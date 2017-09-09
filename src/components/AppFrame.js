@@ -14,10 +14,9 @@ import MenuIcon from 'material-ui-icons/Menu';
 import IconButton from 'material-ui/IconButton';
 import LightbulbOutline from 'material-ui-icons/LightbulbOutline';
 import Menu, { MenuItem } from 'material-ui/Menu';
-import Github from 'training/src/components/Github';
-import ArrowDropRight from 'material-ui/svg-icons/navigation/chevron-left';
-import Refresh from 'material-ui/svg-icons/navigation/refresh';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import ArrowDropRight from 'material-ui-icons/ChevronLeft';
+import Refresh from 'material-ui-icons/Refresh';
+import MoreVertIcon from 'material-ui-icons/MoreVert';
 import AppDrawer from 'training/src/components/AppDrawer';
 import AppSearch from 'training/src/components/AppSearch';
 

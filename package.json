@@ -2,7 +2,7 @@
   "name": "training",
   "private": true,
   "version": "1.0.0",
-  "description": "Documentation site for Material-UI",
+  "description": "Training create by Material-UI",
   "repository": {
     "type": "git",
     "url": "https://github.com/callemall/material-ui.git"
@@ -90,7 +90,7 @@
     "url-loader": "^0.5.9",
     "vrtest": "^0.2.0",
     "webfontloader": "^1.6.28",
-    "webpack": "^3.0.0",
+    "webpack": "^3.5.6",
     "webpack-dev-server": "^2.5.0"
   },
   "peerDependencies": {
