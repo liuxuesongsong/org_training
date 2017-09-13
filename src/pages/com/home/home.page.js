@@ -154,16 +154,16 @@ class Home extends Component {
                                 {this.state.name}
                             </Typography>
                             <Typography type="body1" component="p">
-                                {Lang[window.Lang].pages.company.home.arranged + "/" + Lang[window.Lang].pages.company.home.arranged + ":"
-                                    + this.state.arranged + Lang[window.Lang].pages.company.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.company.home.human}
+                                {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.arranged + ":"
+                                    + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
                             </Typography>
                             <Typography type="body1" component="p">
-                                {Lang[window.Lang].pages.company.home.passed + "/" + Lang[window.Lang].pages.company.home.trained + ":"
-                                    + this.state.passed + Lang[window.Lang].pages.company.home.human + "/" + this.state.examing + Lang[window.Lang].pages.company.home.human}
+                                {Lang[window.Lang].pages.com.home.passed + "/" + Lang[window.Lang].pages.com.home.trained + ":"
+                                    + this.state.passed + Lang[window.Lang].pages.com.home.human + "/" + this.state.examing + Lang[window.Lang].pages.com.home.human}
                             </Typography>
                         </Paper>
                         <Paper elevation={4} style={{ marginTop: 10, width: "400px", }}>
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.unarranged_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
                                 {this.state.unarragedStudents.map(student =>
                                     <StudentCard
                                         type={CARD_TYPE_UNARRANGE}
@@ -173,7 +173,7 @@ class Home extends Component {
                                         email={student.base_info.email}
                                         level={student.base_info.level}
                                         city={student.base_info.city}
-                                        status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.company.home.being_reroll : ""}
+                                        status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.com.home.being_reroll : ""}
                                     >
                                     </StudentCard>
                                 )}
@@ -183,7 +183,7 @@ class Home extends Component {
                     <div style={{ margin: 10, width: 800, float: "left" }}>
                         <Paper elevation={4}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.arranged_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
                                 {this.state.arrangedStudents.map(student => {
                                     console.log(student.status[STATUS_AGREED].status);
                                     switch (student.status[STATUS_AGREED].status) {
@@ -255,7 +255,7 @@ class Home extends Component {
                     <div style={{ margin: 10, width: 400, float: "left" }}>
                         <Paper elevation={4}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.clazz_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                                 {this.state.clazz.map(clazz =>
                                     <ListItem dense button key={clazz}>
                                         {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}

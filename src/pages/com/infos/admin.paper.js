@@ -74,7 +74,7 @@ class Admin extends Component {
                 <Paper style={{ width: 600 }}>
                     <TextField
                         id="account"
-                        label={Lang[window.Lang].pages.company.infos.admin.account}
+                        label={Lang[window.Lang].pages.com.infos.admin.account}
                         value={this.state.account}
                         onChange={event => {
                             this.setState({
@@ -85,7 +85,7 @@ class Admin extends Component {
                     </TextField>
                     <TextField
                         id="password"
-                        label={Lang[window.Lang].pages.company.infos.admin.password}
+                        label={Lang[window.Lang].pages.com.infos.admin.password}
                         value={this.state.password}
                         onChange={event => {
                             this.setState({
@@ -96,7 +96,7 @@ class Admin extends Component {
                     </TextField>
                     <TextField
                         id="name"
-                        label={Lang[window.Lang].pages.company.infos.admin.name}
+                        label={Lang[window.Lang].pages.com.infos.admin.name}
                         value={this.state.name}
                         onChange={event => {
                             this.setState({
@@ -107,7 +107,7 @@ class Admin extends Component {
                     </TextField>
                     <TextField
                         id="tel"
-                        label={Lang[window.Lang].pages.company.infos.admin.tel}
+                        label={Lang[window.Lang].pages.com.infos.admin.tel}
                         value={this.state.tel}
                         onChange={event => {
                             this.setState({
@@ -118,7 +118,7 @@ class Admin extends Component {
                     </TextField>
                     <TextField
                         id="email"
-                        label={Lang[window.Lang].pages.company.infos.admin.email}
+                        label={Lang[window.Lang].pages.com.infos.admin.email}
                         value={this.state.email}
                         onChange={event => {
                             this.setState({

@@ -22,8 +22,10 @@ const Language = {
                 cancel_button: "取消",
                 next_step: "跳过",
                 pre_step: "上一步",
+                login_success: "登陆成功",
+                register_success: "注册成功"
             },
-            company: {
+            com: {
                 home: {
                     title: "首页",
                     arranged: "已安排",
@@ -38,6 +40,7 @@ const Language = {
                     being_reroll: "正在重新排队"
                 },
                 infos: {
+                    title: "企业信息",
                     base: {
                         title: "基本信息",
 
@@ -72,6 +75,7 @@ const Language = {
                     }
                 },
                 students: {
+                    title: "学生",
                     list_title: "学员列表",
                     new_student: "新增",
                     del_student: "删除",
@@ -126,7 +130,7 @@ const Language = {
                     unpassed: "未通过考试",
                 },
                 enrolled: {
-                    title: "",
+                    title: "报名",
                     unenrolled: "未报名",
                     unarrange: "待安排",
                     arranged: "已安排",
@@ -144,21 +148,34 @@ const Language = {
                     }
                 }
             },
+            org: {
+                area: "地区",
+                arrange_rate: "待安排/已安排",
+                classed: "已开班",
+                new_class: "添加班级",
+                new_service: "添加服务区",
 
-        },
-        orgnization: {
-            area: "地区",
-            arrange_rate: "待安排/已安排",
-            classed: "已开班",
-            new_class: "添加班级",
-            score: {
-                title: "成绩录入",
-                daily_score: "平日成绩",
-                exam_score: "考试成绩",
+                home: {
+                    title: "首页"
+                },
+                enroll: {
+                    title: "报名查看"
+                },
+                clazz: {
+                    title: "班级安排",
+                },
+                score: {
+                    title: "成绩管理",
+                    daily_score: "平日成绩",
+                    exam_score: "考试成绩",
 
+                },
+                area: {
+                    title: "服务区域",
+                }
             },
-            new_service: "添加服务区"
         },
+
         components: {
             AppFrame: {
                 ThemeColor: "主题颜色",

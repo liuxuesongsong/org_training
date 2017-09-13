@@ -72,7 +72,7 @@ class Base extends Component {
                 <Paper style={{ width: 600 }}>
                     <TextField
                         id="company_name"
-                        label={Lang[window.Lang].pages.company.infos.base.company_name}
+                        label={Lang[window.Lang].pages.com.infos.base.company_name}
                         value={this.state.company_name}
                         onChange={event => {
                             this.setState({
@@ -83,7 +83,7 @@ class Base extends Component {
                     />
                     <TextField
                         id="province"
-                        label={Lang[window.Lang].pages.company.infos.base.province}
+                        label={Lang[window.Lang].pages.com.infos.base.province}
                         value={this.state.province}
                         onChange={event => {
                             this.setState({
@@ -94,7 +94,7 @@ class Base extends Component {
                     />
                     <TextField
                         id="qualification"
-                        label={Lang[window.Lang].pages.company.infos.base.qualification}
+                        label={Lang[window.Lang].pages.com.infos.base.qualification}
                         value={this.state.qualification}
                         onChange={event => {
                             this.setState({

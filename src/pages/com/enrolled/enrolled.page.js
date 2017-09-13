@@ -140,7 +140,7 @@ class Enrolled extends Component {
         return (
             <div style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}>
                 <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.enrolled.unenrolled}</ListSubheader>}>
+                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unenrolled}</ListSubheader>}>
                         {this.state.newStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ENROLL}
@@ -165,7 +165,7 @@ class Enrolled extends Component {
                     </List>
                 </Paper>
                 <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.enrolled.unarrange}</ListSubheader>}>
+                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unarrange}</ListSubheader>}>
                         {this.state.unarragedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}
@@ -191,7 +191,7 @@ class Enrolled extends Component {
                     </List>
                 </Paper>
                 <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.enrolled.arranged}</ListSubheader>}>
+                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.arranged}</ListSubheader>}>
                         {this.state.arrangedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ARRANGE}

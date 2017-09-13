@@ -10,196 +10,96 @@ import AppFrame from 'training/src/components/AppFrame';
 import Home from 'training/src/pages/Home';
 // import { componentAPIs, requireMarkdown, demos, requireDemo } from 'training/src/components/files';
 
-import Enrolled from '../pages/company/enrolled/enrolled.page.js';
-import CompanyHome from '../pages/company/home/home.page.js';
-import Students from '../pages/company/students/students.page.js';
-import Exams from '../pages/company/exams/exams.page.js';
-import Infos from '../pages/company/infos/info.page.js';
+import Enrolled from '../pages/com/enrolled/enrolled.page.js';
+import CompanyHome from '../pages/com/home/home.page.js';
+import Students from '../pages/com/students/students.page.js';
+import Exams from '../pages/com/exams/exams.page.js';
+import Infos from '../pages/com/infos/info.page.js';
 
-import Enroll from '../pages/organization/enroll';
-import OrganizationHome from '../pages/organization/home';
-import Area from '../pages/organization/area';
-import Score from '../pages/organization/score';
-import Clazz from '../pages/organization/clazz';
+import Enroll from '../pages/org/enroll';
+import OrganizationHome from '../pages/org/home';
+import Area from '../pages/org/area';
+import Score from '../pages/org/score';
+import Clazz from '../pages/org/clazz';
+
+import Lang from '../language';
 
 import { APP_TYPE_UNLOGIN, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION } from '../enum';
 
-var AppRouter = {}
-AppRouter[APP_TYPE_UNLOGIN] =
-  <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-    <Route title="Training" path="/" component={AppFrame}>
-      <IndexRoute dockDrawer title={null} nav component={Home} />
-      <Route
-        title={titleize("首页")}
-        path={'/company/home'}
-        content={Home}
-      />
-      <Route
-        title={titleize("企业信息")}
-        path={'/company/infos'}
-        content={Home}
-      />
-      <Route
-        title={titleize("学生")}
-        path={'/company/students'}
-        content={Home}
-      />
-      <Route
-        title={titleize("报名")}
-        path={'/company/enrolled'}
-        content={Home}
-      />
-      <Route
-        title={titleize("考试")}
-        path={'/company/exams'}
-        content={Home}
-      />
-      <Route
-        title={titleize("首页")}
-        path={'/organization/home'}
-        content={Home}
-      />
-      <Route
-        title={titleize("报名查看")}
-        path={'/organization/enroll'}
-        content={Home}
-      />
-      <Route
-        title={titleize("班级安排")}
-        path={'/organization/clazz'}
-        content={Home}
-      />
-      <Route
-        title={titleize("成绩管理")}
-        path={'/organization/score'}
-        content={Home}
-      />
-      <Route
-        title={titleize("服务区域")}
-        path={'/organization/area'}
-        content={Home}
-      />
-    </Route>
-  </Router>
-AppRouter[APP_TYPE_COMPANY] =
-  <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-    <Route title="Training" path="/" component={AppFrame}>
-      <IndexRoute dockDrawer title={null} nav component={Home} />
-      <Route
-        title={titleize("首页")}
-        path={'/company/home'}
-        nav component={CompanyHome}
-      />
-      <Route
-        title={titleize("企业信息")}
-        path={'/company/infos'}
-        content={Infos}
-        nav component={Infos}
-      />
-      <Route
-        title={titleize("学生")}
-        path={'/company/students'}
-        content={Students}
-        nav component={Students}
-      />
-      <Route
-        title={titleize("报名")}
-        path={'/company/enrolled'}
-        content={Enrolled}
-        nav component={Enrolled}
-      />
-      <Route
-        title={titleize("考试")}
-        path={'/company/exams'}
-        content={Exams}
-        nav component={Exams}
-      />
-      <Route
-        title={titleize("首页")}
-        path={'/organization/home'}
-        content={Home}
-      />
-      <Route
-        title={titleize("报名查看")}
-        path={'/organization/enroll'}
-        content={Home}
-      />
-      <Route
-        title={titleize("班级安排")}
-        path={'/organization/clazz'}
-        content={Home}
-      />
-      <Route
-        title={titleize("成绩管理")}
-        path={'/organization/score'}
-        content={Home}
-      />
-      <Route
-        title={titleize("服务区域")}
-        path={'/organization/area'}
-        content={Home}
-      />
-    </Route>
-  </Router>
-AppRouter[APP_TYPE_ORANIZATION] =
-  <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-    <Route title="Training" path="/" component={AppFrame}>
-      <IndexRoute dockDrawer title={null} nav component={Home} />
-      <Route
-        title={titleize("首页")}
-        path={'/company/home'}
-        content={OrganizationHome}
-      />
-      <Route
-        title={titleize("企业信息")}
-        path={'/company/infos'}
-        content={OrganizationHome}
-      />
-      <Route
-        title={titleize("学生")}
-        path={'/company/students'}
-        content={OrganizationHome}
-      />
-      <Route
-        title={titleize("报名")}
-        path={'/company/enrolled'}
-        content={OrganizationHome}
-      />
-      <Route
-        title={titleize("考试")}
-        path={'/company/exams'}
-        content={OrganizationHome}
-      />
-      <Route
-        title={titleize("首页")}
-        path={'/organization/home'}
-        nav component={OrganizationHome}
-      />
-      <Route
-        title={titleize("报名查看")}
-        path={'/organization/enroll'}
-        content={Enroll}
-        nav component={Enroll}
-      />
-      <Route
-        title={titleize("班级安排")}
-        path={'/organization/clazz'}
-        content={Clazz}
-        nav component={Clazz}
-      />
-      <Route
-        title={titleize("成绩管理")}
-        path={'/organization/score'}
-        content={Score}
-        nav component={Score}
-      />
-      <Route
-        title={titleize("服务区域")}
-        path={'/organization/area'}
-        content={Area}
-        nav component={Area}
-      />
-    </Route>
-  </Router>
+var AppRouter = <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+  <Route title="Training" path="/" component={AppFrame}>
+    <IndexRoute dockDrawer title={null} nav component={Home} />
+    <Route
+      title={titleize(Lang[window.Lang].pages.com.home.title)}
+      path={'/com/home'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.com.infos.title)}
+      path={'/com/infos'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.com.students.title)}
+      path={'/com/students'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.com.enrolled.title)}
+      path={'/com/enrolled'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.com.exams.title)}
+      path={'/com/exams'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.org.home.title)}
+      path={'/org/home'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.org.enroll.title)}
+      path={'/org/enroll'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.org.clazz.title)}
+      path={'/org/clazz'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.org.score.title)}
+      path={'/org/score'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : Home}
+    />
+    <Route
+      title={titleize(Lang[window.Lang].pages.org.area.title)}
+      path={'/org/area'}
+      content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : Home}
+      nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
+      component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : Home}
+    />
+  </Route>
+</Router>
 
 export default AppRouter;

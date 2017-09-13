@@ -61,7 +61,7 @@ class App extends Component {
 
     return (
       <MuiThemeProvider theme={theme} styleManager={styleManager}>
-        {AppRouter[this.state.apptype]}
+        {AppRouter}
       </MuiThemeProvider>
     );
   }

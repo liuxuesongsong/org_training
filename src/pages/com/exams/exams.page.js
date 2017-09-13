@@ -134,7 +134,7 @@ class Exams extends Component {
                     style={{ paddingTop: "80px", paddingLeft: 40, display: 'flex', FlexDirection: 'row', justifyContent: 'space-between' }}
                 >
                     <Paper elevation={4} style={Style.paper}>
-                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.exams.examing}</ListSubheader>}>
+                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.exams.examing}</ListSubheader>}>
                             {this.state.examingStudents.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_COMMON}
@@ -149,7 +149,7 @@ class Exams extends Component {
                         </List>
                     </Paper>
                     <Paper elevation={4} style={Style.paper}>
-                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.exams.passed}</ListSubheader>}>
+                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.exams.passed}</ListSubheader>}>
                             {this.state.passedStudents.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_COMMON}
@@ -164,7 +164,7 @@ class Exams extends Component {
                         </List>
                     </Paper>
                     <Paper elevation={4} style={Style.paper}>
-                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.exams.unpassed}</ListSubheader>}>
+                        <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.exams.unpassed}</ListSubheader>}>
                             {this.state.unpassedStudents.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_EXAM}

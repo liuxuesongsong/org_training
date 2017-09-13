@@ -107,17 +107,17 @@ class Home extends Component {
                                 {this.state.name}
                             </Typography>
                             <Typography type="body1" component="p">
-                                {Lang[window.Lang].pages.company.home.arranged + "/" + Lang[window.Lang].pages.company.home.arranged + ":"
-                                    + this.state.arranged + Lang[window.Lang].pages.company.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.company.home.human}
+                                {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.arranged + ":"
+                                    + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
                             </Typography>
                             <Typography type="body1" component="p">
-                                {Lang[window.Lang].pages.company.home.passed + "/" + Lang[window.Lang].pages.company.home.trained + ":"
-                                    + this.state.passed + Lang[window.Lang].pages.company.home.human + "/" + this.state.examing + Lang[window.Lang].pages.company.home.human}
+                                {Lang[window.Lang].pages.com.home.passed + "/" + Lang[window.Lang].pages.com.home.trained + ":"
+                                    + this.state.passed + Lang[window.Lang].pages.com.home.human + "/" + this.state.examing + Lang[window.Lang].pages.com.home.human}
                             </Typography>
                         </Paper>
                         <Paper elevation={4} style={{ width: "500px", }}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.unarranged_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
                                 {this.state.unarragedStudents.map(student =>
                                     <Card
                                     >
@@ -129,7 +129,7 @@ class Home extends Component {
                     <div style={{ margin: 10, width: 800, float: "left" }}>
                         <Paper elevation={4}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.arranged_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
                                 {this.state.arrangedStudents.map(student =>
                                     <Card
                                     >
@@ -143,7 +143,7 @@ class Home extends Component {
                     <div style={{ margin: 10, width: 400, float: "left" }}>
                         <Paper elevation={4}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.home.clazz_title}</ListSubheader>}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                                 {this.state.clazz.map(value =>
                                     <ListItem dense button key={value}>
                                         {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}

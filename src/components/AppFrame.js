@@ -146,7 +146,11 @@ class AppFrame extends Component {
     activeStep: 0,
     index: 0,
     unavailable: false,
+    password_error: false,
+    repeat_error: false,
     available_result: "",
+    password_result: "",
+    repeat_result: "",
 
     // 提示状态
     alertOpen: false,
@@ -187,12 +191,15 @@ class AppFrame extends Component {
   check_available = (account) => {
     var cb = (route, message, arg) => {
       if (message.code === Code.LOGIC_SUCCESS) {
-        // 与其他玩家不冲突
+        this.setState({
+          unavailable: false,
+          available_result: Lang[window.Lang].pages.com.home.available
+        })
       } else {
         if (message.code === 0) {
           this.setState({
             unavailable: false,
-            available_result: Lang[window.Lang].pages.company.home.available
+            available_result: Lang[window.Lang].pages.com.home.available
           })
         } else {
           this.setState({
@@ -213,29 +220,17 @@ class AppFrame extends Component {
   register = (account, password, repeat) => {
     // 判断两次密码是否一致
     if (password !== repeat) {
-      this.setState({
-        password_error: true,
-        password_result: Lang[window.Lang].ErrorCode[1000]
-      })
       return;
     }
-    if (account === "") {
-      this.setState({
-        unavailable: true,
-        available_result: Lang[window.Lang].ErrorCode[1002]
-      })
+    if (account === "" || password === "") {
       return;
     }
-    if (password === "") {
-      this.setState({
-        password_error: true,
-        password_result: Lang[window.Lang].ErrorCode[1001]
-      })
-      return;
-    }
-    var cb = (route, message, arg) => {
 
-      this.handleNext();
+    var cb = (route, message, arg) => {
+      if (message.code === Code.LOGIC_SUCCESS) {
+        this.handleNext();
+        this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.register_success);
+      }
       this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
     }
     getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, {});
@@ -286,15 +281,17 @@ class AppFrame extends Component {
         // 登录成功后跳转到相应界面
         switch (sessionStorage.apptype) {
           case APP_TYPE_COMPANY:
-            window.location = window.location + "/company/home";
+            window.location = window.location + "/com/home";
             break;
           case APP_TYPE_ORANIZATION:
-            window.location = window.location + "/organization/home";
+            window.location = window.location + "/org/home";
             break;
         }
 
+        this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
+        // this.context.router.push("/com/home");
+      } else {
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
-        // this.context.router.push("/company/home");
       }
     }
 
@@ -352,11 +349,19 @@ class AppFrame extends Component {
               })
             }}
             onBlur={() => {
+              if (e.value === "") {
+                this.setState({
+                  available: true,
+                  available_result: Lang[window.Lang].ErrorCode[1001]
+                })
+                return
+              }
               this.check_available(document.getElementById("register_account").value);
             }}
             helperText={this.state.available_result}
           />
           <TextField
+            error={this.state.password_error}
             name="register_password"
             id="register_password"
             label={Lang[window.Lang].pages.main.password}
@@ -365,14 +370,43 @@ class AppFrame extends Component {
             }}
             type="password"
             fullWidth={true}
+            onBlur={(e) => {
+              if (e.value === "") {
+                this.setState({
+                  password_error: true,
+                  password_result: Lang[window.Lang].ErrorCode[1001]
+                })
+              } else if (document.getElementById("repeat_password").value !== e.value) {
+                this.setState({
+                  password_error: true,
+                  password_result: Lang[window.Lang].ErrorCode[1000]
+                })
+              }
+            }}
+            helperText={this.state.password_result}
           // defaultValue={Lang[window.Lang].pages.main.input_your_password}
           />
           <TextField
+            error={this.state.repeat_error}
             name="repeat_password"
             id="repeat_password"
             label={Lang[window.Lang].pages.main.repeat_password}
             type="password"
             fullWidth={true}
+            onBlur={(e) => {
+              if (e.value === "") {
+                this.setState({
+                  repeat_error: true,
+                  repeat_result: Lang[window.Lang].ErrorCode[1001]
+                })
+              } else if (document.getElementById("register_password").value !== e.value) {
+                this.setState({
+                  repeat_error: true,
+                  repeat_result: Lang[window.Lang].ErrorCode[1000]
+                })
+              }
+            }}
+            helperText={this.state.repeat_result}
           // defaultValue={Lang[window.Lang].pages.main.input_your_password}
           />
           {/* <Checkbox
@@ -544,9 +578,6 @@ class AppFrame extends Component {
 
   render() {
 
-
-    console.log("render frame")
-
     const { children, routes, width } = this.props;
 
     const classes = this.props.classes;
@@ -581,7 +612,6 @@ class AppFrame extends Component {
                 {title}
               </Typography>}
             <div className={classes.grow} />
-            <AppSearch />
 
             <IconButton
               title="Toggle light/dark theme"
@@ -650,7 +680,7 @@ class AppFrame extends Component {
           onRequestClose={this.handleDrawerClose}
           open={(drawerDocked || this.state.drawerOpen)}
         />
-        {this.state.logged ? <div style={{ flex: '1 0 100%', }}>
+        {this.state.logged ? children : <div style={{ flex: '1 0 100%', }}>
           <div style={{
             minHeight: '100vh', // Makes the hero full height until we get some more content.
             flex: '0 0 auto',
@@ -699,7 +729,7 @@ class AppFrame extends Component {
               </div>
             </div>
           </div>
-        </div> : children}
+        </div>}
         <CommonAlert
           show={this.state.alertOpen}
           type={this.state.alertType}

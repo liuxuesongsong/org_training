@@ -46,7 +46,7 @@ class ComCard extends Component {
           <Button
             dense
             onClick={this.state.action[0]}>
-            {Lang[window.Lang].pages.company.card.modify}
+            {Lang[window.Lang].pages.com.card.modify}
           </Button>
         </CardActions>
       case CARD_TYPE_ENROLL:
@@ -54,7 +54,7 @@ class ComCard extends Component {
           <Button
             dense
             onClick={this.state.action[0]}>
-            {Lang[window.Lang].pages.company.card.enroll}
+            {Lang[window.Lang].pages.com.card.enroll}
           </Button>
         </CardActions>
       case CARD_TYPE_ARRANGE:
@@ -65,15 +65,15 @@ class ComCard extends Component {
                 dense
                 id={"left"}
                 onClick={this.state.action[0]}>
-                {Lang[window.Lang].pages.company.card.agree}
+                {Lang[window.Lang].pages.com.card.agree}
               </Button>
               <Button
                 dense
                 id={"right"}
                 onClick={this.state.action[1]}>
-                {Lang[window.Lang].pages.company.card.refuse}
+                {Lang[window.Lang].pages.com.card.refuse}
               </Button>
-            </div> : Lang[window.Lang].pages.company.card.status[1]}
+            </div> : Lang[window.Lang].pages.com.card.status[1]}
         </CardActions>
       case CARD_TYPE_EXAM:
         return <CardActions>
@@ -81,13 +81,13 @@ class ComCard extends Component {
             dense
             id={"left"}
             onClick={this.state.action[0]}>
-            {Lang[window.Lang].pages.company.card.retry}
+            {Lang[window.Lang].pages.com.card.retry}
           </Button>
           <Button
             dense
             id={"right"}
             onClick={this.state.action[1]}>
-            {Lang[window.Lang].pages.company.card.giveup}
+            {Lang[window.Lang].pages.com.card.giveup}
           </Button>
         </CardActions>
       case CARD_TYPE_UNARRANGE:

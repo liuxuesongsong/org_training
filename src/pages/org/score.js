@@ -38,7 +38,7 @@ class Score extends Component {
     render() {
         return <div>
             <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.students.list_title}</ListSubheader>}>
+                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     {this.state.clazzes.map(clazz =>
                         <Card style={{ display: 'flex', }}>
                             <div style={{
@@ -64,7 +64,7 @@ class Score extends Component {
                 </List>
             </div>
             <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.students.list_title}</ListSubheader>}>
+                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     {this.state.students.map(student =>
                         <Card style={{ display: 'flex', }}>
                             <div style={{

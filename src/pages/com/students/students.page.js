@@ -146,7 +146,7 @@ class Students extends Component {
                                         var student = {};
                                         this.newStudent(student);
                                     }}>
-                                    {Lang[window.Lang].pages.company.students.new_student}
+                                    {Lang[window.Lang].pages.com.students.new_student}
                                 </Button>
                             </ListSubheader>}>
                             {this.state.students.map(student =>
@@ -175,35 +175,35 @@ class Students extends Component {
                         <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
                             <div>
                                 <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.company.students.base_info}
+                                    {Lang[window.Lang].pages.com.students.base_info}
                                 </Typography>
                                 <TextField
                                     id="student_name"
-                                    label={Lang[window.Lang].pages.company.students.name}
+                                    label={Lang[window.Lang].pages.com.students.name}
                                     defaultValue={this.state.selected.base_info.name}
                                     fullWidth
                                 />
                                 <TextField
                                     id="tel"
-                                    label={Lang[window.Lang].pages.company.students.tel}
+                                    label={Lang[window.Lang].pages.com.students.tel}
                                     defaultValue={this.state.selected.base_info.tel}
                                     fullWidth
                                 />
                                 <TextField
                                     id="email"
-                                    label={Lang[window.Lang].pages.company.students.email}
+                                    label={Lang[window.Lang].pages.com.students.email}
                                     defaultValue={this.state.selected.base_info.email}
                                     fullWidth
                                 />
                                 <TextField
                                     id="city"
-                                    label={Lang[window.Lang].pages.company.students.city}
+                                    label={Lang[window.Lang].pages.com.students.city}
                                     defaultValue={this.state.selected.base_info.city}
                                     fullWidth
                                 />
                                 <TextField
                                     id="level"
-                                    label={Lang[window.Lang].pages.company.students.level.title}
+                                    label={Lang[window.Lang].pages.com.students.level.title}
                                     defaultValue={this.state.selected.base_info.level}
                                     fullWidth
                                 />
@@ -214,35 +214,35 @@ class Students extends Component {
                             </div>
                             <div>
                                 <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.company.students.personal_info.title}
+                                    {Lang[window.Lang].pages.com.students.personal_info.title}
                                 </Typography>
                                 <TextField
                                     id="licence"
-                                    label={Lang[window.Lang].pages.company.students.personal_info.licence}
+                                    label={Lang[window.Lang].pages.com.students.personal_info.licence}
                                     defaultValue={this.state.selected.personal_info.licence}
                                     fullWidth>
                                 </TextField>
                                 <TextField
                                     id="edu"
-                                    label={Lang[window.Lang].pages.company.students.personal_info.edu}
+                                    label={Lang[window.Lang].pages.com.students.personal_info.edu}
                                     defaultValue={this.state.selected.personal_info.edu}
                                     fullWidth>
                                 </TextField>
                                 <TextField
                                     id="working_time"
-                                    label={Lang[window.Lang].pages.company.students.personal_info.working_time}
+                                    label={Lang[window.Lang].pages.com.students.personal_info.working_time}
                                     defaultValue={this.state.selected.personal_info.working_time}
                                     fullWidth>
                                 </TextField>
                                 <TextField
                                     id="total_amount"
-                                    label={Lang[window.Lang].pages.company.students.personal_info.total_amount}
+                                    label={Lang[window.Lang].pages.com.students.personal_info.total_amount}
                                     defaultValue={this.state.selected.personal_info.total_amount}
                                     fullWidth>
                                 </TextField>
                                 <TextField
                                     id="soft_amount"
-                                    label={Lang[window.Lang].pages.company.students.personal_info.soft_amount}
+                                    label={Lang[window.Lang].pages.com.students.personal_info.soft_amount}
                                     defaultValue={this.state.selected.personal_info.soft_amount}
                                     fullWidth>
                                 </TextField>
@@ -252,7 +252,7 @@ class Students extends Component {
                             </div>
                             <div>
                                 <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.company.students.proj_exp.title}
+                                    {Lang[window.Lang].pages.com.students.proj_exp.title}
                                 </Typography>
                                 {
                                     this.state.selected.proj_exp.map(exp =>
@@ -281,27 +281,27 @@ class Students extends Component {
                                 <div>
                                     <TextField
                                         id="proj_name"
-                                        label={Lang[window.Lang].pages.company.students.proj_exp.name}
+                                        label={Lang[window.Lang].pages.com.students.proj_exp.name}
                                         defaultValue={this.state.selected.proj_exp.name}>
                                     </TextField>
                                     <TextField
                                         id="time"
-                                        label={Lang[window.Lang].pages.company.students.proj_exp.time}
+                                        label={Lang[window.Lang].pages.com.students.proj_exp.time}
                                         defaultValue={this.state.selected.proj_exp.time}>
                                     </TextField>
                                     <TextField
                                         id="actor"
-                                        label={Lang[window.Lang].pages.company.students.proj_exp.actor}
+                                        label={Lang[window.Lang].pages.com.students.proj_exp.actor}
                                         defaultValue={this.state.selected.proj_exp.actor}>
                                     </TextField>
                                     <TextField
                                         id="exp_total_amount"
-                                        label={Lang[window.Lang].pages.company.students.proj_exp.total_amount}
+                                        label={Lang[window.Lang].pages.com.students.proj_exp.total_amount}
                                         defaultValue={this.state.selected.proj_exp.total_amount}>
                                     </TextField>
                                     <TextField
                                         id="exp_soft_amount"
-                                        label={Lang[window.Lang].pages.company.students.proj_exp.soft_amount}
+                                        label={Lang[window.Lang].pages.com.students.proj_exp.soft_amount}
                                         defaultValue={this.state.selected.proj_exp.soft_amount}>
                                     </TextField>
                                 </div>

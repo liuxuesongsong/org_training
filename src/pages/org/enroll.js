@@ -11,9 +11,9 @@ import Lang from '../../language';
 
 import CommonAlert from '../../components/CommonAlert';
 
-class Clazz extends Component {
+class Enroll extends Component {
     state = {
-        clazzes: [],
+        areas: [],
         students: [],
         // 提示状态
         alertOpen: true,
@@ -30,31 +30,16 @@ class Clazz extends Component {
     fresh = () => {
     }
 
-    newClazz = () => {
-
-    }
-
-    modifyClazz = () => {
-
-    }
-
-    deleteClazz = () => {
-
-    }
-
-    freshStudents = () => {
-
-    }
-
     popUpNotice = (type, code, content) => {
         this.setState({ type: type, code: code, content: content, alertOpen: true });
     }
 
+
     render() {
         return <div>
             <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.students.list_title}</ListSubheader>}>
-                    {this.state.clazzes.map(clazz =>
+                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
+                    {this.state.areas.map(area =>
                         <Card style={{ display: 'flex', }}>
                             <div style={{
                                 display: 'flex',
@@ -62,31 +47,13 @@ class Clazz extends Component {
                             }}>
                                 <CardContent>
                                     <Typography type="body1">
-                                        {clazz.id}
-                                    </Typography>
-                                    <Typography type="body1" component="h2">
-                                        {clazz.name}
+                                        {area.name}
                                     </Typography>
                                     <Typography type="body1">
-                                        {clazz.area}
+                                        {area.arrange + "/" + area.enroll}
                                     </Typography>
                                     <Typography component="p">
-                                        {clazz.master}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.tiid}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.teacher}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.address}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.start}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.end}
+                                        {area.clazzes}
                                     </Typography>
                                 </CardContent>
                             </div>
@@ -98,7 +65,7 @@ class Clazz extends Component {
                 </List>
             </div>
             <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.company.students.list_title}</ListSubheader>}>
+                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     {this.state.students.map(student =>
                         <Card style={{ display: 'flex', }}>
                             <div style={{
@@ -111,6 +78,8 @@ class Clazz extends Component {
                                     <Typography type="body1" component="h2">
                                     </Typography>
                                     <Typography type="body1">
+                                    </Typography>
+                                    <Typography component="p">
                                     </Typography>
                                     <Typography component="p">
                                     </Typography>
@@ -135,4 +104,5 @@ class Clazz extends Component {
     }
 
 }
-export default Clazz;
+
+export default Enroll;

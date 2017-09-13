@@ -41,7 +41,7 @@ const styleSheet = createStyleSheet('PaperSheet', theme => ({
     },
 }));
 
-const LANG_PREFIX = Lang[window.Lang].pages.company.infos;
+const LANG_PREFIX = Lang[window.Lang].pages.com.infos;
 
 class Info extends Component {
 

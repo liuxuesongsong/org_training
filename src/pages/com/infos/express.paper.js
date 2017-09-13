@@ -26,7 +26,7 @@ const styleSheet = createStyleSheet('PaperSheet', theme => ({
     },
 }));
 
-const LANG_PREFIX = Lang[window.Lang].pages.company.infos.express;
+const LANG_PREFIX = Lang[window.Lang].pages.com.infos.express;
 
 class Express extends Component {
     componentDidMount() {
