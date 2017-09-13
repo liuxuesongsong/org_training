@@ -93,9 +93,7 @@ export default class CommonAlert extends Component {
             open={this.state.open}
             message={code !== 0 ? Lang[window.Lang].ErrorCode[code] : content}
             autoHideDuration={1500}
-            onRequestClose={() => {
-              this.setState({ open: false });
-            }}
+            onRequestClose={action[0]}
           >
           </Snackbar> :
           <Dialog open={this.state.open} onRequestClose={this.handleRequestClose}>
