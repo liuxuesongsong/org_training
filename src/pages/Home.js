@@ -112,12 +112,13 @@ class Home extends Component {
             unavailable: false,
             available_result: Lang[window.Lang].pages.company.home.available
           })
+        } else {
+          this.setState({
+            unavailable: true,
+            available_result: Lang[window.Lang].ErrorCode[message.code]
+          })
         }
-        console.log(message.code);
-        this.setState({
-          unavailable: true,
-          available_result: Lang[window.Lang].ErrorCode[message.code]
-        })
+
         // 名字已经被占用，需要重新起一个有特色的名字
       }
 

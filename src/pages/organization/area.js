@@ -46,8 +46,10 @@ class Area extends Component {
                             }}>
                                 <CardContent>
                                     <Typography type="body1">
+                                        省市
                                     </Typography>
                                     <Typography type="body1" component="h2">
+                                        地区
                                     </Typography>
                                     <Typography type="body1">
                                     </Typography>
@@ -72,6 +74,6 @@ class Area extends Component {
             </CommonAlert>
         </div>
     }
-
 }
+
 export default Area;

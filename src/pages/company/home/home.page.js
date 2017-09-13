@@ -211,7 +211,7 @@ class Home extends Component {
                                                     },
                                                     () => {
                                                         this.state.selectedStudentId = student.id;
-                                                        this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
+                                                        this.popUpNotice(ALERT, 0, "拒绝" + student.base_info.name + "课程安排？", [
                                                             () => {
                                                                 this.refuseArrange();
                                                                 this.closeNotice();
