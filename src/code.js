@@ -9,11 +9,13 @@ module.exports = {
     "ERROR_INVALID_REQUEST": 3,
     // 该账号已经被注册
     "ACCOUNT_HAD_EXIST": 10001,
+    // 
+    "": 10002,
     // 帐号可以注册
-    
+    "PASSWORD_IS_WRONG": 10006,
 
     // "":
-    
+
     // 
-    "PASSWORD_NOT_SAME":1000,
+    "PASSWORD_NOT_SAME": 1000,
 }

@@ -239,57 +239,64 @@ class AppFrame extends Component {
   login = (account, password) => {
     var cb = (route, message, arg) => {
 
-      if (message.code === Code.LOGIC_SUCCESS) {
+      console.log(message);
+      // Code.LOGIC_SUCCESS
+      if (message.code === 10007) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
-        sessionStorage.session = message.session;
+        sessionStorage.session = message.token;
         sessionStorage.apptype = arg["type"];
+
+        // getData(getRouter(LOGIN))
+
         // window.CacheData = message.data;
         // 严谨检查服务端传过来的数据正确性
-        if (message.data.base !== undefined) {
-          window.CacheData.base = message.data.base;
-        } else {
+        // if (message.data.base !== undefined) {
+        //   window.CacheData.base = message.data.base;
+        // } else {
 
-        }
-        if (message.data.finance !== undefined) {
-          window.CacheData.finance = message.data.finance;
-        } else {
+        // }
+        // if (message.data.finance !== undefined) {
+        //   window.CacheData.finance = message.data.finance;
+        // } else {
 
-        }
-        if (message.data.express !== undefined) {
-          window.CacheData.express = message.data.express;
-        } else {
+        // }
+        // if (message.data.express !== undefined) {
+        //   window.CacheData.express = message.data.express;
+        // } else {
 
-        }
-        if (message.data.admin !== undefined) {
-          window.CacheData.admin = message.data.admin;
-        } else {
+        // }
+        // if (message.data.admin !== undefined) {
+        //   window.CacheData.admin = message.data.admin;
+        // } else {
 
-        }
-        if (message.data.student !== undefined) {
-          window.CacheData.student = message.data.student;
-        } else {
+        // }
+        // if (message.data.student !== undefined) {
+        //   window.CacheData.student = message.data.student;
+        // } else {
 
-        }
-        if (message.data.clazz !== undefined) {
-          window.CacheData.clazz = message.data.clazz;
-        } else {
+        // }
+        // if (message.data.clazz !== undefined) {
+        //   window.CacheData.clazz = message.data.clazz;
+        // } else {
 
-        }
+        // }
 
-        console.log(window.location);
         // 登录成功后跳转到相应界面
-        switch (sessionStorage.apptype) {
+        console.log(sessionStorage.apptype);
+
+        switch (Number(sessionStorage.apptype)) {
           case APP_TYPE_COMPANY:
-            window.location = window.location + "/com/home";
+            console.log(window.location);
+            this.context.router.push("/com/home");
             break;
           case APP_TYPE_ORANIZATION:
-            window.location = window.location + "/org/home";
+            this.context.router.push("/org/home");
             break;
         }
 
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
-        // this.context.router.push("/com/home");
+        // 
       } else {
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
       }
@@ -680,7 +687,7 @@ class AppFrame extends Component {
           onRequestClose={this.handleDrawerClose}
           open={(drawerDocked || this.state.drawerOpen)}
         />
-        {this.state.logged ? children : <div style={{ flex: '1 0 100%', }}>
+        {sessionStorage.getItem("logged") === "true" ? children : <div style={{ flex: '1 0 100%', }}>
           <div style={{
             minHeight: '100vh', // Makes the hero full height until we get some more content.
             flex: '0 0 auto',
@@ -701,7 +708,6 @@ class AppFrame extends Component {
                 backgroundColor: theme.palette.background.paper,
                 width: 500
               }}>
-
                 <AppBar position="static" color="default">
                   <Tabs
                     index={this.state.index}
