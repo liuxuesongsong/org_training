@@ -229,7 +229,7 @@ class AppFrame extends Component {
     var cb = (route, message, arg) => {
       if (message.code === Code.LOGIC_SUCCESS) {
         this.handleNext();
-        this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.register_success);
+        this.popUpNotice(NOTICE, LOGIC_SUCCESS, Lang[window.Lang].pages.main.register_success);
       }
       this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
     }
@@ -244,7 +244,7 @@ class AppFrame extends Component {
       if (message.code === 10007) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
-        sessionStorage.session = message.token;
+        sessionStorage.session = message.session;
         sessionStorage.apptype = arg["type"];
         // 登录成功后跳转到相应界面
         switch (Number(sessionStorage.apptype)) {
@@ -257,6 +257,7 @@ class AppFrame extends Component {
         }
         let e = new Event("login_success");
         dispatchEvent(e);
+        console.log(Lang[window.Lang].pages.main.login_success)
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
@@ -309,20 +310,13 @@ class AppFrame extends Component {
             label={Lang[window.Lang].pages.main.account}
             fullWidth={true}
             defaultValue={sessionStorage.account}
-            onFocus={() => {
+            onFocus={(e) => {
               this.setState({
                 unavailable: false,
                 available_result: ""
               })
             }}
-            onBlur={() => {
-              if (e.value === "") {
-                this.setState({
-                  available: true,
-                  available_result: Lang[window.Lang].ErrorCode[1001]
-                })
-                return
-              }
+            onBlur={(e) => {
               this.check_available(document.getElementById("register_account").value);
             }}
             helperText={this.state.available_result}
@@ -338,15 +332,20 @@ class AppFrame extends Component {
             type="password"
             fullWidth={true}
             onBlur={(e) => {
-              if (e.value === "") {
+              if (document.getElementById("register_password").value === "") {
                 this.setState({
                   password_error: true,
                   password_result: Lang[window.Lang].ErrorCode[1001]
                 })
-              } else if (document.getElementById("repeat_password").value !== e.value) {
+              } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
                 this.setState({
                   password_error: true,
                   password_result: Lang[window.Lang].ErrorCode[1000]
+                })
+              } else {
+                this.setState({
+                  password_error: false,
+                  password_result: ""
                 })
               }
             }}
@@ -361,15 +360,22 @@ class AppFrame extends Component {
             type="password"
             fullWidth={true}
             onBlur={(e) => {
-              if (e.value === "") {
+              if (document.getElementById("register_password").value === "") {
                 this.setState({
                   repeat_error: true,
                   repeat_result: Lang[window.Lang].ErrorCode[1001]
                 })
-              } else if (document.getElementById("register_password").value !== e.value) {
+              } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
                 this.setState({
                   repeat_error: true,
                   repeat_result: Lang[window.Lang].ErrorCode[1000]
+                })
+              } else {
+                this.setState({
+                  repeat_error: false,
+                  password_error: false,
+                  repeat_result: "",
+                  password_result: ""
                 })
               }
             }}
@@ -532,12 +538,16 @@ class AppFrame extends Component {
       alertOpen: false,
     })
   }]) {
+    this.state.alertContent = content;
+    this.state.alertType = type;
+    this.state.alertCode = code;
+    this.state.alertAction = action;
     this.setState({
-      alertType: type,
-      alertCode: code,
-      alertContent: content,
+      // alertType: type,
+      // alertCode: code,
+      // alertContent: content,
       alertOpen: true,
-      alertAction: action
+      // alertAction: action
     });
   }
 

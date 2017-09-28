@@ -63,8 +63,6 @@ class App extends Component {
       setPrismTheme(lightTheme);
     }
 
-    console.log("changing");
-
     return (
       <MuiThemeProvider theme={theme} styleManager={styleManager}>
         {AppRouter}

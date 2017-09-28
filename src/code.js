@@ -13,7 +13,7 @@ module.exports = {
     "": 10002,
     // 帐号可以注册
     "PASSWORD_IS_WRONG": 10006,
-
+    "LOGIN_SUCCESS": 10007,
     // "":
 
     // 

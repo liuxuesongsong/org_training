@@ -154,11 +154,11 @@ export function initCache(callback = () => { }) {
       var cb = (route, message, arg) => {
         if (message.code === Code.LOGIC_SUCCESS) {
           window.CacheData = message.data;
+          console.log(message.data);
           callback()
         }
-
       }
-      getData(getRouter(QUERY), { session: sessionStorage.session, type: APP_TYPE_COMPANY }, cb, { callback: callback });
+      getData(getRouter(QUERY), { session: sessionStorage.session, type: sessionStorage.apptype }, cb, { callback: callback });
     } else {
       // 请登录
       // window.di
