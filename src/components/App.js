@@ -16,8 +16,14 @@ let styleManager;
 
 class App extends Component {
 
+  componentDidMount() {
+    addEventListener("login_success", (e) => {
+      this.setState({ apptype: sessionStorage.apptype })
+    })
+  }
+
   state = {
-    apptype: sessionStorage.apptype | 0
+    apptype: sessionStorage.apptype | 0,
   }
 
   static propTypes = {

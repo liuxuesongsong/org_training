@@ -57,6 +57,9 @@ class Home extends Component {
         let students = getCache(DATA_TYPE_STUDENT);
         let enrolled = 0, arranged = 0, passed = 0, examing = 0,
             unarragedStudents = [], arrangedStudents = [];
+        if (students === undefined) {
+            students = []
+        }
         for (var i = 0; i < students.length; i++) {
             if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID) {
                 enrolled++
@@ -82,14 +85,14 @@ class Home extends Component {
             // }
         }
         window.currentPage.setState({
-            name: getCache(DATA_TYPE_BASE).company_name,
+            name: getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "",
             enrolled: enrolled,
             arranged: arranged,
             examing: examing,
             passed: passed,
             unarragedStudents: unarragedStudents,
             arrangedStudents: arrangedStudents,
-            clazz: getCache(DATA_TYPE_CLAZZ)
+            clazz: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
         })
     }
 
@@ -136,7 +139,6 @@ class Home extends Component {
     }
 
     closeNotice = () => {
-        console.log("123");
         this.setState({
             alertOpen: false,
         })
@@ -202,7 +204,6 @@ class Home extends Component {
                                                         this.state.selectedStudentId = student.id;
                                                         this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
                                                             () => {
-                                                                console.log("456");
                                                                 this.agreeArrange();
                                                                 this.closeNotice();
                                                             }, () => {

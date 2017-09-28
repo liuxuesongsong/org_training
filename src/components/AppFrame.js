@@ -161,27 +161,31 @@ class AppFrame extends Component {
   };
 
   componentDidMount() {
-    console.log("frame mouted");
     window.CacheData = {};
     window.currentPage = this;
     this.getRoutes();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
-      console.log("123")
       this.context.router.push("/");
+    } else {
+      switch (Number(sessionStorage.apptype)) {
+        case APP_TYPE_COMPANY:
+          this.context.router.push("/com/home");
+          break;
+        case APP_TYPE_ORANIZATION:
+          this.context.router.push("/org/home");
+          break;
+      }
     }
   }
 
   getRoutes = () => {
     var cb = (route, message, arg) => {
       try {
-        console.log(route);
-        console.log(message);
         for (var key in message) {
           sessionStorage.setItem(key, message[key]);
         }
-        console.log(sessionStorage);
       } catch (e) {
-        console.log("回调出错");
+        // console.log("回调出错");
       }
     }
 
@@ -207,12 +211,9 @@ class AppFrame extends Component {
             available_result: Lang[window.Lang].ErrorCode[message.code]
           })
         }
-
         // 名字已经被占用，需要重新起一个有特色的名字
       }
 
-      console.log(route);
-      console.log(message);
     }
     getData(getRouter(CHECK_AVAILABLE), { account: account, type: APP_TYPE_COMPANY }, cb);
   }
@@ -225,7 +226,6 @@ class AppFrame extends Component {
     if (account === "" || password === "") {
       return;
     }
-
     var cb = (route, message, arg) => {
       if (message.code === Code.LOGIC_SUCCESS) {
         this.handleNext();
@@ -246,57 +246,18 @@ class AppFrame extends Component {
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.token;
         sessionStorage.apptype = arg["type"];
-
-        // getData(getRouter(LOGIN))
-
-        // window.CacheData = message.data;
-        // 严谨检查服务端传过来的数据正确性
-        // if (message.data.base !== undefined) {
-        //   window.CacheData.base = message.data.base;
-        // } else {
-
-        // }
-        // if (message.data.finance !== undefined) {
-        //   window.CacheData.finance = message.data.finance;
-        // } else {
-
-        // }
-        // if (message.data.express !== undefined) {
-        //   window.CacheData.express = message.data.express;
-        // } else {
-
-        // }
-        // if (message.data.admin !== undefined) {
-        //   window.CacheData.admin = message.data.admin;
-        // } else {
-
-        // }
-        // if (message.data.student !== undefined) {
-        //   window.CacheData.student = message.data.student;
-        // } else {
-
-        // }
-        // if (message.data.clazz !== undefined) {
-        //   window.CacheData.clazz = message.data.clazz;
-        // } else {
-
-        // }
-
         // 登录成功后跳转到相应界面
-        console.log(sessionStorage.apptype);
-
         switch (Number(sessionStorage.apptype)) {
           case APP_TYPE_COMPANY:
-            console.log(window.location);
             this.context.router.push("/com/home");
             break;
           case APP_TYPE_ORANIZATION:
             this.context.router.push("/org/home");
             break;
         }
-
+        let e = new Event("login_success");
+        dispatchEvent(e);
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
-        // 
       } else {
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
       }
@@ -308,7 +269,6 @@ class AppFrame extends Component {
     } else if (this.state.index === ORANIZATION_LOING_INDEX) {
       apptype = APP_TYPE_ORANIZATION;
     }
-    console.log(apptype);
     getData(getRouter(LOGIN), { account: account, password: password, type: apptype }, cb, { account: account, type: apptype });
   }
 
@@ -431,9 +391,7 @@ class AppFrame extends Component {
             raised
             color="accent"
             onClick={() => {
-              console.log("123");
               let account = document.getElementById("register_account").value;
-              console.log(account);
               let password = document.getElementById("register_password").value;
               let repeat = document.getElementById("repeat_password").value;
               this.register(account, password, repeat);
