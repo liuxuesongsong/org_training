@@ -74,8 +74,6 @@ export default class CommonAlert extends Component {
       action
     } = this.props;
 
-    console.log(content)
-
     this.state.action = [
       () => {
         this.setState({ open: false });

@@ -16,10 +16,6 @@ let styleManager;
 
 class App extends Component {
 
-  state = {
-    apptype: sessionStorage.apptype | 0,
-  }
-
   static propTypes = {
     dark: PropTypes.bool.isRequired,
   };

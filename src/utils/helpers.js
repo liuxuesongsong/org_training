@@ -78,7 +78,6 @@ export function getData(router, json, callback = null, args = {}) {
       return Promise.reject(new Error(response.statusText));
     }
   }).then(function (response) {
-    console.log("respond");
     return response.json();
   }).then(function (data) {
     if (callback !== null) {
@@ -137,7 +136,6 @@ export function getCache(key = DATA_TYPE_ALL) {
 export function getStudent(id = 0) {
   for (var i = 0; i < window.CacheData[DATA_TYPE_STUDENT].length; i++) {
     if (window.CacheData[DATA_TYPE_STUDENT][i].id === id) {
-      console.log(window.CacheData[DATA_TYPE_STUDENT][i]);
       return window.CacheData[DATA_TYPE_STUDENT][i];
     }
   }
@@ -154,7 +152,6 @@ export function initCache(callback = () => { }) {
       var cb = (route, message, arg) => {
         if (message.code === Code.LOGIC_SUCCESS) {
           window.CacheData = message.data;
-          console.log(message.data);
           callback()
         }
       }

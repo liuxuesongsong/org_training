@@ -141,6 +141,7 @@ class AppFrame extends Component {
     open: false,
     anchorEl: undefined,
     logged: Boolean(sessionStorage.getItem("logged")),
+    apptype: Number(sessionStorage.getItem("apptype")),
     showRegister: true,
     name: Lang[window.Lang].pages.main.input_your_account,
     activeStep: 0,
@@ -166,15 +167,17 @@ class AppFrame extends Component {
     this.getRoutes();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
+      addEventListener("login_success", (e) => {
+        this.setState({ logged: Boolean(sessionStorage.getItem("logged")), apptype: Number(sessionStorage.getItem("apptype")) })
+        removeEventListener("login_success")
+      })
     } else {
       switch (Number(sessionStorage.apptype)) {
         case APP_TYPE_COMPANY:
           this.context.router.push("/com/home");
-          // window.location = "/com/home";
           break;
         case APP_TYPE_ORANIZATION:
           this.context.router.push("/org/home");
-          // window.location = "/org/home";
           break;
       }
     }
@@ -182,13 +185,11 @@ class AppFrame extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.logged === false && this.state.logged === true) {
-      switch (Number(sessionStorage.apptype)) {
+      switch (this.state.apptype) {
         case APP_TYPE_COMPANY:
-          // this.context.router.push("/com/home");
           window.location = "/com/home";
           break;
         case APP_TYPE_ORANIZATION:
-          // this.context.router.push("/org/home");
           window.location = "/org/home";
           break;
       }
@@ -255,8 +256,6 @@ class AppFrame extends Component {
 
   login = (account, password) => {
     var cb = (route, message, arg) => {
-
-      console.log(message);
       // Code.LOGIC_SUCCESS
       if (message.code === 10007) {
         sessionStorage.logged = true;
@@ -274,7 +273,6 @@ class AppFrame extends Component {
         }
         let e = new Event("login_success");
         dispatchEvent(e);
-        console.log(Lang[window.Lang].pages.main.login_success)
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
