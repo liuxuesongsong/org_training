@@ -142,7 +142,7 @@ class AppFrame extends Component {
     anchorEl: undefined,
     logged: Boolean(sessionStorage.getItem("logged")),
     showRegister: true,
-    name: "",
+    name: Lang[window.Lang].pages.main.input_your_account,
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -307,7 +307,7 @@ class AppFrame extends Component {
             error={this.state.unavailable}
             name="register_account"
             id="register_account"
-            label={Lang[window.Lang].pages.main.account}
+            label={Lang[window.Lang].pages.main.com_account}
             fullWidth={true}
             defaultValue={sessionStorage.account}
             onFocus={(e) => {
@@ -456,14 +456,14 @@ class AppFrame extends Component {
       <div>
         <TextField
           id="login_name"
-          label={Lang[window.Lang].pages.main.account}
+          label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
           style={{
             marginLeft: 200,//styleManager.theme.spacing.unit,
             marginRight: 200,//theme.spacing.unit,  
             width: 200,
           }}
-          defaultValue={Lang[window.Lang].pages.main.input_your_account}
-          value={this.state.name}
+          // defaultValue={Lang[window.Lang].pages.main.input_your_account}
+          // value={this.state.name}
           onChange={event => this.setState({ name: event.target.value })}
         />
         <TextField

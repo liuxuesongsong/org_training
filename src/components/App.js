@@ -18,7 +18,7 @@ class App extends Component {
 
   componentDidMount() {
     addEventListener("login_success", (e) => {
-      this.setState({ apptype: sessionStorage.apptype })
+      render();
     })
   }
 
