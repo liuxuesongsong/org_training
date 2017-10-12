@@ -169,21 +169,22 @@ class AppFrame extends Component {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
         this.setState({ logged: Boolean(sessionStorage.getItem("logged")), apptype: Number(sessionStorage.getItem("apptype")) })
-        removeEventListener("login_success")
       })
     } else {
       switch (Number(sessionStorage.apptype)) {
         case APP_TYPE_COMPANY:
-          this.context.router.push("/com/home");
+          // this.context.router.push("/com/home");
           break;
         case APP_TYPE_ORANIZATION:
-          this.context.router.push("/org/home");
+          // this.context.router.push("/org/home");
           break;
       }
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log(prevState.logged)
+    console.log(this.state.logged)
     if (prevState.logged === false && this.state.logged === true) {
       switch (this.state.apptype) {
         case APP_TYPE_COMPANY:
@@ -245,9 +246,9 @@ class AppFrame extends Component {
       return;
     }
     var cb = (route, message, arg) => {
-      if (message.code === Code.LOGIC_SUCCESS) {
+      if (message.code === Code.REGISTER_SUCCESS) {
         this.handleNext();
-        this.popUpNotice(NOTICE, LOGIC_SUCCESS, Lang[window.Lang].pages.main.register_success);
+        this.popUpNotice(NOTICE, Code.REGISTER_SUCCESS, Lang[window.Lang].ErrorCode[Code.REGISTER_SUCCESS]);
       }
       this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
     }

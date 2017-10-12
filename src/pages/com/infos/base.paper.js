@@ -57,7 +57,7 @@ class Base extends Component {
             }
 
         }
-        
+
         var obj = {
             company_name: document.getElementById(company_name).value,
             province: document.getElementById(province).value,

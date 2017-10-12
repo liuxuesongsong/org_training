@@ -306,7 +306,7 @@ class Students extends Component {
                                         defaultValue={this.state.selected.proj_exp.soft_amount}>
                                     </TextField>
                                 </div>
-                                <Button color="primary" style={{ margin: 10 }}>
+                                <Button color="primary" className={} style={{ margin: 10 }}>
                                     {Lang[window.Lang].pages.main.certain_button}
                                 </Button>
                             </div>

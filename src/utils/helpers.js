@@ -150,8 +150,10 @@ export function initCache(callback = () => { }) {
   // if (!window.CacheData) {
     if (sessionStorage.logged === true || sessionStorage.session !== undefined) {
       var cb = (route, message, arg) => {
-        if (message.code === Code.LOGIC_SUCCESS) {
+        console.log(message)
+        if (message.code === 10045) {
           window.CacheData = message.data;
+          console.log(window.CacheData)
           callback()
         }
       }

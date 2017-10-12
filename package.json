@@ -68,7 +68,7 @@
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.3",
-    "mocha": "^3.4.2",
+    "mocha": "^3.5.3",
     "nyc": "^11.0.3",
     "object-assign": "^4.1.1",
     "phantomjs-prebuilt": "^2.1.14",
@@ -98,6 +98,7 @@
     "react-dom": "^15.3.0 || ^16.0.0-alpha.13"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "babel-runtime": "^6.23.0",
     "classnames": "^2.2.5",
     "dom-helpers": "^3.2.1",
