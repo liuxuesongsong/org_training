@@ -263,14 +263,15 @@ class AppFrame extends Component {
         sessionStorage.session = message.session;
         sessionStorage.apptype = arg["type"];
         // 登录成功后跳转到相应界面
-        switch (Number(sessionStorage.apptype)) {
-          case APP_TYPE_COMPANY:
-            this.context.router.push("/com/home");
-            break;
-          case APP_TYPE_ORANIZATION:
-            this.context.router.push("/org/home");
-            break;
-        }
+        // switch (Number(sessionStorage.apptype)) {
+        //   case APP_TYPE_COMPANY:
+        //     this.context.router.push("/com/home");
+        //     break;
+        //   case APP_TYPE_ORANIZATION:
+        //     this.context.router.push("/org/home");
+        //     break;
+        // }
+        // 修改为登录后派发 登录事件
         let e = new Event("login_success");
         dispatchEvent(e);
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
