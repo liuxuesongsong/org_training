@@ -147,7 +147,7 @@ export function getStudent(id = 0) {
  * @param {*回调函数} callback 
  */
 export function initCache(callback = () => { }) {
-  if (!window.CacheData) {
+  // if (!window.CacheData) {
     if (sessionStorage.logged === true || sessionStorage.session !== undefined) {
       var cb = (route, message, arg) => {
         if (message.code === Code.LOGIC_SUCCESS) {
@@ -160,10 +160,9 @@ export function initCache(callback = () => { }) {
       // 请登录
       // window.di
     }
-  } else {
-    callback();
-    // window.currentPage.cacheToState();
-  }
+  // } else {
+    // callback();
+  // }
 }
 
 /**

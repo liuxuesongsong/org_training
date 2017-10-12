@@ -54,6 +54,7 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         let students = getCache(DATA_TYPE_STUDENT);
+        students = students === undefined ? [] : students;
         let newStudents = [], unarragedStudents = [], arrangedStudents = [];
         for (var i = 0; i < students.length; i++) {
             if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_UNDO) {

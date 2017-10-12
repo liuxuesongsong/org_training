@@ -51,6 +51,7 @@ class Exams extends Component {
 
     cacheToState() {
         let students = getCache(DATA_TYPE_STUDENT);
+        students = students === undefined ? [] : students;
         let examingStudents = [], passedStudents = [], unpassedStudents = [];
         for (var i = 0; i < students.length; i++) {
             if (students[i].status[STATUS_EXAMING].status === STATUS_EXAMING_DOING) {

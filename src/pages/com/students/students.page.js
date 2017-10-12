@@ -54,6 +54,7 @@ class Students extends Component {
 
     cacheToState() {
         let students = getCache(DATA_TYPE_STUDENT);
+        students = students === undefined ? [] : students;
         window.currentPage.setState({ students: students })
     }
 
