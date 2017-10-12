@@ -16,12 +16,6 @@ let styleManager;
 
 class App extends Component {
 
-  componentDidMount() {
-    addEventListener("login_success", (e) => {
-      render();
-    })
-  }
-
   state = {
     apptype: sessionStorage.apptype | 0,
   }

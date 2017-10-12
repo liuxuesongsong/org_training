@@ -170,9 +170,26 @@ class AppFrame extends Component {
       switch (Number(sessionStorage.apptype)) {
         case APP_TYPE_COMPANY:
           this.context.router.push("/com/home");
+          // window.location = "/com/home";
           break;
         case APP_TYPE_ORANIZATION:
           this.context.router.push("/org/home");
+          // window.location = "/org/home";
+          break;
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.logged === false && this.state.logged === true) {
+      switch (Number(sessionStorage.apptype)) {
+        case APP_TYPE_COMPANY:
+          // this.context.router.push("/com/home");
+          window.location = "/com/home";
+          break;
+        case APP_TYPE_ORANIZATION:
+          // this.context.router.push("/org/home");
+          window.location = "/org/home";
           break;
       }
     }
@@ -258,7 +275,8 @@ class AppFrame extends Component {
         let e = new Event("login_success");
         dispatchEvent(e);
         console.log(Lang[window.Lang].pages.main.login_success)
-        this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
+        this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
+        // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
         this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
       }
