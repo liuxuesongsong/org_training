@@ -80,7 +80,7 @@ class Exams extends Component {
                 getStudent(arg.id)[STATUS_ENROLLED] = STATUS_ENROLLED_DID;
             }
         }
-        getData(getRouter(ENROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
+        getData(getRouter(ARRANGE_EXAM), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
     retryExam() {
