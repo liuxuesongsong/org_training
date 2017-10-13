@@ -8,9 +8,9 @@ let expect = chai.expect;
 let routers = "http://47.93.26.208:8001/index.php?m=train&c=route&a=client_route";
 let addr = "http://47.93.26.208:8001/index.php?m=train";
 var routes = {
-    "login": "http://47.93.26.208:8001/index.php?m=train&c=users&a=login",
-    "register": "http://47.93.26.208:8001/index.php?m=train&c=users&a=regist",
-    "available": "http://47.93.26.208:8001/index.php?m=train&c=users&a=available",
+    "login": addr + "&c=users&a=login",
+    "register": addr + "&c=users&a=regist",
+    "available": addr + "&c=users&a=available",
     "logout": addr + "&c=users&a=logout",
     "reset": addr + "&c=users&a=reset",
     "info": addr + "&c=users&a=info",
@@ -49,6 +49,8 @@ let header = {
     },
 }
 
+var session = "bE2rbg"
+
 describe('服务器API测试', function () {
 
     it('请求路由', function () {
@@ -79,7 +81,7 @@ describe('服务器API测试', function () {
 
     it('请求注册', function () {
         return fetch(routes.register, Object.assign(header,
-            { body: JSON.stringify({ account: "tishoy", password: "hantishoy123", type: 1 }) }
+            { body: JSON.stringify({ account: "tishoy2", password: "hantishoy123", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -92,7 +94,7 @@ describe('服务器API测试', function () {
 
     it('用户名可用', function () {
         return fetch(routes.available, Object.assign(header,
-            { body: JSON.stringify({ account: "tishoy", password: "hantishoy123", type: 1 }) }
+            { body: JSON.stringify({ account: "tishoy2", password: "hantishoy123", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -104,7 +106,7 @@ describe('服务器API测试', function () {
 
     it('用户登出', function () {
         return fetch(routes.logout, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy" }) }
+            { body: JSON.stringify({ session: session }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -116,7 +118,7 @@ describe('服务器API测试', function () {
 
     it('用户设置', function () {
         return fetch(routes.reset, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy" }) }
+            { body: JSON.stringify({ session: session }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -128,7 +130,7 @@ describe('服务器API测试', function () {
 
     it('用户信息', function () {
         return fetch(routes.info, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy" }) }
+            { body: JSON.stringify({ session: session }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -143,7 +145,7 @@ describe('服务器API测试', function () {
         return fetch(routes.insert, Object.assign(header,
             {
                 body: JSON.stringify({
-                    session: "tishoy", student: {
+                    session: session, student: {
                         "id": 12,
                         "base_info": {
                             "name": "tishoy1",
@@ -216,7 +218,7 @@ describe('服务器API测试', function () {
 
     it('删除学生', function () {
         return fetch(routes.remove, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -230,7 +232,7 @@ describe('服务器API测试', function () {
         return fetch(routes.base, Object.assign(header,
             {
                 body: JSON.stringify({
-                    session: "tishoy", id: 12, base_info: {
+                    session: session, id: 12, base_info: {
                         "name": "tishoy1",
                         "tel": "13810100010",
                         "email": "tishoy",
@@ -253,7 +255,7 @@ describe('服务器API测试', function () {
         return fetch(routes.self, Object.assign(header,
             {
                 body: JSON.stringify({
-                    session: "tishoy", id: 12, "personal_info": {
+                    session: session, id: 12, "personal_info": {
                         "licence": "232700198902230021",
                         "edu": "QH University",
                         "working_time": "5 year",
@@ -275,7 +277,7 @@ describe('服务器API测试', function () {
         return fetch(routes.addexp, Object.assign(header,
             {
                 body: JSON.stringify({
-                    session: "tishoy", id: 12, exp: {
+                    session: session, id: 12, exp: {
                         "id": "1",
                         "name": "nonono",
                         "time": 1234567890,
@@ -296,7 +298,7 @@ describe('服务器API测试', function () {
 
     it('删除经验', function () {
         return fetch(routes.delexp, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12, exp_id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12, exp_id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -310,7 +312,7 @@ describe('服务器API测试', function () {
     it('安排考试', function () {
         return fetch(routes.examing, Object.assign(header,
             // 为12号学生安排 id为2的考试
-            { body: JSON.stringify({ session: "tishoy", id: 12, exam: 2 }) }
+            { body: JSON.stringify({ session: session, id: 12, exam: 2 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -323,7 +325,7 @@ describe('服务器API测试', function () {
     it('考试通过', function () {
         return fetch(routes.pass, Object.assign(header,
             // 12号学生通过考试
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -335,7 +337,7 @@ describe('服务器API测试', function () {
 
     it('重报名考试', function () {
         return fetch(routes.retry, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -347,7 +349,7 @@ describe('服务器API测试', function () {
 
     it('考试分数', function () {
         return fetch(routes.score, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12, score: 80 }) }
+            { body: JSON.stringify({ session: session, id: 12, score: 80 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -359,7 +361,7 @@ describe('服务器API测试', function () {
 
     it('考试结束', function () {
         return fetch(routes.over, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -372,7 +374,7 @@ describe('服务器API测试', function () {
     it('学生报名', function () {
         return fetch(routes.enroll, Object.assign(header,
             // 为12号学生报名 
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -385,7 +387,7 @@ describe('服务器API测试', function () {
     it('同意安排', function () {
         return fetch(routes.agree, Object.assign(header,
             // 12号学生同意安排
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -398,7 +400,7 @@ describe('服务器API测试', function () {
     it('拒绝安排', function () {
         return fetch(routes.refuse, Object.assign(header,
             // 12号学生拒绝安排
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -410,7 +412,7 @@ describe('服务器API测试', function () {
 
     it('新建班级', function () {
         return fetch(routes.new, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", clazz_id: 2 }) }
+            { body: JSON.stringify({ session: session, clazz_id: 2 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -422,7 +424,7 @@ describe('服务器API测试', function () {
 
     it('进入班级', function () {
         return fetch(routes.entrance, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12, clazz_id: 2 }) }
+            { body: JSON.stringify({ session: session, id: 12, clazz_id: 2 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -434,7 +436,7 @@ describe('服务器API测试', function () {
 
     it('退出班级', function () {
         return fetch(routes.exit, Object.assign(header,
-            { body: JSON.stringify({ session: "tishoy", id: 12 }) }
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -446,7 +448,7 @@ describe('服务器API测试', function () {
 
     it('请求数据', function () {
         return fetch(routes.query, Object.assign(header, {
-            body: JSON.stringify({ session: "tishoy" })
+            body: JSON.stringify({ session: session })
         })).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -454,7 +456,9 @@ describe('服务器API测试', function () {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             expect(json.data.student).to.be.an('array');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0, 10045].indexOf(json.code), -1);
         })
     })
+
+
 });
