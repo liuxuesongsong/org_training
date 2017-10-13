@@ -164,12 +164,12 @@ describe('服务器API测试', function () {
                         },
                         "proj_exp": [
                             {
-                                "id": "1",
-                                "name": "nonono",
-                                "time": "范德萨",
-                                "actor": "范德萨",
-                                "total_amount": "范德萨",
-                                "soft_amount": "放大"
+                                "id": 1,
+                                "name": "支付宝",
+                                "time": 1587515789,
+                                "actor": "经理",
+                                "total_amount": "100万",
+                                "soft_amount": "50万"
                             },
 
                         ],
