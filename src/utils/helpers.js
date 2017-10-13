@@ -29,6 +29,11 @@ export function titleize(string: String) {
     .join(' ');
 }
 
+function formatTimeNumber(n) {
+  n = n.toString()
+  return n[1] ? n : '0' + n
+}
+
 export function getTimeString(timeStamp) {
   let date;
   let ts = parseInt(timeStamp);
@@ -47,7 +52,7 @@ export function getTimeString(timeStamp) {
   let minute = date.getMinutes();
   let second = date.getSeconds();
 
-  return [year, month, day].map(Util.number.formatTimeNumber).join('/') + ' ' + [hour, minute, second].map(Util.number.formatTimeNumber).join(':')
+  return [year, month, day].map(formatTimeNumber).join('/') + ' ' + [hour, minute, second].map(formatTimeNumber).join(':')
 }
 
 /**
@@ -148,22 +153,22 @@ export function getStudent(id = 0) {
  */
 export function initCache(callback = () => { }) {
   // if (!window.CacheData) {
-    if (sessionStorage.logged === true || sessionStorage.session !== undefined) {
-      var cb = (route, message, arg) => {
-        console.log(message)
-        if (message.code === 10045) {
-          window.CacheData = message.data;
-          console.log(window.CacheData)
-          callback()
-        }
+  if (sessionStorage.logged === true || sessionStorage.session !== undefined) {
+    var cb = (route, message, arg) => {
+      console.log(message)
+      if (message.code === 10045) {
+        window.CacheData = message.data;
+        console.log(window.CacheData)
+        callback()
       }
-      getData(getRouter(QUERY), { session: sessionStorage.session, type: sessionStorage.apptype }, cb, { callback: callback });
-    } else {
-      // 请登录
-      // window.di
     }
+    getData(getRouter(QUERY), { session: sessionStorage.session, type: sessionStorage.apptype }, cb, { callback: callback });
+  } else {
+    // 请登录
+    // window.di
+  }
   // } else {
-    // callback();
+  // callback();
   // }
 }
 

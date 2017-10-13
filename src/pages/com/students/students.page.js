@@ -17,7 +17,7 @@ import StudentCard from '../studentCard';
 
 import Lang from '../../../language';
 import Code from '../../../code';
-import { initCache, getData, getRouter, getCache } from '../../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getTimeString } from '../../../utils/helpers';
 import { INSERT_STUDENT, REMOVE_STUDENT, BASE_INFO, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../../enum';
 
 import CommonAlert from '../../../components/CommonAlert';
@@ -144,8 +144,68 @@ class Students extends Component {
                                     color="primary"
                                     style={{ margin: 10 }}
                                     onClick={() => {
-                                        var student = {};
+                                        var student = {
+                                            "id": 12,
+                                            "base_info": {
+                                                "name": "",
+                                                "tel": "",
+                                                "email": "",
+                                                "city": 0,
+                                                "level": 0,
+                                                "company": ""
+                                            },
+                                            "personal_info": {
+                                                "licence": "",
+                                                "edu": "",
+                                                "working_time": "",
+                                                "total_amount": "",
+                                                "soft_amount": ""
+                                            },
+                                            "proj_exp": [
+                                                {
+                                                    "id": 1,
+                                                    "name": "",
+                                                    "time": 0,
+                                                    "actor": "",
+                                                    "total_amount": "",
+                                                    "soft_amount": ""
+                                                },
+
+                                            ],
+                                            // 状态 0 未进行 1 进行中 2 进行结束
+                                            "status": {
+                                                "enrolled": {
+                                                    "status": 0,
+                                                    "time": 1500262255
+                                                },
+                                                "arranged": {
+                                                    "status": 2,
+                                                    "time": 1500262255
+                                                },
+                                                "agreed": {
+                                                    "status": 0,
+                                                    "time": 1500262255
+                                                },
+                                                "examing": {
+                                                    "status": 1,
+                                                    "time": 1500262255
+                                                },
+                                                "passed": {
+                                                    "status": 1,
+                                                    "score": 96,
+                                                    "time": 1500262255
+                                                },
+                                                "retry": {
+                                                    "status": 1,
+                                                    "time": 1500262255
+                                                }
+                                            }
+                                        }
                                         this.newStudent(student);
+                                        this.state.selected = student;
+                                        this.setState({
+                                            showInfo: true
+                                        })
                                     }}>
                                     {Lang[window.Lang].pages.com.students.new_student}
                                 </Button>
@@ -199,13 +259,13 @@ class Students extends Component {
                                 <TextField
                                     id="city"
                                     label={Lang[window.Lang].pages.com.students.city}
-                                    defaultValue={this.state.selected.base_info.city}
+                                    defaultValue={this.state.selected.base_info.city.toString()}
                                     fullWidth
                                 />
                                 <TextField
                                     id="level"
                                     label={Lang[window.Lang].pages.com.students.level.title}
-                                    defaultValue={this.state.selected.base_info.level}
+                                    defaultValue={this.state.selected.base_info.level.toString()}
                                     fullWidth
                                 />
 
@@ -261,9 +321,8 @@ class Students extends Component {
                                             <Typography type="body1" component="p">
                                                 {exp.name}
                                             </Typography>
-
                                             <Typography type="body1" component="p">
-                                                {exp.time}
+                                                {getTimeString(exp.time)}
                                             </Typography>
                                             <Typography type="body1" component="p">
                                                 {exp.actor}
