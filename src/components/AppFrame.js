@@ -168,40 +168,28 @@ class AppFrame extends Component {
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
-        this.setState({ logged: Boolean(sessionStorage.getItem("logged")), apptype: Number(sessionStorage.getItem("apptype")) })
+        console.log("!23");
+        switch (Number(sessionStorage.apptype)) {
+          case APP_TYPE_COMPANY:
+            window.location = "/com/home";
+            break;
+          case APP_TYPE_ORANIZATION:
+            window.location = "/org/home";
+            break;
+        }
       })
-    } else {
-      switch (Number(sessionStorage.apptype)) {
-        case APP_TYPE_COMPANY:
-          // this.context.router.push("/com/home");
-          break;
-        case APP_TYPE_ORANIZATION:
-          // this.context.router.push("/org/home");
-          break;
-      }
-    }
-  }
-
-  componentDidUpdate(prevProps, prevState) {
-    console.log(prevState.logged)
-    console.log(this.state.logged)
-    if (prevState.logged === false && this.state.logged === true) {
-      switch (this.state.apptype) {
-        case APP_TYPE_COMPANY:
-          window.location = "/com/home";
-          break;
-        case APP_TYPE_ORANIZATION:
-          window.location = "/org/home";
-          break;
-      }
-    }
+    } 
   }
 
   getRoutes = () => {
     var cb = (route, message, arg) => {
       try {
-        for (var key in message) {
-          sessionStorage.setItem(key, message[key]);
+        if (message.code === 10046) {
+          for (var key in message) {
+            if (key !== "code") {
+              sessionStorage.setItem(key, message[key]);
+            }
+          }
         }
       } catch (e) {
         // console.log("回调出错");
@@ -213,23 +201,27 @@ class AppFrame extends Component {
 
   check_available = (account) => {
     var cb = (route, message, arg) => {
-      if (message.code === Code.LOGIC_SUCCESS) {
+      if (message.code === Code.ACCOUNT_CAN_USE) {
         this.setState({
           unavailable: false,
           available_result: Lang[window.Lang].pages.com.home.available
         })
       } else {
-        if (message.code === 0) {
-          this.setState({
-            unavailable: false,
-            available_result: Lang[window.Lang].pages.com.home.available
-          })
-        } else {
-          this.setState({
-            unavailable: true,
-            available_result: Lang[window.Lang].ErrorCode[message.code]
-          })
-        }
+        this.setState({
+          unavailable: true,
+          available_result: Lang[window.Lang].ErrorCode[message.code]
+        })
+        // if (message.code === 0) {
+        //   this.setState({
+        //     unavailable: false,
+        //     available_result: Lang[window.Lang].pages.com.home.available
+        //   })
+        // } else {
+        //   this.setState({
+        //     unavailable: true,
+        //     available_result: Lang[window.Lang].ErrorCode[message.code]
+        //   })
+        // }
         // 名字已经被占用，需要重新起一个有特色的名字
       }
 
@@ -258,7 +250,8 @@ class AppFrame extends Component {
   login = (account, password) => {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
-      if (message.code === 10007) {
+      console.log(message.code);
+      if (message.code === 10006) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.session;
@@ -288,6 +281,7 @@ class AppFrame extends Component {
     } else if (this.state.index === ORANIZATION_LOING_INDEX) {
       apptype = APP_TYPE_ORANIZATION;
     }
+    // { account: account, password: password, type: apptype }
     getData(getRouter(LOGIN), { account: account, password: password, type: apptype }, cb, { account: account, type: apptype });
   }
 
@@ -510,6 +504,47 @@ class AppFrame extends Component {
     )
   }
 
+  infoView = () => {
+    return (
+      <div>
+        <TextField
+          id="login_name"
+          label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
+          style={{
+            marginLeft: 200,//styleManager.theme.spacing.unit,
+            marginRight: 200,//theme.spacing.unit,  
+            width: 200,
+          }}
+          // defaultValue={Lang[window.Lang].pages.main.input_your_account}
+          // value={this.state.name}
+          onChange={event => this.setState({ name: event.target.value })}
+        />
+        <TextField
+          label={Lang[window.Lang].pages.main.password}
+          id={"login_password" + this.state.index}
+          type="password"
+        // defaultValue={Lang[window.Lang].pages.main.input_your_password}
+        />
+        <Button
+          raised
+          color="accent"
+          onClick={() => {
+            var name = document.getElementById("login_name").value;
+            var password = document.getElementById("login_password" + this.state.index).value;
+
+            if (name === "" || password === "") {
+              return
+            }
+
+            this.login(name, password);
+          }}
+        >
+          {Lang[window.Lang].pages.main.login_button}
+        </Button>
+      </div>
+    )
+  }
+
   handleDrawerClose = () => {
     this.setState({ drawerOpen: false });
   };
@@ -527,7 +562,19 @@ class AppFrame extends Component {
 
   handleLogout = () => {
     this.popUpNotice("notice", 0, "登出成功")
-    this.setState({ logged: sessionStorage.getItem("logged") });
+    this.state.logged = false;
+    this.setState({ logged: sessionStorage.getItem("logged"), apptype: 0 });
+    addEventListener("login_success", (e) => {
+      switch (Number(sessionStorage.apptype)) {
+        case APP_TYPE_COMPANY:
+          window.location = "/com/home";
+          break;
+        case APP_TYPE_ORANIZATION:
+          window.location = "/org/home";
+          break;
+      }
+      this.setState({ logged: Boolean(sessionStorage.getItem("logged")), apptype: Number(sessionStorage.getItem("apptype")) })
+    })
   }
 
   handleMenuClick = event => {

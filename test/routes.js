@@ -67,34 +67,39 @@ describe('服务器API测试', function () {
 
     it('请求登录', function () {
         return fetch(routes.login, Object.assign(header,
-            { body: JSON.stringify({ account: "tishoy", password: "hantishoy", type: 1 }) }
+            { body: JSON.stringify({ password: "hantishoy", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             assert.notEqual([10005, 10006, 10007].indexOf(json.code), -1);
-            expect(json.data).to.be.an('object');
-            expect(json.data.student).to.be.an('array');
+            console.log(json.code)
+            if (json.code == 10006) {
+                console.log(json.session);
+                expect(json.data).to.be.an('object');
+                expect(json.data.student).to.be.an('array');
+                console.log(json.code);
+            }
         });
     });
 
     it('请求注册', function () {
         return fetch(routes.register, Object.assign(header,
-            { body: JSON.stringify({ account: "tishoy2", password: "hantishoy123", type: 1 }) }
+            { body: JSON.stringify({ account: [1, 2, 3, 4], password: "123", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             // 没有不成功的时候么？ 有！ 
-            assert.notEqual([10003, 10004].indexOf(json.code), -1);
+            assert.notEqual([10001, 10003, 10004].indexOf(json.code), -1);
         });
     });
 
     it('用户名可用', function () {
         return fetch(routes.available, Object.assign(header,
-            { body: JSON.stringify({ account: "tishoy2", password: "hantishoy123", type: 1 }) }
+            { body: JSON.stringify({ account: [1, 2, 3, 4], type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -118,7 +123,7 @@ describe('服务器API测试', function () {
 
     it('用户设置', function () {
         return fetch(routes.reset, Object.assign(header,
-            { body: JSON.stringify({ session: session }) }
+            { body: JSON.stringify({ session: session,  }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {

@@ -10,7 +10,7 @@ module.exports = {
     // 该账号已经被注册
     "ACCOUNT_HAD_EXIST": 10001,
     // 帐号可以注册
-    "": 10002,
+    "ACCOUNT_CAN_USE": 10002,
     "REGISTER_SUCCESS":10003,
     // 帐号可以注册
     "PASSWORD_IS_WRONG": 10006,
