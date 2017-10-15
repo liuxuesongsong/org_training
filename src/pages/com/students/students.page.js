@@ -7,6 +7,12 @@ import Paper from 'material-ui/Paper';
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from 'material-ui/Dialog';
 import List, {
     ListItem, ListItemSecondaryAction, ListItemText,
     ListSubheader,
@@ -131,6 +137,134 @@ class Students extends Component {
         });
     }
 
+    handleRequestClose = () => {
+        this.setState({
+            openNewStudentDialog: false
+        })
+    }
+
+    newStudentDialog() {
+        var student = {
+            "id": 12,
+            "base_info": {
+                "name": "",
+                "tel": "",
+                "email": "",
+                "city": 0,
+                "level": 0,
+                "company": ""
+            },
+            "personal_info": {
+                "licence": "",
+                "edu": "",
+                "working_time": "",
+                "total_amount": "",
+                "soft_amount": ""
+            },
+            "proj_exp": [
+                {
+                    "id": 1,
+                    "name": "",
+                    "time": 0,
+                    "actor": "",
+                    "total_amount": "",
+                    "soft_amount": ""
+                },
+
+            ],
+            // 状态 0 未进行 1 进行中 2 进行结束
+            "status": {
+                "enrolled": {
+                    "status": 0,
+                    "time": 1500262255
+                },
+                "arranged": {
+                    "status": 2,
+                    "time": 1500262255
+                },
+                "agreed": {
+                    "status": 0,
+                    "time": 1500262255
+                },
+                "examing": {
+                    "status": 1,
+                    "time": 1500262255
+                },
+                "passed": {
+                    "status": 1,
+                    "score": 96,
+                    "time": 1500262255
+                },
+                "retry": {
+                    "status": 1,
+                    "time": 1500262255
+                }
+            }
+        }
+        return (
+            <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    新增学员
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                        <Typography type="headline" component="h3">
+                            {Lang[window.Lang].pages.com.students.base_info}
+                        </Typography>
+                        <TextField
+                            id="student_name"
+                            label={Lang[window.Lang].pages.com.students.name}
+                            defaultValue={student.base_info.name}
+                            fullWidth
+                        />
+                        <TextField
+                            id="tel"
+                            label={Lang[window.Lang].pages.com.students.tel}
+                            defaultValue={student.base_info.tel}
+                            fullWidth
+                        />
+                        <TextField
+                            id="email"
+                            label={Lang[window.Lang].pages.com.students.email}
+                            defaultValue={student.base_info.email}
+                            fullWidth
+                        />
+                        <TextField
+                            id="city"
+                            label={Lang[window.Lang].pages.com.students.city}
+                            defaultValue={student.base_info.city.toString()}
+                            fullWidth
+                        />
+                        <TextField
+                            id="level"
+                            label={Lang[window.Lang].pages.com.students.level.title}
+                            defaultValue={student.base_info.level.toString()}
+                            fullWidth
+                        />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+    }
+
     render() {
         return (
             <div>
@@ -138,74 +272,23 @@ class Students extends Component {
                     style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
                 >
                     <div style={{ margin: 10, width: 400, float: "left" }}>
+                        {this.newStudentDialog()}
                         <List subheader={
                             <ListSubheader>
                                 <Button
                                     color="primary"
                                     style={{ margin: 10 }}
                                     onClick={() => {
-                                        var student = {
-                                            "id": 12,
-                                            "base_info": {
-                                                "name": "",
-                                                "tel": "",
-                                                "email": "",
-                                                "city": 0,
-                                                "level": 0,
-                                                "company": ""
-                                            },
-                                            "personal_info": {
-                                                "licence": "",
-                                                "edu": "",
-                                                "working_time": "",
-                                                "total_amount": "",
-                                                "soft_amount": ""
-                                            },
-                                            "proj_exp": [
-                                                {
-                                                    "id": 1,
-                                                    "name": "",
-                                                    "time": 0,
-                                                    "actor": "",
-                                                    "total_amount": "",
-                                                    "soft_amount": ""
-                                                },
 
-                                            ],
-                                            // 状态 0 未进行 1 进行中 2 进行结束
-                                            "status": {
-                                                "enrolled": {
-                                                    "status": 0,
-                                                    "time": 1500262255
-                                                },
-                                                "arranged": {
-                                                    "status": 2,
-                                                    "time": 1500262255
-                                                },
-                                                "agreed": {
-                                                    "status": 0,
-                                                    "time": 1500262255
-                                                },
-                                                "examing": {
-                                                    "status": 1,
-                                                    "time": 1500262255
-                                                },
-                                                "passed": {
-                                                    "status": 1,
-                                                    "score": 96,
-                                                    "time": 1500262255
-                                                },
-                                                "retry": {
-                                                    "status": 1,
-                                                    "time": 1500262255
-                                                }
-                                            }
-                                        }
-                                        this.newStudent(student);
-                                        this.state.selected = student;
+                                        {/* this.newStudent(student); */ }
+                                        {/* this.newStudentDialog(); */ }
+                                        this.setState({
+                                            newStudentDialog: true
+                                        })
+                                        {/* this.state.selected = student;
                                         this.setState({
                                             showInfo: true
-                                        })
+                                        }) */}
                                     }}>
                                     {Lang[window.Lang].pages.com.students.new_student}
                                 </Button>

@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Button from 'material-ui/Button';
 import Typography from 'material-ui/Typography';
@@ -12,18 +11,6 @@ import { getData, getCache, getRouter } from '../../../utils/helpers';
 import { DATA_TYPE_BASE, RESET_INFO, DATA_TYPE_FINANCE } from '../../../enum';
 import Code from '../../../code';
 import Lang from '../../../language';
-
-const styleSheet = createStyleSheet('PaperSheet', theme => ({
-    root: theme.mixins.gutters({
-        paddingTop: 16,
-        paddingBottom: 16,
-    }),
-    paper: {
-        padding: 16,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
 
 const LANG_PREFIX = Lang[window.Lang].pages.com.infos.finance;
 

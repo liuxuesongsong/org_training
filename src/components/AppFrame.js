@@ -178,18 +178,20 @@ class AppFrame extends Component {
             break;
         }
       })
-    } 
+    }
   }
 
   getRoutes = () => {
     var cb = (route, message, arg) => {
       try {
-        if (message.code === 10046) {
+        if (message.code === Code.ROUTER_SUCCESS) {
           for (var key in message) {
             if (key !== "code") {
               sessionStorage.setItem(key, message[key]);
             }
           }
+        } else {
+          this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, Lang[window.Lang].ErrorCode[Code.ERROE_REQUEST_ROUTER]);
         }
       } catch (e) {
         // console.log("回调出错");
@@ -251,21 +253,12 @@ class AppFrame extends Component {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
       console.log(message.code);
-      if (message.code === 10006) {
+      if (message.code === Code.LOGIN_SUCCESS) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.session;
         sessionStorage.apptype = arg["type"];
-        // 登录成功后跳转到相应界面
-        // switch (Number(sessionStorage.apptype)) {
-        //   case APP_TYPE_COMPANY:
-        //     this.context.router.push("/com/home");
-        //     break;
-        //   case APP_TYPE_ORANIZATION:
-        //     this.context.router.push("/org/home");
-        //     break;
-        // }
-        // 修改为登录后派发 登录事件
+        
         let e = new Event("login_success");
         dispatchEvent(e);
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
@@ -499,6 +492,22 @@ class AppFrame extends Component {
           }}
         >
           {Lang[window.Lang].pages.main.login_button}
+        </Button>
+        <Button
+          raised
+          color="accent"
+          onClick={() => {
+            {/* var name = document.getElementById("login_name").value;
+            var password = document.getElementById("login_password" + this.state.index).value;
+
+            if (name === "" || password === "") {
+              return
+            }
+
+            this.login(name, password); */}
+          }}
+        >
+          {Lang[window.Lang].pages.main.forget_password_button}
         </Button>
       </div>
     )

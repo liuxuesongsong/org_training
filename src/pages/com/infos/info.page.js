@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
@@ -28,18 +27,6 @@ import Lang from '../../../language';
 import Code from '../../../code';
 
 import CommonAlert from '../../../components/CommonAlert';
-
-const styleSheet = createStyleSheet('PaperSheet', theme => ({
-    root: theme.mixins.gutters({
-        paddingTop: 16,
-        paddingBottom: 16,
-    }),
-    paper: {
-        padding: 16,
-        textAlign: 'center',
-        color: theme.palette.text.secondary,
-    },
-}));
 
 const LANG_PREFIX = Lang[window.Lang].pages.com.infos;
 

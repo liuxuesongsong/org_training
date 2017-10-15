@@ -18,6 +18,7 @@ const Language = {
                 input_your_password: "输入密码",
                 change_account: "切换账号",
                 login_button: "登录",
+                forget_password_button: "忘记密码",
                 register_button: "注册",
                 certain_button: "确定",
                 cancel_button: "取消",
@@ -202,8 +203,8 @@ const Language = {
             10003: "注册成功",
             10004: "发送信息失败",
             10005: "您尚未注册",
-            10006: "您输入的密码不正确",
-            10007: "登录成功",
+            10006: "登录成功",
+            10007: "您输入的密码不正确",
             10008: "权限错误",
             10009: "验证码正确",
             10010: "验证码错误",
@@ -238,6 +239,8 @@ const Language = {
             10039: "删除失败",
             10040: "添加失败",
             10041: "删除失败",
+            10045: "",
+            10046: "",
         }
     },
     Eng: {

@@ -21,6 +21,8 @@ var routes = {
     "self": addr + "&c=students&a=self",
     "addexp": addr + "&c=students&a=addexp",
     "delexp": addr + "&c=students&a=delexp",
+    "studentsInfo": addr + "&c=students&a=info",
+    "studentsInfos": addr + "&c=students&a=infos",
 
     "examing": addr + "&c=exams&a=examing",
     "pass": addr + "&c=exams&a=pass",
@@ -49,7 +51,7 @@ let header = {
     },
 }
 
-var session = "bE2rbg"
+var session = "XSLIgL"
 
 describe('服务器API测试', function () {
 
@@ -59,6 +61,8 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+            console.log(json);
+
             expect(json).to.be.an('object');
             // 请求路由 希望也有错误码0 
             // expect(json.code).to.be.a('number');
@@ -67,22 +71,23 @@ describe('服务器API测试', function () {
 
     it('请求登录', function () {
         return fetch(routes.login, Object.assign(header,
-            { body: JSON.stringify({ password: "hantishoy", type: 1 }) }
+            { body: JSON.stringify({ account:"tishoy", password: "hantishoy", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
+            console.log(json.code);
             assert.notEqual([10005, 10006, 10007].indexOf(json.code), -1);
-            console.log(json.code)
             if (json.code == 10006) {
                 console.log(json.session);
                 expect(json.data).to.be.an('object');
                 expect(json.data.student).to.be.an('array');
-                console.log(json.code);
             }
         });
     });
+
+    return
 
     it('请求注册', function () {
         return fetch(routes.register, Object.assign(header,
@@ -103,11 +108,13 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+            console.log(json)
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             assert.notEqual([10001, 10002].indexOf(json.code), -1);
         });
     });
+
 
     it('用户登出', function () {
         return fetch(routes.logout, Object.assign(header,
@@ -123,7 +130,7 @@ describe('服务器API测试', function () {
 
     it('用户设置', function () {
         return fetch(routes.reset, Object.assign(header,
-            { body: JSON.stringify({ session: session,  }) }
+            { body: JSON.stringify({ session: session, }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -151,7 +158,7 @@ describe('服务器API测试', function () {
             {
                 body: JSON.stringify({
                     session: session, student: {
-                        "id": 12,
+                        "id": 13,
                         "base_info": {
                             "name": "tishoy1",
                             "tel": "13810100010",
@@ -214,11 +221,12 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            // console.log(json.code)
+            console.log(json.code)
             // 这里返回10002？ 
             assert.notEqual([0, 10015, 10016].indexOf(json.code), -1);
         });
     })
+
 
 
     it('删除学生', function () {
@@ -310,6 +318,34 @@ describe('服务器API测试', function () {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             assert.notEqual([0].indexOf(json.code), -1);
+        });
+    })
+
+    it('单个学生信息', function () {
+        return fetch(routes.studentsInfo, Object.assign(header,
+            // 为12号学生安排 
+            { body: JSON.stringify({ session: session, id: 12 }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0].indexOf(json.code), -1);
+        });
+    })
+
+    it('所有学生信息', function () {
+        return fetch(routes.studentsInfos, Object.assign(header,
+            { body: JSON.stringify({ session: session }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0].indexOf(json.code), -1);
+            if (json.code === 0) {
+                expect(json.data.student).to.be.an('array');
+            }
         });
     })
 
@@ -459,6 +495,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             // assert.equal(json.code, 10004)
             expect(json).to.be.an('object');
+            console.log(json)
             expect(json.code).to.be.a('number');
             expect(json.data.student).to.be.an('array');
             assert.notEqual([0, 10045].indexOf(json.code), -1);
