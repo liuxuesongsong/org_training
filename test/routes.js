@@ -69,9 +69,40 @@ describe('服务器API测试', function () {
         });
     });
 
-    it('请求登录', function () {
+    it('请求登录-成功', function () {
         return fetch(routes.login, Object.assign(header,
-            { body: JSON.stringify({ account:"tishoy", password: "hantishoy", type: 1 }) }
+            { body: JSON.stringify({ account: "tishoy", password: "hantishoy", type: 1 }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            console.log(json.code);
+            assert.notEqual([10006].indexOf(json.code), -1);
+            if (json.code == 10006) {
+                console.log(json.session);
+                expect(json.data).to.be.an('object');
+                expect(json.data.student).to.be.an('array');
+            }
+        });
+    });
+
+    it('请求登录-失败1-用户不存在', function () {
+        return fetch(routes.login, Object.assign(header,
+            { body: JSON.stringify({ account: "不存在的用户", password: "hantishoy", type: 1 }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            console.log(json.code);
+            assert.equal(10005, json.code);
+        });
+    });
+
+    it('请求登录-失败2-密码错误', function () {
+        return fetch(routes.login, Object.assign(header,
+            { body: JSON.stringify({ account: "tishoy", password: "ccc", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -87,7 +118,18 @@ describe('服务器API测试', function () {
         });
     });
 
-    return
+    it('请求登录-其他', function () {
+        return fetch(routes.login, Object.assign(header,
+            { body: "" }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            console.log(json.code)
+        });
+    });
+
 
     it('请求注册', function () {
         return fetch(routes.register, Object.assign(header,
@@ -127,6 +169,8 @@ describe('服务器API测试', function () {
             assert.notEqual([0, 10013, 10014].indexOf(json.code), -1);
         });
     });
+
+    return;
 
     it('用户设置', function () {
         return fetch(routes.reset, Object.assign(header,

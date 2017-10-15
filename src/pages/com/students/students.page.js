@@ -40,6 +40,7 @@ class Students extends Component {
         students: [],
         selected: {},
         showInfo: false,
+        openNewStudentDialog: false,
 
         // 提示状态
         alertOpen: false,
@@ -152,10 +153,12 @@ class Students extends Component {
                 "email": "",
                 "city": 0,
                 "level": 0,
-                "company": ""
             },
             "personal_info": {
-                "licence": "",
+                "licence": {
+                    type: 0,
+                    id: ""
+                },
                 "edu": "",
                 "working_time": "",
                 "total_amount": "",
@@ -247,14 +250,15 @@ class Students extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                                this.handleRequestClose
+
+                                this.handleRequestClose()
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
                         </Button>
                         <Button
                             onClick={() => {
-                                this.handleRequestClose
+                                this.handleRequestClose()
                             }}
                         >
                             {Lang[window.Lang].pages.main.cancel_button}
@@ -283,7 +287,7 @@ class Students extends Component {
                                         {/* this.newStudent(student); */ }
                                         {/* this.newStudentDialog(); */ }
                                         this.setState({
-                                            newStudentDialog: true
+                                            openNewStudentDialog: true
                                         })
                                         {/* this.state.selected = student;
                                         this.setState({
@@ -360,10 +364,16 @@ class Students extends Component {
                                 <Typography type="headline" component="h3">
                                     {Lang[window.Lang].pages.com.students.personal_info.title}
                                 </Typography>
+                                <Selection
+                                    id="licence.type"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_type}
+                                    defaultValue={this.state.selected.personal_info.licence.type}
+                                    fullWidth>
+                                </Selection>
                                 <TextField
-                                    id="licence"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.licence}
-                                    defaultValue={this.state.selected.personal_info.licence}
+                                    id="licence.code"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                    defaultValue={this.state.selected.personal_info.licence.code}
                                     fullWidth>
                                 </TextField>
                                 <TextField

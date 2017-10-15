@@ -97,7 +97,12 @@ const Language = {
 
                     personal_info: {
                         title: "个人信息",
-                        licence: "身份证号",
+                        licence_type: "证件类型",
+                        licence_code: {
+                            0: "",
+                            1: "身份证号码",
+                            2: "护照号码"
+                        },
                         "edu": "学历",
                         "working_time": "从业时间",
                         "total_amount": "累计项目总金额",
