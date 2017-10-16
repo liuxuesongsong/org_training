@@ -5,15 +5,15 @@ var assert = require('assert');
 
 let expect = chai.expect;
 
-let routers = "http://47.93.26.208:8001/index.php?m=train&c=route&a=client_route";
-let addr = "http://47.93.26.208:8001/index.php?m=train";
+let routers = "http://192.168.4.183/index.php?m=train&c=route&a=client_route";
+let addr = "http://192.168.4.183/index.php?m=train";
 var routes = {
     "login": addr + "&c=users&a=login",
     "register": addr + "&c=users&a=regist",
     "available": addr + "&c=users&a=available",
     "logout": addr + "&c=users&a=logout",
     "reset": addr + "&c=users&a=reset",
-    "info": addr + "&c=users&a=info",
+    "info": "http://193.168.4.183/index.php?m=train&c=query&a=info",
 
     "insert": addr + "&c=students&a=insert",
     "remove": addr + "&c=students&a=remove",
@@ -38,7 +38,7 @@ var routes = {
     "entrance": addr + "&c=clazz&a=entrance",
     "exit": addr + "&c=clazz&a=exit",
 
-    "query": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
+    "query": "http://192.168.4.183/index.php?m=train&c=query&a=info",
 }
 
 let header = {
@@ -51,7 +51,7 @@ let header = {
     },
 }
 
-var session = "XSLIgL"
+//var session = "XSLIgL"
 
 describe('服务器API测试', function () {
 
@@ -61,7 +61,7 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-            console.log(json);
+          //  console.log(json);
 
             expect(json).to.be.an('object');
             // 请求路由 希望也有错误码0 
@@ -69,15 +69,17 @@ describe('服务器API测试', function () {
         });
     });
 
-    it('请求登录-成功', function () {
+    it('请求登录-成功-10006', function () {
         return fetch(routes.login, Object.assign(header,
             { body: JSON.stringify({ account: "tishoy", password: "hantishoy", type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+        	
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json.code);
+            session = json.session;
+            console.log(session);
             assert.notEqual([10006].indexOf(json.code), -1);
             if (json.code == 10006) {
                 console.log(json.session);
@@ -87,7 +89,7 @@ describe('服务器API测试', function () {
         });
     });
 
-    it('请求登录-失败1-用户不存在', function () {
+    it('请求登录-失败1-用户不存在-10005', function () {
         return fetch(routes.login, Object.assign(header,
             { body: JSON.stringify({ account: "不存在的用户", password: "hantishoy", type: 1 }) }
         )).then(function (res) {
@@ -95,12 +97,12 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json.code);
+            console.log(json);
             assert.equal(10005, json.code);
         });
     });
 
-    it('请求登录-失败2-密码错误', function () {
+    it('请求登录-失败2-密码错误-10007', function () {
         return fetch(routes.login, Object.assign(header,
             { body: JSON.stringify({ account: "tishoy", password: "ccc", type: 1 }) }
         )).then(function (res) {
@@ -108,13 +110,13 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json.code);
-            assert.notEqual([10005, 10006, 10007].indexOf(json.code), -1);
-            if (json.code == 10006) {
+           // console.log(json);
+            assert.equal(10007, json.code);
+            /*if (json.code == 10006) {
                 console.log(json.session);
                 expect(json.data).to.be.an('object');
                 expect(json.data.student).to.be.an('array');
-            }
+            }*/
         });
     });
 
@@ -126,7 +128,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json.code)
+            console.log(json)
         });
     });
 
@@ -137,28 +139,41 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+        	console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             // 没有不成功的时候么？ 有！ 
             assert.notEqual([10001, 10003, 10004].indexOf(json.code), -1);
         });
     });
-
-    it('用户名可用', function () {
+    
+       it('用户名可用-该账号已注册-10001', function () {
         return fetch(routes.available, Object.assign(header,
             { body: JSON.stringify({ account: [1, 2, 3, 4], type: 1 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-            console.log(json)
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([10001, 10002].indexOf(json.code), -1);
+           assert.equal(10001, json.code);
+        });
+    });
+    
+    it('用户名可用-该账号可以使用-10002', function () {
+        return fetch(routes.available, Object.assign(header,
+            { body: JSON.stringify({ account: "一三五", type: 1 }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.equal(10002, json.code);
         });
     });
 
 
-    it('用户登出', function () {
+    it('用户登出-退出登录-10013', function () {
+    	console.log(session);
         return fetch(routes.logout, Object.assign(header,
             { body: JSON.stringify({ session: session }) }
         )).then(function (res) {
@@ -166,21 +181,36 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0, 10013, 10014].indexOf(json.code), -1);
+            assert.equal(10013, json.code);
         });
     });
-
-    return;
-
-    it('用户设置', function () {
-        return fetch(routes.reset, Object.assign(header,
-            { body: JSON.stringify({ session: session, }) }
+    it('用户登出-用户不存在-10014', function () {
+    	console.log(session);
+        return fetch(routes.logout, Object.assign(header,
+            { body: JSON.stringify({ session: "session" }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.equal(10014, json.code);
+        });
+    });
+    
+
+    it('用户设置', function () {
+        return fetch(routes.reset, Object.assign(header,
+            { body: JSON.stringify({ session: session, base:{
+            	"company_name":"中软1",
+            	"province":"4",
+            	"qualification":"1"} }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+        	console.log(json);
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0,10011,10012].indexOf(json.code), -1);
         });
     });
 
@@ -192,17 +222,17 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0, 10011, 10012].indexOf(json.code), -1);
+            assert.notEqual([0, 10045].indexOf(json.code), -1);
         });
     });
 
-
+return;
     it('插入学生', function () {
         return fetch(routes.insert, Object.assign(header,
             {
                 body: JSON.stringify({
                     session: session, student: {
-                        "id": 13,
+                      //  "id": 13,
                         "base_info": {
                             "name": "tishoy1",
                             "tel": "13810100010",
@@ -212,7 +242,10 @@ describe('服务器API测试', function () {
                             "company": "中软"
                         },
                         "personal_info": {
-                            "licence": "232700198902230021",
+                            licence:{
+								"code" : "232700198902230021",
+								"type" : "身份证"
+							},
                             "edu": "QH University",
                             "working_time": "5 year",
                             "total_amount": "",
@@ -265,7 +298,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json.code)
+            console.log(json)
             // 这里返回10002？ 
             assert.notEqual([0, 10015, 10016].indexOf(json.code), -1);
         });
@@ -539,7 +572,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             // assert.equal(json.code, 10004)
             expect(json).to.be.an('object');
-            console.log(json)
+           // console.log(json)
             expect(json.code).to.be.a('number');
             expect(json.data.student).to.be.an('array');
             assert.notEqual([0, 10045].indexOf(json.code), -1);

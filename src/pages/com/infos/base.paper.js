@@ -46,10 +46,11 @@ class Base extends Component {
         }
 
         var obj = {
-            company_name: document.getElementById(company_name).value,
-            province: document.getElementById(province).value,
-            qualification: document.getElementById(qualification).value
+            company_name: document.getElementById("company_name").value,
+            province: document.getElementById("province").value,
+            qualification: document.getElementById("qualification").value
         }
+        console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
     }
 

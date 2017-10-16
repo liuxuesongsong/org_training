@@ -20,9 +20,10 @@ class Express extends Component {
     componentDidMount() {
         if (getCache(DATA_TYPE_EXPRESS) !== undefined) {
             var data = getCache(DATA_TYPE_EXPRESS)
+            console.log(data);
             this.setState({
                 express_code: data.express_code,
-                express_address: data.address,
+                express_address: data.express_address,
                 address: data.address,
                 express_person: data.express_person,
                 contact_way: data.contact_way
@@ -49,12 +50,13 @@ class Express extends Component {
         }
 
         var obj = {
-            express_code: express_code,
-            express_address: express_address,
-            contact_way: contact_way,
-            address: address,
-            contact_way: qualification
+            express_code: this.state.express_code,
+            express_address:this.state.express_address,
+            address: this.state.address,
+            express_person: this.state.express_person,
+            contact_way: this.state.contact_way
         }
+        console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
     }
 
