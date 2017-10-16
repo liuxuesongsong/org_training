@@ -5,15 +5,15 @@ var assert = require('assert');
 
 let expect = chai.expect;
 
-let routers = "http://192.168.4.183/index.php?m=train&c=route&a=client_route";
-let addr = "http://192.168.4.183/index.php?m=train";
+let routers = "http://47.93.26.208:8001/index.php?m=train&c=route&a=client_route";
+let addr = "http://47.93.26.208:8001/index.php?m=train";
 var routes = {
     "login": addr + "&c=users&a=login",
     "register": addr + "&c=users&a=regist",
     "available": addr + "&c=users&a=available",
     "logout": addr + "&c=users&a=logout",
     "reset": addr + "&c=users&a=reset",
-    "info": "http://193.168.4.183/index.php?m=train&c=query&a=info",
+    "info": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
 
     "insert": addr + "&c=students&a=insert",
     "remove": addr + "&c=students&a=remove",
@@ -38,7 +38,7 @@ var routes = {
     "entrance": addr + "&c=clazz&a=entrance",
     "exit": addr + "&c=clazz&a=exit",
 
-    "query": "http://192.168.4.183/index.php?m=train&c=query&a=info",
+    "query": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
 }
 
 let header = {
