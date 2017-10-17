@@ -11,6 +11,7 @@ import Typography from 'material-ui/Typography';
 
 import { initCache, getData, getRouter, getCache, getStudent } from '../../../utils/helpers';
 import {
+    STUDENT_INFOS,
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,
     CARD_TYPE_UNARRANGE, CARD_TYPE_ARRANGE, AGREE_ARRANGE, REFUSE_ARRANGE, STATUS_AGREED_AGREE, STATUS_AGREED, STATUS_AGREED_UNDO,
@@ -19,6 +20,8 @@ import {
 import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
 import Code from '../../../code';
+
+import Style from '../../../Style';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -45,8 +48,9 @@ class Home extends Component {
     };
 
     componentWillMount() {
+        this.getStudents();
         window.currentPage = this;
-        this.fresh()
+        // this.fresh()
     }
 
     fresh = () => {
@@ -84,8 +88,10 @@ class Home extends Component {
             //     this.state.retry.push(students[i]);
             // }
         }
+        console.log(getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "");
+        var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "";
         window.currentPage.setState({
-            name: getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "",
+            name: name,
             enrolled: enrolled,
             arranged: arranged,
             examing: examing,
@@ -96,13 +102,66 @@ class Home extends Component {
         })
     }
 
+    getStudents() {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                console.log(message.code)
+                
+                let students = message.student;
+                let enrolled = 0, arranged = 0, passed = 0, examing = 0,
+                    unarragedStudents = [], arrangedStudents = [];
+                if (students === undefined) {
+                    students = []
+                }
+                for (var i = 0; i < students.length; i++) {
+                    if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID) {
+                        enrolled++
+                        if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_UNDO) {
+                            unarragedStudents.push(students[i]);
+                        }
+                    }
+                    if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_DOING) {
+                        arranged++
+                        arrangedStudents.push(students[i]);
+                    }
+                    // if (students[i].status['agreed'].status === 1) {
+                    //     this.state.agreed.push(students[i]);
+                    // }
+                    if (students[i].status[STATUS_EXAMING].status === STATUS_EXAMING_DID) {
+                        examing++
+                    }
+                    if (students[i].status[STATUS_PASSED].status === STATUS_PASSED_DID) {
+                        passed++
+                    }
+                    // if (students[i].status['retry'].status === 1) {
+                    //     this.state.retry.push(students[i]);
+                    // }
+                }
+                this.setState({
+                    name: name,
+                    enrolled: enrolled,
+                    arranged: arranged,
+                    examing: examing,
+                    passed: passed,
+                    unarragedStudents: unarragedStudents,
+                    arrangedStudents: arrangedStudents,
+                    clazz: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
+                })
+            }
+
+        }
+        getData(getRouter(STUDENT_INFOS), { session: sessionStorage.session }, cb, {});
+    }
+
     agreeArrange() {
         var id = this.state.selectedStudentId;
         var cb = (router, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 getStudent(arg.id).status[STATUS_AGREED].status = STATUS_AGREED_AGREE;
                 this.fresh();
+
             }
+            this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, Lang[window.Lang].ErrorCode[Code.ERROE_REQUEST_ROUTER]);
         }
         getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -148,9 +207,9 @@ class Home extends Component {
         return (
             <div>
                 <div
-                    style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
+                    style={Style.pages.com.home.page}
                 >
-                    <div style={{ margin: 10, width: 400, float: "left" }}>
+                    <div style={Style.pages.com.home.papers}>
                         <Paper id="companyid" width="400px">
                             <Typography type="headline" component="h5">
                                 {this.state.name}
@@ -164,7 +223,7 @@ class Home extends Component {
                                     + this.state.passed + Lang[window.Lang].pages.com.home.human + "/" + this.state.examing + Lang[window.Lang].pages.com.home.human}
                             </Typography>
                         </Paper>
-                        <Paper elevation={4} style={{ marginTop: 10, width: "400px", }}>
+                        <Paper elevation={4} style={Style.pages.com.home.buttom_paper}>
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
                                 {this.state.unarragedStudents.map(student =>
                                     <StudentCard
@@ -182,7 +241,7 @@ class Home extends Component {
                             </List>
                         </Paper>
                     </div>
-                    <div style={{ margin: 10, width: 800, float: "left" }}>
+                    <div style={Style.pages.com.home.papers}>
                         <Paper elevation={4}>
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
@@ -253,7 +312,7 @@ class Home extends Component {
 
                         </Paper>
                     </div>
-                    <div style={{ margin: 10, width: 400, float: "left" }}>
+                    <div style={Style.pages.com.home.papers}>
                         <Paper elevation={4}>
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>

@@ -149,6 +149,7 @@ const Language = {
                     refuse: "拒绝",
                     retry: "重考试",
                     giveup: "放弃",
+                    remove: "删除",
                     status: {
                         1: "已通过",
                         2: "已拒绝",

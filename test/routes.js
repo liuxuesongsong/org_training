@@ -37,7 +37,7 @@ var routes = {
     "creatclass": addr + "&c=clazz&a=creatclass",
     "editclass": addr + "&c=clazz&a=editclass",
     "delclass": addr + "&c=clazz&a=delclass",
-    
+
     "classinfos": addr + "&c=clazz&a=classinfos",
 
     "query": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
@@ -63,7 +63,7 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-          //  console.log(json);
+            //  console.log(json);
 
             expect(json).to.be.an('object');
             // 请求路由 希望也有错误码0 
@@ -77,7 +77,7 @@ describe('服务器API测试', function () {
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	
+
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             session = json.session;
@@ -112,7 +112,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-           // console.log(json);
+            // console.log(json);
             assert.equal(10007, json.code);
             /*if (json.code == 10006) {
                 console.log(json.session);
@@ -134,48 +134,48 @@ describe('服务器API测试', function () {
         });
     });
 
-/*
-    it('请求注册', function () {
-        return fetch(routes.register, Object.assign(header,
-            { body: JSON.stringify({ account: [1, 2, 3, 4], password: "123", type: 1 }) }
-        )).then(function (res) {
-            return res.json();
-        }).then(function (json) {
-        	console.log(json);
-            expect(json).to.be.an('object');
-            expect(json.code).to.be.a('number');
-            // 没有不成功的时候么？ 有！ 
-            assert.notEqual([10001, 10003, 10004].indexOf(json.code), -1);
+    /*
+        it('请求注册', function () {
+            return fetch(routes.register, Object.assign(header,
+                { body: JSON.stringify({ account: [1, 2, 3, 4], password: "123", type: 1 }) }
+            )).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                console.log(json);
+                expect(json).to.be.an('object');
+                expect(json.code).to.be.a('number');
+                // 没有不成功的时候么？ 有！ 
+                assert.notEqual([10001, 10003, 10004].indexOf(json.code), -1);
+            });
         });
-    });
-    */
-/*       it('用户名可用-该账号已注册-10001', function () {
-        return fetch(routes.available, Object.assign(header,
-            { body: JSON.stringify({ account: [1, 2, 3, 4], type: 1 }) }
-        )).then(function (res) {
-            return res.json();
-        }).then(function (json) {
-            expect(json).to.be.an('object');
-            expect(json.code).to.be.a('number');
-           assert.equal(10001, json.code);
+        */
+    /*       it('用户名可用-该账号已注册-10001', function () {
+            return fetch(routes.available, Object.assign(header,
+                { body: JSON.stringify({ account: [1, 2, 3, 4], type: 1 }) }
+            )).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                expect(json).to.be.an('object');
+                expect(json.code).to.be.a('number');
+               assert.equal(10001, json.code);
+            });
         });
-    });
+        
+        it('用户名可用-该账号可以使用-10002', function () {
+            return fetch(routes.available, Object.assign(header,
+                { body: JSON.stringify({ account: "一三五", type: 1 }) }
+            )).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                expect(json).to.be.an('object');
+                expect(json.code).to.be.a('number');
+                assert.equal(10002, json.code);
+            });
+        });
     
-    it('用户名可用-该账号可以使用-10002', function () {
-        return fetch(routes.available, Object.assign(header,
-            { body: JSON.stringify({ account: "一三五", type: 1 }) }
-        )).then(function (res) {
-            return res.json();
-        }).then(function (json) {
-            expect(json).to.be.an('object');
-            expect(json.code).to.be.a('number');
-            assert.equal(10002, json.code);
-        });
-    });
-
-*/
+    */
     it('用户登出-退出登录-10013', function () {
-    	console.log(session);
+        console.log(session);
         return fetch(routes.logout, Object.assign(header,
             { body: JSON.stringify({ session: session }) }
         )).then(function (res) {
@@ -187,7 +187,7 @@ describe('服务器API测试', function () {
         });
     });
     it('用户登出-用户不存在-10014', function () {
-    	console.log(session);
+        console.log(session);
         return fetch(routes.logout, Object.assign(header,
             { body: JSON.stringify({ session: "session" }) }
         )).then(function (res) {
@@ -198,21 +198,26 @@ describe('服务器API测试', function () {
             assert.equal(10014, json.code);
         });
     });
-    
+
 
     it('用户设置', function () {
         return fetch(routes.reset, Object.assign(header,
-            { body: JSON.stringify({ session: session, base:{
-            	"company_name":"中软1",
-            	"province":"4",
-            	"qualification":"1"} }) }
+            {
+                body: JSON.stringify({
+                    session: session, base: {
+                        "company_name": "中软1",
+                        "province": "4",
+                        "qualification": "1"
+                    }
+                })
+            }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	console.log(json);
+            console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10011,10012].indexOf(json.code), -1);
+            assert.notEqual([0, 10011, 10012].indexOf(json.code), -1);
         });
     });
 
@@ -229,82 +234,90 @@ describe('服务器API测试', function () {
     });
 
 
-/*    it('插入学生', function () {
-        return fetch(routes.insert, Object.assign(header,
-            {
-                body: JSON.stringify({
-                    session: session, student: {
-                        "id": 13,
-                        "base_info": {
-                            "name": "tishoy1",
-                            "tel": "13810100010",
-                            "email": "tishoy",
-                            "city": 0,
-                            "level": 2,
-                            "company": "中软"
-                        },
-                        "personal_info": {
-                            licence:{
-								"code" : "232700198902230021",
-								"type" : "身份证"
-							},
-                            "edu": "QH University",
-                            "working_time": "5 year",
-                            "total_amount": "",
-                            "soft_amount": ""
-                        },
-                        "proj_exp": [
-                            {
-                                "id": 1,
-                                "name": "支付宝",
-                                "time": 1587515789,
-                                "actor": "经理",
-                                "total_amount": "100万",
-                                "soft_amount": "50万"
+    /*    it('插入学生', function () {
+            return fetch(routes.insert, Object.assign(header,
+                {
+                    body: JSON.stringify({
+                        session: session, student: {
+                            "id": 13,
+                            "base_info": {
+                                "name": "tishoy1",
+                                "tel": "13810100010",
+                                "email": "tishoy",
+                                "city": 0,
+                                "level": 2,
+                                "company": "中软"
                             },
-
-                        ],
-                        // 状态 0 未进行 1 进行中 2 进行结束
-                        "status": {
-                            "enrolled": {
-                                "status": 0,
-                                "time": 1500262255
+                            "personal_info": {
+                                licence:{
+                                    "code" : "232700198902230021",
+                                    "type" : "身份证"
+                                },
+                                "edu": "QH University",
+                                "working_time": "5 year",
+                                "total_amount": "",
+                                "soft_amount": ""
                             },
-                            "arranged": {
-                                "status": 2,
-                                "time": 1500262255
-                            },
-                            "agreed": {
-                                "status": 0,
-                                "time": 1500262255
-                            },
-                            "examing": {
-                                "status": 1,
-                                "time": 1500262255
-                            },
-                            "passed": {
-                                "status": 1,
-                                "score": 96,
-                                "time": 1500262255
-                            },
-                            "retry": {
-                                "status": 1,
-                                "time": 1500262255
+                            "proj_exp": [
+                                {
+                                    "id": 1,
+                                    "name": "支付宝",
+                                    "time": 1587515789,
+                                    "actor": "经理",
+                                    "total_amount": "100万",
+                                    "soft_amount": "50万"
+                                },
+                                {
+                                    "id": 1,
+                                    "name": "支付宝",
+                                    "time": 1587515789,
+                                    "actor": "经理",
+                                    "total_amount": "100万",
+                                    "soft_amount": "50万"
+                                },
+    
+                            ],
+                            // 状态 0 未进行 1 进行中 2 进行结束
+                            "status": {
+                                "enrolled": {
+                                    "status": 0,
+                                    "time": 1500262255
+                                },
+                                "arranged": {
+                                    "status": 2,
+                                    "time": 1500262255
+                                },
+                                "agreed": {
+                                    "status": 0,
+                                    "time": 1500262255
+                                },
+                                "examing": {
+                                    "status": 1,
+                                    "time": 1500262255
+                                },
+                                "passed": {
+                                    "status": 1,
+                                    "score": 96,
+                                    "time": 1500262255
+                                },
+                                "retry": {
+                                    "status": 1,
+                                    "time": 1500262255
+                                }
                             }
                         }
-                    }
-                })
-            }
-        )).then(function (res) {
-            return res.json();
-        }).then(function (json) {
-            expect(json).to.be.an('object');
-            expect(json.code).to.be.a('number');
-           // console.log(json)
-            // 这里返回10002？ 
-            assert.notEqual([0, 10015, 10016].indexOf(json.code), -1);
-        });
-    })*/
+                    })
+                }
+            )).then(function (res) {
+                return res.json();
+            }).then(function (json) {
+                expect(json).to.be.an('object');
+                expect(json.code).to.be.a('number');
+               // console.log(json)
+                // 这里返回10002？ 
+                assert.notEqual([0, 10015, 10016].indexOf(json.code), -1);
+            });
+        })*/
 
 
 
@@ -342,7 +355,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10018,100181].indexOf(json.code), -1);
+            assert.notEqual([0, 10018, 100181].indexOf(json.code), -1);
         });
     })
 
@@ -370,7 +383,7 @@ describe('服务器API测试', function () {
             assert.notEqual([0, 10020, 10021].indexOf(json.code), -1);
         });
     })
-return;
+    return;
     it('增加经验', function () {
         return fetch(routes.addexp, Object.assign(header,
             {
@@ -538,14 +551,14 @@ return;
 
     it('新建班级', function () {
         return fetch(routes.creatclass, Object.assign(header,
-            { body: JSON.stringify({ session: session, area:"北京", class_name: "高级", train_starttime:"2018/01/02" }) }
+            { body: JSON.stringify({ session: session, area: "北京", class_name: "高级", train_starttime: "2018/01/02" }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	console.log(json);
+            console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10026,100261,100262].indexOf(json.code), -1);
+            assert.notEqual([0, 10026, 100261, 100262].indexOf(json.code), -1);
         });
     })
 
@@ -555,22 +568,22 @@ return;
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	console.log(json);
+            console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10028,100281].indexOf(json.code), -1);
+            assert.notEqual([0, 10028, 100281].indexOf(json.code), -1);
         });
     })
- it('删除班级', function () {
-        return fetch(routes.delclass , Object.assign(header,
-            { body: JSON.stringify({ session: session,id:12 }) }
+    it('删除班级', function () {
+        return fetch(routes.delclass, Object.assign(header,
+            { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	console.log(json);
+            console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10029,100291].indexOf(json.code), -1);
+            assert.notEqual([0, 10029, 100291].indexOf(json.code), -1);
         });
     })
     it('查看班级', function () {
@@ -579,10 +592,10 @@ return;
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
-        	console.log(json);
+            console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10027,100271].indexOf(json.code), -1);
+            assert.notEqual([0, 10027, 100271].indexOf(json.code), -1);
         });
     })
 
@@ -594,7 +607,7 @@ return;
         }).then(function (json) {
             // assert.equal(json.code, 10004)
             expect(json).to.be.an('object');
-           // console.log(json)
+            // console.log(json)
             expect(json.code).to.be.a('number');
             expect(json.data.student).to.be.an('array');
             assert.notEqual([0, 10045].indexOf(json.code), -1);

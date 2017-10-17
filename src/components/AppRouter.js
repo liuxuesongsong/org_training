@@ -30,76 +30,76 @@ var AppRouter =
 
   <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
     <Route title="Training" path="/" component={AppFrame}>
-      <IndexRoute dockDrawer title={null} nav component={Home} />
+      <IndexRoute dockDrawer title={null} nav component={AppFrame} />
       <Route
         title={titleize(Lang[window.Lang].pages.com.home.title)}
         path={'/com/home'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.infos.title)}
         path={'/com/infos'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.students.title)}
         path={'/com/students'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.enrolled.title)}
         path={'/com/enrolled'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.exams.title)}
         path={'/com/exams'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.home.title)}
         path={'/org/home'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.enroll.title)}
         path={'/org/enroll'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.clazz.title)}
         path={'/org/clazz'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.score.title)}
         path={'/org/score'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.area.title)}
         path={'/org/area'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : Home}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : Home}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : AppFrame}
       />
     </Route>
   </Router>

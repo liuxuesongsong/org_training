@@ -24,7 +24,7 @@ import StudentCard from '../studentCard';
 import Lang from '../../../language';
 import Code from '../../../code';
 import { initCache, getData, getRouter, getCache, getTimeString } from '../../../utils/helpers';
-import { INSERT_STUDENT, REMOVE_STUDENT, BASE_INFO, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../../enum';
+import { ALERT, NOTICE, STUDENT_INFOS, INSERT_STUDENT, REMOVE_STUDENT, BASE_INFO, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../../enum';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -51,6 +51,7 @@ class Students extends Component {
     }
 
     componentDidMount() {
+        // this.getStudents();
         window.currentPage = this;
         this.fresh()
     }
@@ -66,28 +67,42 @@ class Students extends Component {
     }
 
     getStudents() {
-
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({ students: message.student })
+            }
+            console.log(message)
+        }
+        getData(getRouter(STUDENT_INFOS), { session: sessionStorage.session }, cb, {});
     }
 
     newStudent(student) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                getCache(DATA_TYPE_STUDENT).push(student)
+            if (message.code === Code.INSERT_SUCCESS) {
+                this.state.students.push(student)
+                console.log("123")
+                this.setState({
+                    students: this.state.students
+                })
             }
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
 
-    removeStudent() {
+    removeStudent(id) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                for (var i = 0; i < getCache(student).length; i++) {
-                    if (getCache(DATA_TYPE_STUDENT)[i].id === student.id) {
-                        getCache(DATA_TYPE_STUDENT).splice(i, 1);
+            if (message.code === Code.REMOVE_SUCCESS) {
+                for (var i = 0; i < this.state.students.length; i++) {
+                    if (this.state.students[i].id === arg.id) {
+                        this.state.students.splice(i, 1);
+                        this.setState({
+                            students: this.state.students
+                        })
                         break;
                     }
                 }
             }
+            this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
         }
         getData(getRouter(REMOVE_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -250,7 +265,14 @@ class Students extends Component {
                     <div>
                         <Button
                             onClick={() => {
-
+                                var base_info = {
+                                    name: document.getElementById("student_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("student_name").value,
+                                    tel: document.getElementById("tel").value,
+                                    email: document.getElementById("email").value,
+                                    city: document.getElementById("city").value,
+                                    level: document.getElementById("level").value,
+                                }
+                                this.newStudent({ base_info: base_info })
                                 this.handleRequestClose()
                             }}
                         >
@@ -267,6 +289,12 @@ class Students extends Component {
                 </DialogActions>
             </Dialog >
         )
+    }
+
+    closeNotice = () => {
+        this.setState({
+            alertOpen: false,
+        })
     }
 
     render() {
@@ -304,15 +332,23 @@ class Students extends Component {
                                     name={student.base_info.name}
                                     tel={student.base_info.tel}
                                     email={student.base_info.email}
-                                    level={student.base_info.level}
-                                    city={student.base_info.city}
+                                    level={Number(student.base_info.level)}
+                                    city={Number(student.base_info.city)}
                                     action={[() => {
                                         this.state.selected = student;
+                                        console.log(student);
                                         this.setState({
                                             showInfo: true
                                         })
                                     }, () => {
-
+                                        this.state.selected = student;
+                                        this.popUpNotice(ALERT, 0, "删除学生" + student.base_info.name, [
+                                            () => {
+                                                this.removeStudent(student.id);
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
                                     }]}
                                 >
                                 </StudentCard>
@@ -364,12 +400,12 @@ class Students extends Component {
                                 <Typography type="headline" component="h3">
                                     {Lang[window.Lang].pages.com.students.personal_info.title}
                                 </Typography>
-                                <Selection
+                                {/* <Selection
                                     id="licence.type"
                                     label={Lang[window.Lang].pages.com.students.personal_info.licence_type}
                                     defaultValue={this.state.selected.personal_info.licence.type}
                                     fullWidth>
-                                </Selection>
+                                </Selection> */}
                                 <TextField
                                     id="licence.code"
                                     label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}

@@ -39,14 +39,18 @@ class ComCard extends Component {
   buttonActions() {
     switch (this.state.type) {
       case CARD_TYPE_COMMON:
-        return
-        this.getStatusDescribe();
+        return this.getStatusDescribe();
       case CARD_TYPE_INFO:
         return <CardActions>
           <Button
             dense
             onClick={this.state.action[0]}>
             {Lang[window.Lang].pages.com.card.modify}
+          </Button>
+          <Button
+            dense
+            onClick={this.state.action[1]}>
+            {Lang[window.Lang].pages.com.card.remove}
           </Button>
         </CardActions>
       case CARD_TYPE_ENROLL:

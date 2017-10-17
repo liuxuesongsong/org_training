@@ -19,6 +19,12 @@ module.exports = {
     "PASSWORD_IS_WRONG": 10007,
     // "":
 
+
+    "INSERT_SUCCESS": 10015,
+
+
+    "REMOVE_SUCCESS": 10017,
+
     // 路由地址获取成功
     "ROUTER_SUCCESS": 10046,
 

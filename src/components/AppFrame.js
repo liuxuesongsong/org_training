@@ -42,6 +42,11 @@ import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
 import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
+import Base from '../pages/com/infos/base.paper'
+import Express from '../pages/com/infos/express.paper'
+import Finance from '../pages/com/infos/finance.paper'
+import Admin from '../pages/com/infos/admin.paper'
+
 import CommonAlert from './CommonAlert';
 
 function getTitle(routes) {
@@ -163,12 +168,10 @@ class AppFrame extends Component {
 
   componentDidMount() {
     window.CacheData = {};
-    window.currentPage = this;
     this.getRoutes();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
-        console.log("!23");
         switch (Number(sessionStorage.apptype)) {
           case APP_TYPE_COMPANY:
             window.location = "/com/home";
@@ -258,7 +261,7 @@ class AppFrame extends Component {
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.session;
         sessionStorage.apptype = arg["type"];
-        
+
         let e = new Event("login_success");
         dispatchEvent(e);
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
@@ -279,9 +282,13 @@ class AppFrame extends Component {
   }
 
   handleNext = () => {
-    this.setState({
-      activeStep: this.state.activeStep + 1,
-    });
+    if (this.state.activeStep === 5) {
+      login()
+    } else {
+      this.setState({
+        activeStep: this.state.activeStep + 1,
+      });
+    }
   };
 
   handleBack = () => {
@@ -436,7 +443,7 @@ class AppFrame extends Component {
       <paper>
         {this.RegisterStep()}
         <MobileStepper
-          nextButtonText={Lang[window.Lang].pages.main.next_step}
+          nextButtonText={this.state.activeStep === 5 ? Lang[window.Lang].pages.main.next_step : "登陆"}
           backButtonText={Lang[window.Lang].pages.main.pre_step}
           type="text"
           steps={6}
@@ -449,7 +456,7 @@ class AppFrame extends Component {
           onBack={this.handleBack}
           onNext={this.handleNext}
           disableBack={this.state.activeStep === 0 || this.state.activeStep === 2}
-          disableNext={this.state.activeStep === 5 || this.state.activeStep === 1}
+          disableNext={this.state.activeStep === 1}
         />
 
       </paper>
@@ -727,7 +734,7 @@ class AppFrame extends Component {
           docked={drawerDocked}
           routes={routes}
           onRequestClose={this.handleDrawerClose}
-          open={(drawerDocked || this.state.drawerOpen)}
+          open={sessionStorage.getItem("logged") === "true" ? (drawerDocked || this.state.drawerOpen) : false}
         />
         {sessionStorage.getItem("logged") === "true" ? children : <div style={{ flex: '1 0 100%', }}>
           <div style={{

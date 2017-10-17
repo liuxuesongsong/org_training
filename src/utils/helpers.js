@@ -38,7 +38,7 @@ export function getTimeString(timeStamp) {
   let date;
   let ts = parseInt(timeStamp);
   if (isNaN(ts)) {
-    data = new Date();
+    date = new Date();
   } else if (ts > 1000000000000) {
     date = new Date(ts);
   } else {
