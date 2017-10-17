@@ -34,9 +34,11 @@ var routes = {
     "agree": addr + "&c=enrolled&a=agree",
     "refuse": addr + "&c=enrolled&a=refuse",
 
-    "new": addr + "&c=clazz&a=new",
-    "entrance": addr + "&c=clazz&a=entrance",
-    "exit": addr + "&c=clazz&a=exit",
+    "creatclass": addr + "&c=clazz&a=creatclass",
+    "editclass": addr + "&c=clazz&a=editclass",
+    "delclass": addr + "&c=clazz&a=delclass",
+    
+    "classinfos": addr + "&c=clazz&a=classinfos",
 
     "query": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
 }
@@ -132,7 +134,7 @@ describe('服务器API测试', function () {
         });
     });
 
-
+/*
     it('请求注册', function () {
         return fetch(routes.register, Object.assign(header,
             { body: JSON.stringify({ account: [1, 2, 3, 4], password: "123", type: 1 }) }
@@ -146,8 +148,8 @@ describe('服务器API测试', function () {
             assert.notEqual([10001, 10003, 10004].indexOf(json.code), -1);
         });
     });
-    
-       it('用户名可用-该账号已注册-10001', function () {
+    */
+/*       it('用户名可用-该账号已注册-10001', function () {
         return fetch(routes.available, Object.assign(header,
             { body: JSON.stringify({ account: [1, 2, 3, 4], type: 1 }) }
         )).then(function (res) {
@@ -171,7 +173,7 @@ describe('服务器API测试', function () {
         });
     });
 
-
+*/
     it('用户登出-退出登录-10013', function () {
     	console.log(session);
         return fetch(routes.logout, Object.assign(header,
@@ -226,13 +228,13 @@ describe('服务器API测试', function () {
         });
     });
 
-return;
-    it('插入学生', function () {
+
+/*    it('插入学生', function () {
         return fetch(routes.insert, Object.assign(header,
             {
                 body: JSON.stringify({
                     session: session, student: {
-                      //  "id": 13,
+                        "id": 13,
                         "base_info": {
                             "name": "tishoy1",
                             "tel": "13810100010",
@@ -298,11 +300,11 @@ return;
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            console.log(json)
+           // console.log(json)
             // 这里返回10002？ 
             assert.notEqual([0, 10015, 10016].indexOf(json.code), -1);
         });
-    })
+    })*/
 
 
 
@@ -314,11 +316,14 @@ return;
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0, 10017, 10018, 10019].indexOf(json.code), -1);
+            console.log(json);
+            assert.notEqual([0, 10017, 100171].indexOf(json.code), -1);
         });
     })
 
-    it('基础信息', function () {
+
+
+    it('修改学员基础信息', function () {
         return fetch(routes.base, Object.assign(header,
             {
                 body: JSON.stringify({
@@ -337,11 +342,14 @@ return;
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0,10018,100181].indexOf(json.code), -1);
         });
     })
 
-    it('个人信息', function () {
+
+
+
+    it('修改个人信息', function () {
         return fetch(routes.self, Object.assign(header,
             {
                 body: JSON.stringify({
@@ -362,7 +370,7 @@ return;
             assert.notEqual([0, 10020, 10021].indexOf(json.code), -1);
         });
     })
-
+return;
     it('增加经验', function () {
         return fetch(routes.addexp, Object.assign(header,
             {
@@ -386,7 +394,7 @@ return;
         });
     })
 
-    it('删除经验', function () {
+    it('删除项目经验', function () {
         return fetch(routes.delexp, Object.assign(header,
             { body: JSON.stringify({ session: session, id: 12, exp_id: 12 }) }
         )).then(function (res) {
@@ -529,38 +537,52 @@ return;
     })
 
     it('新建班级', function () {
-        return fetch(routes.new, Object.assign(header,
-            { body: JSON.stringify({ session: session, clazz_id: 2 }) }
+        return fetch(routes.creatclass, Object.assign(header,
+            { body: JSON.stringify({ session: session, area:"北京", class_name: "高级", train_starttime:"2018/01/02" }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+        	console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0,10026,100261,100262].indexOf(json.code), -1);
         });
     })
 
-    it('进入班级', function () {
-        return fetch(routes.entrance, Object.assign(header,
-            { body: JSON.stringify({ session: session, id: 12, clazz_id: 2 }) }
+    it('编辑班级', function () {
+        return fetch(routes.editclass, Object.assign(header,
+            { body: JSON.stringify({ session: session, class_head: "李四", address: "中软大厦" }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+        	console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0,10028,100281].indexOf(json.code), -1);
         });
     })
-
-    it('退出班级', function () {
-        return fetch(routes.exit, Object.assign(header,
+ it('删除班级', function () {
+        return fetch(routes.delclass , Object.assign(header,
+            { body: JSON.stringify({ session: session,id:12 }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+        	console.log(json);
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0,10029,100291].indexOf(json.code), -1);
+        });
+    })
+    it('查看班级', function () {
+        return fetch(routes.classinfos, Object.assign(header,
             { body: JSON.stringify({ session: session, id: 12 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
+        	console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0,10027,100271].indexOf(json.code), -1);
         });
     })
 

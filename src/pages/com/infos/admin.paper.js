@@ -21,6 +21,7 @@ class Admin extends Component {
     componentDidMount() {
         if (getCache(DATA_TYPE_ADMIN) !== undefined) {
             var data = getCache(DATA_TYPE_ADMIN);
+            console.log(data);
             this.setState({
                 account: data.account, 
                 password: data.password, 
