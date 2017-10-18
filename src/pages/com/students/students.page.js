@@ -287,7 +287,7 @@ class Students extends Component {
                         </Button>
                     </div>
                 </DialogActions>
-            </Dialog >
+            </Dialog>
         )
     }
 

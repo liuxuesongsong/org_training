@@ -166,7 +166,7 @@ class AppFrame extends Component {
     alertAction: []
   };
 
-  componentDidMount() {
+  componentWillMount() {
     window.CacheData = {};
     this.getRoutes();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
@@ -181,6 +181,19 @@ class AppFrame extends Component {
             break;
         }
       })
+    } else {
+      switch (Number(sessionStorage.apptype)) {
+        case APP_TYPE_COMPANY:
+          if (window.location.pathname === "/") {
+            this.context.router.push("/com/home");
+          }
+          break;
+        case APP_TYPE_ORANIZATION:
+          if (window.location.pathname === "/") {
+            this.context.router.push("/org/home");
+          }
+          break;
+      }
     }
   }
 
