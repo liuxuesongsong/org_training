@@ -333,8 +333,10 @@ class Students extends Component {
                                     name={student.base_info.name}
                                     tel={student.base_info.tel}
                                     email={student.base_info.email}
-                                    level={Number(student.base_info.level)}
-                                    city={Number(student.base_info.city)}
+                                    level={(student.base_info.level)}
+                                    city={(student.base_info.city)}
+                                   //level={Number(student.base_info.level)}
+                                    //city={Number(student.base_info.city)}
                                     action={[() => {
                                         this.state.selected = student;
                                         console.log(student);

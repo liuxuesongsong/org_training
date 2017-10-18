@@ -380,10 +380,10 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0, 10020, 10021].indexOf(json.code), -1);
+            assert.notEqual([0, 10018, 100181].indexOf(json.code), -1);
         });
     })
-    return;
+   
     it('增加经验', function () {
         return fetch(routes.addexp, Object.assign(header,
             {
@@ -428,7 +428,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0].indexOf(json.code), -1);
+            assert.notEqual([0,10019,100191].indexOf(json.code), -1);
         });
     })
 
@@ -554,6 +554,7 @@ describe('服务器API测试', function () {
             { body: JSON.stringify({ session: session, area: "北京", class_name: "高级", train_starttime: "2018/01/02" }) }
         )).then(function (res) {
             return res.json();
+            console.log("创建班级");
         }).then(function (json) {
             console.log(json);
             expect(json).to.be.an('object');
