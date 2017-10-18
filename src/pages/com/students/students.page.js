@@ -223,7 +223,7 @@ class Students extends Component {
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                     新增学员
-            </DialogTitle>
+                </DialogTitle>
                 <DialogContent>
                     <div>
                         <Typography type="headline" component="h3">
@@ -304,7 +304,7 @@ class Students extends Component {
                     style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
                 >
                     <div style={{ margin: 10, width: 400, float: "left" }}>
-                        {this.newStudentDialog()}
+
                         <List subheader={
                             <ListSubheader>
                                 <Button
@@ -325,7 +325,7 @@ class Students extends Component {
                                     {Lang[window.Lang].pages.com.students.new_student}
                                 </Button>
                             </ListSubheader>}>
-                           
+
                             {this.state.students.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_INFO}
@@ -335,7 +335,7 @@ class Students extends Component {
                                     email={student.base_info.email}
                                     level={(student.base_info.level)}
                                     city={(student.base_info.city)}
-                                   //level={Number(student.base_info.level)}
+                                    //level={Number(student.base_info.level)}
                                     //city={Number(student.base_info.city)}
                                     action={[() => {
                                         this.state.selected = student;
@@ -504,6 +504,7 @@ class Students extends Component {
                         </Paper> : <div />}
 
                 </div>
+                {this.newStudentDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

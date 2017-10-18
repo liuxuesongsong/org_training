@@ -171,6 +171,14 @@ const Language = {
                 },
                 clazz: {
                     title: "班级安排",
+                    new: "新建班级",
+                    info: {
+                        area: "地区",
+                        class_name: "级别",
+                        train_starttime: "开班时间",
+                        class_head: "班主任",
+                        address: "开班地址"
+                    }
                 },
                 score: {
                     title: "成绩管理",

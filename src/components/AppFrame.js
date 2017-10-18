@@ -40,7 +40,7 @@ import Lang from '../language';
 import Code from '../code';
 import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
-import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
+import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
 import Express from '../pages/com/infos/express.paper'
@@ -149,6 +149,7 @@ class AppFrame extends Component {
     apptype: Number(sessionStorage.getItem("apptype")),
     showRegister: true,
     name: Lang[window.Lang].pages.main.input_your_account,
+    password: "",
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -269,7 +270,7 @@ class AppFrame extends Component {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
       console.log(message.code);
-      if (message.code === Code.LOGIN_SUCCESS) {
+      if (message.code === Code.LOGIN_SUCCESS || message.code === 10031) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.session;
@@ -285,13 +286,17 @@ class AppFrame extends Component {
     }
 
     var apptype;
+    console.log(APP_TYPE_ORANIZATION);
+    console.log(this.state.index);
     if (this.state.index === COMPANY_LOING_INDEX) {
       apptype = APP_TYPE_COMPANY;
+      getData(getRouter(LOGIN), { account: account, password: password }, cb, { account: account, type: apptype });
     } else if (this.state.index === ORANIZATION_LOING_INDEX) {
       apptype = APP_TYPE_ORANIZATION;
+      console.log("123")
+      getData(getRouter(ORG_LOGIN), { account: account, password: password }, cb, { account: account, type: apptype });
     }
     // { account: account, password: password, type: apptype }
-    getData(getRouter(LOGIN), { account: account, password: password, type: apptype }, cb, { account: account, type: apptype });
   }
 
   handleNext = () => {
@@ -480,30 +485,34 @@ class AppFrame extends Component {
     return (
       <div>
         <TextField
-          id="login_name"
+          id={"login_name" + this.state.index}
           label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
           style={{
-            marginLeft: 200,//styleManager.theme.spacing.unit,
-            marginRight: 200,//theme.spacing.unit,  
-            width: 200,
+            marginLeft: "auto",//styleManager.theme.spacing.unit,
+            marginRight: "auto",//theme.spacing.unit,  
           }}
-          // defaultValue={Lang[window.Lang].pages.main.input_your_account}
-          // value={this.state.name}
           onChange={event => this.setState({ name: event.target.value })}
         />
         <TextField
           label={Lang[window.Lang].pages.main.password}
           id={"login_password" + this.state.index}
           type="password"
-        // defaultValue={Lang[window.Lang].pages.main.input_your_password}
+          style={{
+            marginLeft: "auto",//styleManager.theme.spacing.unit,
+            marginRight: "auto",//theme.spacing.unit,  
+          }}
+          onChange={event => this.setState({ password: event.target.value })}
         />
         <Button
           raised
           color="accent"
+          style={{
+            margin: "20px 20px",
+          }}
           onClick={() => {
-            var name = document.getElementById("login_name").value;
-            var password = document.getElementById("login_password" + this.state.index).value;
-
+            var name = this.state.name;
+            var password = this.state.password;
+            console.log(password)
             if (name === "" || password === "") {
               return
             }
@@ -516,6 +525,9 @@ class AppFrame extends Component {
         <Button
           raised
           color="accent"
+          style={{
+            margin: "20px 20px",
+          }}
           onClick={() => {
             {/* var name = document.getElementById("login_name").value;
             var password = document.getElementById("login_password" + this.state.index).value;
@@ -666,138 +678,141 @@ class AppFrame extends Component {
     }
 
     return (
-      <div className={classes.appFrame}>
-        <AppBar className={appBarClassName}>
-          <Toolbar>
-            <IconButton
-              color="contrast"
-              onClick={this.handleDrawerToggle}
-              className={navIconClassName}
-            >
-              <MenuIcon />
-            </IconButton>
-            {title !== null &&
-              <Typography className={classes.title} type="title" color="inherit" noWrap>
-                {title}
-              </Typography>}
-            <div className={classes.grow} />
+      <div>
+        {sessionStorage.getItem("logged") === "true" ?
+          <div className={classes.appFrame}>
+            <AppBar className={appBarClassName}>
+              <Toolbar>
+                <IconButton
+                  color="contrast"
+                  onClick={this.handleDrawerToggle}
+                  className={navIconClassName}
+                >
+                  <MenuIcon />
+                </IconButton>
+                {title !== null &&
+                  <Typography className={classes.title} type="title" color="inherit" noWrap>
+                    {title}
+                  </Typography>}
+                <div className={classes.grow} />
 
-            <IconButton
-              title="Toggle light/dark theme"
-              color="contrast"
-              onClick={this.handleToggleShade}
-            >
-              <LightbulbOutline />
-            </IconButton>
-            <IconButton
-              color="contrast"
-              onClick={() => {
-                window.currentPage.fresh();
-              }}>
-              <Refresh />
-            </IconButton>
-            <IconButton
-              color="contrast"
-              onClick={this.handleMenuClick}
-              aria-owns="api-menu"
-              aria-haspopup="true"
-            >
-              <MoreVertIcon />
-            </IconButton>
-            <Menu
-              id="api-menu"
-              anchorEl={this.state.anchorEl}
-              open={this.state.menuOpen}
-              onRequestClose={this.handleMenuClose}
-            >
-              <MenuItem key="info"
-                onClick={() => {
-                  this.handleOpenDetail();
-                  if (sessionStorage.appType === undefined) {
+                <IconButton
+                  title="Toggle light/dark theme"
+                  color="contrast"
+                  onClick={this.handleToggleShade}
+                >
+                  <LightbulbOutline />
+                </IconButton>
+                <IconButton
+                  color="contrast"
+                  onClick={() => {
+                    window.currentPage.fresh();
+                  }}>
+                  <Refresh />
+                </IconButton>
+                <IconButton
+                  color="contrast"
+                  onClick={this.handleMenuClick}
+                  aria-owns="api-menu"
+                  aria-haspopup="true"
+                >
+                  <MoreVertIcon />
+                </IconButton>
+                <Menu
+                  id="api-menu"
+                  anchorEl={this.state.anchorEl}
+                  open={this.state.menuOpen}
+                  onRequestClose={this.handleMenuClose}
+                >
+                  <MenuItem key="info"
+                    onClick={() => {
+                      this.handleOpenDetail();
+                      if (sessionStorage.appType === undefined) {
 
-                  } else if (sessionStorage.appType === APP_TYPE_COMPANY) {
+                      } else if (sessionStorage.appType === APP_TYPE_COMPANY) {
 
-                  } else if (sessionStorage.appType === APP_TYPE_ORANIZATION) {
+                      } else if (sessionStorage.appType === APP_TYPE_ORANIZATION) {
 
-                  }
-                }} >
-                {Lang[window.Lang].components.AppFrame.Info}
-              </MenuItem>
-              <MenuItem
-                key="reset"
-                onClick={() => {
-                  this.handleOpenReset();
-                }} >
-                {Lang[window.Lang].components.AppFrame.Reset}
-              </MenuItem>
-              <MenuItem
-                key="logout"
-                onClick={() => {
-                  // location.reload();
-                  // location.replace("/web_client");
-                  this.logout();
-                }}>
-                {Lang[window.Lang].components.AppFrame.Logout}
-              </MenuItem>
-            </Menu>
-          </Toolbar>
-        </AppBar>
-        <AppDrawer
-          className={classes.drawer}
-          docked={drawerDocked}
-          routes={routes}
-          onRequestClose={this.handleDrawerClose}
-          open={sessionStorage.getItem("logged") === "true" ? (drawerDocked || this.state.drawerOpen) : false}
-        />
-        {sessionStorage.getItem("logged") === "true" ? children : <div style={{ flex: '1 0 100%', }}>
-          <div style={{
-            minHeight: '100vh', // Makes the hero full height until we get some more content.
-            flex: '0 0 auto',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            backgroundColor: theme.palette.primary[500],
-            color: theme.palette.getContrastText(theme.palette.primary[500]),
-          }}>
+                      }
+                    }} >
+                    {Lang[window.Lang].components.AppFrame.Info}
+                  </MenuItem>
+                  <MenuItem
+                    key="reset"
+                    onClick={() => {
+                      this.handleOpenReset();
+                    }} >
+                    {Lang[window.Lang].components.AppFrame.Reset}
+                  </MenuItem>
+                  <MenuItem
+                    key="logout"
+                    onClick={() => {
+                      // location.reload();
+                      // location.replace("/web_client");
+                      this.logout();
+                    }}>
+                    {Lang[window.Lang].components.AppFrame.Logout}
+                  </MenuItem>
+                </Menu>
+              </Toolbar>
+            </AppBar>
+            <AppDrawer
+              className={classes.drawer}
+              docked={drawerDocked}
+              routes={routes}
+              onRequestClose={this.handleDrawerClose}
+              open={sessionStorage.getItem("logged") === "true" ? (drawerDocked || this.state.drawerOpen) : false}
+            />
+            {children}
+          </div> : <div style={{ flex: '1 0 100%', }}>
             <div style={{
-              padding: '60px 30px',
-              textAlign: 'center',
-              [theme.breakpoints.up('sm')]: {
-                padding: '120px 30px',
-              },
+              minHeight: '100vh', // Makes the hero full height until we get some more content.
+              flex: '0 0 auto',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: theme.palette.primary[500],
+              color: theme.palette.getContrastText(theme.palette.primary[500]),
             }}>
               <div style={{
-                backgroundColor: theme.palette.background.paper,
-                width: 500
+                padding: '60px 30px',
+                textAlign: 'center',
+                [theme.breakpoints.up('sm')]: {
+                  padding: '120px 30px',
+                },
               }}>
-                <AppBar position="static" color="default">
-                  <Tabs
-                    index={this.state.index}
-                    onChange={this.handleChange}
-                    indicatorColor="primary"
-                    textColor="primary"
-                    fullWidth
-                  >
-                    <Tab label="公司登陆" />
-                    <Tab label="公司注册" />
-                    <Tab label="机构登陆" />
-                  </Tabs>
-                </AppBar>
-                <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
-                  <TabContainer>
-                    {this.LoginView()}
-                  </TabContainer>
-                  <TabContainer>
-                    {this.RegisterView()}
-                  </TabContainer>
-                  <TabContainer>
-                    {this.LoginView()}
-                  </TabContainer>
-                </SwipeableViews>
+                <div style={{
+                  backgroundColor: theme.palette.background.paper,
+                  width: 500
+                }}>
+                  <AppBar position="static" color="default">
+                    <Tabs
+                      index={this.state.index}
+                      onChange={this.handleChange}
+                      indicatorColor="primary"
+                      textColor="primary"
+                      fullWidth
+                    >
+                      <Tab label="公司登陆" />
+                      <Tab label="公司注册" />
+                      <Tab label="机构登陆" />
+                    </Tabs>
+                  </AppBar>
+                  <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
+                    <TabContainer>
+                      {this.LoginView()}
+                    </TabContainer>
+                    <TabContainer>
+                      {this.RegisterView()}
+                    </TabContainer>
+                    <TabContainer>
+                      {this.LoginView()}
+                    </TabContainer>
+                  </SwipeableViews>
+                </div>
               </div>
             </div>
-          </div>
-        </div>}
+          </div>}
         <CommonAlert
           show={this.state.alertOpen}
           type={this.state.alertType}

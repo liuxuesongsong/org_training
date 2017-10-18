@@ -5,15 +5,15 @@ var assert = require('assert');
 
 let expect = chai.expect;
 
-let routers = "http://47.93.26.208:8001/index.php?m=train&c=route&a=client_route";
-let addr = "http://47.93.26.208:8001/index.php?m=train";
+let routers = "http://192.168.0.105:8010/index.php?m=train&c=route&a=client_route";
+let addr = "http://192.168.0.105:8010/index.php?m=train";
 var routes = {
     "login": addr + "&c=users&a=login",
     "register": addr + "&c=users&a=regist",
     "available": addr + "&c=users&a=available",
     "logout": addr + "&c=users&a=logout",
     "reset": addr + "&c=users&a=reset",
-    "info": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
+    "info": addr + "&c=query&a=info",
 
     "insert": addr + "&c=students&a=insert",
     "remove": addr + "&c=students&a=remove",
@@ -34,13 +34,13 @@ var routes = {
     "agree": addr + "&c=enrolled&a=agree",
     "refuse": addr + "&c=enrolled&a=refuse",
 
-    "creatclass": addr + "&c=clazz&a=creatclass",
-    "editclass": addr + "&c=clazz&a=editclass",
-    "delclass": addr + "&c=clazz&a=delclass",
+    "createClass": addr + "&c=clazz&a=createClass",
+    "editClass": addr + "&c=clazz&a=editClass",
+    "delClass": addr + "&c=clazz&a=delClass",
 
     "classinfos": addr + "&c=clazz&a=classinfos",
 
-    "query": "http://47.93.26.208:8001/index.php?m=train&c=query&a=info",
+    "query": addr + "&c=query&a=info",
 }
 
 let header = {
@@ -53,7 +53,7 @@ let header = {
     },
 }
 
-//var session = "XSLIgL"
+var session = "XzZG17"
 
 describe('服务器API测试', function () {
 
@@ -383,7 +383,7 @@ describe('服务器API测试', function () {
             assert.notEqual([0, 10018, 100181].indexOf(json.code), -1);
         });
     })
-   
+
     it('增加经验', function () {
         return fetch(routes.addexp, Object.assign(header,
             {
@@ -428,7 +428,7 @@ describe('服务器API测试', function () {
         }).then(function (json) {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0,10019,100191].indexOf(json.code), -1);
+            assert.notEqual([0, 10019, 100191].indexOf(json.code), -1);
         });
     })
 
@@ -550,8 +550,8 @@ describe('服务器API测试', function () {
     })
 
     it('新建班级', function () {
-        return fetch(routes.creatclass, Object.assign(header,
-            { body: JSON.stringify({ session: session, area: "北京", class_name: "高级", train_starttime: "2018/01/02" }) }
+        return fetch(routes.createClass, Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17", clazz: { area: "北京", class_name: "高级", train_starttime: "2018/01/02" } }) }
         )).then(function (res) {
             return res.json();
             console.log("创建班级");
@@ -559,13 +559,13 @@ describe('服务器API测试', function () {
             console.log(json);
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
-            assert.notEqual([0, 10026, 100261, 100262].indexOf(json.code), -1);
+            assert.notEqual([0, 10026, 100261, 100262, 100263].indexOf(json.code), -1);
         });
     })
 
     it('编辑班级', function () {
-        return fetch(routes.editclass, Object.assign(header,
-            { body: JSON.stringify({ session: session, class_head: "李四", address: "中软大厦" }) }
+        return fetch(routes.editClass, Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17", id: 17, class: { class_head: "李san四", address: "中软大厦" } }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -575,9 +575,10 @@ describe('服务器API测试', function () {
             assert.notEqual([0, 10028, 100281].indexOf(json.code), -1);
         });
     })
+
     it('删除班级', function () {
-        return fetch(routes.delclass, Object.assign(header,
-            { body: JSON.stringify({ session: session, id: 12 }) }
+        return fetch(routes.delClass, Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17", id: 17 }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
@@ -587,9 +588,10 @@ describe('服务器API测试', function () {
             assert.notEqual([0, 10029, 100291].indexOf(json.code), -1);
         });
     })
+
     it('查看班级', function () {
         return fetch(routes.classinfos, Object.assign(header,
-            { body: JSON.stringify({ session: session, id: 12 }) }
+            { body: JSON.stringify({ session: "XzZG17" }) }
         )).then(function (res) {
             return res.json();
         }).then(function (json) {
