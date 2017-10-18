@@ -24,14 +24,14 @@ class Base extends Component {
             province: "",
             qualification: ""
         });
-        // if (getCache(DATA_TYPE_BASE) !== undefined) {
-        //     var data = getCache(DATA_TYPE_BASE);
-        //     this.setState({
-        //         company_name: data.company_name,
-        //         province: data.province,
-        //         qualification: data.qualification
-        //     });
-        // }
+         if (getCache(DATA_TYPE_BASE) !== undefined) {
+            var data = getCache(DATA_TYPE_BASE);
+             this.setState({
+                company_name: data.company_name,
+                province: data.province,
+                 qualification: data.qualification
+             });
+         }
     }
 
     submit = () => {

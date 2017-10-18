@@ -325,6 +325,7 @@ class Students extends Component {
                                     {Lang[window.Lang].pages.com.students.new_student}
                                 </Button>
                             </ListSubheader>}>
+                           
                             {this.state.students.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_INFO}
