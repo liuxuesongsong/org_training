@@ -6,6 +6,8 @@ import List, {
 import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Typography from 'material-ui/Typography';
 
+import { ALERT, NOTICE, NEW_AREA, DEL_AREA, QUERY_AREA, QUERY, } from '../../enum';
+
 import Code from '../../code';
 import Lang from '../../language';
 
@@ -14,6 +16,7 @@ import CommonAlert from '../../components/CommonAlert';
 class Area extends Component {
     state = {
         areas: [],
+        clazz: [],
         // 提示状态
         alertOpen: false,
         alertType: "notice",
@@ -29,6 +32,56 @@ class Area extends Component {
     fresh = () => {
     }
 
+    newArea = (area) => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.areas.push(arg.area);
+            }
+        }
+        getData(getRouter(NEW_AREA), { session: sessionStorage.session, id: id }, cb, { area: area });
+
+    }
+
+    delArea = () => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                for (var i = 0; i < this.state.areas.length; i++) {
+                    if (this.state.areas[i].id === arg.id) {
+                        this.state.areas.splice(i, 1);
+                        this.setState({
+                            areas: this.state.areas
+                        })
+                        break;
+                    }
+                }
+            }
+        }
+        getData(getRouter(QUERY_AREA), { session: sessionStorage.session, id: id }, cb, { id: id });
+    }
+
+    queryArea = () => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.areas = message.area
+            }
+        }
+        getData(getRouter(NEW_AREA), { session: sessionStorage.session, id: id }, cb, { id: id });
+
+    }
+
+    queryClazzInArea = () => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.areas = message.area
+            }
+        }
+        getData(getRouter(), { session: sessionStorage.session, id: id }, cb, { id: id });
+
+    }
 
     popUpNotice = (type, code, content) => {
         this.setState({ type: type, code: code, content: content, alertOpen: true });

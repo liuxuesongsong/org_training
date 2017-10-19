@@ -13,7 +13,7 @@ import StudentCard from '../studentCard.js';
 
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
-    QUERY, ENROLL_STUDENT, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
+    QUERY, ENROLL_STUDENT,EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
     CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED
 } from '../../../enum';
@@ -87,6 +87,20 @@ class Enrolled extends Component {
             }
         }
         getData(getRouter(ENROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
+    }
+
+    kickClazz() {
+        var id = this.state.selectedStudentId;
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                // let student = getStudent(arg.id);
+                // student.status[STATUS_ENROLLED].status = STATUS_ENROLLED_DID;
+                // student.status[STATUS_ARRANGED].status = STATUS_ARRANGED_UNDO;
+                // this.fresh();
+            }
+        }
+        getData(getRouter(EXIT_CLASS), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
     agreeArrange() {

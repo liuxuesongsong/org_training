@@ -134,13 +134,13 @@ class Clazz extends Component {
         getData(getRouter(NEW_CLASS), obj, cb, {});
     }
 
-    modifyClazz = () => {
+    modifyClazz = (id, clazz) => {
         var cb = (route, message, arg) => {
             if (message.code === 10026) {
                 this.setState({ clazzes: message.clazz })
             }
         }
-        getData(getRouter(EDIT_CLASS), { session: sessionStorage.session }, cb, {});
+        getData(getRouter(EDIT_CLASS), { session: sessionStorage.session, id: id, "class": clazz }, cb, {});
 
     }
 

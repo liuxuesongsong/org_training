@@ -30,6 +30,28 @@ class Enroll extends Component {
     fresh = () => {
     }
 
+    entranceClazz = () => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+            }
+        }
+        getData(getRouter(ENTRANCE_CLASS), { session: sessionStorage.session, id: id }, cb, { id: id });
+
+    }
+
+    exitClazz = () => {
+        var cb = (router, message, arg) => {
+            console.log(message);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+            }
+        }
+        getData(getRouter(EXIT_CLASS), { session: sessionStorage.session, id: id }, cb, { id: id });
+
+    }
+
     popUpNotice = (type, code, content) => {
         this.setState({ type: type, code: code, content: content, alertOpen: true });
     }

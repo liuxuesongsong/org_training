@@ -71,6 +71,7 @@ class ComCard extends Component {
                 onClick={this.state.action[0]}>
                 {Lang[window.Lang].pages.com.card.agree}
               </Button>
+              <br />
               <Button
                 dense
                 id={"right"}
@@ -150,17 +151,19 @@ class ComCard extends Component {
           }}>
             <CardContent>
               <Typography type="body1">
-                {name}
+                {"学生姓名:" + name}
               </Typography>
               <Typography type="body1" component="h2">
-                {tel}
+                {"联系电话:" + tel}
               </Typography>
               <Typography type="body1">
-                {email}
+                {"电子邮件:" + email}
               </Typography>
               <Typography component="p">
-                {level}<br />
-                {city}
+                {"客户等级:" + level}<br />
+              </Typography>
+              <Typography component="p">
+                {"所在城市:" + city}
               </Typography>
             </CardContent>
           </div>
