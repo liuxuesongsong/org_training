@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'proptypes';
 // import { withStyles, createStyleSheet } from 'materialui/styles';
 
+import Drawer from 'material-ui/Drawer';
 import Paper from 'material-ui/Paper';
 // import GridList from 'materialui/Grid';
 import Typography from 'material-ui/Typography';
@@ -41,6 +42,7 @@ class Students extends Component {
         selected: {},
         showInfo: false,
         openNewStudentDialog: false,
+        right: false,
 
         // 提示状态
         alertOpen: false,
@@ -297,6 +299,13 @@ class Students extends Component {
         })
     }
 
+    toggleDrawer = (open) => () => {
+        console.log("123");
+        this.setState({
+            right: open,
+        });
+    };
+
     render() {
         return (
             <div>
@@ -340,9 +349,11 @@ class Students extends Component {
                                     action={[() => {
                                         this.state.selected = student;
                                         console.log(student);
-                                        this.setState({
-                                            showInfo: true
-                                        })
+                                        // this.setState({
+                                        //     showInfo: true
+                                        // })
+                                        this.state.showInfo = true;
+                                        this.toggleDrawer(true)()
                                     }, () => {
                                         this.state.selected = student;
                                         this.popUpNotice(ALERT, 0, "删除学生" + student.base_info.name, [
@@ -359,149 +370,165 @@ class Students extends Component {
                         </List>
                     </div>
                     {this.state.showInfo === true ?
-                        <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
-                            <div>
-                                <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.com.students.base_info}
-                                </Typography>
-                                <TextField
-                                    id="student_name"
-                                    label={Lang[window.Lang].pages.com.students.name}
-                                    defaultValue={this.state.selected.base_info.name}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="tel"
-                                    label={Lang[window.Lang].pages.com.students.tel}
-                                    defaultValue={this.state.selected.base_info.tel}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="email"
-                                    label={Lang[window.Lang].pages.com.students.email}
-                                    defaultValue={this.state.selected.base_info.email}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="city"
-                                    label={Lang[window.Lang].pages.com.students.city}
-                                    defaultValue={this.state.selected.base_info.city.toString()}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="level"
-                                    label={Lang[window.Lang].pages.com.students.level.title}
-                                    defaultValue={this.state.selected.base_info.level.toString()}
-                                    fullWidth
-                                />
+                        <Drawer
+                            anchor="right"
+                            open={this.state.right}
+                            onRequestClose={this.toggleDrawer(false)}
+                        >
+                            <div
+                                tabIndex={0}
+                                role="button"
+                                onClick={this.toggleDrawer(false)}
+                                onKeyDown={this.toggleDrawer(false)}
+                            >
 
-                                <Button color="primary" style={{ margin: 10 }}>
-                                    {Lang[window.Lang].pages.main.certain_button}
-                                </Button>
-                            </div>
-                            <div>
-                                <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.com.students.personal_info.title}
-                                </Typography>
-                                {/* <Selection
+                                <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
+                                    <div>
+                                        <Typography type="headline" component="h3">
+                                            {Lang[window.Lang].pages.com.students.base_info}
+                                        </Typography>
+                                        <TextField
+                                            id="student_name"
+                                            label={Lang[window.Lang].pages.com.students.name}
+                                            defaultValue={this.state.selected.base_info.name}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            id="tel"
+                                            label={Lang[window.Lang].pages.com.students.tel}
+                                            defaultValue={this.state.selected.base_info.tel}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            id="email"
+                                            label={Lang[window.Lang].pages.com.students.email}
+                                            defaultValue={this.state.selected.base_info.email}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            id="city"
+                                            label={Lang[window.Lang].pages.com.students.city}
+                                            defaultValue={this.state.selected.base_info.city.toString()}
+                                            fullWidth
+                                        />
+                                        <TextField
+                                            id="level"
+                                            label={Lang[window.Lang].pages.com.students.level.title}
+                                            defaultValue={this.state.selected.base_info.level.toString()}
+                                            fullWidth
+                                        />
+
+                                        <Button color="primary" style={{ margin: 10 }}>
+                                            {Lang[window.Lang].pages.main.certain_button}
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Typography type="headline" component="h3">
+                                            {Lang[window.Lang].pages.com.students.personal_info.title}
+                                        </Typography>
+                                        {/* <Selection
                                     id="licence.type"
                                     label={Lang[window.Lang].pages.com.students.personal_info.licence_type}
                                     defaultValue={this.state.selected.personal_info.licence.type}
                                     fullWidth>
                                 </Selection> */}
-                                <TextField
-                                    id="licence.code"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                    defaultValue={this.state.selected.personal_info.licence.code}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="edu"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.edu}
-                                    defaultValue={this.state.selected.personal_info.edu}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="working_time"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.working_time}
-                                    defaultValue={this.state.selected.personal_info.working_time}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="total_amount"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.total_amount}
-                                    defaultValue={this.state.selected.personal_info.total_amount}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="soft_amount"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.soft_amount}
-                                    defaultValue={this.state.selected.personal_info.soft_amount}
-                                    fullWidth>
-                                </TextField>
-                                <Button color="primary" style={{ margin: 10 }}>
-                                    {Lang[window.Lang].pages.main.certain_button}
-                                </Button>
+                                        <TextField
+                                            id="licence.code"
+                                            label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                            defaultValue={this.state.selected.personal_info.licence.code}
+                                            fullWidth>
+                                        </TextField>
+                                        <TextField
+                                            id="edu"
+                                            label={Lang[window.Lang].pages.com.students.personal_info.edu}
+                                            defaultValue={this.state.selected.personal_info.edu}
+                                            fullWidth>
+                                        </TextField>
+                                        <TextField
+                                            id="working_time"
+                                            label={Lang[window.Lang].pages.com.students.personal_info.working_time}
+                                            defaultValue={this.state.selected.personal_info.working_time}
+                                            fullWidth>
+                                        </TextField>
+                                        <TextField
+                                            id="total_amount"
+                                            label={Lang[window.Lang].pages.com.students.personal_info.total_amount}
+                                            defaultValue={this.state.selected.personal_info.total_amount}
+                                            fullWidth>
+                                        </TextField>
+                                        <TextField
+                                            id="soft_amount"
+                                            label={Lang[window.Lang].pages.com.students.personal_info.soft_amount}
+                                            defaultValue={this.state.selected.personal_info.soft_amount}
+                                            fullWidth>
+                                        </TextField>
+                                        <Button color="primary" style={{ margin: 10 }}>
+                                            {Lang[window.Lang].pages.main.certain_button}
+                                        </Button>
+                                    </div>
+                                    <div>
+                                        <Typography type="headline" component="h3">
+                                            {Lang[window.Lang].pages.com.students.proj_exp.title}
+                                        </Typography>
+                                        {
+                                            this.state.selected.proj_exp.map(exp =>
+                                                <div id={exp.id}>
+                                                    <Typography type="body1" component="p">
+                                                        {exp.name}
+                                                    </Typography>
+                                                    <Typography type="body1" component="p">
+                                                        {getTimeString(exp.time)}
+                                                    </Typography>
+                                                    <Typography type="body1" component="p">
+                                                        {exp.actor}
+                                                    </Typography>
+                                                    <Typography type="body1" component="p">
+                                                        {exp.total_amount}
+                                                    </Typography>
+                                                    <Typography type="body1" component="p">
+                                                        {exp.soft_amount}
+                                                    </Typography>
+                                                    <Button color="primary" style={{ margin: 10 }}>
+                                                        {Lang[window.Lang].pages.main.certain_button}
+                                                    </Button>
+                                                </div>)
+                                        }
+                                        <div>
+                                            <TextField
+                                                id="proj_name"
+                                                label={Lang[window.Lang].pages.com.students.proj_exp.name}
+                                                defaultValue={this.state.selected.proj_exp.name}>
+                                            </TextField>
+                                            <TextField
+                                                id="time"
+                                                label={Lang[window.Lang].pages.com.students.proj_exp.time}
+                                                defaultValue={this.state.selected.proj_exp.time}>
+                                            </TextField>
+                                            <TextField
+                                                id="actor"
+                                                label={Lang[window.Lang].pages.com.students.proj_exp.actor}
+                                                defaultValue={this.state.selected.proj_exp.actor}>
+                                            </TextField>
+                                            <TextField
+                                                id="exp_total_amount"
+                                                label={Lang[window.Lang].pages.com.students.proj_exp.total_amount}
+                                                defaultValue={this.state.selected.proj_exp.total_amount}>
+                                            </TextField>
+                                            <TextField
+                                                id="exp_soft_amount"
+                                                label={Lang[window.Lang].pages.com.students.proj_exp.soft_amount}
+                                                defaultValue={this.state.selected.proj_exp.soft_amount}>
+                                            </TextField>
+                                        </div>
+                                        <Button color="primary" style={{ margin: 10 }}>
+                                            {Lang[window.Lang].pages.main.certain_button}
+                                        </Button>
+                                    </div>
+                                </Paper>
+
+
                             </div>
-                            <div>
-                                <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.com.students.proj_exp.title}
-                                </Typography>
-                                {
-                                    this.state.selected.proj_exp.map(exp =>
-                                        <div id={exp.id}>
-                                            <Typography type="body1" component="p">
-                                                {exp.name}
-                                            </Typography>
-                                            <Typography type="body1" component="p">
-                                                {getTimeString(exp.time)}
-                                            </Typography>
-                                            <Typography type="body1" component="p">
-                                                {exp.actor}
-                                            </Typography>
-                                            <Typography type="body1" component="p">
-                                                {exp.total_amount}
-                                            </Typography>
-                                            <Typography type="body1" component="p">
-                                                {exp.soft_amount}
-                                            </Typography>
-                                            <Button color="primary" style={{ margin: 10 }}>
-                                                {Lang[window.Lang].pages.main.certain_button}
-                                            </Button>
-                                        </div>)
-                                }
-                                <div>
-                                    <TextField
-                                        id="proj_name"
-                                        label={Lang[window.Lang].pages.com.students.proj_exp.name}
-                                        defaultValue={this.state.selected.proj_exp.name}>
-                                    </TextField>
-                                    <TextField
-                                        id="time"
-                                        label={Lang[window.Lang].pages.com.students.proj_exp.time}
-                                        defaultValue={this.state.selected.proj_exp.time}>
-                                    </TextField>
-                                    <TextField
-                                        id="actor"
-                                        label={Lang[window.Lang].pages.com.students.proj_exp.actor}
-                                        defaultValue={this.state.selected.proj_exp.actor}>
-                                    </TextField>
-                                    <TextField
-                                        id="exp_total_amount"
-                                        label={Lang[window.Lang].pages.com.students.proj_exp.total_amount}
-                                        defaultValue={this.state.selected.proj_exp.total_amount}>
-                                    </TextField>
-                                    <TextField
-                                        id="exp_soft_amount"
-                                        label={Lang[window.Lang].pages.com.students.proj_exp.soft_amount}
-                                        defaultValue={this.state.selected.proj_exp.soft_amount}>
-                                    </TextField>
-                                </div>
-                                <Button color="primary" style={{ margin: 10 }}>
-                                    {Lang[window.Lang].pages.main.certain_button}
-                                </Button>
-                            </div>
-                        </Paper> : <div />}
+                        </Drawer> : <div />}
 
                 </div>
                 {this.newStudentDialog()}
