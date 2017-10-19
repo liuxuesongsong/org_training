@@ -13,6 +13,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Drawer from 'material-ui/Drawer';
 
 import { initCache, getData, getRouter, getCache, getStudent } from '../../utils/helpers';
 
@@ -177,128 +178,143 @@ class Clazz extends Component {
         this.setState({ type: type, code: code, content: content, alertOpen: true });
     }
 
+    toggleDrawer = (open) => () => {
+        this.setState({
+            right: open,
+        });
+    };
+
     render() {
-        return <div>
-            <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
-                    <ListSubheader>
-                        <Button
-                            color="primary"
-                            onClick={() => {
-                                this.setState({
-                                    openNewClazzDialog: true
-                                });
-                            }}
-                            style={{ margin: 10 }}
-                        >
-                            {Lang[window.Lang].pages.org.clazz.new}
-                        </Button>
-                    </ListSubheader>
-                    {this.state.clazzes.map(clazz =>
-                        <Card
-                            key={clazz.id}
-                            style={{ display: 'flex', }}>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                            }}>
-                                <CardContent>
-                                    <Typography type="body1">
-                                        {clazz.id}
-                                    </Typography>
-                                    <Typography type="body1" component="h2">
-                                        {clazz.name}
-                                    </Typography>
-                                    <Typography type="body1">
-                                        {clazz.area}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.train_starttime}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.class_head}
-                                    </Typography>
-                                    <Typography type="body1">
-                                        {clazz.ti_name}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.address}
-                                    </Typography>
-                                    <Typography component="p">
-                                        {clazz.time}
-                                    </Typography>
-                                </CardContent>
-                            </div>
-                            <div>
-                                <CardActions>
-                                    <Button
-                                        dense
-                                        onClick={() => {
-                                            this.state.selected = clazz;
-                                            this.setState({
-                                                showInfo: true
-                                            })
+        return (
+            <div>
+                <div style={{ margin: 10, width: 400, float: "left" }}>
+                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
+                        <ListSubheader>
+                            <Button
+                                color="primary"
+                                onClick={() => {
+                                    this.setState({
+                                        openNewClazzDialog: true
+                                    });
+                                }}
+                                style={{ margin: 10 }}
+                            >
+                                {Lang[window.Lang].pages.org.clazz.new}
+                            </Button>
+                        </ListSubheader>
+                        {this.state.clazzes.map(clazz =>
+                            <Card
+                                key={clazz.id}
+                                style={{ display: 'flex', }}>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                    <CardContent>
+                                        <Typography type="body1">
+                                            {clazz.id}
+                                        </Typography>
+                                        <Typography type="body1" component="h2">
+                                            {clazz.name}
+                                        </Typography>
+                                        <Typography type="body1">
+                                            {clazz.area}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {clazz.train_starttime}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {clazz.class_head}
+                                        </Typography>
+                                        <Typography type="body1">
+                                            {clazz.ti_name}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {clazz.address}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {clazz.time}
+                                        </Typography>
+                                    </CardContent>
+                                </div>
+                                <div>
+                                    <CardActions>
+                                        <Button
+                                            dense
+                                            onClick={() => {
+                                                this.state.selected = clazz;
+                                                this.state.showInfo = true;
+                                                this.toggleDrawer(true)()
+                                            }}>
+                                            {Lang[window.Lang].pages.com.card.modify}
+                                        </Button>
+                                        <Button
+                                            dense
+                                            onClick={() => {
+                                                this.state.selected = clazz;
+                                                this.deleteClazz(clazz.id);
+                                                return
+                                                this.popUpNotice(ALERT, 0, "删除该班级", [
+                                                    () => {
+                                                        this.removeStudent(clazz.id);
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                            }}>
+                                            {Lang[window.Lang].pages.com.card.remove}
+                                        </Button>
+                                    </CardActions>
+                                </div>
+                            </Card>
+                        )}
+                    </List>
+                </div>
+                {this.state.showInfo === true ?
+                    <Drawer
+                        anchor="right"
+                        open={this.state.right}
+                        onRequestClose={this.toggleDrawer(false)}
+                    >
+                        <div style={{ margin: 10, width: 400, float: "left" }}>
+                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
+                                {this.state.students.map(student =>
+                                    <Card style={{ display: 'flex', }}>
+                                        <div style={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
                                         }}>
-                                        {Lang[window.Lang].pages.com.card.modify}
-                                    </Button>
-                                    <Button
-                                        dense
-                                        onClick={() => {
-                                            this.state.selected = clazz;
-                                            this.deleteClazz(clazz.id);
-                                            return
-                                            this.popUpNotice(ALERT, 0, "删除该班级", [
-                                                () => {
-                                                    this.removeStudent(clazz.id);
-                                                    this.closeNotice();
-                                                }, () => {
-                                                    this.closeNotice();
-                                                }]);
-                                        }}>
-                                        {Lang[window.Lang].pages.com.card.remove}
-                                    </Button>
-                                </CardActions>
-                            </div>
-                        </Card>
-                    )}
-                </List>
+                                            <CardContent>
+                                                <Typography type="body1">
+                                                </Typography>
+                                                <Typography type="body1" component="h2">
+                                                </Typography>
+                                                <Typography type="body1">
+                                                </Typography>
+                                                <Typography component="p">
+                                                </Typography>
+                                            </CardContent>
+                                        </div>
+                                        <div>
+                                            {this.buttonActions()}
+                                        </div>
+                                    </Card>
+                                )}
+                            </List>
+                        </div>
+
+                    </Drawer> : <div />}
+                {this.newClazzDialog()}
+                <CommonAlert
+                    show={this.state.alertOpen}
+                    type={this.state.alertType}
+                    code={this.state.alertCode}
+                    content={this.state.alertContent}
+                    action={this.state.alertAction}
+                >
+                </CommonAlert>
             </div>
-            <div style={{ margin: 10, width: 400, float: "left" }}>
-                <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
-                    {this.state.students.map(student =>
-                        <Card style={{ display: 'flex', }}>
-                            <div style={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                            }}>
-                                <CardContent>
-                                    <Typography type="body1">
-                                    </Typography>
-                                    <Typography type="body1" component="h2">
-                                    </Typography>
-                                    <Typography type="body1">
-                                    </Typography>
-                                    <Typography component="p">
-                                    </Typography>
-                                </CardContent>
-                            </div>
-                            <div>
-                                {this.buttonActions()}
-                            </div>
-                        </Card>
-                    )}
-                </List>
-            </div>
-            {this.newClazzDialog()}
-            <CommonAlert
-                show={this.state.alertOpen}
-                type={this.state.alertType}
-                code={this.state.alertCode}
-                content={this.state.alertContent}
-                action={this.state.alertAction}
-            >
-            </CommonAlert>
-        </div >
+        )
     }
 
 }

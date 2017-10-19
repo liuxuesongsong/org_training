@@ -300,7 +300,6 @@ class Students extends Component {
     }
 
     toggleDrawer = (open) => () => {
-        console.log("123");
         this.setState({
             right: open,
         });
@@ -348,10 +347,6 @@ class Students extends Component {
                                     //city={Number(student.base_info.city)}
                                     action={[() => {
                                         this.state.selected = student;
-                                        console.log(student);
-                                        // this.setState({
-                                        //     showInfo: true
-                                        // })
                                         this.state.showInfo = true;
                                         this.toggleDrawer(true)()
                                     }, () => {
