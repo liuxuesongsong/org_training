@@ -105,7 +105,9 @@ export function isJson(obj) {
  * @param {*路由键} key 
  */
 export function getRouter(key) {
+	console.log(key);
   var router = sessionStorage.getItem(key);
+  console.log(router);
   return router === null ? config.routers : router;
 }
 
