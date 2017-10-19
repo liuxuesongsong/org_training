@@ -13,6 +13,7 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
+import Drawer from 'material-ui/Drawer';
 
 import { initCache, getData, getRouter, getCache, getStudent } from '../../utils/helpers';
 
@@ -45,16 +46,18 @@ class Area extends Component {
 
     fresh = () => {
     }
-      queryArea = () => {
+
+    queryArea = () => {
         var cb = (router, message, arg) => {
             console.log(message);
             if (message.code === 10033) {
-            	this.setState({ areas: message.area })
+                this.setState({ areas: message.area })
             }
         }
         getData(getRouter(QUERY_AREA), { session: sessionStorage.session }, cb, {});
 
     }
+
     newAreaDialog = () => {
         return (
             <Dialog open={this.state.openNewAreaDialog} onRequestClose={this.handleRequestClose} >
@@ -78,7 +81,7 @@ class Area extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                            	console.log(document.getElementById("area_name").value);
+                                console.log(document.getElementById("area_name").value);
                                 this.newArea({
                                     area_name: document.getElementById("area_name").value
                                 })
@@ -99,17 +102,17 @@ class Area extends Component {
             </Dialog>
         )
     }
-    
-    
-    
-    
+
+
+
+
     newArea = (area) => {
         var cb = (router, message, arg) => {
-        	console.log(message);
+            console.log(message);
             if (message.code === 10032) {
                 this.state.areas.push(arg.area)
                 //报错
-               //  this.setState({ areas: this.state.areas })
+                //  this.setState({ areas: this.state.areas })
             }
         }
         var obj = {
@@ -138,7 +141,7 @@ class Area extends Component {
         getData(getRouter(DEL_AREA), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
-  
+
 
     queryClazzInArea = () => {
         var cb = (router, message, arg) => {
@@ -150,7 +153,8 @@ class Area extends Component {
         getData(getRouter(), { session: sessionStorage.session, id: id }, cb, { id: id });
 
     }
-      handleRequestClose = () => {
+    
+    handleRequestClose = () => {
         this.setState({
             openNewAreaDialog: false
         })
@@ -162,8 +166,8 @@ class Area extends Component {
 
     render() {
         return <div>
-        
-          <div style={{ margin: 10,marginLeft:50, width: 400, float: "left" }}>
+
+            <div style={{ margin: 10, marginLeft: 50, width: 400, float: "left" }}>
                 <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     <ListSubheader>
                         <Button
@@ -177,7 +181,7 @@ class Area extends Component {
                         >
                             {Lang[window.Lang].pages.org.new_service}
                         </Button>
-                    </ListSubheader> 
+                    </ListSubheader>
                     {this.state.areas.map(area =>
                         <Card
                             key={area.id}
@@ -193,12 +197,12 @@ class Area extends Component {
                                     <Typography type="body1" component="h2">
                                         {area.area_name}
                                     </Typography>
-                                   
+
                                 </CardContent>
                             </div>
                             <div>
                                 <CardActions>
-                                    
+
                                     <Button
                                         dense
                                         onClick={() => {
@@ -221,11 +225,11 @@ class Area extends Component {
                     )}
                 </List>
             </div>
-        
-        
-        
-           
-              {this.newAreaDialog()}
+
+
+
+
+            {this.newAreaDialog()}
             <CommonAlert
                 show={this.state.alertOpen}
                 type={this.state.alertType}

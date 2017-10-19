@@ -86,6 +86,10 @@ export function getData(router, json, callback = null, args = {}) {
     return response.json();
   }).then(function (data) {
     if (callback !== null) {
+      if (data.code === 10099) {
+        sessionStorage.logged = false;
+      }
+      // sessionStorage.logged = false;
       callback(router, data, args);
     }
     return data;
