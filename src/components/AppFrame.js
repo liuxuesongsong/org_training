@@ -718,42 +718,43 @@ class AppFrame extends Component {
                 >
                   <MoreVertIcon />
                 </IconButton>
-                <Menu
-                  id="api-menu"
-                  anchorEl={this.state.anchorEl}
-                  open={this.state.menuOpen}
-                  onRequestClose={this.handleMenuClose}
-                >
-                  <MenuItem key="info"
-                    onClick={() => {
-                      this.handleOpenDetail();
-                      if (sessionStorage.appType === undefined) {
+                {this.state.menuOpen === true ?
+                  <Menu
+                    id="api-menu"
+                    anchorEl={this.state.anchorEl}
+                    open={this.state.menuOpen}
+                    onRequestClose={this.handleMenuClose}
+                  >
+                    <MenuItem key="info"
+                      onClick={() => {
+                        this.handleOpenDetail();
+                        if (sessionStorage.appType === undefined) {
 
-                      } else if (sessionStorage.appType === APP_TYPE_COMPANY) {
+                        } else if (sessionStorage.appType === APP_TYPE_COMPANY) {
 
-                      } else if (sessionStorage.appType === APP_TYPE_ORANIZATION) {
+                        } else if (sessionStorage.appType === APP_TYPE_ORANIZATION) {
 
-                      }
-                    }} >
-                    {Lang[window.Lang].components.AppFrame.Info}
-                  </MenuItem>
-                  <MenuItem
-                    key="reset"
-                    onClick={() => {
-                      this.handleOpenReset();
-                    }} >
-                    {Lang[window.Lang].components.AppFrame.Reset}
-                  </MenuItem>
-                  <MenuItem
-                    key="logout"
-                    onClick={() => {
-                      // location.reload();
-                      // location.replace("/web_client");
-                      this.logout();
-                    }}>
-                    {Lang[window.Lang].components.AppFrame.Logout}
-                  </MenuItem>
-                </Menu>
+                        }
+                      }} >
+                      {Lang[window.Lang].components.AppFrame.Info}
+                    </MenuItem>
+                    <MenuItem
+                      key="reset"
+                      onClick={() => {
+                        this.handleOpenReset();
+                      }} >
+                      {Lang[window.Lang].components.AppFrame.Reset}
+                    </MenuItem>
+                    <MenuItem
+                      key="logout"
+                      onClick={() => {
+                        // location.reload();
+                        // location.replace("/web_client");
+                        this.logout();
+                      }}>
+                      {Lang[window.Lang].components.AppFrame.Logout}
+                    </MenuItem>
+                  </Menu> : ""}
               </Toolbar>
             </AppBar>
             <AppDrawer

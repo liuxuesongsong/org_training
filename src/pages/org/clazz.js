@@ -29,7 +29,7 @@ class Clazz extends Component {
         showInfo: false,
         openNewClazzDialog: false,
         // 提示状态
-        alertOpen: true,
+        alertOpen: false,
         alertType: "notice",
         alertCode: Code.LOGIC_SUCCESS,
         alertContent: "登录成功"

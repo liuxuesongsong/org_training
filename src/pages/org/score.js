@@ -16,7 +16,7 @@ class Score extends Component {
         clazzes: [],
         students: [],
         // 提示状态
-        alertOpen: true,
+        alertOpen: false,
         alertType: "notice",
         alertCode: Code.LOGIC_SUCCESS,
         alertContent: "登录成功"
