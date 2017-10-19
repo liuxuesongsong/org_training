@@ -18,7 +18,7 @@ import Drawer from 'material-ui/Drawer';
 import { initCache, getData, getRouter, getCache, getStudent } from '../../utils/helpers';
 
 
-import { ALERT, NOTICE, NEW_AREA, DEL_AREA, QUERY_AREA, QUERY, } from '../../enum';
+import { ALERT, NOTICE, NEW_AREA, DEL_AREA, AREA_INFOS, QUERY, } from '../../enum';
 
 import Code from '../../code';
 import Lang from '../../language';
@@ -54,8 +54,7 @@ class Area extends Component {
                 this.setState({ areas: message.area })
             }
         }
-        getData(getRouter(QUERY_AREA), { session: sessionStorage.session }, cb, {});
-
+        getData(getRouter(AREA_INFOS), { session: sessionStorage.session }, cb, {});
     }
 
     newAreaDialog = () => {
@@ -110,17 +109,17 @@ class Area extends Component {
         var cb = (router, message, arg) => {
             console.log(message);
             if (message.code === 10032) {
+                console.log(message.id);
+                Object.assign(arg.area, { id: message.id })
                 this.state.areas.push(arg.area)
-                //报错
-                //  this.setState({ areas: this.state.areas })
+                this.setState({ areas: this.state.areas })
             }
         }
         var obj = {
             session: sessionStorage.session,
             area: area
-
         }
-        getData(getRouter(NEW_AREA), obj, cb, {});
+        getData(getRouter(NEW_AREA), obj, cb, { area: area });
 
     }
 
@@ -153,7 +152,7 @@ class Area extends Component {
         getData(getRouter(), { session: sessionStorage.session, id: id }, cb, { id: id });
 
     }
-    
+
     handleRequestClose = () => {
         this.setState({
             openNewAreaDialog: false

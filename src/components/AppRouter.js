@@ -59,13 +59,13 @@ var AppRouter =
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : AppFrame}
       />
-      <Route
+      {/* <Route
         title={titleize(Lang[window.Lang].pages.com.exams.title)}
         path={'/com/exams'}
         content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
-      />
+      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.org.home.title)}
         path={'/org/home'}
@@ -87,13 +87,13 @@ var AppRouter =
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : AppFrame}
       />
-      <Route
+      {/* <Route
         title={titleize(Lang[window.Lang].pages.org.score.title)}
         path={'/org/score'}
         content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
-      />
+      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.org.area.title)}
         path={'/org/area'}

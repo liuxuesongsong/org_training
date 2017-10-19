@@ -28,6 +28,7 @@ class Clazz extends Component {
         clazzes: [],
         students: [],
         showInfo: false,
+        showStudents: false,
         openNewClazzDialog: false,
         // 提示状态
         alertOpen: false,
@@ -244,7 +245,7 @@ class Clazz extends Component {
                                             onClick={() => {
                                                 this.state.selected = clazz;
                                                 this.state.showInfo = true;
-                                                this.toggleDrawer(true)()
+                                                {/* this.toggleDrawer(true)() */ }
                                             }}>
                                             {Lang[window.Lang].pages.com.card.modify}
                                         </Button>
@@ -264,13 +265,22 @@ class Clazz extends Component {
                                             }}>
                                             {Lang[window.Lang].pages.com.card.remove}
                                         </Button>
+                                        <Button
+                                            dense
+                                            onClick={() => {
+                                                this.state.selected = clazz;
+                                                this.state.showStudents = true;
+                                                this.toggleDrawer(true)()
+                                            }}>
+                                            {"添加学生"}
+                                        </Button>
                                     </CardActions>
                                 </div>
                             </Card>
                         )}
                     </List>
                 </div>
-                {this.state.showInfo === true ?
+                {this.state.showStudents === true ?
                     <Drawer
                         anchor="right"
                         open={this.state.right}

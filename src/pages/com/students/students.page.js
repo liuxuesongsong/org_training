@@ -401,15 +401,15 @@ class Students extends Component {
                                             fullWidth
                                         />
                                         <TextField
-                                            id="city"
-                                            label={Lang[window.Lang].pages.com.students.city}
-                                            defaultValue={this.state.selected.base_info.city}
+                                            id="area_id"
+                                            label={Lang[window.Lang].pages.com.students.area_id}
+                                            defaultValue={this.state.selected.base_info.area_id.toString()}
                                             fullWidth
                                         />
                                         <TextField
-                                            id="level"
-                                            label={Lang[window.Lang].pages.com.students.level.title}
-                                            defaultValue={this.state.selected.base_info.level}
+                                            id="course_id"
+                                            label={Lang[window.Lang].pages.com.students.course_id.title}
+                                            defaultValue={this.state.selected.base_info.course_id.toString()}
                                             fullWidth
                                         />
 

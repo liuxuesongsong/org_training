@@ -190,6 +190,7 @@ describe('服务器API测试', function () {
             assert.equal(10013, json.code);
         });
     });
+    
     it('用户登出-用户不存在-10014', function () {
         console.log(session);
         return fetch(routes.logout, Object.assign(header,

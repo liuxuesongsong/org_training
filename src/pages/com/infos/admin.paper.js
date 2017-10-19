@@ -23,10 +23,10 @@ class Admin extends Component {
             var data = getCache(DATA_TYPE_ADMIN);
             console.log(data);
             this.setState({
-                account: data.account, 
-                password: data.password, 
-                name: data.name, 
-                tel: data.tel, 
+                account: data.account,
+                password: data.password,
+                name: data.name,
+                tel: data.tel,
                 email: data.email
             });
         }

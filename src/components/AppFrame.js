@@ -474,6 +474,7 @@ class AppFrame extends Component {
             marginLeft: "auto",//styleManager.theme.spacing.unit,
             marginRight: "auto",//theme.spacing.unit,  
           }}
+          fullWidth={true}
           onChange={event => this.setState({ name: event.target.value })}
         />
         <TextField
@@ -484,6 +485,7 @@ class AppFrame extends Component {
             marginLeft: "auto",//styleManager.theme.spacing.unit,
             marginRight: "auto",//theme.spacing.unit,  
           }}
+          fullWidth={true}
           onChange={event => this.setState({ password: event.target.value })}
         />
         <Button
