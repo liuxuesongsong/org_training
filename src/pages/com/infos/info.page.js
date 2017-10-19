@@ -5,9 +5,9 @@ import PropTypes from 'prop-types';
 import Paper from 'material-ui/Paper';
 import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
-import Drawer from 'material-ui/Drawer';
 import TextField from 'material-ui/TextField';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
+import Drawer from 'material-ui/Drawer';
 
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
@@ -34,7 +34,7 @@ class Info extends Component {
 
     state = {
         gotData: false,
-        open: true,
+        drawOpen: false,
         show: "all",
 
         // 提示状态
@@ -79,6 +79,12 @@ class Info extends Component {
         });
     }
 
+    toggleDrawer = (open) => () => {
+        this.setState({
+            drawOpen: open,
+        });
+    };
+
     render() {
 
         return (
@@ -97,28 +103,28 @@ class Info extends Component {
                     }} disablePadding>
                         <div>
                             <ListItem button
-                                onClick={() => { this.setState({ show: "base" }) }}>
+                                onClick={() => { this.setState({ show: "base", drawOpen: true }) }}>
                                 <ListItemIcon>
                                     <InboxIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={LANG_PREFIX.base.title} />
                             </ListItem>
                             <ListItem button
-                                onClick={() => { this.setState({ show: "finance" }) }}>
+                                onClick={() => { this.setState({ show: "finance", drawOpen: true }) }}>
                                 <ListItemIcon>
                                     <StarIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={LANG_PREFIX.finance.title} />
                             </ListItem>
                             <ListItem button
-                                onClick={() => { this.setState({ show: "express" }) }}>
+                                onClick={() => { this.setState({ show: "express", drawOpen: true }) }}>
                                 <ListItemIcon>
                                     <SendIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={LANG_PREFIX.express.title} />
                             </ListItem>
                             <ListItem button
-                                onClick={() => { this.setState({ show: "admin" }) }}>
+                                onClick={() => { this.setState({ show: "admin", drawOpen: true }) }}>
                                 <ListItemIcon>
                                     <DraftsIcon />
                                 </ListItemIcon>
@@ -126,23 +132,30 @@ class Info extends Component {
                             </ListItem>
                         </div>
                     </List>
-                    {this.state.gotData === true ?
-                        <Grid container gutter={24}>
-                            {this.state.show === "all" || this.state.show === "base" ? <Grid item xs={12} sm={6}>
-                                <Base />
-                            </Grid> : ""}
-                            {this.state.show === "all" || this.state.show === "finance" ? <Grid item xs={12} sm={6}>
-                                <Finance />
-                            </Grid> : ""}
-                            {this.state.show === "all" || this.state.show === "express" ? <Grid item xs={12} sm={6}>
-                                <Express />
-                            </Grid> : ""}
-                            {this.state.show === "all" || this.state.show === "admin" ? <Grid item xs={12} sm={6}>
-                                <Admin />
-                            </Grid> : ""}
-                        </Grid> : <div />
-                    }
+                    <Drawer
+                        anchor="right"
+                        open={this.state.drawOpen}
+                        onRequestClose={this.toggleDrawer(false)}
+                    >
+                        {this.state.gotData === true ?
+                            <Grid container gutter={24}>
+                                {this.state.show === "base" ? <Grid item xs={12} sm={6}>
+                                    <Base />
+                                </Grid> : ""}
+                                {this.state.show === "finance" ? <Grid item xs={12} sm={6}>
+                                    <Finance />
+                                </Grid> : ""}
+                                {this.state.show === "express" ? <Grid item xs={12} sm={6}>
+                                    <Express />
+                                </Grid> : ""}
+                                {this.state.show === "admin" ? <Grid item xs={12} sm={6}>
+                                    <Admin />
+                                </Grid> : ""}
+                            </Grid> : <div />
+                        }
+                    </Drawer>
                 </div>
+
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
