@@ -378,8 +378,8 @@ class Students extends Component {
                             <div
                                 tabIndex={0}
                                 role="button"
-                                onClick={this.toggleDrawer(false)}
-                                onKeyDown={this.toggleDrawer(false)}
+                                // onClick={this.toggleDrawer(false)}
+                                // onKeyDown={this.toggleDrawer(false)}
                             >
 
                                 <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
