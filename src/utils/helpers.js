@@ -94,6 +94,7 @@ export function getData(router, json, callback = null, args = {}) {
     }
     return data;
   }).catch(function (e) {
+    console.log("发送的数据" + json);
     console.log(e);
     console.log("调用" + router + "接口出错");
   });
@@ -109,19 +110,12 @@ export function isJson(obj) {
  * @param {*路由键} key 
  */
 export function getRouter(key) {
-	console.log(key);
+  console.log(key);
   var router = sessionStorage.getItem(key);
   console.log(router);
   return router === null ? config.routers : router;
 }
 
-/**
- * 
- * @param {*} key 
- */
-export function getStorage(key) {
-  return localStorage.getItem(key);
-}
 
 /**
  * 获取保存所有数据
@@ -141,25 +135,12 @@ export function getCache(key = DATA_TYPE_ALL) {
 }
 
 /**
- * 获取单个学生
- * @param {*学生ID} id 
- */
-export function getStudent(id = 0) {
-  for (var i = 0; i < window.CacheData[DATA_TYPE_STUDENT].length; i++) {
-    if (window.CacheData[DATA_TYPE_STUDENT][i].id === id) {
-      return window.CacheData[DATA_TYPE_STUDENT][i];
-    }
-  }
-  return {};
-}
-
-/**
  * 每个页面初始化使用的cache
  * @param {*回调函数} callback 
  */
 export function initCache(callback = () => { }) {
   // if (!window.CacheData) {
-  if (sessionStorage.logged === true || sessionStorage.session !== undefined) {
+  if (sessionStorage.logged === "true" || sessionStorage.session !== undefined) {
     var cb = (route, message, arg) => {
       console.log(message)
       if (message.code === 10045) {

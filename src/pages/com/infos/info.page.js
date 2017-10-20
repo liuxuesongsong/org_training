@@ -9,6 +9,7 @@ import TextField from 'material-ui/TextField';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 import Drawer from 'material-ui/Drawer';
 
+import BackIcon from 'material-ui-icons/ArrowBack';
 import InboxIcon from 'material-ui-icons/Inbox';
 import DraftsIcon from 'material-ui-icons/Drafts';
 import StarIcon from 'material-ui-icons/Star';
@@ -105,7 +106,7 @@ class Info extends Component {
                             <ListItem button
                                 onClick={() => { this.setState({ show: "base", drawOpen: true }) }}>
                                 <ListItemIcon>
-                                    <InboxIcon />
+                                    <BackIcon />
                                 </ListItemIcon>
                                 <ListItemText primary={LANG_PREFIX.base.title} />
                             </ListItem>

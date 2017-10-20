@@ -53,7 +53,7 @@ let header = {
     },
 }
 
-var session = "XzZG17"
+// var session = "XzZG17"
 
 describe('服务器API测试', function () {
 
