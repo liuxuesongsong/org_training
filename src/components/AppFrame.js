@@ -13,7 +13,6 @@ import Divider from 'material-ui/Divider';
 import MenuIcon from 'material-ui-icons/Menu';
 import IconButton from 'material-ui/IconButton';
 import LightbulbOutline from 'material-ui-icons/LightbulbOutline';
-import Menu, { MenuItem } from 'material-ui/Menu';
 import ArrowDropRight from 'material-ui-icons/ChevronLeft';
 import Refresh from 'material-ui-icons/Refresh';
 import Tabs, { Tab } from 'material-ui/Tabs';
@@ -142,7 +141,6 @@ class AppFrame extends Component {
 
   state = {
     drawerOpen: false,
-    menuOpen: false,
     open: false,
     anchorEl: undefined,
     logged: Boolean(sessionStorage.getItem("logged")),
@@ -330,7 +328,6 @@ class AppFrame extends Component {
         return <div>
           <Typography>遵循中软科技以下条款</Typography>
         </div>
-      // 注册账号密码
       case 1:
         return <div>
           <TextField
@@ -380,7 +377,6 @@ class AppFrame extends Component {
               }
             }}
             helperText={this.state.password_result}
-          // defaultValue={Lang[window.Lang].pages.main.input_your_password}
           />
           <TextField
             error={this.state.repeat_error}
@@ -410,19 +406,7 @@ class AppFrame extends Component {
               }
             }}
             helperText={this.state.repeat_result}
-          // defaultValue={Lang[window.Lang].pages.main.input_your_password}
           />
-          {/* <Checkbox
-                    label="记住密码"
-                    // checked={this.state.rememberLogin}
-                    style={{
-                        checkbox: {
-                            marginTop: 10,
-                            marginBottom: 10
-                        },
-                    }}
-                    onCheck={() => { }}
-                /> */}
           <Button
             raised
             color="accent"
@@ -452,7 +436,6 @@ class AppFrame extends Component {
         return <div>
           <Admin />
         </div>
-
     }
   }
 
@@ -522,66 +505,6 @@ class AppFrame extends Component {
         >
           {Lang[window.Lang].pages.main.login_button}
         </Button>
-        <Button
-          raised
-          color="accent"
-          style={{
-            margin: "20px 20px",
-          }}
-          onClick={() => {
-            {/* var name = document.getElementById("login_name").value;
-            var password = document.getElementById("login_password" + this.state.index).value;
-
-            if (name === "" || password === "") {
-              return
-            }
-
-            this.login(name, password); */}
-          }}
-        >
-          {Lang[window.Lang].pages.main.forget_password_button}
-        </Button>
-      </div>
-    )
-  }
-
-  infoView = () => {
-    return (
-      <div>
-        <TextField
-          id="login_name"
-          label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
-          style={{
-            marginLeft: 200,//styleManager.theme.spacing.unit,
-            marginRight: 200,//theme.spacing.unit,  
-            width: 200,
-          }}
-          // defaultValue={Lang[window.Lang].pages.main.input_your_account}
-          // value={this.state.name}
-          onChange={event => this.setState({ name: event.target.value })}
-        />
-        <TextField
-          label={Lang[window.Lang].pages.main.password}
-          id={"login_password" + this.state.index}
-          type="password"
-        // defaultValue={Lang[window.Lang].pages.main.input_your_password}
-        />
-        <Button
-          raised
-          color="accent"
-          onClick={() => {
-            var name = document.getElementById("login_name").value;
-            var password = document.getElementById("login_password" + this.state.index).value;
-
-            if (name === "" || password === "") {
-              return
-            }
-
-            this.login(name, password);
-          }}
-        >
-          {Lang[window.Lang].pages.main.login_button}
-        </Button>
       </div>
     )
   }
@@ -618,14 +541,6 @@ class AppFrame extends Component {
     })
   }
 
-  handleMenuClick = event => {
-    this.setState({ menuOpen: true, anchorEl: event.currentTarget });
-  };
-
-  handleMenuClose = () => {
-    this.setState({ menuOpen: false });
-  };
-
   logout = () => {
     sessionStorage.logged = false;
     sessionStorage.account = "";
@@ -649,12 +564,60 @@ class AppFrame extends Component {
     this.state.alertCode = code;
     this.state.alertAction = action;
     this.setState({
-      // alertType: type,
-      // alertCode: code,
-      // alertContent: content,
       alertOpen: true,
-      // alertAction: action
     });
+  }
+
+  LoginTable = () => {
+    return <div style={{ flex: '1 0 100%', }}>
+      <div style={{
+        minHeight: '100vh', // Makes the hero full height until we get some more content.
+        flex: '0 0 auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.palette.primary[500],
+        color: theme.palette.getContrastText(theme.palette.primary[500]),
+      }}>
+        <div style={{
+          padding: '60px 30px',
+          textAlign: 'center',
+          [theme.breakpoints.up('sm')]: {
+            padding: '120px 30px',
+          },
+        }}>
+          <div style={{
+            backgroundColor: theme.palette.background.paper,
+            width: 500
+          }}>
+            <AppBar position="static" color="default">
+              <Tabs
+                index={this.state.index}
+                onChange={this.handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                fullWidth
+              >
+                <Tab label="公司登陆" />
+                <Tab label="公司注册" />
+                <Tab label="机构登陆" />
+              </Tabs>
+            </AppBar>
+            <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
+              <TabContainer>
+                {this.LoginView()}
+              </TabContainer>
+              <TabContainer>
+                {this.RegisterView()}
+              </TabContainer>
+              <TabContainer>
+                {this.LoginView()}
+              </TabContainer>
+            </SwipeableViews>
+          </div>
+        </div>
+      </div>
+    </div>
   }
 
   render() {
@@ -712,55 +675,7 @@ class AppFrame extends Component {
               open={sessionStorage.getItem("logged") === "true" ? (drawerDocked || this.state.drawerOpen) : false}
             />
             {children}
-          </div> : <div style={{ flex: '1 0 100%', }}>
-            <div style={{
-              minHeight: '100vh', // Makes the hero full height until we get some more content.
-              flex: '0 0 auto',
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              backgroundColor: theme.palette.primary[500],
-              color: theme.palette.getContrastText(theme.palette.primary[500]),
-            }}>
-              <div style={{
-                padding: '60px 30px',
-                textAlign: 'center',
-                [theme.breakpoints.up('sm')]: {
-                  padding: '120px 30px',
-                },
-              }}>
-                <div style={{
-                  backgroundColor: theme.palette.background.paper,
-                  width: 500
-                }}>
-                  <AppBar position="static" color="default">
-                    <Tabs
-                      index={this.state.index}
-                      onChange={this.handleChange}
-                      indicatorColor="primary"
-                      textColor="primary"
-                      fullWidth
-                    >
-                      <Tab label="公司登陆" />
-                      <Tab label="公司注册" />
-                      <Tab label="机构登陆" />
-                    </Tabs>
-                  </AppBar>
-                  <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
-                    <TabContainer>
-                      {this.LoginView()}
-                    </TabContainer>
-                    <TabContainer>
-                      {this.RegisterView()}
-                    </TabContainer>
-                    <TabContainer>
-                      {this.LoginView()}
-                    </TabContainer>
-                  </SwipeableViews>
-                </div>
-              </div>
-            </div>
-          </div>}
+          </div> : this.LoginTable()}
         <CommonAlert
           show={this.state.alertOpen}
           type={this.state.alertType}

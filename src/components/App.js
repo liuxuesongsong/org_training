@@ -10,7 +10,6 @@ import blue from 'material-ui/colors/blue';
 import pink from 'material-ui/colors/pink';
 import { lightTheme, darkTheme, setPrismTheme } from 'training/src/utils/prism';
 import AppRouter from 'training/src/components/AppRouter';
-import { APP_TYPE_UNLOGIN } from '../enum';
 
 let styleManager;
 

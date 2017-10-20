@@ -11,9 +11,11 @@ import Divider from 'material-ui/Divider';
 import AppDrawerNavItem from 'training/src/components/AppDrawerNavItem';
 import Link from 'training/src/components/Link';
 
+import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION } from "../enum";
+
 const styleSheet = createStyleSheet('AppDrawer', theme => ({
   paper: {
-    width: 125,
+    width: 150,
     backgroundColor: theme.palette.background.paper,
   },
   title: {
@@ -72,7 +74,6 @@ function reduceChildRoutes(props, items, childRoute, index) {
 
 function AppDrawer(props) {
   const classes = props.classes;
-  const GITHUB_RELEASE_BASE_URL = 'https://github.com/callemall/material-ui/releases/tag/';
 
   return (
     <Drawer
@@ -88,8 +89,8 @@ function AppDrawer(props) {
       <div className={classes.nav}>
         <Toolbar className={classes.toolbar}>
           <Typography type="title" gutterBottom color="inherit">
-            企业登陆
-            </Typography>
+            {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? "企业登陆" : "机构登陆"}
+          </Typography>
           {
             /**<Link className={classes.title} to="/" onClick={props.onRequestClose}>
             
