@@ -695,14 +695,6 @@ class AppFrame extends Component {
                     {title}
                   </Typography>}
                 <div className={classes.grow} />
-
-                <IconButton
-                  title="Toggle light/dark theme"
-                  color="contrast"
-                  onClick={this.handleToggleShade}
-                >
-                  <LightbulbOutline />
-                </IconButton>
                 <IconButton
                   color="contrast"
                   onClick={() => {
@@ -710,51 +702,6 @@ class AppFrame extends Component {
                   }}>
                   <Refresh />
                 </IconButton>
-                <IconButton
-                  color="contrast"
-                  onClick={this.handleMenuClick}
-                  aria-owns="api-menu"
-                  aria-haspopup="true"
-                >
-                  <MoreVertIcon />
-                </IconButton>
-                {this.state.menuOpen === true ?
-                  <Menu
-                    id="api-menu"
-                    anchorEl={this.state.anchorEl}
-                    open={this.state.menuOpen}
-                    onRequestClose={this.handleMenuClose}
-                  >
-                    <MenuItem key="info"
-                      onClick={() => {
-                        this.handleOpenDetail();
-                        if (sessionStorage.appType === undefined) {
-
-                        } else if (sessionStorage.appType === APP_TYPE_COMPANY) {
-
-                        } else if (sessionStorage.appType === APP_TYPE_ORANIZATION) {
-
-                        }
-                      }} >
-                      {Lang[window.Lang].components.AppFrame.Info}
-                    </MenuItem>
-                    <MenuItem
-                      key="reset"
-                      onClick={() => {
-                        this.handleOpenReset();
-                      }} >
-                      {Lang[window.Lang].components.AppFrame.Reset}
-                    </MenuItem>
-                    <MenuItem
-                      key="logout"
-                      onClick={() => {
-                        // location.reload();
-                        // location.replace("/web_client");
-                        this.logout();
-                      }}>
-                      {Lang[window.Lang].components.AppFrame.Logout}
-                    </MenuItem>
-                  </Menu> : ""}
               </Toolbar>
             </AppBar>
             <AppDrawer
