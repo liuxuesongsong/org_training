@@ -37,7 +37,8 @@ class Finance extends Component {
     submit = () => {
 
         var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
+            console.log(message);
+            if (message.code === 100112) {
                 window.CacheData.finance = arg.data;
                 console.log(getCache(DATA_TYPE_FINANCE));
             }
@@ -48,9 +49,10 @@ class Finance extends Component {
             bank: this.state.bank,
             bank_account: this.state.bank_account,
             address: this.state.address,
-            tel: this.state.tel
+            tel: this.state.tel,
+            reset:1
         }
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, finance: obj }, cb, { self: this, data: obj });
     }
 
     render() {

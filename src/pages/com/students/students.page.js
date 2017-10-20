@@ -252,13 +252,13 @@ class Students extends Component {
                         <TextField
                             id="city"
                             label={Lang[window.Lang].pages.com.students.city}
-                            defaultValue={student.base_info.city.toString()}
+                            defaultValue={student.base_info.city}
                             fullWidth
                         />
                         <TextField
                             id="level"
                             label={Lang[window.Lang].pages.com.students.level.title}
-                            defaultValue={student.base_info.level.toString()}
+                            defaultValue={student.base_info.level}
                             fullWidth
                         />
                     </div>
@@ -403,13 +403,13 @@ class Students extends Component {
                                         <TextField
                                             id="city"
                                             label={Lang[window.Lang].pages.com.students.city}
-                                            defaultValue={this.state.selected.base_info.city.toString()}
+                                            defaultValue={this.state.selected.base_info.city}
                                             fullWidth
                                         />
                                         <TextField
                                             id="level"
                                             label={Lang[window.Lang].pages.com.students.level.title}
-                                            defaultValue={this.state.selected.base_info.level.toString()}
+                                            defaultValue={this.state.selected.base_info.level}
                                             fullWidth
                                         />
 

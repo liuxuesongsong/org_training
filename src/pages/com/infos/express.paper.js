@@ -54,10 +54,11 @@ class Express extends Component {
             express_address:this.state.express_address,
             address: this.state.address,
             express_person: this.state.express_person,
-            contact_way: this.state.contact_way
+            contact_way: this.state.contact_way,
+            reset:1
         }
         console.log(obj);
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, express:obj }, cb, { self: this, data: obj });
     }
 
     render() {

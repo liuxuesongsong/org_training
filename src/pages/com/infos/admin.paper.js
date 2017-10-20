@@ -49,9 +49,11 @@ class Admin extends Component {
             password: this.state.password,
             name: this.state.name,
             tel: this.state.tel,
-            email: this.state.email
+            email: this.state.email,
+            reset:1
         }
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
+        console.log(obj);
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, admin:obj }, cb, { self: this, data: obj });
     }
 
     render() {

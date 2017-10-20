@@ -5,8 +5,8 @@ var assert = require('assert');
 
 let expect = chai.expect;
 
-let routers = "http://192.168.0.105:8010/index.php?m=train&c=route&a=client_route";
-let addr = "http://192.168.0.105:8010/index.php?m=train";
+let routers = "http://192.168.4.43:8010/index.php?m=train&c=route&a=client_route";
+let addr = "http://192.168.4.43:8010/index.php?m=train";
 var routes = {
     "login": addr + "&c=users&a=login",
     "register": addr + "&c=users&a=regist",
@@ -37,8 +37,12 @@ var routes = {
     "createClass": addr + "&c=clazz&a=createClass",
     "editClass": addr + "&c=clazz&a=editClass",
     "delClass": addr + "&c=clazz&a=delClass",
-
     "classinfos": addr + "&c=clazz&a=classinfos",
+    
+
+    "createArea": addr + "&c=area&a=createArea ",
+    "delArea": addr + "&c=area&a=delArea",
+    "areaInfos": addr + "&c=area&a=areaInfos ",
 
     "query": addr + "&c=query&a=info",
 }
@@ -599,6 +603,43 @@ describe('服务器API测试', function () {
             expect(json).to.be.an('object');
             expect(json.code).to.be.a('number');
             assert.notEqual([0, 10027, 100271].indexOf(json.code), -1);
+        });
+    })
+
+    it('新建服务区', function () {
+        return fetch(routes.createArea, Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17", area: { area_name: "北京" } }) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            console.log(json);
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0,10032, 100321].indexOf(json.code), -1);
+        });
+    })
+    it('查看服务区', function () {
+        return fetch(routes.areaInfos , Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17"}) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            console.log(json);
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0,10033, 100331].indexOf(json.code), -1);
+        });
+    })
+    it('删除服务区', function () {
+        return fetch(routes.delArea , Object.assign(header,
+            { body: JSON.stringify({ session: "XzZG17", id: 17}) }
+        )).then(function (res) {
+            return res.json();
+        }).then(function (json) {
+            console.log(json);
+            expect(json).to.be.an('object');
+            expect(json.code).to.be.a('number');
+            assert.notEqual([0,10034, 100341,100342].indexOf(json.code), -1);
         });
     })
 

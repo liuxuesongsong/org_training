@@ -59,7 +59,10 @@ class Info extends Component {
 
         window.currentPage.setState({
             gotData: true
+            
         });
+        
+        
     }
 
     popUpNotice(type, code, content, action = [() => {
@@ -82,11 +85,12 @@ class Info extends Component {
 
     toggleDrawer = (open) => () => {
         this.setState({
-            drawOpen: open,
+            drawOpen: false,
         });
     };
 
     render() {
+       
 
         return (
             <div>

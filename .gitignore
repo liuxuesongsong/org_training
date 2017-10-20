@@ -3,3 +3,4 @@
 /.git
 /.vscode
 /package-lock.json
+/src/config.js

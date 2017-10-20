@@ -38,7 +38,8 @@ class Base extends Component {
 
 
         var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
+            console.log(message);
+            if (message.code === 100111) {
 
                 console.log(arg.data);
 
@@ -53,10 +54,11 @@ class Base extends Component {
         var obj = {
             company_name: document.getElementById("company_name").value,
             province: document.getElementById("province").value,
-            qualification: document.getElementById("qualification").value
+            qualification: document.getElementById("qualification").value,
+            reset:1
         }
         console.log(obj);
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: obj }, cb, { self: this, data: obj });
     }
 
     render() {
@@ -101,6 +103,7 @@ class Base extends Component {
                         color="accent"
                         onClick={() => {
                             this.submit();
+                            
                         }}
                     >
                         {Lang[window.Lang].pages.main.certain_button}

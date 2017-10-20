@@ -54,16 +54,18 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         let students = getCache(DATA_TYPE_STUDENT);
+        console.log(students);
         students = students === undefined ? [] : students;
         let newStudents = [], unarragedStudents = [], arrangedStudents = [];
         for (var i = 0; i < students.length; i++) {
-            if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_UNDO) {
+           
+            if (students[i].is_inlist == 0) {      
                 newStudents.push(students[i]);
             }
-            if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID && students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_UNDO) {
+            if (students[i].is_inlist == 1) {
                 unarragedStudents.push(students[i]);
             }
-            if (students[i].status[STATUS_AGREED].status === STATUS_ARRANGED_DOING || students[i].status[STATUS_AGREED].status === STATUS_ARRANGED_DID) {
+            if (students[i].is_inlist == 1 ) {
                 arrangedStudents.push(students[i]);
             }
         }
@@ -77,12 +79,14 @@ class Enrolled extends Component {
     // 将新加入的学生排队
     erollStudent() {
         var id = this.state.selectedStudentId;
+        console.log(id);
         var cb = (router, message, arg) => {
             console.log(message);
-            if (message.code === Code.LOGIC_SUCCESS) {
+            if (message.code === 0) {
                 let student = getStudent(arg.id);
-                student.status[STATUS_ENROLLED].status = STATUS_ENROLLED_DID;
-                student.status[STATUS_ARRANGED].status = STATUS_ARRANGED_UNDO;
+               
+                student.is_inlist = STATUS_ENROLLED_DID;
+                student.is_inlist = STATUS_ARRANGED_UNDO;
                 this.fresh();
             }
         }
