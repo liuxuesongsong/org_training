@@ -13,6 +13,7 @@ import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
 import IconButton from 'material-ui/IconButton';
 import MenuIcon from 'material-ui-icons/Menu';
+import Divider from 'material-ui/Divider';
 
 import BackIcon from 'material-ui-icons/ArrowBack';
 import InboxIcon from 'material-ui-icons/Inbox';
@@ -167,7 +168,9 @@ class Info extends Component {
         var items = [];
         for (var i = 1; i <= 4; i++) {
             items.push(
-                <ListItem id={i} onClick={() => { }}>
+                <ListItem id={i} onClick={() => {
+
+                }}>
                     <ListItemText primary={(i) + "级"} />
                 </ListItem>
             )
@@ -177,6 +180,21 @@ class Info extends Component {
 
     subShow = () => {
         switch (this.state.show) {
+            case "componyName":
+                <AppBar position="static" color="default">
+                    <Toolbar>
+                        <IconButton className={{
+                            marginLeft: -12,
+                            marginRight: 20,
+                        }} color="default" aria-label="Menu">
+                            <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                        </IconButton>
+                        <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                            {"修改公司简称"}
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                return
             case "area":
                 return (
                     <div>
@@ -189,8 +207,8 @@ class Info extends Component {
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                    修改财务信息
-                </Typography>
+                                    {"修改所在区域"}
+                                </Typography>
                             </Toolbar>
                         </AppBar>
                         <List style={{
@@ -215,17 +233,19 @@ class Info extends Component {
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                    修改财务信息
-                </Typography>
+                                    {"修改企业等级"}
+                                </Typography>
                             </Toolbar>
                         </AppBar>
-                        <List style={{
-                            height: "100%"
-                        }} disablePadding>
-                            {
-                                this.qualificationItems()
-                            }
-                        </List>
+                        <Paper>
+                            <List style={{
+                                height: "100%"
+                            }} disablePadding>
+                                {
+                                    this.qualificationItems()
+                                }
+                            </List>
+                        </Paper>
                     </div>
                 );
             case "base":
@@ -239,8 +259,8 @@ class Info extends Component {
                                 <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                             </IconButton>
                             <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                修改财务信息
-                </Typography>
+                                {"修改财务信息"}
+                            </Typography>
                         </Toolbar>
                     </AppBar>
                     <Base />
@@ -256,11 +276,12 @@ class Info extends Component {
                                 <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                             </IconButton>
                             <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                修改财务信息
+                                {"修改邮政信息"}
                             </Typography>
                         </Toolbar>
                     </AppBar>
-                    <TextField
+                    <Finance />
+                    {/* <TextField
                         id="name"
                         label={LANG_PREFIX.finance.name}
                         value={this.state.finance.name}
@@ -334,58 +355,90 @@ class Info extends Component {
                         }}
                     >
                         {Lang[window.Lang].pages.main.certain_button}
-                    </Button>
+                    </Button> */}
                 </div>);
             case "express":
-                return <Express />;
+                return (
+                    <div>
+                        <AppBar position="static" color="default">
+                            <Toolbar>
+                                <IconButton className={{
+                                    marginLeft: -12,
+                                    marginRight: 20,
+                                }} color="default" aria-label="Menu">
+                                    <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                </IconButton>
+                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                    {"修改邮政信息"}
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <Express />
+                    </div>);
             case "admin":
-                return <Admin />;
+                return (
+                    <div>
+                        <AppBar position="static" color="default">
+                            <Toolbar>
+                                <IconButton className={{
+                                    marginLeft: -12,
+                                    marginRight: 20,
+                                }} color="default" aria-label="Menu">
+                                    <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                </IconButton>
+                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                    {"修改管理员信息"}
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <Admin />
+                    </div>);
             default:
                 return (<div>
-                    <AppBar position="static" color="default">
-                        <Toolbar>
-                            <IconButton className={{
-                                marginLeft: -12,
-                                marginRight: 20,
-                            }} color="default" aria-label="Menu">
-                                <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
-                            </IconButton>
-                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                修改财务信息
-                    </Typography>
-                        </Toolbar>
-                    </AppBar>
+
                     <List style={{
                         height: "100%"
                     }} disablePadding>
-                        <div>
-                            <ListSubheader>{"企业信息"}</ListSubheader>
+                        <ListSubheader>{"企业信息"}</ListSubheader>
+                        <Paper>
+                            <ListItem button
+                                onClick={() => { this.setState({ show: "componyName", }) }}>
+                                <ListItemText primary={"公司简称"} />
+                            </ListItem>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "area", }) }}>
                                 <ListItemText primary={"所属服务区"} />
                             </ListItem>
+
                             <ListItem button
                                 onClick={() => { this.setState({ show: "qualification", }) }}>
                                 <ListItemText primary={"企业等级"} />
                             </ListItem>
-                            <ListSubheader>{"邮政信息"}</ListSubheader>
+                        </Paper>
+                        <ListSubheader style={{ marginTop: 20 }}>{"邮政信息"}</ListSubheader>
+                        <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "express", }) }}>
                                 <ListItemText primary={LANG_PREFIX.express.title} />
                             </ListItem>
-                            <ListSubheader>{"财务信息"}</ListSubheader>
+                        </Paper >
+                        <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
+                        <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "finance", }) }}>
                                 纳税信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.finance.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.taxpayer_identify}<br />
                                 银行信息&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank_account}<br />
                                 联系方式&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.tel}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.address}
                             </ListItem>
-                            <ListSubheader>{"管理员信息"}</ListSubheader>
+                        </Paper>
+                        <ListSubheader style={{ marginTop: 20 }}>{"管理员信息"}</ListSubheader>
+                        <Paper>
+
                             <ListItem button
                                 onClick={() => { this.setState({ show: "admin", }) }}>
                                 <ListItemText primary={LANG_PREFIX.admin.title} />
                             </ListItem>
-                        </div>
+                        </Paper>
                     </List>
                 </div>)
         }
@@ -395,10 +448,10 @@ class Info extends Component {
         return (
             <div>
 
-                <div style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}>
-                    <Paper style={{ width: window.innerWidth, height: window.innerHeight }}>
+                <div style={{ paddingTop: 80, paddingLeft: window.innerWidth * 0.1, justifyContent: 'space-between' }}>
+                    <div style={{ width: window.innerWidth * 0.8, height: window.innerHeight }}>
                         {this.subShow()}
-                    </Paper>
+                    </div>
                 </div>
                 <CommonAlert
                     show={this.state.alertOpen}

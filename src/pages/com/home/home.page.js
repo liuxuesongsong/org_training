@@ -15,7 +15,7 @@ import {
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,
     CARD_TYPE_UNARRANGE, CARD_TYPE_ARRANGE, AGREE_ARRANGE, REFUSE_ARRANGE, STATUS_AGREED_AGREE, STATUS_AGREED, STATUS_AGREED_UNDO,
-    STATUS_AGREED_REFUSED, STATUS_ENROLLED_REDO, NOTICE, ALERT, CARD_TYPE_COMMON
+    STATUS_AGREED_REFUSED, STATUS_ENROLLED_REDO, NOTICE, ALERT, CARD_TYPE_COMMON, STATUS_ARRANGED_DID 
 } from '../../../enum';
 import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
@@ -36,7 +36,7 @@ class Home extends Component {
         passed: 0,
         unarragedStudents: [],
         arrangedStudents: [],
-        clazz: [],
+        clazzes: [],
         // 界面状态
         selectedStudentId: undefined,
         // 提示状态
@@ -48,9 +48,10 @@ class Home extends Component {
     };
 
     componentWillMount() {
-        this.getStudents();
+        // this.getStudents();
         window.currentPage = this;
-        // this.fresh()
+        this.fresh();
+        console.log(new Date().getTime())
     }
 
     fresh = () => {
@@ -58,38 +59,27 @@ class Home extends Component {
     }
 
     cacheToState() {
+
+        // console.log(getCache(DATA_TYPE_ALL));
         let students = getCache(DATA_TYPE_STUDENT);
         let enrolled = 0, arranged = 0, passed = 0, examing = 0,
             unarragedStudents = [], arrangedStudents = [];
-        if (students === undefined) {
-            students = []
-        }
+        // if (students === undefined) {
+        //     students = []
+        // }
         for (var i = 0; i < students.length; i++) {
-            if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID) {
-                enrolled++
-                if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_UNDO) {
-                    unarragedStudents.push(students[i]);
-                }
+
+            if (students[i].is_inlist == STATUS_ENROLLED_DID) {
+                enrolled++;
+                unarragedStudents.push(students[i]);
             }
-            if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_DOING) {
-                arranged++
+            if (students[i].is_inlist == STATUS_ARRANGED_DID) {
+                enrolled++;
+                arranged++;
                 arrangedStudents.push(students[i]);
             }
-            // if (students[i].status['agreed'].status === 1) {
-            //     this.state.agreed.push(students[i]);
-            // }
-            if (students[i].status[STATUS_EXAMING].status === STATUS_EXAMING_DID) {
-                examing++
-            }
-            if (students[i].status[STATUS_PASSED].status === STATUS_PASSED_DID) {
-                passed++
-            }
-            // if (students[i].status['retry'].status === 1) {
-            //     this.state.retry.push(students[i]);
-            // }
         }
-        console.log(getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "");
-        var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).company_name : "";
+        var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).c_name : "";
         window.currentPage.setState({
             name: name,
             enrolled: enrolled,
@@ -106,7 +96,7 @@ class Home extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 console.log(message.code)
-                
+
                 let students = message.student;
                 let enrolled = 0, arranged = 0, passed = 0, examing = 0,
                     unarragedStudents = [], arrangedStudents = [];
@@ -147,8 +137,9 @@ class Home extends Component {
                     arrangedStudents: arrangedStudents,
                     clazz: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
                 })
-            }
+            } else {
 
+            }
         }
         getData(getRouter(STUDENT_INFOS), { session: sessionStorage.session }, cb, {});
     }
@@ -215,13 +206,15 @@ class Home extends Component {
                                 {this.state.name}
                             </Typography>
                             <Typography type="body1" component="p">
-                                {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.arranged + ":"
+                                {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.enrolled + ":"
                                     + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
                             </Typography>
-                            <Typography type="body1" component="p">
+                            {// 当前按本未使用
+                                /**<Typography type="body1" component="p">
                                 {Lang[window.Lang].pages.com.home.passed + "/" + Lang[window.Lang].pages.com.home.trained + ":"
                                     + this.state.passed + Lang[window.Lang].pages.com.home.human + "/" + this.state.examing + Lang[window.Lang].pages.com.home.human}
-                            </Typography>
+        </Typography>*/
+                            }
                         </Paper>
                         <Paper elevation={4} style={Style.pages.com.home.buttom_paper}>
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
@@ -234,7 +227,7 @@ class Home extends Component {
                                         email={student.base_info.email}
                                         level={student.base_info.level}
                                         city={student.base_info.city}
-                                        status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.com.home.being_reroll : ""}
+                                        /* status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.com.home.being_reroll : ""} */
                                     >
                                     </StudentCard>
                                 )}
@@ -316,7 +309,7 @@ class Home extends Component {
                         <Paper elevation={4}>
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
-                                {this.state.clazz.map(clazz =>
+                                {this.state.clazzes.map(clazz =>
                                     <ListItem dense button key={clazz}>
                                         {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}
                                         <ListItemText primary={clazz.id} />

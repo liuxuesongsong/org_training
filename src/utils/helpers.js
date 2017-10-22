@@ -63,10 +63,73 @@ export function getTimeString(timeStamp) {
  * @param {*} args 
  */
 export function getData(router, json, callback = null, args = {}) {
+  console.log(router)
   if (!isJson(json)) {
-
+    console.log("request必须为json");
   }
-  fetch(router, {
+  for (var key in router.request) {
+    if (json[key] === null) {
+      console.log("发送的json中" + key + "字段不能为null");
+      return;
+    } else {
+      var request_low = router.request[key].split(":");
+      console.log(request_low)
+      switch (request_low[0]) {
+        case "string":
+          json[key] = json[key].toString();
+          if (request_low.length > 1) {
+            console.log(String(json[key]).length);
+            if (String(json[key]).length !== Number(request_low[1])) {
+              console.log("发送的json中" + key + "字段只能为" + request_low[1] + "位字符");
+              return;
+            }
+          }
+          break;
+        case "int":
+          if (request_low.length > 1) {
+            if (json[key] >= Math.pow(2, Number(request_low[1]))) {
+              console.log("发送的json中" + key + "字段只能为" + Math.pow(2, Number(request_low[1])) + "位数字");
+              return;
+            }
+          }
+          if (isNaN(Number(json[key]))) {
+            console.log("发送的json中" + key + "字段需要为数字");
+            return
+          }
+          break;
+        case "list":
+          if (!json[key].length) {
+            console.log("发送的json中" + key + "字段需要为数组");
+            return
+          }
+          if (request_low.length > 1) {
+
+          }
+          break;
+        case "enum":
+          if (request_low.length > 1) {
+            var enum_list = eval(request_low[1]);
+            console.log(enum_list);
+            console.log(enum_list.indexOf(json[key]))
+            if (enum_list.indexOf(json[key]) === -1) {
+              console.log("发送的json中" + key + "字段需要为" + request_low[1] + "中的一项");
+              return
+            }
+          } else {
+            return;
+          }
+          break;
+        case "student":
+          break;
+        case "clazz":
+          break;
+        case "area":
+          break;
+      }
+
+    }
+  }
+  fetch(router.url, {
     method: 'POST',
     mode: 'cors',
     cache: 'default',
@@ -87,18 +150,29 @@ export function getData(router, json, callback = null, args = {}) {
   }).then(function (data) {
     if (callback !== null) {
       if (data.code === 10099) {
-        sessionStorage.logged = false;
+        console.log("123");
+        let e = new Event("session_invalid");
+        dispatchEvent(e);
       }
       // sessionStorage.logged = false;
       callback(router, data, args);
     }
     return data;
   }).catch(function (e) {
-    console.log("发送的数据" + json);
     console.log(e);
-    console.log("调用" + router + "接口出错");
+    console.log("调用" + router.url + "接口出错");
   });
   return
+}
+
+export function getStudent(id) {
+  console.log(window.CacheData);
+  for (var i = 0; i < window.CacheData.students.length; i++) {
+    if (window.CacheData.students[i].id === id) {
+      return window.CacheData.students[id];
+    }
+  }
+  return {}
 }
 
 export function isJson(obj) {
@@ -111,9 +185,9 @@ export function isJson(obj) {
  */
 export function getRouter(key) {
   console.log(key);
-  var router = sessionStorage.getItem(key);
+  var router = JSON.parse(sessionStorage.getItem(key));
   console.log(router);
-  return router === null ? config.routers : router;
+  return router === null ? { url: config.routers } : router;
 }
 
 
@@ -140,16 +214,17 @@ export function getCache(key = DATA_TYPE_ALL) {
  */
 export function initCache(callback = () => { }) {
   // if (!window.CacheData) {
+  console.log(window.CacheData);
   if (sessionStorage.logged === "true" || sessionStorage.session !== undefined) {
     var cb = (route, message, arg) => {
       console.log(message)
-      if (message.code === 10045) {
+      if (message.code === Code.LOGIC_SUCCESS) {
         window.CacheData = message.data;
         console.log(window.CacheData)
         callback()
       }
     }
-    getData(getRouter(QUERY), { session: sessionStorage.session, type: sessionStorage.apptype }, cb, { callback: callback });
+    getData(getRouter(QUERY), { session: sessionStorage.session }, cb, { callback: callback });
   } else {
     // 请登录
     // window.di

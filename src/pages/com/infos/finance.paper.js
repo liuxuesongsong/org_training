@@ -17,19 +17,19 @@ const LANG_PREFIX = Lang[window.Lang].pages.com.infos.finance;
 class Finance extends Component {
 
     state = {
-        name: "", taxpayer_identify: "", bank: "", bank_account: "", address: "", tel: ""
+        allname: "", taxpayer_number: "", opening_bank: "", bank_account: "", c_address: "", financial_call: ""
     }
 
     componentDidMount() {
         if (getCache(DATA_TYPE_FINANCE) !== undefined) {
             var data = getCache(DATA_TYPE_FINANCE)
             this.setState({
-                name: data.name,
-                taxpayer_identify: data.taxpayer_identify,
-                bank: data.bank,
+                allname: data.allname,
+                taxpayer_number: data.taxpayer_number,
+                opening_bank: data.opening_bank,
                 bank_account: data.bank_account,
-                address: data.address,
-                tel: data.tel
+                c_address: data.c_address,
+                financial_call: data.financial_call
             });
         }
     }
@@ -44,12 +44,12 @@ class Finance extends Component {
             }
         }
         var obj = {
-            name: this.state.name,
-            taxpayer_identify: this.state.taxpayer_identify,
-            bank: this.state.bank,
+            all_allname: this.state.allname,
+            taxpayer_number: this.state.taxpayer_number,
+            opening_bank: this.state.opening_bank,
             bank_account: this.state.bank_account,
-            address: this.state.address,
-            tel: this.state.tel,
+            c_address: this.state.c_address,
+            financial_call: this.state.financial_call,
             reset:1
         }
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, finance: obj }, cb, { self: this, data: obj });
@@ -62,34 +62,34 @@ class Finance extends Component {
 
                 <Paper style={{ width: 600 }}>
                     <TextField
-                        id="name"
-                        label={LANG_PREFIX.name}
-                        value={this.state.name}
+                        id="allname"
+                        label={LANG_PREFIX.allname}
+                        value={this.state.allname}
                         onChange={event => {
                             this.setState({
-                                name: event.target.value,
+                                allname: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="taxpayer_identify"
-                        label={LANG_PREFIX.taxpayer_identify}
-                        value={this.state.taxpayer_identify}
+                        id="taxpayer_number"
+                        label={LANG_PREFIX.taxpayer_number}
+                        value={this.state.taxpayer_number}
                         onChange={event => {
                             this.setState({
-                                taxpayer_identify: event.target.value,
+                                taxpayer_number: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="bank"
-                        label={LANG_PREFIX.bank}
-                        value={this.state.bank}
+                        id="opening_bank"
+                        label={LANG_PREFIX.opening_bank}
+                        value={this.state.opening_bank}
                         onChange={event => {
                             this.setState({
-                                bank: event.target.value,
+                                opening_bank: event.target.value,
                             });
                         }}
                         fullWidth>
@@ -106,23 +106,23 @@ class Finance extends Component {
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="address"
-                        label={LANG_PREFIX.address}
-                        value={this.state.address}
+                        id="c_address"
+                        label={LANG_PREFIX.c_address}
+                        value={this.state.c_address}
                         onChange={event => {
                             this.setState({
-                                address: event.target.value,
+                                c_address: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="tel"
-                        label={LANG_PREFIX.tel}
-                        value={this.state.tel}
+                        id="financial_call"
+                        label={LANG_PREFIX.financial_call}
+                        value={this.state.financial_call}
                         onChange={event => {
                             this.setState({
-                                tel: event.target.value,
+                                financial_call: event.target.value,
                             });
                         }}
                         fullWidth>

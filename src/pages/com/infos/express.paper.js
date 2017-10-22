@@ -22,17 +22,17 @@ class Express extends Component {
             var data = getCache(DATA_TYPE_EXPRESS)
             console.log(data);
             this.setState({
-                express_code: data.express_code,
-                express_address: data.express_address,
-                address: data.address,
-                express_person: data.express_person,
-                contact_way: data.contact_way
+                zip_code: data.zip_code,
+                receive_address: data.receive_address,
+                district: data.district,
+                receiver: data.receiver,
+                receive_phone: data.receive_phone
             });
         }
     }
 
     state = {
-        express_code: "", express_address: "", address: "", express_person: "", contact_way: ""
+        zip_code: "", receive_address: "", district: "", receiver: "", receive_phone: ""
     }
 
     submit = () => {
@@ -50,11 +50,11 @@ class Express extends Component {
         }
 
         var obj = {
-            express_code: this.state.express_code,
-            express_address:this.state.express_address,
-            address: this.state.address,
-            express_person: this.state.express_person,
-            contact_way: this.state.contact_way,
+            zip_code: this.state.zip_code,
+            receive_address: this.state.receive_address,
+            district:this.state.district,
+            receiver: this.state.receiver,
+            receive_phone: this.state.receive_phone,
             reset:1
         }
         console.log(obj);
@@ -69,60 +69,60 @@ class Express extends Component {
 
 
                     <TextField
-                        id="express_code"
-                        label={LANG_PREFIX.express_code}
-                        value={this.state.express_code}
+                        id="zip_code"
+                        label={LANG_PREFIX.zip_code}
+                        value={this.state.zip_code}
                         onChange={event => {
                             this.setState({
-                                express_code: event.target.value,
+                                zip_code: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="express_address"
-                        label={LANG_PREFIX.express_address}
-                        value={this.state.express_address}
+                        id="receive_address"
+                        label={LANG_PREFIX.receive_address}
+                        value={this.state.receive_address}
                         onChange={event => {
                             this.setState({
-                                express_address: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-
-                    <TextField
-                        id="address"
-                        label={LANG_PREFIX.address}
-                        value={this.state.address}
-                        onChange={event => {
-                            this.setState({
-                                address: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-
-                    </TextField>
-
-                    <TextField
-                        id="express_person"
-                        label={LANG_PREFIX.express_person}
-                        value={this.state.express_person}
-                        onChange={event => {
-                            this.setState({
-                                express_person: event.target.value,
+                                receive_address: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
 
                     <TextField
-                        id="contact_way"
-                        label={LANG_PREFIX.contact_way}
-                        value={this.state.contact_way}
+                        id="district"
+                        label={LANG_PREFIX.district}
+                        value={this.state.district}
                         onChange={event => {
                             this.setState({
-                                contact_way: event.target.value,
+                                district: event.target.value,
+                            });
+                        }}
+                        fullWidth>
+
+                    </TextField>
+
+                    <TextField
+                        id="receiver"
+                        label={LANG_PREFIX.receiver}
+                        value={this.state.receiver}
+                        onChange={event => {
+                            this.setState({
+                                receiver: event.target.value,
+                            });
+                        }}
+                        fullWidth>
+                    </TextField>
+
+                    <TextField
+                        id="receive_phone"
+                        label={LANG_PREFIX.receive_phone}
+                        value={this.state.receive_phone}
+                        onChange={event => {
+                            this.setState({
+                                receive_phone: event.target.value,
                             });
                         }}
                         fullWidth>

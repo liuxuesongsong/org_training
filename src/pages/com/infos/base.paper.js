@@ -15,21 +15,24 @@ import Lang from '../../../language';
 
 class Base extends Component {
     state = {
-        company_name: "", province: "", qualification: ""
+        c_name: "",
+        c_area_id: "",
+        c_level: "",
+        submit_obj: {}
     }
 
     componentDidMount() {
         this.setState({
-            company_name: "",
-            province: "",
-            qualification: ""
+            c_name: "",
+            c_area_id: 0,
+            c_level: ""
         });
         if (getCache(DATA_TYPE_BASE) !== undefined) {
             var data = getCache(DATA_TYPE_BASE);
             this.setState({
-                company_name: data.company_name,
-                province: data.province,
-                qualification: data.qualification
+                c_name: data.c_name,
+                c_area_id: data.c_area_id,
+                c_level: data.c_level
             });
         }
     }
@@ -49,12 +52,14 @@ class Base extends Component {
 
         }
 
+        // this.state.submit_obj
         var obj = {
-            company_name: document.getElementById("company_name").value,
-            province: document.getElementById("province").value,
-            qualification: document.getElementById("qualification").value,
-            reset:1
+            "c_name": document.getElementById("c_name").value,
+            "c_area_id": document.getElementById("c_area_id").value,
+            "c_level": document.getElementById("c_level").value,
+            "reset": 1
         }
+
         console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: obj }, cb, { self: this, data: obj });
     }
@@ -64,34 +69,34 @@ class Base extends Component {
             <div>
                 <Paper style={{ width: 600 }}>
                     <TextField
-                        id="company_name"
-                        label={Lang[window.Lang].pages.com.infos.base.company_name}
-                        value={this.state.company_name}
+                        id="c_name"
+                        label={Lang[window.Lang].pages.com.infos.base.c_name}
+                        value={this.state.c_name}
                         onChange={event => {
                             this.setState({
-                                company_name: event.target.value,
+                                c_name: event.target.value,
                             });
                         }}
                         fullWidth
                     />
                     <TextField
-                        id="province"
-                        label={Lang[window.Lang].pages.com.infos.base.province}
-                        value={this.state.province}
+                        id="c_area_id"
+                        label={Lang[window.Lang].pages.com.infos.base.c_area_id}
+                        value={this.state.c_area_id}
                         onChange={event => {
                             this.setState({
-                                province: event.target.value,
+                                c_area_id: event.target.value,
                             });
                         }}
                         fullWidth
                     />
                     <TextField
-                        id="qualification"
-                        label={Lang[window.Lang].pages.com.infos.base.qualification}
-                        value={this.state.qualification}
+                        id="c_level"
+                        label={Lang[window.Lang].pages.com.infos.base.c_level}
+                        value={this.state.c_level}
                         onChange={event => {
                             this.setState({
-                                qualification: event.target.value,
+                                c_level: event.target.value,
                             });
                         }}
                         fullWidth
@@ -101,7 +106,7 @@ class Base extends Component {
                         color="accent"
                         onClick={() => {
                             this.submit();
-                            
+
                         }}
                     >
                         {Lang[window.Lang].pages.main.certain_button}

@@ -91,7 +91,7 @@ const styleSheet = createStyleSheet('AppFrame', theme => ({
     flex: '1 1 auto',
   },
   title: {
-    marginLeft: 24,
+    marginLeft: 40,
     flex: '0 1 auto',
   },
   appBar: {
@@ -148,6 +148,7 @@ class AppFrame extends Component {
     showRegister: true,
     name: Lang[window.Lang].pages.main.input_your_account,
     password: "",
+    check_code: "1234",
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -179,7 +180,7 @@ class AppFrame extends Component {
             window.location = "/org/home";
             break;
         }
-      })
+      });
     } else {
       switch (Number(sessionStorage.apptype)) {
         case APP_TYPE_COMPANY:
@@ -193,27 +194,35 @@ class AppFrame extends Component {
           }
           break;
       }
+
     }
+    addEventListener("session_invalid", (e) => {
+      // sessionStorage.logged = false;
+      // sessionStorage.apptype = APP_TYPE_UNLOGIN;
+      // sessionStorage.session = "";
+      // window.location = "/";
+      this.handleLogout();
+      this.popUpNotice(NOTICE, 0, "您的session无效");
+    })
   }
 
   getRoutes = () => {
     var cb = (route, message, arg) => {
       try {
-        if (message.code === Code.ROUTER_SUCCESS) {
-          for (var key in message) {
-            if (key !== "code") {
-              sessionStorage.setItem(key, message[key]);
-            }
+        if (message.code === Code.LOGIC_SUCCESS) {
+          console.log(message.data.routelist)
+          for (var key in message.data.routelist) {
+            sessionStorage.setItem(key, JSON.stringify(message.data.routelist[key]));
           }
         } else {
-          this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, Lang[window.Lang].ErrorCode[Code.ERROE_REQUEST_ROUTER]);
+          this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, message.msg);
         }
       } catch (e) {
         // console.log("回调出错");
       }
     }
 
-    getData(config.routers, { type: APP_TYPE_COMPANY, version: config.version }, cb);
+    getData({ url: config.routers }, { type: APP_TYPE_COMPANY, version: config.version }, cb);
   }
 
   check_available = (account) => {
@@ -243,7 +252,7 @@ class AppFrame extends Component {
       }
 
     }
-    getData(getRouter(CHECK_AVAILABLE), { account: account, type: APP_TYPE_COMPANY }, cb);
+    getData(getRouter(CHECK_AVAILABLE), { key: "account", value: account }, cb);
   }
 
   register = (account, password, repeat) => {
@@ -257,21 +266,23 @@ class AppFrame extends Component {
     var cb = (route, message, arg) => {
       if (message.code === Code.REGISTER_SUCCESS) {
         this.handleNext();
+        this.state.account = arg.account;
+        this.state.password = arg.password;
         this.popUpNotice(NOTICE, Code.REGISTER_SUCCESS, Lang[window.Lang].ErrorCode[Code.REGISTER_SUCCESS]);
       }
       this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
     }
-    getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, {});
+    getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, { account: account, password: password });
   }
 
-  login = (account, password) => {
+  login = (account, password, check_code) => {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
       console.log(message.code);
-      if (message.code === Code.LOGIN_SUCCESS || message.code === 10031) {
+      if (message.code === Code.LOGIC_SUCCESS) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
-        sessionStorage.session = message.session;
+        sessionStorage.session = message.data.session;
         sessionStorage.apptype = arg["type"];
 
         let e = new Event("login_success");
@@ -288,18 +299,17 @@ class AppFrame extends Component {
     console.log(this.state.index);
     if (this.state.index === COMPANY_LOING_INDEX) {
       apptype = APP_TYPE_COMPANY;
-      getData(getRouter(LOGIN), { account: account, password: password }, cb, { account: account, type: apptype });
+      getData(getRouter(LOGIN), { account: account, password: password, type: 0, checkcode: check_code }, cb, { account: account, type: apptype });
     } else if (this.state.index === ORANIZATION_LOING_INDEX) {
       apptype = APP_TYPE_ORANIZATION;
-      console.log("123")
-      getData(getRouter(ORG_LOGIN), { account: account, password: password }, cb, { account: account, type: apptype });
+      getData(getRouter(ORG_LOGIN), { account: account, password: password, type: 1, checkcode: check_code }, cb, { account: account, type: apptype });
     }
     // { account: account, password: password, type: apptype }
   }
 
   handleNext = () => {
     if (this.state.activeStep === 5) {
-      login()
+      this.login(name, password);
     } else {
       this.setState({
         activeStep: this.state.activeStep + 1,
@@ -444,7 +454,7 @@ class AppFrame extends Component {
       <paper>
         {this.RegisterStep()}
         <MobileStepper
-          nextButtonText={this.state.activeStep === 5 ? Lang[window.Lang].pages.main.next_step : "登陆"}
+          nextButtonText={this.state.activeStep !== 5 ? Lang[window.Lang].pages.main.next_step : "登陆"}
           backButtonText={Lang[window.Lang].pages.main.pre_step}
           type="text"
           steps={6}
@@ -488,6 +498,17 @@ class AppFrame extends Component {
           fullWidth={true}
           onChange={event => this.setState({ password: event.target.value })}
         />
+        <TextField
+          label={"验证码"}
+          id={"check_code" + this.state.index}
+          style={{
+            marginLeft: "auto",//styleManager.theme.spacing.unit,
+            marginRight: "auto",//theme.spacing.unit,  
+          }}
+          fullWidth={true}
+          defaultValue="1234"
+          onChange={event => this.setState({ check_code: event.target.value })}
+        />
         <Button
           raised
           color="accent"
@@ -497,12 +518,20 @@ class AppFrame extends Component {
           onClick={() => {
             var name = this.state.name;
             var password = this.state.password;
+            var check_code = this.state.check_code;
             console.log(password)
-            if (name === "" || password === "") {
+            if (name === "") {
+              this.popUpNotice(NOTICE, 0, "您没有输入账号")
+              return
+            } else if (password === "") {
+              this.popUpNotice(NOTICE, 0, "您没有输入密码")
+              return
+            } else if (check_code === "") {
+              this.popUpNotice(NOTICE, 0, "您没有输入验证码")
               return
             }
 
-            this.login(name, password);
+            this.login(name, password, check_code);
           }}
         >
           {Lang[window.Lang].pages.main.login_button}
@@ -527,7 +556,6 @@ class AppFrame extends Component {
   };
 
   handleLogout = () => {
-    this.popUpNotice("notice", 0, "登出成功")
     this.state.logged = false;
     this.setState({ logged: sessionStorage.getItem("logged"), apptype: 0 });
     addEventListener("login_success", (e) => {
@@ -549,6 +577,7 @@ class AppFrame extends Component {
     sessionStorage.session = "";
     sessionStorage.apptype = APP_TYPE_UNLOGIN;
     this.context.router.push("/");
+    this.popUpNotice("notice", 0, "登出成功");
     this.handleLogout();
   }
 

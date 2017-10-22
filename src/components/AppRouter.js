@@ -45,13 +45,13 @@ var AppRouter =
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : AppFrame}
       />
-      <Route
+      {/* <Route
         title={titleize(Lang[window.Lang].pages.com.students.title)}
         path={'/com/students'}
         content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
-      />
+      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.com.enrolled.title)}
         path={'/com/enrolled'}

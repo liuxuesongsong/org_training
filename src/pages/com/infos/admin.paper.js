@@ -15,7 +15,7 @@ import Lang from '../../../language';
 
 class Admin extends Component {
     state = {
-        account: "", password: "", name: "", tel: "", email: ""
+        account: "", password: "", name: "", mobile: "", mail: ""
     }
 
     componentDidMount() {
@@ -26,8 +26,8 @@ class Admin extends Component {
                 account: data.account,
                 password: data.password,
                 name: data.name,
-                tel: data.tel,
-                email: data.email
+                mobile: data.mobile,
+                mail: data.mail
             });
         }
     }
@@ -48,12 +48,13 @@ class Admin extends Component {
             account: this.state.account,
             password: this.state.password,
             name: this.state.name,
-            tel: this.state.tel,
-            email: this.state.email,
-            reset:1
+            mobile: this.state.mobile,
+            mail: this.state.mail,
+            reset: 1
         }
+
         console.log(obj);
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, admin:obj }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
     }
 
     render() {
@@ -96,23 +97,23 @@ class Admin extends Component {
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="tel"
-                        label={Lang[window.Lang].pages.com.infos.admin.tel}
-                        value={this.state.tel}
+                        id="mobile"
+                        label={Lang[window.Lang].pages.com.infos.admin.mobile}
+                        value={this.state.mobile}
                         onChange={event => {
                             this.setState({
-                                tel: event.target.value,
+                                mobile: event.target.value,
                             });
                         }}
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="email"
-                        label={Lang[window.Lang].pages.com.infos.admin.email}
-                        value={this.state.email}
+                        id="mail"
+                        label={Lang[window.Lang].pages.com.infos.admin.mail}
+                        value={this.state.mail}
                         onChange={event => {
                             this.setState({
-                                email: event.target.value,
+                                mail: event.target.value,
                             });
                         }}
                         fullWidth>

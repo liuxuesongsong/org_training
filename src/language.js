@@ -46,34 +46,34 @@ const Language = {
                     base: {
                         title: "基本信息",
 
-                        company_name: "企业名称",
-                        province: "省市地区",
-                        qualification: "企业资质"
+                        city: "企业名称",
+                        c_area_id: "省市地区",
+                        c_level: "企业资质"
                     },
                     finance: {
                         title: "财务信息",
-                        name: "公司全称",
-                        taxpayer_identify: "纳税人识别号",
-                        bank: "开户银行",
+                        allname: "公司全称",
+                        taxpayer_number: "纳税人识别号",
+                        opening_bank: "开户银行",
                         bank_account: "开户行账号",
-                        address: "地址",
-                        tel: "电话"
+                        c_address: "地址",
+                        financial_call: "电话"
                     },
                     express: {
                         title: "邮政信息",
-                        express_code: "邮编",
-                        express_address: "收件地址",
-                        address: "详细地址",
-                        express_person: "收件人",
-                        contact_way: "联系方式"
+                        zip_code: "邮编",
+                        receive_address: "收件地址",
+                        district: "详细地址",
+                        receiver: "收件人",
+                        receive_phone: "联系方式"
                     },
                     admin: {
                         title: "管理员信息",
                         account: "用户名",
                         password: "密码",
                         name: "管理员姓名",
-                        tel: "手机",
-                        email: "邮箱"
+                        mobile: "手机",
+                        mail: "邮箱"
                     }
                 },
                 students: {
@@ -212,6 +212,7 @@ const Language = {
             1000: "两次密码不相同",
             1001: "密码不能为空",
             1002: "账号不能为空",
+            // 10101:""
             10001: "账号已被注册",
             10002: "该账号可以使用",
             10003: "注册成功",

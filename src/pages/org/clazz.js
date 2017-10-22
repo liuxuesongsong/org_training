@@ -68,13 +68,13 @@ class Clazz extends Component {
                             {Lang[window.Lang].pages.org.clazz.new}
                         </Typography>
                         <TextField
-                            id="area"
+                            id="area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                             fullWidth
                         />
                         <TextField
-                            id="class_name"
+                            id="course_id"
                             label={Lang[window.Lang].pages.org.clazz.info.class_name}
                             defaultValue={""}
                             fullWidth
@@ -98,8 +98,8 @@ class Clazz extends Component {
                         <Button
                             onClick={() => {
                                 this.newClazz({
-                                    area: document.getElementById("area").value,
-                                    class_name: document.getElementById("class_name").value,
+                                    area: document.getElementById("area_id").value,
+                                    class_name: document.getElementById("course_id").value,
                                     train_starttime: document.getElementById("train_starttime").value
                                 })
                                 this.handleRequestClose()
