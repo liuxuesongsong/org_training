@@ -61,7 +61,7 @@ class Base extends Component {
         }
 
         console.log(obj);
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: obj }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }
 
     render() {

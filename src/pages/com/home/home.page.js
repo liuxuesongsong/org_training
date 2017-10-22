@@ -11,11 +11,11 @@ import Typography from 'material-ui/Typography';
 
 import { initCache, getData, getRouter, getCache, getStudent } from '../../../utils/helpers';
 import {
-    STUDENT_INFOS,
+    STUDENT_INFOS, STATUS_ENROLLED_UNDO,
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,
     CARD_TYPE_UNARRANGE, CARD_TYPE_ARRANGE, AGREE_ARRANGE, REFUSE_ARRANGE, STATUS_AGREED_AGREE, STATUS_AGREED, STATUS_AGREED_UNDO,
-    STATUS_AGREED_REFUSED, STATUS_ENROLLED_REDO, NOTICE, ALERT, CARD_TYPE_COMMON, STATUS_ARRANGED_DID 
+    STATUS_AGREED_REFUSED, STATUS_ENROLLED_REDO, NOTICE, ALERT, CARD_TYPE_COMMON, STATUS_ARRANGED_DID
 } from '../../../enum';
 import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
@@ -68,7 +68,9 @@ class Home extends Component {
         //     students = []
         // }
         for (var i = 0; i < students.length; i++) {
+            // if () {
 
+            // }
             if (students[i].is_inlist == STATUS_ENROLLED_DID) {
                 enrolled++;
                 unarragedStudents.push(students[i]);
@@ -80,6 +82,7 @@ class Home extends Component {
             }
         }
         var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).c_name : "";
+        console.log(getCache(DATA_TYPE_CLAZZ))
         window.currentPage.setState({
             name: name,
             enrolled: enrolled,
@@ -88,7 +91,7 @@ class Home extends Component {
             passed: passed,
             unarragedStudents: unarragedStudents,
             arrangedStudents: arrangedStudents,
-            clazz: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
+            clazzes: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
         })
     }
 
@@ -209,7 +212,7 @@ class Home extends Component {
                                 {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.enrolled + ":"
                                     + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
                             </Typography>
-                            {// 当前按本未使用
+                            {// 当前版本未使用
                                 /**<Typography type="body1" component="p">
                                 {Lang[window.Lang].pages.com.home.passed + "/" + Lang[window.Lang].pages.com.home.trained + ":"
                                     + this.state.passed + Lang[window.Lang].pages.com.home.human + "/" + this.state.examing + Lang[window.Lang].pages.com.home.human}
@@ -222,12 +225,12 @@ class Home extends Component {
                                     <StudentCard
                                         type={CARD_TYPE_UNARRANGE}
                                         key={CARD_TYPE_UNARRANGE + student.id}
-                                        name={student.base_info.name}
-                                        tel={student.base_info.tel}
-                                        email={student.base_info.email}
-                                        level={student.base_info.level}
-                                        city={student.base_info.city}
-                                        /* status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.com.home.being_reroll : ""} */
+                                        name={student.name}
+                                        tel={student.mobile}
+                                        email={student.mail}
+                                        level={student.course_id}
+                                        city={student.area_id}
+                                    /* status={student.status.enrolled.status === STATUS_ENROLLED_REDO ? Lang[window.Lang].pages.com.home.being_reroll : ""} */
                                     >
                                     </StudentCard>
                                 )}
@@ -239,17 +242,17 @@ class Home extends Component {
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
                                 {this.state.arrangedStudents.map(student => {
-                                    console.log(student.status[STATUS_AGREED].status);
-                                    switch (student.status[STATUS_AGREED].status) {
+                                    console.log(student.is_inlist);
+                                    switch (student.is_inlist) {
                                         case STATUS_AGREED_UNDO:
                                             return (<StudentCard
                                                 type={CARD_TYPE_ARRANGE}
                                                 key={CARD_TYPE_ARRANGE + student.id}
-                                                name={student.base_info.name}
-                                                tel={student.base_info.tel}
-                                                email={student.base_info.email}
-                                                level={student.base_info.level}
-                                                city={student.base_info.city}
+                                                name={student.name}
+                                                tel={student.mobile}
+                                                email={student.mail}
+                                                level={student.course_id}
+                                                city={student.area_id}
                                                 action={[
                                                     () => {
                                                         console.log("agreeArrange" + student.id);
@@ -278,11 +281,11 @@ class Home extends Component {
                                             return (<StudentCard
                                                 type={CARD_TYPE_ARRANGE}
                                                 key={CARD_TYPE_ARRANGE + student.id}
-                                                name={student.base_info.name}
-                                                tel={student.base_info.tel}
-                                                email={student.base_info.email}
-                                                level={student.base_info.level}
-                                                city={student.base_info.city}
+                                                name={student.name}
+                                                tel={student.mobile}
+                                                email={student.mail}
+                                                level={student.course_id}
+                                                city={student.area_id}
                                                 status={"已通过"}
                                             >
                                             </StudentCard>)
@@ -290,11 +293,11 @@ class Home extends Component {
                                             return (<StudentCard
                                                 type={CARD_TYPE_ARRANGE}
                                                 key={CARD_TYPE_ARRANGE + student.id}
-                                                name={student.base_info.name}
-                                                tel={student.base_info.tel}
-                                                email={student.base_info.email}
-                                                level={student.base_info.level}
-                                                city={student.base_info.city}
+                                                name={student.name}
+                                                tel={student.mobile}
+                                                email={student.mail}
+                                                level={student.course_id}
+                                                city={student.area_id}
                                                 status={"已拒绝"}
                                             >
                                             </StudentCard>)
@@ -310,9 +313,12 @@ class Home extends Component {
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                                 {this.state.clazzes.map(clazz =>
-                                    <ListItem dense button key={clazz}>
+                                    <ListItem dense button key={clazz.id}>
                                         {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}
-                                        <ListItemText primary={clazz.id} />
+                                        <ListItemText primary={clazz.area_id} />
+                                        <ListItemText primary={clazz.course_id} />
+                                        <ListItemText primary={clazz.ti_id} />
+                                        <ListItemText primary={clazz.train_starttime} />
                                         <ListItemSecondaryAction>
                                             {/* <Checkbox
                   onClick={event => this.handleToggle(event, value)}

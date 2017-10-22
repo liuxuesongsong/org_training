@@ -8,6 +8,12 @@ import List, {
     ListSubheader,
 } from 'material-ui/List';
 import Typography from 'material-ui/Typography';
+import AppBar from 'material-ui/AppBar';
+import Toolbar from 'material-ui/Toolbar';
+import Button from 'material-ui/Button';
+
+import IconButton from 'material-ui/IconButton';
+import BackIcon from 'material-ui-icons/ArrowBack';
 
 import StudentCard from '../studentCard.js';
 
@@ -55,7 +61,7 @@ class Enrolled extends Component {
 
     cacheToState() {
         // 设置界面
-        let students = getCache(DATA_TYPE_STUDENT);
+        var students = getCache(DATA_TYPE_STUDENT);
         console.log(students);
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
@@ -182,14 +188,18 @@ class Enrolled extends Component {
                             <StudentCard
                                 type={CARD_TYPE_ENROLL}
                                 key={student.id}
-                                name={student.base_info.name}
-                                tel={student.base_info.tel}
-                                email={student.base_info.email}
-                                level={student.base_info.level}
-                                city={student.base_info.city}
+                                name={student.name}
+                                tel={student.mobile}
+                                email={student.mail}
+                                level={student.course_id}
+                                city={student.area_id}
                                 action={[() => {
+                                    this.state.selected = student;
+                                    this.state.showInfo = true;
+                                    this.toggleDrawer(true)()
+                                }, () => {
                                     this.state.selectedStudentId = student.id;
-                                    this.popUpNotice(ALERT, 0, "为" + student.base_info.name + "报名", [
+                                    this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
                                         () => {
                                             this.erollStudent();
                                             this.closeNotice();
@@ -207,14 +217,14 @@ class Enrolled extends Component {
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}
                                 key={student.id}
-                                name={student.base_info.name}
-                                tel={student.base_info.tel}
-                                email={student.base_info.email}
-                                level={student.base_info.level}
-                                city={student.base_info.city}
+                                name={student.name}
+                                tel={student.mobile}
+                                email={student.mail}
+                                level={student.course_id}
+                                city={student.area_id}
                                 action={[() => {
                                     this.state.selectedStudentId = student.id;
-                                    this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
+                                    this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
                                         () => {
                                             this.enrolled();
                                             this.closeNotice();
@@ -233,15 +243,15 @@ class Enrolled extends Component {
                             <StudentCard
                                 type={CARD_TYPE_ARRANGE}
                                 key={student.id}
-                                name={student.base_info.name}
-                                tel={student.base_info.tel}
-                                email={student.base_info.email}
-                                level={student.base_info.level}
-                                city={student.base_info.city}
+                                name={student.name}
+                                tel={student.mobile}
+                                email={student.mail}
+                                level={student.course_id}
+                                city={student.area_id}
                                 action={[
                                     () => {
                                         this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
+                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
                                             () => {
                                                 console.log("agreeArrange" + student.id);
                                                 this.agreeArrange();
@@ -253,7 +263,7 @@ class Enrolled extends Component {
                                     () => {
                                         this.state.selectedStudentId = student.id;
 
-                                        this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
+                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
                                             () => {
                                                 this.refuseArrange();
                                                 this.closeNotice();
@@ -286,31 +296,31 @@ class Enrolled extends Component {
                                     <TextField
                                         id="student_name"
                                         label={Lang[window.Lang].pages.com.students.name}
-                                        defaultValue={this.state.selected.base_info.name}
+                                        defaultValue={this.state.selected.name}
                                         fullWidth
                                     />
                                     <TextField
                                         id="tel"
                                         label={Lang[window.Lang].pages.com.students.tel}
-                                        defaultValue={this.state.selected.base_info.tel}
+                                        defaultValue={this.state.selected.tel}
                                         fullWidth
                                     />
                                     <TextField
                                         id="email"
                                         label={Lang[window.Lang].pages.com.students.email}
-                                        defaultValue={this.state.selected.base_info.email}
+                                        defaultValue={this.state.selected.email}
                                         fullWidth
                                     />
                                     <TextField
                                         id="area_id"
                                         label={Lang[window.Lang].pages.com.students.area_id}
-                                        defaultValue={this.state.selected.base_info.area_id.toString()}
+                                        defaultValue={this.state.selected.area_id.toString()}
                                         fullWidth
                                     />
                                     <TextField
                                         id="course_id"
                                         label={Lang[window.Lang].pages.com.students.course_id.title}
-                                        defaultValue={this.state.selected.base_info.course_id.toString()}
+                                        defaultValue={this.state.selected.course_id.toString()}
                                         fullWidth
                                     />
 

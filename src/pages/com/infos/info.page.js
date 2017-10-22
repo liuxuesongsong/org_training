@@ -35,7 +35,7 @@ import { initCache, getCache } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 
-import { DATA_TYPE_BASE, RESET_INFO, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
+import { DATA_TYPE_AREA, DATA_TYPE_BASE, RESET_INFO, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -49,14 +49,20 @@ class Info extends Component {
         show: "all",
         base: {},
         finance: {
-            name: "公司名称未设置",
-            taxpayer_identify: "纳税人识别号未设置",
-            bank: "开户银行未设置",
+            allname: "公司名称未设置",
+            taxpayer_number: "纳税人识别号未设置",
+            opening_bank: "开户银行未设置",
             bank_account: "开户账号未设置",
-            tel: "联系电话未设置",
-            address: "地址未设置"
+            c_address: "联系电话未设置",
+            financial_call: "地址未设置"
         },
-        express: {},
+        express: {
+            zip_code: "未设置",
+            receive_address: "未设置",
+            district: "未设置",
+            receiver: "未设置",
+            receive_phone: "未设置"
+        },
         admin: {},
 
         // 提示状态
@@ -127,25 +133,19 @@ class Info extends Component {
         });
     }
 
-    submit = (sendObj) => {
+    submit = (objType, sendObj) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-
                 console.log(arg.data);
-
-                window.CacheData.base = arg.data;
-
+                for (var k in arg.data) {
+                    window.CacheData[arg.objType][k] = arg.data[k];
+                }
                 console.log(getCache(DATA_TYPE_BASE));
                 // arg.self.state.data = 
             }
-
         }
-
-        var obj = {
-            qualification: document.getElementById("qualification").value
-        }
-        console.log(obj);
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, base: JSON.stringify(obj) }, cb, { self: this, data: obj });
+        console.log(sendObj);
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
     }
 
     toggleDrawer = (open) => () => {
@@ -181,20 +181,41 @@ class Info extends Component {
     subShow = () => {
         switch (this.state.show) {
             case "componyName":
-                <AppBar position="static" color="default">
-                    <Toolbar>
-                        <IconButton className={{
-                            marginLeft: -12,
-                            marginRight: 20,
-                        }} color="default" aria-label="Menu">
-                            <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
-                        </IconButton>
-                        <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                            {"修改公司简称"}
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
-                return
+                return (<div>
+                    <AppBar position="static" color="default">
+                        <Toolbar>
+                            <IconButton className={{
+                                marginLeft: -12,
+                                marginRight: 20,
+                            }} color="default" aria-label="Menu">
+                                <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                            </IconButton>
+                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                {"修改公司简称"}
+                            </Typography>
+                            <TextField
+                                id="bank_account"
+                                label={LANG_PREFIX.bank_account}
+                                value={this.state.bank_account}
+                                onChange={event => {
+                                    this.setState({
+                                        bank_account: event.target.value,
+                                    });
+                                }}
+                                fullWidth>
+                            </TextField>
+                            <Button
+                                raised
+                                color="accent"
+                                onClick={() => {
+                                    this.submit();
+                                }}
+                            >
+                                {Lang[window.Lang].pages.main.certain_button}
+                            </Button>
+                        </Toolbar>
+                    </AppBar>
+                </div>)
             case "area":
                 return (
                     <div>
@@ -209,15 +230,22 @@ class Info extends Component {
                                 <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                     {"修改所在区域"}
                                 </Typography>
+
                             </Toolbar>
                         </AppBar>
                         <List style={{
                             height: "100%"
                         }} disablePadding>
-                            <ListItem onClick={() => { this.setState({ show: "area", }) }}>
-                                <ListItemText primary={"所属服务区"} />
+                            {getCache(DATA_TYPE_AREA).map(area =>
+                                <ListItem button
+                                    onClick={() => {
+                                        this.submit("base", {
+                                            c_area_id: area.id
+                                        })
+                                    }}>
+                                    {area.area_name}
+                                </ListItem>)}
 
-                            </ListItem>
                         </List>
                     </div>
                 )
@@ -419,24 +447,31 @@ class Info extends Component {
                         <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "express", }) }}>
-                                <ListItemText primary={LANG_PREFIX.express.title} />
+                                {/* <ListItemText primary={LANG_PREFIX.express.title} /> */}
+                                收件人&nbsp;&nbsp;&nbsp;&nbsp; {this.state.express.receiver}<br />
+                                联系电话&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.receive_phone}<br />
+                                所在区域&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}<br />
+                                收件地址&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.district}
                             </ListItem>
                         </Paper >
                         <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
                         <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "finance", }) }}>
-                                纳税信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.finance.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.taxpayer_identify}<br />
-                                银行信息&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank_account}<br />
-                                联系方式&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.tel}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.address}
+                                纳税信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.finance.allname}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.taxpayer_number}<br />
+                                银行信息&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.opening_bank}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank_account}<br />
+                                联系方式&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.c_address}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.financial_call}
                             </ListItem>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"管理员信息"}</ListSubheader>
                         <Paper>
-
                             <ListItem button
                                 onClick={() => { this.setState({ show: "admin", }) }}>
-                                <ListItemText primary={LANG_PREFIX.admin.title} />
+                                管理员信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
+                            </ListItem>
+                            <ListItem button
+                                onClick={() => { this.setState({ show: "admin", }) }}>
+                                登陆信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.account}
                             </ListItem>
                         </Paper>
                     </List>

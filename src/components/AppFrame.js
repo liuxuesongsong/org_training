@@ -201,8 +201,8 @@ class AppFrame extends Component {
       // sessionStorage.apptype = APP_TYPE_UNLOGIN;
       // sessionStorage.session = "";
       // window.location = "/";
-      this.handleLogout();
       this.popUpNotice(NOTICE, 0, "您的session无效");
+      this.logout();
     })
   }
 
@@ -556,6 +556,7 @@ class AppFrame extends Component {
   };
 
   handleLogout = () => {
+    console.log("logout")
     this.state.logged = false;
     this.setState({ logged: sessionStorage.getItem("logged"), apptype: 0 });
     addEventListener("login_success", (e) => {

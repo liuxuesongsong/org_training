@@ -73,7 +73,9 @@ const Language = {
                         password: "密码",
                         name: "管理员姓名",
                         mobile: "手机",
-                        mail: "邮箱"
+                        mail: "邮箱",
+                        duty: "职位",
+                        department: "部门"
                     }
                 },
                 students: {

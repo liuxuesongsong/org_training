@@ -52,7 +52,7 @@ class Finance extends Component {
             financial_call: this.state.financial_call,
             reset:1
         }
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, finance: obj }, cb, { self: this, data: obj });
+        getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }
 
     render() {

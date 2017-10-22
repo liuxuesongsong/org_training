@@ -15,7 +15,12 @@ import Lang from '../../../language';
 
 class Admin extends Component {
     state = {
-        account: "", password: "", name: "", mobile: "", mail: ""
+        account: "",
+        password: "",
+        name: "",
+        mobile: "",
+        mail: "",
+        temObj: {}
     }
 
     componentDidMount() {
@@ -27,17 +32,22 @@ class Admin extends Component {
                 password: data.password,
                 name: data.name,
                 mobile: data.mobile,
-                mail: data.mail
+                mail: data.mail,
+                duty: data.duty,
+                department: data.department
             });
         }
     }
 
-    submit = () => {
+    submit = (sendObj) => {
 
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
 
-                window.CacheData.admin = arg.data;
+                for (var key in this.state.temObj) {
+                    window.CacheData.admin[key] = this.state.temObj[key];
+                }
+
 
                 console.log(getCache(DATA_TYPE_ADMIN));
                 // arg.self.state.data = 
@@ -50,6 +60,8 @@ class Admin extends Component {
             name: this.state.name,
             mobile: this.state.mobile,
             mail: this.state.mail,
+            duty: this.state.duty,
+            department: this.state.department,
             reset: 1
         }
 
@@ -67,10 +79,12 @@ class Admin extends Component {
                         id="account"
                         label={Lang[window.Lang].pages.com.infos.admin.account}
                         value={this.state.account}
-                        onChange={event => {
-                            this.setState({
-                                account: event.target.value,
-                            });
+                        onChange={(event, value) => {
+                            console.log(value);
+                            this.state.temObj.account = value;
+                            // this.setState({
+                            //     account: event.target.value,
+                            // });
                         }}
                         fullWidth>
                     </TextField>
@@ -89,9 +103,33 @@ class Admin extends Component {
                         id="name"
                         label={Lang[window.Lang].pages.com.infos.admin.name}
                         value={this.state.name}
-                        onChange={event => {
+                        onChange={(event, value) => {
+                            console.log(value);
+                            this.state.temObj.account = value;
                             this.setState({
                                 name: event.target.value,
+                            });
+                        }}
+                        fullWidth>
+                    </TextField>
+                    <TextField
+                        id="duty"
+                        label={Lang[window.Lang].pages.com.infos.admin.duty}
+                        value={this.state.duty}
+                        onChange={event => {
+                            this.setState({
+                                duty: event.target.value,
+                            });
+                        }}
+                        fullWidth>
+                    </TextField>
+                    <TextField
+                        id="department"
+                        label={Lang[window.Lang].pages.com.infos.admin.department}
+                        value={this.state.mail}
+                        onChange={event => {
+                            this.setState({
+                                mail: event.target.value,
                             });
                         }}
                         fullWidth>
