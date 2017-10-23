@@ -210,7 +210,6 @@ class AppFrame extends Component {
     var cb = (route, message, arg) => {
       try {
         if (message.code === Code.LOGIC_SUCCESS) {
-          console.log(message.data.routelist)
           for (var key in message.data.routelist) {
             sessionStorage.setItem(key, JSON.stringify(message.data.routelist[key]));
           }
@@ -218,7 +217,6 @@ class AppFrame extends Component {
           this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, message.msg);
         }
       } catch (e) {
-        // console.log("回调出错");
       }
     }
 
@@ -278,7 +276,6 @@ class AppFrame extends Component {
   login = (account, password, check_code) => {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
-      console.log(message.code);
       if (message.code === Code.LOGIC_SUCCESS) {
         sessionStorage.logged = true;
         sessionStorage.account = arg["account"];
@@ -295,8 +292,6 @@ class AppFrame extends Component {
     }
 
     var apptype;
-    console.log(APP_TYPE_ORANIZATION);
-    console.log(this.state.index);
     if (this.state.index === COMPANY_LOING_INDEX) {
       apptype = APP_TYPE_COMPANY;
       getData(getRouter(LOGIN), { account: account, password: password, type: 0, checkcode: check_code }, cb, { account: account, type: apptype });
@@ -519,7 +514,6 @@ class AppFrame extends Component {
             var name = this.state.name;
             var password = this.state.password;
             var check_code = this.state.check_code;
-            console.log(password)
             if (name === "") {
               this.popUpNotice(NOTICE, 0, "您没有输入账号")
               return
@@ -556,7 +550,6 @@ class AppFrame extends Component {
   };
 
   handleLogout = () => {
-    console.log("logout")
     this.state.logged = false;
     this.setState({ logged: sessionStorage.getItem("logged"), apptype: 0 });
     addEventListener("login_success", (e) => {

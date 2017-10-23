@@ -62,7 +62,6 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         var students = getCache(DATA_TYPE_STUDENT);
-        console.log(students);
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
     }
@@ -91,9 +90,7 @@ class Enrolled extends Component {
     // 将新加入的学生排队
     erollStudent() {
         var id = this.state.selectedStudentId;
-        console.log(id);
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === 0) {
                 let student = getStudent(arg.id);
                 student.is_inlist = STATUS_ENROLLED_DID;
@@ -106,7 +103,6 @@ class Enrolled extends Component {
     kickClazz() {
         var id = this.state.selectedStudentId;
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === Code.LOGIC_SUCCESS) {
                 // let student = getStudent(arg.id);
                 // student.status[STATUS_ENROLLED].status = STATUS_ENROLLED_DID;
@@ -253,7 +249,6 @@ class Enrolled extends Component {
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
                                             () => {
-                                                console.log("agreeArrange" + student.id);
                                                 this.agreeArrange();
                                                 this.closeNotice();
                                             }, () => {

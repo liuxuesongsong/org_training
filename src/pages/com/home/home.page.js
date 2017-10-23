@@ -51,7 +51,6 @@ class Home extends Component {
         // this.getStudents();
         window.currentPage = this;
         this.fresh();
-        console.log(new Date().getTime())
     }
 
     fresh = () => {
@@ -60,7 +59,6 @@ class Home extends Component {
 
     cacheToState() {
 
-        // console.log(getCache(DATA_TYPE_ALL));
         let students = getCache(DATA_TYPE_STUDENT);
         let enrolled = 0, arranged = 0, passed = 0, examing = 0,
             unarragedStudents = [], arrangedStudents = [];
@@ -82,7 +80,6 @@ class Home extends Component {
             }
         }
         var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).c_name : "";
-        console.log(getCache(DATA_TYPE_CLAZZ))
         window.currentPage.setState({
             name: name,
             enrolled: enrolled,
@@ -95,10 +92,10 @@ class Home extends Component {
         })
     }
 
+    // 未使用
     getStudents() {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(message.code)
 
                 let students = message.student;
                 let enrolled = 0, arranged = 0, passed = 0, examing = 0,
@@ -242,7 +239,6 @@ class Home extends Component {
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
                                 {this.state.arrangedStudents.map(student => {
-                                    console.log(student.is_inlist);
                                     switch (student.is_inlist) {
                                         case STATUS_AGREED_UNDO:
                                             return (<StudentCard
@@ -255,7 +251,6 @@ class Home extends Component {
                                                 city={student.area_id}
                                                 action={[
                                                     () => {
-                                                        console.log("agreeArrange" + student.id);
                                                         this.state.selectedStudentId = student.id;
                                                         this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
                                                             () => {

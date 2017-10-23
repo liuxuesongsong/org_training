@@ -37,10 +37,8 @@ class Finance extends Component {
     submit = () => {
 
         var cb = (route, message, arg) => {
-            console.log(message);
             if (message.code === 100112) {
                 window.CacheData.finance = arg.data;
-                console.log(getCache(DATA_TYPE_FINANCE));
             }
         }
         var obj = {

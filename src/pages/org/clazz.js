@@ -51,7 +51,6 @@ class Clazz extends Component {
             if (message.code === 10027) {
                 this.setState({ clazzes: message.clazz })
             }
-            console.log(message)
         }
         getData(getRouter(CLASS_INFOS), { session: sessionStorage.session }, cb, {});
     }
@@ -126,7 +125,6 @@ class Clazz extends Component {
                 this.state.clazzes.push(clazz)
                 this.setState({ clazzes: this.state.clazzes })
             }
-            console.log(message)
         }
         var obj = {
             session: sessionStorage.session,
@@ -148,7 +146,6 @@ class Clazz extends Component {
 
     deleteClazz = (id) => {
         var cb = (route, message, arg) => {
-            console.log(message)
             if (message.code === 10029) {
                 for (var i = 0; i < this.state.clazzes.length; i++) {
                     if (this.state.clazzes[i].id === arg.id) {

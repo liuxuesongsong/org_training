@@ -39,17 +39,10 @@ class Base extends Component {
 
     submit = () => {
         var cb = (route, message, arg) => {
-            console.log(message);
-            if (message.code === 100111) {
-
-                console.log(arg.data);
-
+            if (message.code === 0) {
                 window.CacheData.base = arg.data;
-
-                console.log(getCache(DATA_TYPE_BASE));
                 // arg.self.state.data = 
             }
-
         }
 
         // this.state.submit_obj
@@ -60,7 +53,6 @@ class Base extends Component {
             "reset": 1
         }
 
-        console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }
 

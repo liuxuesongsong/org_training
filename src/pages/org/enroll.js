@@ -32,7 +32,6 @@ class Enroll extends Component {
 
     entranceClazz = () => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === Code.LOGIC_SUCCESS) {
                 
             }
@@ -43,7 +42,6 @@ class Enroll extends Component {
 
     exitClazz = () => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === Code.LOGIC_SUCCESS) {
                 
             }

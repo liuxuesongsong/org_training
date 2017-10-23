@@ -49,7 +49,6 @@ class Area extends Component {
 
     queryArea = () => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === 10033) {
                 this.setState({ areas: message.area })
             }
@@ -80,7 +79,6 @@ class Area extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                                console.log(document.getElementById("area_name").value);
                                 this.newArea({
                                     area_name: document.getElementById("area_name").value
                                 })
@@ -107,9 +105,7 @@ class Area extends Component {
 
     newArea = (area) => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === 10032) {
-                console.log(message.id);
                 Object.assign(arg.area, { id: message.id })
                 this.state.areas.push(arg.area)
                 this.setState({ areas: this.state.areas })
@@ -144,7 +140,6 @@ class Area extends Component {
 
     queryClazzInArea = () => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.areas = message.area
             }

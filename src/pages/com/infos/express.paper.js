@@ -20,7 +20,6 @@ class Express extends Component {
     componentDidMount() {
         if (getCache(DATA_TYPE_EXPRESS) !== undefined) {
             var data = getCache(DATA_TYPE_EXPRESS)
-            console.log(data);
             this.setState({
                 zip_code: data.zip_code,
                 receive_address: data.receive_address,
@@ -43,7 +42,6 @@ class Express extends Component {
 
                 window.CacheData.express = arg.data;
 
-                console.log(getCache(DATA_TYPE_EXPRESS));
                 // arg.self.state.data = 
             }
 
@@ -57,7 +55,6 @@ class Express extends Component {
             receive_phone: this.state.receive_phone,
             reset:1
         }
-        console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, company:obj }, cb, { self: this, data: obj });
     }
 

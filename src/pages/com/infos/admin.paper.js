@@ -26,7 +26,6 @@ class Admin extends Component {
     componentDidMount() {
         if (getCache(DATA_TYPE_ADMIN) !== undefined) {
             var data = getCache(DATA_TYPE_ADMIN);
-            console.log(data);
             this.setState({
                 account: data.account,
                 password: data.password,
@@ -49,7 +48,6 @@ class Admin extends Component {
                 }
 
 
-                console.log(getCache(DATA_TYPE_ADMIN));
                 // arg.self.state.data = 
             }
 
@@ -65,7 +63,6 @@ class Admin extends Component {
             reset: 1
         }
 
-        console.log(obj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
     }
 
@@ -80,7 +77,6 @@ class Admin extends Component {
                         label={Lang[window.Lang].pages.com.infos.admin.account}
                         value={this.state.account}
                         onChange={(event, value) => {
-                            console.log(value);
                             this.state.temObj.account = value;
                             // this.setState({
                             //     account: event.target.value,
@@ -104,7 +100,6 @@ class Admin extends Component {
                         label={Lang[window.Lang].pages.com.infos.admin.name}
                         value={this.state.name}
                         onChange={(event, value) => {
-                            console.log(value);
                             this.state.temObj.account = value;
                             this.setState({
                                 name: event.target.value,

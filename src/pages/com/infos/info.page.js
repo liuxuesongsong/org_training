@@ -108,7 +108,6 @@ class Info extends Component {
         }
         if (getCache(DATA_TYPE_ADMIN) !== undefined) {
             var data = getCache(DATA_TYPE_ADMIN);
-            console.log(data);
             window.currentPage.setState({
                 admin: data
             });
@@ -136,15 +135,12 @@ class Info extends Component {
     submit = (objType, sendObj) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(arg.data);
                 for (var k in arg.data) {
                     window.CacheData[arg.objType][k] = arg.data[k];
                 }
-                console.log(getCache(DATA_TYPE_BASE));
                 // arg.self.state.data = 
             }
         }
-        console.log(sendObj);
         getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
     }
 
@@ -156,7 +152,6 @@ class Info extends Component {
 
     queryArea = () => {
         var cb = (router, message, arg) => {
-            console.log(message);
             if (message.code === 10033) {
                 this.setState({ areas: message.area })
             }

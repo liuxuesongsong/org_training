@@ -63,7 +63,6 @@ export function getTimeString(timeStamp) {
  * @param {*} args 
  */
 export function getData(router, json, callback = null, args = {}) {
-  console.log(router)
   if (!isJson(json)) {
     console.log("request必须为json");
   }
@@ -73,7 +72,6 @@ export function getData(router, json, callback = null, args = {}) {
       return;
     } else {
       var request_low = router.request[key].split(":");
-      console.log(request_low)
       switch (request_low[0]) {
         case "string":
           json[key] = json[key].toString();
@@ -109,8 +107,6 @@ export function getData(router, json, callback = null, args = {}) {
         case "enum":
           if (request_low.length > 1) {
             var enum_list = eval(request_low[1]);
-            console.log(enum_list);
-            console.log(enum_list.indexOf(json[key]))
             if (enum_list.indexOf(json[key]) === -1) {
               console.log("发送的json中" + key + "字段需要为" + request_low[1] + "中的一项");
               return
@@ -150,9 +146,7 @@ export function getData(router, json, callback = null, args = {}) {
   }).then(function (data) {
     if (callback !== null) {
       if (data.code === 10099) {
-        console.log("123");
-        let e = new Event("session_invalid");
-        dispatchEvent(e);
+        logout();
       }
       // sessionStorage.logged = false;
       callback(router, data, args);
@@ -165,8 +159,12 @@ export function getData(router, json, callback = null, args = {}) {
   return
 }
 
+function logout() {
+  let e = new Event("session_invalid");
+  dispatchEvent(e);
+}
+
 export function getStudent(id) {
-  console.log(window.CacheData);
   for (var i = 0; i < window.CacheData.students.length; i++) {
     if (window.CacheData.students[i].id === id) {
       return window.CacheData.students[id];
@@ -184,9 +182,7 @@ export function isJson(obj) {
  * @param {*路由键} key 
  */
 export function getRouter(key) {
-  console.log(key);
   var router = JSON.parse(sessionStorage.getItem(key));
-  console.log(router);
   return router === null ? { url: config.routers } : router;
 }
 
@@ -213,25 +209,17 @@ export function getCache(key = DATA_TYPE_ALL) {
  * @param {*回调函数} callback 
  */
 export function initCache(callback = () => { }) {
-  // if (!window.CacheData) {
-  console.log(window.CacheData);
   if (sessionStorage.logged === "true" || sessionStorage.session !== undefined) {
     var cb = (route, message, arg) => {
-      console.log(message)
       if (message.code === Code.LOGIC_SUCCESS) {
         window.CacheData = message.data;
-        console.log(window.CacheData)
         callback()
       }
     }
     getData(getRouter(QUERY), { session: sessionStorage.session }, cb, { callback: callback });
   } else {
-    // 请登录
-    // window.di
+    logout();
   }
-  // } else {
-  // callback();
-  // }
 }
 
 /**

@@ -73,7 +73,6 @@ class Students extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.setState({ students: message.student })
             }
-            console.log(message)
         }
         getData(getRouter(STUDENT_INFOS), { session: sessionStorage.session }, cb, {});
     }
@@ -82,7 +81,6 @@ class Students extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.INSERT_SUCCESS) {
                 this.state.students.push(student)
-                console.log("123")
                 this.setState({
                     students: this.state.students
                 })
