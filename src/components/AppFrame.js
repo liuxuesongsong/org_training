@@ -74,6 +74,7 @@ const styleSheet = createStyleSheet('AppFrame', theme => ({
       overflowX: 'hidden',
       WebkitFontSmoothing: 'antialiased', // Antialiasing.
       MozOsxFontSmoothing: 'grayscale', // Antialiasing.
+      fontFamily: '"Helvetica Neue",Helvetica,Arial,"Microsoft Yahei","Hiragino Sans GB","Heiti SC","WenQuanYi Micro Hei",sans-serif'
     },
     img: {
       maxWidth: '100%',
@@ -103,10 +104,10 @@ const styleSheet = createStyleSheet('AppFrame', theme => ({
   },
   [theme.breakpoints.up('lg')]: {
     drawer: {
-      width: '100px',
+      width: '150px',
     },
     appBarShift: {
-      width: 'calc(100% - 100px)',
+      width: 'calc(100% - 150px)',
     },
     navIconHide: {
       display: 'none',
@@ -126,7 +127,7 @@ const palette = createPalette({
 const theme = createMuiTheme({ palette });
 
 const TabContainer = props =>
-  <div style={{ padding: 24 }}>
+  <div className={'nyx-login-body'}>
     {props.children}
   </div>;
 
@@ -446,7 +447,7 @@ class AppFrame extends Component {
 
   RegisterView = () => {
     return (
-      <paper>
+      <div>
         {this.RegisterStep()}
         <MobileStepper
           nextButtonText={this.state.activeStep !== 5 ? Lang[window.Lang].pages.main.next_step : "登陆"}
@@ -465,7 +466,7 @@ class AppFrame extends Component {
           disableNext={this.state.activeStep === 1}
         />
 
-      </paper>
+      </div>
     )
   }
 
@@ -506,10 +507,8 @@ class AppFrame extends Component {
         />
         <Button
           raised
-          color="accent"
-          style={{
-            margin: "20px 20px",
-          }}
+          color="primary"
+          className={'nyx-btn-circle'}
           onClick={() => {
             var name = this.state.name;
             var password = this.state.password;
@@ -594,27 +593,9 @@ class AppFrame extends Component {
   }
 
   LoginTable = () => {
-    return <div style={{ flex: '1 0 100%', }}>
-      <div style={{
-        minHeight: '100vh', // Makes the hero full height until we get some more content.
-        flex: '0 0 auto',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: theme.palette.primary[500],
-        color: theme.palette.getContrastText(theme.palette.primary[500]),
-      }}>
-        <div style={{
-          padding: '60px 30px',
-          textAlign: 'center',
-          [theme.breakpoints.up('sm')]: {
-            padding: '120px 30px',
-          },
-        }}>
-          <div style={{
-            backgroundColor: theme.palette.background.paper,
-            width: 500
-          }}>
+    return <div className={'nyx-login-bg'}>
+        <div className={'nyx-login'}>
+          <div className={'nyx-login-window'}>
             <AppBar position="static" color="default">
               <Tabs
                 index={this.state.index}
@@ -642,7 +623,6 @@ class AppFrame extends Component {
           </div>
         </div>
       </div>
-    </div>
   }
 
   render() {
@@ -666,10 +646,10 @@ class AppFrame extends Component {
     }
 
     return (
-      <div>
+      <div className="nyx">
         {sessionStorage.getItem("logged") === "true" ?
           <div className={classes.appFrame}>
-            <AppBar className={appBarClassName}>
+            <AppBar className={[appBarClassName,'nyx-topbar']}>
               <Toolbar>
                 <IconButton
                   color="contrast"
@@ -693,7 +673,7 @@ class AppFrame extends Component {
               </Toolbar>
             </AppBar>
             <AppDrawer
-              className={classes.drawer}
+              className={[classes.drawer,'nyx-sidebar']}
               docked={drawerDocked}
               routes={routes}
               onRequestClose={this.handleDrawerClose}

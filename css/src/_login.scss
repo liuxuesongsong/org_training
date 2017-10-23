@@ -1,0 +1,102 @@
+@charset "utf-8";
+@import  "mixins/color";
+@import "mixins/shadow";
+
+$win-width:480px;
+$win-height:320px;
+$bar-height:48px;
+$body-height:$win-height - $bar-height;
+$corner-size:125px;
+$btn-size:64px;
+
+.nyx-login-bg{
+    background-color: $blue;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+.nyx-login-bg:before{
+    position: fixed;
+    top:0;
+    left:0;
+    height: $corner-size;
+    width: $corner-size;
+    border-left:$corner-size $blue900 solid;
+    border-bottom:$corner-size transparent solid;
+    content:" ";
+}
+.nyx-login-bg:after{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    height: $corner-size;
+    width: $corner-size;
+    border-right:$corner-size $blue900 solid;
+    border-top:$corner-size transparent solid;
+    content:" ";
+}
+.nyx-login{
+    background-color:$blue900;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    @extend .nyx-z2;
+}
+
+.nyx-login-window{
+    margin: 4rem;
+    height:$win-height;
+    width: $win-width;
+    background-color: #fff;
+    @extend .nyx-z12;
+    &:hover{
+        @extend .nyx-z24;
+    }
+    header{
+        @extend .nyx-z4;
+        height: $bar-height;
+    }
+}
+
+.nyx-login-window:before {
+    position: absolute;
+    font-size: 2.5rem;
+    margin-top: -2.5em;
+    margin-left: -6em;
+    color: #fff;
+    content: "系统集成级服务项目管理人员";
+    text-shadow: 2px 2px 2px rgba(0,0,0,.3);
+}
+
+.nyx-login-window:after {
+    position: absolute;
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    margin-left: 8em;
+    bottom: 0;
+    color: #fff;
+    content: "培训报名入口";
+    text-shadow: 2px 2px 2px rgba(0,0,0,.3);
+}
+.nyx-login-body{
+    height: $body-height;
+    padding: 2rem;
+    
+    .nyx-btn-circle{
+        border-radius: 50%;
+        height: $btn-size;
+        width: $btn-size;
+        position: absolute;
+        right:0;
+        bottom:0;
+        margin-bottom: $btn-size/2;
+        margin-right: $btn-size/2;
+        padding: 0;
+        min-width: initial;
+    }
+}
+.nyx-login-body>div>div{
+    margin-bottom: 1rem;
+}

@@ -1,0 +1,18 @@
+@charset "utf-8";
+@import  "mixins/color";
+@import "mixins/shadow";
+
+.nyx-sidebar{
+    a{
+        line-height: 2em;
+        border-right:$blue 5px solid;
+        margin-bottom:2px; 
+        &:hover{
+            border-right-color:$blue900;
+            background-color:$blue;
+            color: #fff; 
+        }
+        transition: color .1;
+    }
+    @extend .nyx-z8;
+}
