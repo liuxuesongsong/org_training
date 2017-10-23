@@ -140,9 +140,9 @@ const Language = {
                 },
                 enrolled: {
                     title: "报名",
-                    unenrolled: "未报名",
-                    unarrange: "待安排",
-                    arranged: "已安排",
+                    unenrolled: "未报名列表",
+                    unarrange: "待安排列表",
+                    arranged: "已安排列表",
                 },
                 card: {
                     modify: "修改",

@@ -145,18 +145,26 @@ class ComCard extends Component {
     return (
       <div>
         <Card style={{ display: 'flex', }}>
+          <CardMedia
+            style={{
+              width: 151,
+              height: 151,
+            }}
+            image="/images/live-from-space.jpg"
+            title="Live from space album cover"
+          />
           <div style={{
             display: 'flex',
             flexDirection: 'column',
           }}>
-            <CardContent>
-              <Typography type="body1">
-                {"学生姓名:" + name}
+            <CardContent style={{ flex: '1 0 auto', }}>
+              <Typography type="headline">
+                {name}
               </Typography>
-              <Typography type="body1" component="h2">
+              <Typography component="p">
                 {"联系电话:" + tel}
               </Typography>
-              <Typography type="body1">
+              <Typography component="p">
                 {"电子邮件:" + email}
               </Typography>
               <Typography component="p">
@@ -166,9 +174,14 @@ class ComCard extends Component {
                 {"所在城市:" + city}
               </Typography>
             </CardContent>
-          </div>
-          <div>
-            {this.buttonActions()}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              paddingLeft: "px",
+              paddingBottom: "px"
+            }}>
+              {this.buttonActions()}
+            </div>
           </div>
         </Card>
       </div>
@@ -177,3 +190,4 @@ class ComCard extends Component {
 }
 
 export default ComCard;
+

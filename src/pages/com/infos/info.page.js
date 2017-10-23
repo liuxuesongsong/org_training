@@ -179,7 +179,7 @@ class Info extends Component {
                 return (<div>
                     <AppBar position="static" color="default">
                         <Toolbar>
-                            <IconButton className={{
+                            <IconButton style={{
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
@@ -416,6 +416,35 @@ class Info extends Component {
                         </AppBar>
                         <Admin />
                     </div>);
+            case "logout":
+                return (
+                    <div>
+                        <AppBar position="static" color="default">
+                            <Toolbar>
+                                <IconButton className={{
+                                    marginLeft: -12,
+                                    marginRight: 20,
+                                }} color="default" aria-label="Menu">
+                                    <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                </IconButton>
+                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                    {"登出当前账号"}
+                                </Typography>
+                            </Toolbar>
+                        </AppBar>
+                        <Button
+                            raised
+                            color="accent"
+                            onClick={() => {
+                                var cb = () => {
+
+                                }
+                                // getData(getCache(LOG))
+                            }}>
+                            {"登出"}
+                        </Button>
+                    </div>
+                )
             default:
                 return (<div>
 
@@ -448,7 +477,7 @@ class Info extends Component {
                                 所在区域&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}<br />
                                 收件地址&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.district}
                             </ListItem>
-                        </Paper >
+                        </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
                         <Paper>
                             <ListItem button
@@ -465,7 +494,7 @@ class Info extends Component {
                                 管理员信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
                             </ListItem>
                             <ListItem button
-                                onClick={() => { this.setState({ show: "admin", }) }}>
+                                onClick={() => { this.setState({ show: "logout", }) }}>
                                 登陆信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.account}
                             </ListItem>
                         </Paper>

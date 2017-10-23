@@ -8,6 +8,8 @@ import List, {
     ListSubheader,
 } from 'material-ui/List';
 import Typography from 'material-ui/Typography';
+import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
+import Button from 'material-ui/Button';
 
 import { initCache, getData, getRouter, getCache, getStudent } from '../../../utils/helpers';
 import {
@@ -62,13 +64,7 @@ class Home extends Component {
         let students = getCache(DATA_TYPE_STUDENT);
         let enrolled = 0, arranged = 0, passed = 0, examing = 0,
             unarragedStudents = [], arrangedStudents = [];
-        // if (students === undefined) {
-        //     students = []
-        // }
         for (var i = 0; i < students.length; i++) {
-            // if () {
-
-            // }
             if (students[i].is_inlist == STATUS_ENROLLED_DID) {
                 enrolled++;
                 unarragedStudents.push(students[i]);
@@ -92,57 +88,6 @@ class Home extends Component {
         })
     }
 
-    // 未使用
-    getStudents() {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-
-                let students = message.student;
-                let enrolled = 0, arranged = 0, passed = 0, examing = 0,
-                    unarragedStudents = [], arrangedStudents = [];
-                if (students === undefined) {
-                    students = []
-                }
-                for (var i = 0; i < students.length; i++) {
-                    if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID) {
-                        enrolled++
-                        if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_UNDO) {
-                            unarragedStudents.push(students[i]);
-                        }
-                    }
-                    if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_DOING) {
-                        arranged++
-                        arrangedStudents.push(students[i]);
-                    }
-                    // if (students[i].status['agreed'].status === 1) {
-                    //     this.state.agreed.push(students[i]);
-                    // }
-                    if (students[i].status[STATUS_EXAMING].status === STATUS_EXAMING_DID) {
-                        examing++
-                    }
-                    if (students[i].status[STATUS_PASSED].status === STATUS_PASSED_DID) {
-                        passed++
-                    }
-                    // if (students[i].status['retry'].status === 1) {
-                    //     this.state.retry.push(students[i]);
-                    // }
-                }
-                this.setState({
-                    name: name,
-                    enrolled: enrolled,
-                    arranged: arranged,
-                    examing: examing,
-                    passed: passed,
-                    unarragedStudents: unarragedStudents,
-                    arrangedStudents: arrangedStudents,
-                    clazz: getCache(DATA_TYPE_CLAZZ) ? getCache(DATA_TYPE_CLAZZ) : []
-                })
-            } else {
-
-            }
-        }
-        getData(getRouter(STUDENT_INFOS), { session: sessionStorage.session }, cb, {});
-    }
 
     agreeArrange() {
         var id = this.state.selectedStudentId;
@@ -309,17 +254,35 @@ class Home extends Component {
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                                 {this.state.clazzes.map(clazz =>
                                     <ListItem dense button key={clazz.id}>
-                                        {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}
-                                        <ListItemText primary={clazz.area_id} />
-                                        <ListItemText primary={clazz.course_id} />
-                                        <ListItemText primary={clazz.ti_id} />
-                                        <ListItemText primary={clazz.train_starttime} />
-                                        <ListItemSecondaryAction>
-                                            {/* <Checkbox
-                  onClick={event => this.handleToggle(event, value)}
-                  checked={this.state.checked.indexOf(value) !== -1}
-                /> */}
-                                        </ListItemSecondaryAction>
+                                        <Card style={{maxWidth: 345,}}>
+                                            <CardMedia
+                                            style={{height: 120,}}
+                                                image="/static/images/cards/contemplative-reptile.jpg"
+                                                title="Contemplative Reptile"
+                                            />
+                                            <CardContent>
+                                                <Typography type="headline" component="h2">
+                                                    {clazz.area_id}
+                                                </Typography>
+                                                <Typography component="p">
+                                                    {clazz.course_id}
+                                                </Typography>
+                                                <Typography component="p">
+                                                    {clazz.ti_id}
+                                                </Typography>
+                                                <Typography component="p">
+                                                    {clazz.train_starttime}
+                                                </Typography>
+                                            </CardContent>
+                                            <CardActions>
+                                                <Button dense color="primary">
+                                                    {"分享"}
+                                                </Button>
+                                                <Button dense color="primary">
+                                                    {"了解详情"}
+                                                </Button>
+                                            </CardActions>
+                                        </Card>
                                     </ListItem>,
                                 )}
                             </List>

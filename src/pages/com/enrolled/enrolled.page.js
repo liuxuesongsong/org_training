@@ -8,9 +8,17 @@ import List, {
     ListSubheader,
 } from 'material-ui/List';
 import Typography from 'material-ui/Typography';
+import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
+import AddIcon from 'material-ui-icons/Add';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from 'material-ui/Dialog';
 
 import IconButton from 'material-ui/IconButton';
 import BackIcon from 'material-ui-icons/ArrowBack';
@@ -46,7 +54,8 @@ class Enrolled extends Component {
         alertType: ALERT,
         alertCode: Code.LOGIC_SUCCESS,
         alertContent: "",
-        alertAction: []
+        alertAction: [],
+        openNewStudentDialog: false
     };
 
 
@@ -100,6 +109,18 @@ class Enrolled extends Component {
         getData(getRouter(ENROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
+    newStudent(student) {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.INSERT_SUCCESS) {
+                this.state.students.push(student)
+                this.setState({
+                    students: this.state.students
+                })
+            }
+        }
+        getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
+    }
+
     kickClazz() {
         var id = this.state.selectedStudentId;
         var cb = (router, message, arg) => {
@@ -137,6 +158,144 @@ class Enrolled extends Component {
         getData(getRouter(REFUSE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
+    newStudentDialog() {
+        var student = {
+            "id": 12,
+            "base_info": {
+                "name": "",
+                "tel": "",
+                "email": "",
+                "city": 0,
+                "level": 0,
+            },
+            "personal_info": {
+                "licence": {
+                    type: 0,
+                    id: ""
+                },
+                "edu": "",
+                "working_time": "",
+                "total_amount": "",
+                "soft_amount": ""
+            },
+            "proj_exp": [
+                {
+                    "id": 1,
+                    "name": "",
+                    "time": 0,
+                    "actor": "",
+                    "total_amount": "",
+                    "soft_amount": ""
+                },
+
+            ],
+            // 状态 0 未进行 1 进行中 2 进行结束
+            "status": {
+                "enrolled": {
+                    "status": 0,
+                    "time": 1500262255
+                },
+                "arranged": {
+                    "status": 2,
+                    "time": 1500262255
+                },
+                "agreed": {
+                    "status": 0,
+                    "time": 1500262255
+                },
+                "examing": {
+                    "status": 1,
+                    "time": 1500262255
+                },
+                "passed": {
+                    "status": 1,
+                    "score": 96,
+                    "time": 1500262255
+                },
+                "retry": {
+                    "status": 1,
+                    "time": 1500262255
+                }
+            }
+        }
+        return (
+            <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    新增学员
+                </DialogTitle>
+                <DialogContent>
+                    <div>
+                        <Typography type="headline" component="h3">
+                            {Lang[window.Lang].pages.com.students.base_info}
+                        </Typography>
+                        <TextField
+                            id="student_name"
+                            label={Lang[window.Lang].pages.com.students.name}
+                            defaultValue={student.base_info.name}
+                            fullWidth
+                        />
+                        <TextField
+                            id="tel"
+                            label={Lang[window.Lang].pages.com.students.tel}
+                            defaultValue={student.base_info.tel}
+                            fullWidth
+                        />
+                        <TextField
+                            id="email"
+                            label={Lang[window.Lang].pages.com.students.email}
+                            defaultValue={student.base_info.email}
+                            fullWidth
+                        />
+                        <TextField
+                            id="city"
+                            label={Lang[window.Lang].pages.com.students.city}
+                            defaultValue={student.base_info.city}
+                            fullWidth
+                        />
+                        <TextField
+                            id="level"
+                            label={Lang[window.Lang].pages.com.students.level.title}
+                            defaultValue={student.base_info.level}
+                            fullWidth
+                        />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                var base_info = {
+                                    name: document.getElementById("student_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("student_name").value,
+                                    tel: document.getElementById("tel").value,
+                                    email: document.getElementById("email").value,
+                                    city: document.getElementById("city").value,
+                                    level: document.getElementById("level").value,
+                                }
+                                this.newStudent({ base_info: base_info })
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog>
+        )
+    }
+
+    handleRequestClose = () => {
+        this.setState({
+            openNewStudentDialog: false
+        })
+    }
+    
     closeNotice = () => {
         this.setState({
             alertOpen: false,
@@ -165,30 +324,28 @@ class Enrolled extends Component {
         return (
             <div style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}>
                 <Paper style={Style.paper}>
-                    <AppBar position="static" color="default">
-                        <Toolbar>
-                            <IconButton className={{
-                                marginLeft: -12,
-                                marginRight: 20,
-                            }} color="default" aria-label="Menu">
-                                <BackIcon onClick={() => { this.setState({ showInfo: true }) }} />
-                            </IconButton>
-                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
-                                {"未报名学生"}
-                            </Typography>
-                            <Button color="contrast">Login</Button>
-                        </Toolbar>
-                    </AppBar>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unenrolled}</ListSubheader>}>
+                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unenrolled}
+                        <Button fab color="primary" aria-label="add" className={{ marginRight: 10 }}
+                            onClick={() => {
+                                this.setState({
+                                    openNewStudentDialog: true
+                                })
+
+                            }}
+                        >
+                            <AddIcon />
+
+                        </Button>
+                    </ListSubheader>}>
                         {this.state.newStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ENROLL}
                                 key={student.id}
-                                name={student.name}
-                                tel={student.mobile}
-                                email={student.mail}
-                                level={student.course_id}
-                                city={student.area_id}
+                                name={student.name.toString()}
+                                tel={student.mobile === undefined ? "" : student.mobile}
+                                email={student.mail === undefined ? "" : student.mail}
+                                level={Number(student.course_id)}
+                                city={Number(student.area_id)}
                                 action={[() => {
                                     this.state.selected = student;
                                     this.state.showInfo = true;
@@ -213,11 +370,11 @@ class Enrolled extends Component {
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}
                                 key={student.id}
-                                name={student.name}
-                                tel={student.mobile}
-                                email={student.mail}
-                                level={student.course_id}
-                                city={student.area_id}
+                                name={student.name.toString()}
+                                tel={student.mobile === undefined ? "" : student.mobile}
+                                email={student.mail === undefined ? "" : student.mail}
+                                level={Number(student.course_id)}
+                                city={Number(student.area_id)}
                                 action={[() => {
                                     this.state.selectedStudentId = student.id;
                                     this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
@@ -239,11 +396,11 @@ class Enrolled extends Component {
                             <StudentCard
                                 type={CARD_TYPE_ARRANGE}
                                 key={student.id}
-                                name={student.name}
-                                tel={student.mobile}
-                                email={student.mail}
-                                level={student.course_id}
-                                city={student.area_id}
+                                name={student.name.toString()}
+                                tel={student.mobile === undefined ? "" : student.mobile}
+                                email={student.mail === undefined ? "" : student.mail}
+                                level={Number(student.course_id)}
+                                city={Number(student.area_id)}
                                 action={[
                                     () => {
                                         this.state.selectedStudentId = student.id;
@@ -430,6 +587,7 @@ class Enrolled extends Component {
 
                         </div>
                     </Drawer> : <div />}
+                {this.newStudentDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
