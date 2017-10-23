@@ -28,7 +28,7 @@ import StudentCard from '../studentCard.js';
 
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
-    QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
+    UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
     CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED
 } from '../../../enum';
@@ -49,6 +49,7 @@ class Enrolled extends Component {
         arrangedStudents: [],
         // 界面状态
         selectedStudentId: undefined,
+        selected: {},
         showInfo: false,
         right: false,
         // 提示状态
@@ -113,14 +114,33 @@ class Enrolled extends Component {
 
     newStudent(student) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.INSERT_SUCCESS) {
-                this.state.students.push(student)
-                this.setState({
-                    students: this.state.students
-                })
+            if (message.code === Code.LOGIC_SUCCESS) {
+                console.log("222")
+                window.CacheData.students.push(Object.assign(arg.student, { id: message.id }));
+                this.fresh();
             }
+            this.handleRequestClose()
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
+    }
+
+    removeStudent(id) {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.REMOVE_SUCCESS) {
+                for (var i = 0; i < window.CacheData.students.length; i++) {
+                    if (window.CacheData.students[i].id === arg.id) {
+                        window.CacheData.students.splice(i, 1);
+                        // this.setState({
+                        //     students: this.state.students
+                        // })
+                        break;
+                    }
+                }
+                this.fresh();
+            }
+            this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
+        }
+        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
     kickClazz() {
@@ -161,65 +181,7 @@ class Enrolled extends Component {
     }
 
     newStudentDialog() {
-        var student = {
-            "id": 12,
-            "base_info": {
-                "name": "",
-                "tel": "",
-                "email": "",
-                "city": 0,
-                "level": 0,
-            },
-            "personal_info": {
-                "licence": {
-                    type: 0,
-                    id: ""
-                },
-                "edu": "",
-                "working_time": "",
-                "total_amount": "",
-                "soft_amount": ""
-            },
-            "proj_exp": [
-                {
-                    "id": 1,
-                    "name": "",
-                    "time": 0,
-                    "actor": "",
-                    "total_amount": "",
-                    "soft_amount": ""
-                },
 
-            ],
-            // 状态 0 未进行 1 进行中 2 进行结束
-            "status": {
-                "enrolled": {
-                    "status": 0,
-                    "time": 1500262255
-                },
-                "arranged": {
-                    "status": 2,
-                    "time": 1500262255
-                },
-                "agreed": {
-                    "status": 0,
-                    "time": 1500262255
-                },
-                "examing": {
-                    "status": 1,
-                    "time": 1500262255
-                },
-                "passed": {
-                    "status": 1,
-                    "score": 96,
-                    "time": 1500262255
-                },
-                "retry": {
-                    "status": 1,
-                    "time": 1500262255
-                }
-            }
-        }
         return (
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
@@ -228,36 +190,30 @@ class Enrolled extends Component {
                 <DialogContent>
                     <div>
                         <Typography type="headline" component="h3">
-                            {Lang[window.Lang].pages.com.students.base_info}
+                            {Lang[window.Lang].pages.com.students.title}
                         </Typography>
                         <TextField
-                            id="student_name"
+                            id="new_name"
                             label={Lang[window.Lang].pages.com.students.name}
-                            defaultValue={student.base_info.name}
+                            defaultValue={""}
                             fullWidth
                         />
                         <TextField
-                            id="tel"
+                            id="new_tel"
                             label={Lang[window.Lang].pages.com.students.tel}
-                            defaultValue={student.base_info.tel}
+                            defaultValue={""}
                             fullWidth
                         />
                         <TextField
-                            id="email"
+                            id="new_mail"
                             label={Lang[window.Lang].pages.com.students.email}
-                            defaultValue={student.base_info.email}
+                            defaultValue={""}
                             fullWidth
                         />
                         <TextField
-                            id="city"
-                            label={Lang[window.Lang].pages.com.students.city}
-                            defaultValue={student.base_info.city}
-                            fullWidth
-                        />
-                        <TextField
-                            id="level"
+                            id="new_level"
                             label={Lang[window.Lang].pages.com.students.level.title}
-                            defaultValue={student.base_info.level}
+                            defaultValue={1}
                             fullWidth
                         />
                     </div>
@@ -266,15 +222,12 @@ class Enrolled extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                                var base_info = {
-                                    name: document.getElementById("student_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("student_name").value,
-                                    tel: document.getElementById("tel").value,
-                                    email: document.getElementById("email").value,
-                                    city: document.getElementById("city").value,
-                                    level: document.getElementById("level").value,
-                                }
-                                this.newStudent({ base_info: base_info })
-                                this.handleRequestClose()
+                                this.newStudent({
+                                    name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
+                                    mobile: document.getElementById("new_tel").value,
+                                    mail: document.getElementById("new_mail").value,
+                                    course_id: document.getElementById("new_level").value,
+                                })
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
@@ -474,66 +427,75 @@ class Enrolled extends Component {
                                     />
                                     <TextField
                                         id="area_id"
-                                        label={Lang[window.Lang].pages.com.students.area_id}
+                                        label={Lang[window.Lang].pages.com.students.city}
                                         defaultValue={this.state.selected.area_id.toString()}
                                         fullWidth
                                     />
                                     <TextField
                                         id="course_id"
-                                        label={Lang[window.Lang].pages.com.students.course_id.title}
+                                        label={Lang[window.Lang].pages.com.students.level.title}
                                         defaultValue={this.state.selected.course_id.toString()}
                                         fullWidth
                                     />
-
-                                    <Button color="primary" style={{ margin: 10 }}>
-                                        {Lang[window.Lang].pages.main.certain_button}
-                                    </Button>
                                 </div>
                                 <div>
                                     <Typography type="headline" component="h3">
                                         {Lang[window.Lang].pages.com.students.personal_info.title}
                                     </Typography>
-                                    {/* <Selection
-                                    id="licence.type"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_type}
-                                    defaultValue={this.state.selected.personal_info.licence.type}
-                                    fullWidth>
-                                </Selection> */}
+
                                     <TextField
                                         id="licence.code"
                                         label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                        defaultValue={this.state.selected.personal_info.licence.code}
+                                        defaultValue={this.state.selected.identity_card}
                                         fullWidth>
                                     </TextField>
                                     <TextField
                                         id="edu"
                                         label={Lang[window.Lang].pages.com.students.personal_info.edu}
-                                        defaultValue={this.state.selected.personal_info.edu}
+                                        defaultValue={this.state.selected.education}
                                         fullWidth>
                                     </TextField>
                                     <TextField
                                         id="working_time"
                                         label={Lang[window.Lang].pages.com.students.personal_info.working_time}
-                                        defaultValue={this.state.selected.personal_info.working_time}
+                                        defaultValue={this.state.selected.work_years}
                                         fullWidth>
                                     </TextField>
                                     <TextField
                                         id="total_amount"
                                         label={Lang[window.Lang].pages.com.students.personal_info.total_amount}
-                                        defaultValue={this.state.selected.personal_info.total_amount}
+                                        defaultValue={this.state.selected.total_amount}
                                         fullWidth>
                                     </TextField>
                                     <TextField
                                         id="soft_amount"
                                         label={Lang[window.Lang].pages.com.students.personal_info.soft_amount}
-                                        defaultValue={this.state.selected.personal_info.soft_amount}
+                                        defaultValue={this.state.selected.soft_amount}
                                         fullWidth>
                                     </TextField>
-                                    <Button color="primary" style={{ margin: 10 }}>
+                                    <Button color="primary" style={{ margin: 10 }} onClick={
+                                        (e) => {
+                                            var cb = (route, message, arg) => {
+                                                if (message.code === Code.LOGIC_SUCCESS) {
+                                                    for (var i = 0; i < getCache(student).length; i++) {
+                                                        if (getCache(DATA_TYPE_STUDENT)[i].id === arg.id) {
+                                                            getCache(DATA_TYPE_STUDENT)[i][arg.key] = info;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            var obj = {
+
+                                            }
+                                            getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: id, student: obj }, cb, { self: this, data: obj });
+
+                                        }
+                                    }>
                                         {Lang[window.Lang].pages.main.certain_button}
                                     </Button>
                                 </div>
-                                <div>
+                                {/* <div>
                                     <Typography type="headline" component="h3">
                                         {Lang[window.Lang].pages.com.students.proj_exp.title}
                                     </Typography>
@@ -590,7 +552,7 @@ class Enrolled extends Component {
                                     <Button color="primary" style={{ margin: 10 }}>
                                         {Lang[window.Lang].pages.main.certain_button}
                                     </Button>
-                                </div>
+                                </div> */}
                             </Paper>
 
 

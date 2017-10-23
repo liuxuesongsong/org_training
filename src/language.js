@@ -85,7 +85,7 @@ const Language = {
                     del_student: "删除",
                     exam_record: "考试记录",
                     fix_student: "修改",
-                    base_infobase_info: "基本信息",
+                    base_info: "基本信息",
                     name: "姓名",
                     tel: "电话",
                     email: "电子邮件",

@@ -31,7 +31,7 @@ import Finance from './finance.paper';
 import Express from './express.paper';
 import Admin from './admin.paper';
 
-import { initCache, getCache } from '../../../utils/helpers';
+import { initCache, getCache, getData, getRouter, getCity } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 
@@ -47,7 +47,14 @@ class Info extends Component {
         gotData: false,
         drawOpen: false,
         show: "all",
-        base: {},
+        city: "",
+        chooseCity: "",
+        base: {
+            c_name: "未设置",
+            c_area_id: "未设置",
+            city: "未设置",
+            c_level: "未设置",
+        },
         finance: {
             allname: "公司名称未设置",
             taxpayer_number: "纳税人识别号未设置",
@@ -90,8 +97,12 @@ class Info extends Component {
         });
         if (getCache(DATA_TYPE_BASE) !== undefined) {
             var data = getCache(DATA_TYPE_BASE);
+            console.log(data);
+            var currentCity = getCity(data.c_area_id);
             window.currentPage.setState({
-                base: data
+                base: data,
+                city: currentCity,
+                chooseCity: currentCity
             });
         }
         if (getCache(DATA_TYPE_FINANCE) !== undefined) {
@@ -136,10 +147,13 @@ class Info extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 for (var k in arg.data) {
-                    window.CacheData[arg.objType][k] = arg.data[k];
+                    window.CacheData[arg.type][k] = arg.data[k];
                 }
+                this.fresh();
+                // this.state.city = getCity()
                 // arg.self.state.data = 
             }
+
         }
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
     }
@@ -160,17 +174,20 @@ class Info extends Component {
     }
 
     qualificationItems = () => {
-        var items = [];
-        for (var i = 1; i <= 4; i++) {
-            items.push(
-                <ListItem id={i} onClick={() => {
-
+        var components = []
+        var items = [1, 2, 3, 4];
+        items.map((item) => {
+            components.push(
+                <ListItem button id={item} onClick={() => {
+                    this.submit("base", {
+                        c_level: item
+                    })
+                    this.setState({ show: "all" })
                 }}>
-                    <ListItemText primary={(i) + "级"} />
-                </ListItem>
-            )
-        }
-        return items
+                    <ListItemText primary={(item) + "级"} />
+                </ListItem>)
+        })
+        return components
     }
 
     subShow = () => {
@@ -188,28 +205,30 @@ class Info extends Component {
                             <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                 {"修改公司简称"}
                             </Typography>
-                            <TextField
-                                id="bank_account"
-                                label={LANG_PREFIX.bank_account}
-                                value={this.state.bank_account}
-                                onChange={event => {
-                                    this.setState({
-                                        bank_account: event.target.value,
-                                    });
-                                }}
-                                fullWidth>
-                            </TextField>
-                            <Button
-                                raised
-                                color="accent"
-                                onClick={() => {
-                                    this.submit();
-                                }}
-                            >
-                                {Lang[window.Lang].pages.main.certain_button}
-                            </Button>
+
                         </Toolbar>
                     </AppBar>
+                    <TextField
+                        id="bank_account"
+                        label={LANG_PREFIX.bank_account}
+                        value={this.state.base.c_name}
+                        onChange={event => {
+                            this.state.base.c_name = event.target.value
+                            this.setState({
+                                base: this.state.base,
+                            });
+                        }}
+                        fullWidth>
+                    </TextField>
+                    <Button
+                        raised
+                        color="accent"
+                        onClick={() => {
+                            this.submit("base", { c_name: this.state.base.c_name });
+                        }}
+                    >
+                        {Lang[window.Lang].pages.main.certain_button}
+                    </Button>
                 </div>)
             case "area":
                 return (
@@ -233,12 +252,16 @@ class Info extends Component {
                         }} disablePadding>
                             {getCache(DATA_TYPE_AREA).map(area =>
                                 <ListItem button
-                                    onClick={() => {
+                                    onClick={(e) => {
                                         this.submit("base", {
                                             c_area_id: area.id
                                         })
+                                        this.setState({ show: "all" })
                                     }}>
                                     {area.area_name}
+                                    <div>
+                                        {area.id === this.state.base.c_area_id ? this.state.city : ""}
+                                    </div>
                                 </ListItem>)}
 
                         </List>
@@ -484,15 +507,24 @@ class Info extends Component {
                             <ListItem button
                                 onClick={() => { this.setState({ show: "componyName", }) }}>
                                 <ListItemText primary={"公司简称"} />
+                                <div>
+                                    {this.state.base.c_name}
+                                </div>
                             </ListItem>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "area", }) }}>
                                 <ListItemText primary={"所属服务区"} />
+                                <div>
+                                    {this.state.city}
+                                </div>
                             </ListItem>
 
                             <ListItem button
                                 onClick={() => { this.setState({ show: "qualification", }) }}>
                                 <ListItemText primary={"企业等级"} />
+                                <div>
+                                    {this.state.base.c_level}
+                                </div>
                             </ListItem>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"邮政信息"}</ListSubheader>

@@ -173,6 +173,18 @@ export function getStudent(id) {
   return {}
 }
 
+export function getCity(id) {
+  var city = ""
+  for (var i = 0; i < window.CacheData.areas.length; i++) {
+    if (window.CacheData.areas[i].id === id) {
+      city = window.CacheData.areas[i].area_name;
+      break;
+    }
+  }
+  console.log(city);
+  return city
+}
+
 export function isJson(obj) {
   return typeof (obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
 }
