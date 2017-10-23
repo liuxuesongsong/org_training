@@ -60,7 +60,6 @@ class Admin extends Component {
             mail: this.state.mail,
             duty: this.state.duty,
             department: this.state.department,
-            reset: 1
         }
 
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });

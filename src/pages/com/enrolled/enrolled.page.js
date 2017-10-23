@@ -19,6 +19,7 @@ import Dialog, {
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
+import Drawer from 'material-ui/Drawer';
 
 import IconButton from 'material-ui/IconButton';
 import BackIcon from 'material-ui-icons/ArrowBack';
@@ -49,6 +50,7 @@ class Enrolled extends Component {
         // 界面状态
         selectedStudentId: undefined,
         showInfo: false,
+        right: false,
         // 提示状态
         alertOpen: false,
         alertType: ALERT,
@@ -295,7 +297,7 @@ class Enrolled extends Component {
             openNewStudentDialog: false
         })
     }
-    
+
     closeNotice = () => {
         this.setState({
             alertOpen: false,
@@ -319,6 +321,13 @@ class Enrolled extends Component {
             alertAction: action
         });
     }
+
+    toggleDrawer = (open) => () => {
+        this.setState({
+            showInfo: true,
+            right: open,
+        });
+    };
 
     render() {
         return (

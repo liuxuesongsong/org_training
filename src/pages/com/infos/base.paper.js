@@ -39,7 +39,7 @@ class Base extends Component {
 
     submit = () => {
         var cb = (route, message, arg) => {
-            if (message.code === 0) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 window.CacheData.base = arg.data;
                 // arg.self.state.data = 
             }
@@ -50,7 +50,6 @@ class Base extends Component {
             "c_name": document.getElementById("c_name").value,
             "c_area_id": document.getElementById("c_area_id").value,
             "c_level": document.getElementById("c_level").value,
-            "reset": 1
         }
 
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });

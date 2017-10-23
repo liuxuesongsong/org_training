@@ -279,7 +279,13 @@ class Info extends Component {
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
-                                <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                <BackIcon onClick={() => {
+                                    var data = getCache(DATA_TYPE_BASE);
+                                    this.setState({
+                                        show: "all",
+                                        base: data
+                                    });
+                                }} />
                             </IconButton>
                             <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                 {"修改财务信息"}
@@ -296,7 +302,15 @@ class Info extends Component {
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
-                                <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                <BackIcon onClick={() => {
+                                    if (getCache(DATA_TYPE_FINANCE) !== undefined) {
+                                        var data = getCache(DATA_TYPE_FINANCE)
+                                        this.setState({
+                                            finance: data,
+                                            show: "all"
+                                        });
+                                    }
+                                }} />
                             </IconButton>
                             <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                 {"修改邮政信息"}
@@ -389,7 +403,13 @@ class Info extends Component {
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
-                                    <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                    <BackIcon onClick={() => {
+                                        var data = getCache(DATA_TYPE_EXPRESS)
+                                        this.setState({
+                                            show: "all",
+                                            express: data
+                                        });
+                                    }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                     {"修改邮政信息"}
@@ -407,7 +427,15 @@ class Info extends Component {
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
-                                    <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
+                                    <BackIcon onClick={() => {
+                                        if (getCache(DATA_TYPE_ADMIN) !== undefined) {
+                                            var data = getCache(DATA_TYPE_ADMIN);
+                                            this.setState({
+                                                admin: data,
+                                                show: "all"
+                                            });
+                                        }
+                                    }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" className={{ flex: 1 }}>
                                     {"修改管理员信息"}

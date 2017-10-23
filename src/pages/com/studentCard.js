@@ -58,6 +58,11 @@ class ComCard extends Component {
           <Button
             dense
             onClick={this.state.action[0]}>
+            {Lang[window.Lang].pages.com.card.modify}
+          </Button>
+          <Button
+            dense
+            onClick={this.state.action[1]}>
             {Lang[window.Lang].pages.com.card.enroll}
           </Button>
         </CardActions>

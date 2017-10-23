@@ -37,18 +37,17 @@ class Finance extends Component {
     submit = () => {
 
         var cb = (route, message, arg) => {
-            if (message.code === 100112) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 window.CacheData.finance = arg.data;
             }
         }
         var obj = {
-            all_allname: this.state.allname,
+            allname: this.state.allname,
             taxpayer_number: this.state.taxpayer_number,
             opening_bank: this.state.opening_bank,
             bank_account: this.state.bank_account,
             c_address: this.state.c_address,
             financial_call: this.state.financial_call,
-            reset:1
         }
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }

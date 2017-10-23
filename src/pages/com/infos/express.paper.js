@@ -53,7 +53,6 @@ class Express extends Component {
             district:this.state.district,
             receiver: this.state.receiver,
             receive_phone: this.state.receive_phone,
-            reset:1
         }
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company:obj }, cb, { self: this, data: obj });
     }
