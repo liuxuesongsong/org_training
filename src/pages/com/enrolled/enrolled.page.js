@@ -321,6 +321,15 @@ class Enrolled extends Component {
                                         }, () => {
                                             this.closeNotice();
                                         }]);
+                                }, () => {
+                                    this.state.selected = student;
+                                    this.popUpNotice(ALERT, 0, "删除学生" + student.base_info.name, [
+                                        () => {
+                                            this.removeStudent(student.id);
+                                            this.closeNotice();
+                                        }, () => {
+                                            this.closeNotice();
+                                        }]);
                                 }]}>
                             </StudentCard>
                         )}
