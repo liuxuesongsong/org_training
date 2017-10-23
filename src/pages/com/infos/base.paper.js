@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 
 import { getData, getCache, getRouter } from '../../../utils/helpers';
-import { DATA_TYPE_BASE, RESET_INFO } from '../../../enum';
+import { DATA_TYPE_BASE, UPDATE_COMPANY } from '../../../enum';
 import Code from '../../../code';
 import Lang from '../../../language';
 
@@ -53,7 +53,7 @@ class Base extends Component {
             "reset": 1
         }
 
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
+        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }
 
     render() {

@@ -35,7 +35,7 @@ import { initCache, getCache } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 
-import { DATA_TYPE_AREA, DATA_TYPE_BASE, RESET_INFO, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
+import { DATA_TYPE_AREA, DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -141,7 +141,7 @@ class Info extends Component {
                 // arg.self.state.data = 
             }
         }
-        getData(getRouter(RESET_INFO), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
+        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
     }
 
     toggleDrawer = (open) => () => {
