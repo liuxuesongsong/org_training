@@ -158,6 +158,7 @@ class Home extends Component {
                                 </Typography>*/
                         }
                     </div>
+<<<<<<< Updated upstream
                     <div style={Style.pages.com.home.papers}>
                         <Paper elevation={4}>
 
@@ -200,6 +201,44 @@ class Home extends Component {
 
                         </Paper>
 
+=======
+                    <div className={'nyx-area-paper'} >
+                        <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
+                            {this.state.clazzes.map(clazz =>
+                                <ListItem dense button key={clazz.id}>
+                                    <Card style={{ maxWidth: 345, }}>
+                                        <CardMedia
+                                            style={{ height: 120, }}
+                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            title="Contemplative Reptile"
+                                        />
+                                        <CardContent>
+                                            <Typography type="headline" component="h2">
+                                                {clazz.area_id}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {clazz.course_id}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {clazz.ti_id}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {clazz.train_starttime}
+                                            </Typography>
+                                        </CardContent>
+                                        {/* <CardActions>
+                                            <Button dense color="primary">
+                                                {"分享"}
+                                            </Button>
+                                            <Button dense color="primary">
+                                                {"了解详情"}
+                                            </Button>
+                                        </CardActions> */}
+                                    </Card>
+                                </ListItem>,
+                            )}
+                        </List>
+>>>>>>> Stashed changes
                     </div>
                 </div>
                     <Paper className={'nyx-paper nyx-list-paper'}>
