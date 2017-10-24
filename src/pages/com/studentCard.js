@@ -117,6 +117,7 @@ class ComCard extends Component {
             <Button
               dense
               onClick={this.state.action[0]}>
+              {"取消"}
             </Button>
           </CardActions>
         )

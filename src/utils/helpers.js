@@ -167,7 +167,7 @@ function logout() {
 export function getStudent(id) {
   for (var i = 0; i < window.CacheData.students.length; i++) {
     if (window.CacheData.students[i].id === id) {
-      return window.CacheData.students[id];
+      return window.CacheData.students[i];
     }
   }
   return {}

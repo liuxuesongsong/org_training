@@ -28,7 +28,7 @@ import StudentCard from '../studentCard.js';
 
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
-    REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
+    UNROLL_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
     CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED, NOTICE
 } from '../../../enum';
@@ -74,7 +74,6 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         var students = getCache(DATA_TYPE_STUDENT);
-        console.log(students);
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
     }
@@ -100,14 +99,24 @@ class Enrolled extends Component {
         })
     }
 
+    cancelEnroll(id) {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.fresh();
+            }
+            this.handleRequestClose()
+        }
+        getData(getRouter(UNROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
+    }
+
     // 将新加入的学生排队
-    erollStudent() {
-        var id = this.state.selectedStudentId;
+    erollStudent(id) {
         var cb = (router, message, arg) => {
-            if (message.code === 0) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 let student = getStudent(arg.id);
                 student.is_inlist = STATUS_ENROLLED_DID;
                 this.updateStudents();
+                // this.fresh();
             }
         }
         getData(getRouter(ENROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
@@ -116,7 +125,6 @@ class Enrolled extends Component {
     newStudent(student) {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log("222")
                 window.CacheData.students.push(Object.assign(arg.student, { id: message.id }));
                 this.fresh();
             }
@@ -142,6 +150,31 @@ class Enrolled extends Component {
             this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
         }
         getData(getRouter(REMOVE_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
+    }
+
+    modifyStudent = () => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({
+                    right: false,
+                });
+                arg.self.fresh();
+            }
+        }
+        var id = this.state.selected.id;
+        //var id=sessionStorage.id;
+        var obj = {
+            name: document.getElementById("student_name").value,
+            identity_card: document.getElementById("licence.code").value,
+            course_id: document.getElementById("course_id").value === "未设置" ? 0 : document.getElementById("course_id").value,
+            register: document.getElementById("register").value,
+            department: document.getElementById("department").value,
+            duty: document.getElementById("duty").value,
+            mobile: document.getElementById("mobile").value,
+            mail: document.getElementById("mail").value,
+            wechat: document.getElementById("wechat").value,
+        }
+        getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: window.currentPage, data: obj });
     }
 
     kickClazz() {
@@ -182,7 +215,6 @@ class Enrolled extends Component {
     }
 
     newStudentDialog() {
-
         return (
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
@@ -278,7 +310,7 @@ class Enrolled extends Component {
 
     toggleDrawer = (open) => () => {
         this.setState({
-            showInfo: true,
+            showInfo: open,
             right: open,
         });
     };
@@ -293,11 +325,9 @@ class Enrolled extends Component {
                                 this.setState({
                                     openNewStudentDialog: true
                                 })
-
                             }}
                         >
                             <AddIcon />
-
                         </Button>
                     </ListSubheader>}>
                         {this.state.newStudents.map(student =>
@@ -318,7 +348,7 @@ class Enrolled extends Component {
                                     this.state.selectedStudentId = student.id;
                                     this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
                                         () => {
-                                            this.erollStudent();
+                                            this.erollStudent(student.id);
                                             this.closeNotice();
                                         }, () => {
                                             this.closeNotice();
@@ -352,7 +382,7 @@ class Enrolled extends Component {
                                     this.state.selectedStudentId = student.id;
                                     this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
                                         () => {
-                                            this.enrolled();
+                                            this.cancelEnroll(student.id);
                                             this.closeNotice();
                                         }, () => {
                                             this.closeNotice();
@@ -400,127 +430,96 @@ class Enrolled extends Component {
                         )}
                     </List>
                 </Paper>
-                {this.state.showInfo === true ?
-                    <Drawer
-                        anchor="right"
-                        open={this.state.right}
-                        onRequestClose={this.toggleDrawer(false)}
+                <Drawer
+                    anchor="right"
+                    open={this.state.right}
+                    onRequestClose={this.toggleDrawer(false)}
+                >
+                    <div
+                        tabIndex={0}
+                        role="button"
+                    // onClick={this.toggleDrawer(false)}
+                    // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <div
-                            tabIndex={0}
-                            role="button"
-                        // onClick={this.toggleDrawer(false)}
-                        // onKeyDown={this.toggleDrawer(false)}
-                        >
 
-                            <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
-                                <div>
-                                    <Typography type="headline" component="h3">
-                                        {Lang[window.Lang].pages.com.students.base_info}
-                                    </Typography>
-                                    <TextField
-                                        id="student_name"
-                                        label={Lang[window.Lang].pages.com.students.name}
-                                        defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        id="licence.code"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                        defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="course_id"
-                                        label={Lang[window.Lang].pages.com.students.level.title}
-                                        defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
-                                        fullWidth
-                                    />
-        
-                                    <TextField
-                                        id="register"
-                                        label={Lang[window.Lang].pages.com.students.register}
-                                        defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
-                                        fullWidth>
-                                    </TextField>
-                                   
-                                </div>
-                                <div>
-                                    <Typography type="headline" component="h3">
-                                        {Lang[window.Lang].pages.com.students.personal_info.title}
-                                    </Typography>
-                                    <TextField
-                                        id="department"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.department}
-                                        defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="duty"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.duty}
-                                        defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="mobile"
-                                        label={Lang[window.Lang].pages.com.students.tel}
-                                        defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        id="mail"
-                                        label={Lang[window.Lang].pages.com.students.email}
-                                        defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        id="wechat"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.wechat}
-                                        defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
-                                        fullWidth
-                                    />
+                        <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
+                            <div>
+                                <Typography type="headline" component="h3">
+                                    {Lang[window.Lang].pages.com.students.base_info}
+                                </Typography>
+                                <TextField
+                                    id="student_name"
+                                    label={Lang[window.Lang].pages.com.students.name}
+                                    defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="licence.code"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                    defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    id="course_id"
+                                    label={Lang[window.Lang].pages.com.students.level.title}
+                                    defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
+                                    fullWidth
+                                />
+
+                                <TextField
+                                    id="register"
+                                    label={Lang[window.Lang].pages.com.students.register}
+                                    defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
+                                    fullWidth>
+                                </TextField>
+
+                            </div>
+                            <div>
+                                <Typography type="headline" component="h3">
+                                    {Lang[window.Lang].pages.com.students.personal_info.title}
+                                </Typography>
+                                <TextField
+                                    id="department"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.department}
+                                    defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    id="duty"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.duty}
+                                    defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    id="mobile"
+                                    label={Lang[window.Lang].pages.com.students.tel}
+                                    defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="mail"
+                                    label={Lang[window.Lang].pages.com.students.email}
+                                    defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
+                                    fullWidth
+                                />
+                                <TextField
+                                    id="wechat"
+                                    label={Lang[window.Lang].pages.com.students.personal_info.wechat}
+                                    defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
+                                    fullWidth
+                                />
 
 
-                                    <Button color="primary" style={{ margin: 10 }} onClick={
-                                        (e) => {
-                                            var cb = (route, message, arg) => {
-                                                console.log(message);
-                                                if (message.code === Code.LOGIC_SUCCESS) {
-                                                    console.log(getCache(DATA_TYPE_STUDENT));
-                                                    for (var i = 0; i < getCache(DATA_TYPE_STUDENT).length; i++) {
-                                                        if (getCache(DATA_TYPE_STUDENT)[i].id === arg.id) {
-                                                            console.log(arg.id);
-                                                            getCache(DATA_TYPE_STUDENT)[i][arg.key] = info;
-                                                            break;
-                                                        }
-                                                    }
-                                                    this.fresh();
-                                                }
-                                            }
-                                            var id = this.state.selected.id;
-                                            //var id=sessionStorage.id;
-                                            var obj = {
-                                                name:document.getElementById("student_name").value,
-                                                identity_card:document.getElementById("licence.code").value,
-                                                course_id:document.getElementById("course_id").value==="未设置"?0:document.getElementById("course_id").value,
-                                                register:document.getElementById("register").value,
-                                                department:document.getElementById("department").value,
-                                                duty:document.getElementById("duty").value,
-                                                mobile:document.getElementById("mobile").value,
-                                                mail:document.getElementById("mail").value,                                          
-                                                wechat:document.getElementById("wechat").value,                                                                                          
-                                                
-
-                                            }
-                                            console.log(obj)
-                                            getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: this, data: obj });
-
-                                        }
-                                    }>
-                                        {Lang[window.Lang].pages.main.certain_button}
-                                    </Button>
-                                </div>
-                                {/* <div>
+                                <Button
+                                    color="primary"
+                                    style={{ margin: 10 }}
+                                    onClick={(e) => {
+                                        this.modifyStudent(e)
+                                    }}>
+                                    {Lang[window.Lang].pages.main.certain_button}
+                                </Button>
+                            </div>
+                            {/* <div>
                                     <Typography type="headline" component="h3">
                                         {Lang[window.Lang].pages.com.students.proj_exp.title}
                                     </Typography>
@@ -578,11 +577,11 @@ class Enrolled extends Component {
                                         {Lang[window.Lang].pages.main.certain_button}
                                     </Button>
                                 </div> */}
-                            </Paper>
+                        </Paper>
 
 
-                        </div>
-                    </Drawer> : <div />}
+                    </div>
+                </Drawer>
                 {this.newStudentDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
