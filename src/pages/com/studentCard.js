@@ -174,20 +174,32 @@ class ComCard extends Component {
             flexDirection: 'column',
           }}>
             <CardContent style={{ flex: '1 0 auto', }}>
-              <Typography type="headline">
+              <Typography className={"nyx-card-name"}>
                 {name}
               </Typography>
-              <Typography component="p">
-                {"联系电话:" + mobile}
+              <Typography className={"nyx-card-key"}>
+                {"联系电话:"}
               </Typography>
-              <Typography component="p">
-                {"电子邮件:" + email}
+              <Typography className={"nyx-card-value"}>
+                {tel}
               </Typography>
-              <Typography component="p">
-                {"客户等级:" + level}<br />
+              <Typography className={"nyx-card-name"}>
+                {"电子邮件:"}
               </Typography>
-              <Typography component="p">
-                {"所在城市:" + city}
+              <Typography className={"nyx-card-value"}>
+                {email}
+              </Typography>
+              <Typography className={"nyx-card-name"}>
+                {"客户等级:"}<br />
+              </Typography>
+              <Typography className={"nyx-card-value"}>
+                {level}
+              </Typography>
+              <Typography className={"nyx-card-name"}>
+                {"所在城市:"}
+              </Typography>
+              <Typography className={"nyx-card-value"}>
+                {city}
               </Typography>
             </CardContent>
             <div style={{

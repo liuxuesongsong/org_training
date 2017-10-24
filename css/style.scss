@@ -1,4 +1,7 @@
 @charset "utf-8";
+@import "src/mixins/color";
+@import "src/mixins/shadow";
+@import "src/mixins/font";
 
 @import "src/reset_materialui";
 @import "src/login";
@@ -7,3 +10,7 @@
 @import "src/home";
 @import "src/company";
 @import "src/enroll";
+
+.font{
+    @extend .glyphicon-menu-down:before;
+}

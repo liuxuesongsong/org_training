@@ -501,6 +501,10 @@ class Enrolled extends Component {
                                             //var id=sessionStorage.id;
                                             var obj = {
                                                 name:document.getElementById("student_name").value,
+                                                mobile:document.getElementById("tel").value,
+                                                mail:document.getElementById("email").value,
+                                                area_id:document.getElementById("area_id").value,
+                                                course_id:document.getElementById("course_id").value,
                                                 identity_card:document.getElementById("licence.code").value,
                                                 course_id:document.getElementById("course_id").value==="未设置"?0:document.getElementById("course_id").value,
                                                 register:document.getElementById("register").value,
