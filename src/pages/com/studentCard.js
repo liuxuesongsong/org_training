@@ -181,7 +181,7 @@ class ComCard extends Component {
                 {"联系电话:"}
               </Typography>
               <Typography className={"nyx-card-value"}>
-                {tel}
+                {mobile}
               </Typography>
               <Typography className={"nyx-card-name"}>
                 {"电子邮件:"}
