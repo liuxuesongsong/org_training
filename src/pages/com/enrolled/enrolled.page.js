@@ -28,9 +28,9 @@ import StudentCard from '../studentCard.js';
 
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
-    UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
+    REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
-    CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED
+    CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED, NOTICE
 } from '../../../enum';
 import Lang from '../../../language';
 import Code from '../../../code';
@@ -127,7 +127,7 @@ class Enrolled extends Component {
 
     removeStudent(id) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.REMOVE_SUCCESS) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 for (var i = 0; i < window.CacheData.students.length; i++) {
                     if (window.CacheData.students[i].id === arg.id) {
                         window.CacheData.students.splice(i, 1);
@@ -141,8 +141,7 @@ class Enrolled extends Component {
             }
             this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
         }
-        console.log(id);
-        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, id: id }, cb, { id: id });
+        getData(getRouter(REMOVE_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
     kickClazz() {
@@ -312,6 +311,7 @@ class Enrolled extends Component {
                                 city={Number(student.area_id)}
                                 action={[() => {
                                     this.state.selected = student;
+                                    this.state.selectedStudentId = student.id;
                                     this.state.showInfo = true;
                                     this.toggleDrawer(true)()
                                 }, () => {
@@ -325,7 +325,7 @@ class Enrolled extends Component {
                                         }]);
                                 }, () => {
                                     this.state.selected = student;
-                                    this.popUpNotice(ALERT, 0, "删除学生" + student.base_info.name, [
+                                    this.popUpNotice(ALERT, 0, "删除学生" + student.name, [
                                         () => {
                                             this.removeStudent(student.id);
                                             this.closeNotice();
@@ -496,6 +496,7 @@ class Enrolled extends Component {
                                                             break;
                                                         }
                                                     }
+                                                    this.fresh();
                                                 }
                                             }
                                             var id = this.state.selected.id;
@@ -514,9 +515,8 @@ class Enrolled extends Component {
                                                 
 
                                             }
-                                            console.log(obj);
-                                            console.log(sessionStorage.session);
-                                            getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: id, student: obj }, cb, { self: this, data: obj });
+                                            console.log(this.state.selectedStudentId)
+                                            getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: this, data: obj });
 
                                         }
                                     }>
