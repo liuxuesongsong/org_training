@@ -164,7 +164,7 @@ class Students extends Component {
             "id": 12,
             "base_info": {
                 "name": "",
-                "tel": "",
+                "mobile": "",
                 "email": "",
                 "city": 0,
                 "level": 0,
@@ -236,9 +236,9 @@ class Students extends Component {
                             fullWidth
                         />
                         <TextField
-                            id="tel"
-                            label={Lang[window.Lang].pages.com.students.tel}
-                            defaultValue={student.base_info.tel}
+                            id="mobile"
+                            label={Lang[window.Lang].pages.com.students.mobile}
+                            defaultValue={student.base_info.mobile}
                             fullWidth
                         />
                         <TextField
@@ -266,8 +266,8 @@ class Students extends Component {
                         <Button
                             onClick={() => {
                                 var base_info = {
-                                    name: document.getElementById("student_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("student_name").value,
-                                    tel: document.getElementById("tel").value,
+                                    name: document.gemobileementById("student_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("student_name").value,
+                                    mobile: document.getElementById("mobile").value,
                                     email: document.getElementById("email").value,
                                     city: document.getElementById("city").value,
                                     level: document.getElementById("level").value,
@@ -337,7 +337,7 @@ class Students extends Component {
                                     type={CARD_TYPE_INFO}
                                     key={student.id}
                                     name={student.base_info.name}
-                                    tel={student.base_info.tel}
+                                    mobile={student.base_info.mobile}
                                     email={student.base_info.email}
                                     level={(student.base_info.level)}
                                     city={(student.base_info.city)}

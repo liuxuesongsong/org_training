@@ -88,6 +88,8 @@ const Language = {
                     base_info: "基本信息",
                     name: "姓名",
                     tel: "电话",
+                    major:"考试级别",
+                    register:"临时登记编号",
                     email: "电子邮件",
                     city: "地区",
                     level: {
@@ -105,6 +107,9 @@ const Language = {
                             1: "身份证号码",
                             2: "护照号码"
                         },
+                        "department":"部门",
+                        "duty":"职务",
+                        "wechat":"微信",
                         "edu": "学历",
                         "working_time": "从业时间",
                         "total_amount": "累计项目总金额",

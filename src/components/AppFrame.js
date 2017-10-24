@@ -670,7 +670,7 @@ class AppFrame extends Component {
       <div className="nyx">
         {sessionStorage.getItem("logged") === "true" ?
           <div className={classes.appFrame}>
-            <AppBar className={[appBarClassName,'nyx-topbar']}>
+            <AppBar className={appBarClassName+'nyx-topbar'}>
               <Toolbar>
                 <IconButton
                   color="contrast"
@@ -694,7 +694,7 @@ class AppFrame extends Component {
               </Toolbar>
             </AppBar>
             <AppDrawer
-              className={[classes.drawer,'nyx-sidebar']}
+              className={classes.drawer+'nyx-sidebar'}
               docked={drawerDocked}
               routes={routes}
               onRequestClose={this.handleDrawerClose}

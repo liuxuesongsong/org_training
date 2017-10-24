@@ -397,7 +397,7 @@ class Info extends Component {
                         fullWidth>
                     </TextField>
                     <TextField
-                        id="tel"
+                        id="mobile"
                         label={LANG_PREFIX.finance.tel}
                         value={this.state.finance.tel}
                         onChange={event => {

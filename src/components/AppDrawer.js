@@ -87,7 +87,7 @@ function AppDrawer(props) {
       keepMounted
     >
       <div className={classes.nav}>
-        <Toolbar className={[classes.toolbar,'nyx-logo']}>
+        <Toolbar className={classes.toolbar+' nyx-logo'}>
           <Typography type="title" gutterBottom color="inherit">
             {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? "企业登陆" : "机构登陆"}
           </Typography>

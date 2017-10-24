@@ -141,7 +141,7 @@ class Exams extends Component {
                                     type={CARD_TYPE_COMMON}
                                     key={student.id}
                                     name={student.base_info.name}
-                                    tel={student.base_info.tel}
+                                    mobile={student.base_info.mobile}
                                     email={student.base_info.email}
                                     level={student.base_info.level}
                                     city={student.base_info.city}>
@@ -156,7 +156,7 @@ class Exams extends Component {
                                     type={CARD_TYPE_COMMON}
                                     key={student.id}
                                     name={student.base_info.name}
-                                    tel={student.base_info.tel}
+                                    mobile={student.base_info.mobile}
                                     email={student.base_info.email}
                                     level={student.base_info.level}
                                     city={student.base_info.city}>
@@ -171,7 +171,7 @@ class Exams extends Component {
                                     type={CARD_TYPE_EXAM}
                                     key={student.id}
                                     name={student.base_info.name}
-                                    tel={student.base_info.tel}
+                                    mobile={student.base_info.mobile}
                                     email={student.base_info.email}
                                     level={student.base_info.level}
                                     city={student.base_info.city}

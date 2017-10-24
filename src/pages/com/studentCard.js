@@ -21,14 +21,20 @@ class ComCard extends Component {
   }
 
   static propTypes = {
-    type: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    tel: PropTypes.string.isRequired,
-    email: PropTypes.string.isRequired,
-    level: PropTypes.number.isRequired,
-    city: PropTypes.number.isRequired,
-    action: PropTypes.array.isRequired,
-    status: PropTypes.string.isRequired,
+    // type: PropTypes.string.isRequired,
+    // name: PropTypes.string.isRequired,
+    // mobile: PropTypes.string.isRequired,
+    // mail: PropTypes.string.isRequired,
+    // level: PropTypes.number.isRequired,
+    // city: PropTypes.number.isRequired,
+    // action: PropTypes.array.isRequired,
+    // status: PropTypes.string.isRequired,
+    // identity_card:PropTypes.string.isRequired,
+    // course_id:PropTypes.number.isRequired,
+    // register:PropTypes.string.isRequired,
+    // department:PropTypes.string.isRequired,
+    // duty:PropTypes.string.isRequired,
+    // wechat:PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -140,7 +146,7 @@ class ComCard extends Component {
     const {
       type,
       name,
-      tel,
+      mobile,
       email,
       level,
       city,
@@ -155,14 +161,14 @@ class ComCard extends Component {
     return (
       <div>
         <Card style={{ display: 'flex', }}>
-          <CardMedia
-            style={{
-              width: 151,
-              height: 151,
-            }}
-            image="/images/live-from-space.jpg"
-            title="Live from space album cover"
-          />
+         <CardMedia
+         style={{
+           width: 151,
+           height: 151,
+         }}
+         //image="/images/live-from-space.jpg"
+         title="Live from space album cover"
+       />
           <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -172,7 +178,7 @@ class ComCard extends Component {
                 {name}
               </Typography>
               <Typography component="p">
-                {"联系电话:" + tel}
+                {"联系电话:" + mobile}
               </Typography>
               <Typography component="p">
                 {"电子邮件:" + email}

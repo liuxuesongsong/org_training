@@ -203,7 +203,7 @@ class Home extends Component {
                                     type={CARD_TYPE_UNARRANGE}
                                     key={CARD_TYPE_UNARRANGE + student.id}
                                     name={student.name}
-                                    tel={student.mobile}
+                                    mobile={student.mobile}
                                     email={student.mail}
                                     level={student.course_id}
                                     city={student.area_id}
@@ -223,7 +223,7 @@ class Home extends Component {
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
                                             name={student.name}
-                                            tel={student.mobile}
+                                            mobile={student.mobile}
                                             email={student.mail}
                                             level={student.course_id}
                                             city={student.area_id}
@@ -255,7 +255,7 @@ class Home extends Component {
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
                                             name={student.name}
-                                            tel={student.mobile}
+                                            mobile={student.mobile}
                                             email={student.mail}
                                             level={student.course_id}
                                             city={student.area_id}
@@ -267,7 +267,7 @@ class Home extends Component {
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
                                             name={student.name}
-                                            tel={student.mobile}
+                                            mobile={student.mobile}
                                             email={student.mail}
                                             level={student.course_id}
                                             city={student.area_id}

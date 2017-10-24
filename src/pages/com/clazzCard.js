@@ -24,7 +24,7 @@ const styleSheet = createStyleSheet('SimpleCard', theme => ({
 class ClazzCard extends Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    tel: PropTypes.string.isRequired,
+    mobile: PropTypes.string.isRequired,
     email: PropTypes.string.isRequired,
     level: PropTypes.number.isRequired,
     city: PropTypes.number.isRequired
@@ -34,7 +34,7 @@ class ClazzCard extends Component {
   render() {
     const {
       name,
-      tel,
+      mobile,
       email,
       level,
       city
@@ -51,8 +51,8 @@ class ClazzCard extends Component {
               <Typography type="name">
                 {name}
               </Typography>
-              <Typography type="tel" component="h2">
-                {tel}
+              <Typography type="mobile" component="h2">
+                {mobile}
               </Typography>
               <Typography type="email">
                 {email}

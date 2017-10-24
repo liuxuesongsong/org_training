@@ -210,9 +210,21 @@ export function getRouter(key) {
  * - clazz 所属班级
  */
 export function getCache(key = DATA_TYPE_ALL) {
+  console.log(key);
+  console.log(CacheData);
   if (key === DATA_TYPE_ALL) {
     return window.CacheData;
   }
+  // if(key==="students"){
+  //   var len = window.CacheData["students"].length;
+  //   var res = [];
+  //   for(var i = 0;i<len;i++){
+  //     res[i] = window.CacheData["students"][i];
+  //     res[i]["mobile"] = res[i]["mobile"].toString();
+  //     // res[i]["wechat"] = res[i]["wechat"].toString();
+  //   }
+  //   return res;
+  // }
   return window.CacheData[key];
 }
 

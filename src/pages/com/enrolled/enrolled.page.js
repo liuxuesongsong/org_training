@@ -214,7 +214,7 @@ class Enrolled extends Component {
                         <TextField
                             id="new_level"
                             label={Lang[window.Lang].pages.com.students.level.title}
-                            defaultValue={1}
+                            defaultValue={"1"}
                             fullWidth
                         />
                     </div>
@@ -305,8 +305,8 @@ class Enrolled extends Component {
                                 type={CARD_TYPE_ENROLL}
                                 key={student.id}
                                 name={student.name.toString()}
-                                tel={student.mobile === undefined ? "" : student.mobile}
-                                email={student.mail === undefined ? "" : student.mail}
+                                mobile={student.mobile === undefined ? "" : student.mobile.toString()}
+                                email={student.mail.toString() === undefined ? "" : student.mail.toString()}
                                 level={Number(student.course_id)}
                                 city={Number(student.area_id)}
                                 action={[() => {
@@ -421,75 +421,73 @@ class Enrolled extends Component {
                                     <TextField
                                         id="student_name"
                                         label={Lang[window.Lang].pages.com.students.name}
-                                        defaultValue={this.state.selected.name}
+                                        defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
                                         fullWidth
                                     />
                                     <TextField
-                                        id="tel"
-                                        label={Lang[window.Lang].pages.com.students.tel}
-                                        defaultValue={this.state.selected.mobile}
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        id="email"
-                                        label={Lang[window.Lang].pages.com.students.email}
-                                        defaultValue={this.state.selected.mail}
-                                        fullWidth
-                                    />
-                                    <TextField
-                                        id="area_id"
-                                        label={Lang[window.Lang].pages.com.students.city}
-                                        defaultValue={this.state.selected.area_id.toString()}
-                                        fullWidth
-                                    />
+                                        id="licence.code"
+                                        label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                        defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
+                                        fullWidth>
+                                    </TextField>
                                     <TextField
                                         id="course_id"
                                         label={Lang[window.Lang].pages.com.students.level.title}
-                                        defaultValue={this.state.selected.course_id.toString()}
+                                        defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
                                         fullWidth
                                     />
+        
+                                    <TextField
+                                        id="register"
+                                        label={Lang[window.Lang].pages.com.students.register}
+                                        defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
+                                        fullWidth>
+                                    </TextField>
+                                   
                                 </div>
                                 <div>
                                     <Typography type="headline" component="h3">
                                         {Lang[window.Lang].pages.com.students.personal_info.title}
                                     </Typography>
+                                    <TextField
+                                        id="department"
+                                        label={Lang[window.Lang].pages.com.students.personal_info.department}
+                                        defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
+                                        fullWidth>
+                                    </TextField>
+                                    <TextField
+                                        id="duty"
+                                        label={Lang[window.Lang].pages.com.students.personal_info.duty}
+                                        defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
+                                        fullWidth>
+                                    </TextField>
+                                    <TextField
+                                        id="mobile"
+                                        label={Lang[window.Lang].pages.com.students.tel}
+                                        defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        id="mail"
+                                        label={Lang[window.Lang].pages.com.students.email}
+                                        defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
+                                        fullWidth
+                                    />
+                                    <TextField
+                                        id="wechat"
+                                        label={Lang[window.Lang].pages.com.students.personal_info.wechat}
+                                        defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
+                                        fullWidth
+                                    />
 
-                                    <TextField
-                                        id="licence.code"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                        defaultValue={this.state.selected.identity_card}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="edu"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.edu}
-                                        defaultValue={this.state.selected.education}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="working_time"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.working_time}
-                                        defaultValue={this.state.selected.work_years}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="total_amount"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.total_amount}
-                                        defaultValue={this.state.selected.total_amount}
-                                        fullWidth>
-                                    </TextField>
-                                    <TextField
-                                        id="soft_amount"
-                                        label={Lang[window.Lang].pages.com.students.personal_info.soft_amount}
-                                        defaultValue={this.state.selected.soft_amount}
-                                        fullWidth>
-                                    </TextField>
+
                                     <Button color="primary" style={{ margin: 10 }} onClick={
                                         (e) => {
                                             var cb = (route, message, arg) => {
                                                 console.log(message);
                                                 if (message.code === Code.LOGIC_SUCCESS) {
-                                                    for (var i = 0; i < getCache(student).length; i++) {
+                                                    console.log(getCache(DATA_TYPE_STUDENT));
+                                                    for (var i = 0; i < getCache(DATA_TYPE_STUDENT).length; i++) {
                                                         if (getCache(DATA_TYPE_STUDENT)[i].id === arg.id) {
                                                             console.log(arg.id);
                                                             getCache(DATA_TYPE_STUDENT)[i][arg.key] = info;
@@ -503,19 +501,18 @@ class Enrolled extends Component {
                                             //var id=sessionStorage.id;
                                             var obj = {
                                                 name:document.getElementById("student_name").value,
-                                                tel:document.getElementById("tel").value,
-                                                email:document.getElementById("email").value,
-                                                area_id:document.getElementById("area_id").value,
-                                                course_id:document.getElementById("course_id").value,
                                                 identity_card:document.getElementById("licence.code").value,
-                                                education:document.getElementById("edu").value,
-                                                work_years:document.getElementById("working_time").value,
-                                                total_amount:document.getElementById("total_amount").value,
-                                                soft_amount:document.getElementById("soft_amount").value,
+                                                course_id:document.getElementById("course_id").value==="未设置"?0:document.getElementById("course_id").value,
+                                                register:document.getElementById("register").value,
+                                                department:document.getElementById("department").value,
+                                                duty:document.getElementById("duty").value,
+                                                mobile:document.getElementById("mobile").value,
+                                                mail:document.getElementById("mail").value,                                          
+                                                wechat:document.getElementById("wechat").value,                                                                                          
                                                 
 
                                             }
-                                            console.log(this.state.selectedStudentId)
+                                            console.log(obj)
                                             getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: this, data: obj });
 
                                         }
