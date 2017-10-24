@@ -565,10 +565,9 @@ class Info extends Component {
 
     render() {
         return (
-            <div>
-
-                <div style={{ paddingTop: 80, paddingLeft: window.innerWidth * 0.1, justifyContent: 'space-between' }}>
-                    <div style={{ width: window.innerWidth * 0.8, height: window.innerHeight }}>
+            <div className={'nyx-page'}>
+                <div className={'nyx-company-paper'}>
+                    <div>
                         {this.subShow()}
                     </div>
                 </div>

@@ -284,10 +284,10 @@ class Enrolled extends Component {
 
     render() {
         return (
-            <div style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}>
-                <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unenrolled}
-                        <Button fab color="primary" aria-label="add" className={{ marginRight: 10 }}
+            <div className={'nyx-page'}>
+                <Paper className={'nyx-paper nyx-list-paper'}>
+                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.unenrolled}
+                        <Button fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                             onClick={() => {
                                 this.setState({
                                     openNewStudentDialog: true
@@ -335,8 +335,8 @@ class Enrolled extends Component {
                         )}
                     </List>
                 </Paper>
-                <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.unarrange}</ListSubheader>}>
+                <Paper className={'nyx-paper nyx-list-paper'}>
+                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.unarrange}</ListSubheader>}>
                         {this.state.unarragedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}
@@ -361,8 +361,8 @@ class Enrolled extends Component {
                         )}
                     </List>
                 </Paper>
-                <Paper style={Style.paper}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.enrolled.arranged}</ListSubheader>}>
+                <Paper className={'nyx-paper nyx-list-paper'}>
+                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.arranged}</ListSubheader>}>
                         {this.state.arrangedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ARRANGE}

@@ -192,6 +192,9 @@
 .nyx-login-body > div > div {
   margin-bottom: 1rem; }
 
+.nyx-topbar {
+  height: 64px; }
+
 .nyx-z0 {
   -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12); }
@@ -308,5 +311,34 @@
     border-right-color: #0D47A1;
     background-color: #2196F3;
     color: #fff; }
+
+.nyx-page {
+  padding-top: 64px;
+  margin: 0 auto; }
+
+#companyid {
+  height: 150px; }
+
+.nyx-area-paper {
+  height: 350px; }
+
+.nyx-paper {
+  float: left;
+  width: 300px;
+  margin: 1rem;
+  padding: 1rem; }
+  .nyx-paper .nyx-paper-header {
+    padding-left: 0 !important; }
+
+.nyx-list-paper {
+  height: 550px; }
+
+.nyx-company-paper {
+  width: 800px; }
+
+.nyx-paper-header-btn {
+  float: right;
+  position: relative;
+  bottom: -28px; }
 
 /*# sourceMappingURL=style.css.map */
