@@ -39,18 +39,13 @@ class Admin extends Component {
     }
 
     submit = (sendObj) => {
-
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
 
                 for (var key in this.state.temObj) {
                     window.CacheData.admin[key] = this.state.temObj[key];
                 }
-
-
-                // arg.self.state.data = 
             }
-
         }
         var obj = {
             account: this.state.account,
@@ -67,101 +62,96 @@ class Admin extends Component {
 
     render() {
         return (
-            <div
-
-            >
-                <Paper style={{ width: 600 }}>
-                    <TextField
-                        id="account"
-                        label={Lang[window.Lang].pages.com.infos.admin.account}
-                        value={this.state.account}
-                        onChange={(event, value) => {
-                            this.state.temObj.account = value;
-                            // this.setState({
-                            //     account: event.target.value,
-                            // });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="password"
-                        label={Lang[window.Lang].pages.com.infos.admin.password}
-                        value={this.state.password}
-                        onChange={event => {
-                            this.setState({
-                                password: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="name"
-                        label={Lang[window.Lang].pages.com.infos.admin.name}
-                        value={this.state.name}
-                        onChange={(event, value) => {
-                            this.state.temObj.account = value;
-                            this.setState({
-                                name: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="duty"
-                        label={Lang[window.Lang].pages.com.infos.admin.duty}
-                        value={this.state.duty}
-                        onChange={event => {
-                            this.setState({
-                                duty: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="department"
-                        label={Lang[window.Lang].pages.com.infos.admin.department}
-                        value={this.state.mail}
-                        onChange={event => {
-                            this.setState({
-                                mail: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="mobile"
-                        label={Lang[window.Lang].pages.com.infos.admin.mobile}
-                        value={this.state.mobile}
-                        onChange={event => {
-                            this.setState({
-                                mobile: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="mail"
-                        label={Lang[window.Lang].pages.com.infos.admin.mail}
-                        value={this.state.mail}
-                        onChange={event => {
-                            this.setState({
-                                mail: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <Button
-                        raised
-                        color="accent"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        {Lang[window.Lang].pages.main.certain_button}
-                    </Button>
-                </Paper>
-
-            </div>
+            <Paper style={{ width: 600 }}>
+                <TextField
+                    id="account"
+                    label={Lang[window.Lang].pages.com.infos.admin.account}
+                    value={this.state.account}
+                    onChange={(event, value) => {
+                        this.state.temObj.account = value;
+                        // this.setState({
+                        //     account: event.target.value,
+                        // });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="password"
+                    label={Lang[window.Lang].pages.com.infos.admin.password}
+                    value={this.state.password}
+                    onChange={event => {
+                        this.setState({
+                            password: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="name"
+                    label={Lang[window.Lang].pages.com.infos.admin.name}
+                    value={this.state.name}
+                    onChange={(event, value) => {
+                        this.state.temObj.account = value;
+                        this.setState({
+                            name: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="duty"
+                    label={Lang[window.Lang].pages.com.infos.admin.duty}
+                    value={this.state.duty}
+                    onChange={event => {
+                        this.setState({
+                            duty: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="department"
+                    label={Lang[window.Lang].pages.com.infos.admin.department}
+                    value={this.state.mail}
+                    onChange={event => {
+                        this.setState({
+                            mail: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="mobile"
+                    label={Lang[window.Lang].pages.com.infos.admin.mobile}
+                    value={this.state.mobile}
+                    onChange={event => {
+                        this.setState({
+                            mobile: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="mail"
+                    label={Lang[window.Lang].pages.com.infos.admin.mail}
+                    value={this.state.mail}
+                    onChange={event => {
+                        this.setState({
+                            mail: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <Button
+                    raised
+                    color="accent"
+                    onClick={() => {
+                        this.submit();
+                    }}
+                >
+                    {Lang[window.Lang].pages.main.certain_button}
+                </Button>
+            </Paper>
         );
     }
 

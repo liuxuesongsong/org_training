@@ -50,91 +50,87 @@ class Express extends Component {
         var obj = {
             zip_code: this.state.zip_code,
             receive_address: this.state.receive_address,
-            district:this.state.district,
+            district: this.state.district,
             receiver: this.state.receiver,
             receive_phone: this.state.receive_phone,
         }
-        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company:obj }, cb, { self: this, data: obj });
+        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: obj }, cb, { self: this, data: obj });
     }
 
     render() {
         return (
-            <div>
-
-                <Paper style={{ width: 600 }}>
+            <Paper style={{ width: 600 }}>
 
 
-                    <TextField
-                        id="zip_code"
-                        label={LANG_PREFIX.zip_code}
-                        value={this.state.zip_code}
-                        onChange={event => {
-                            this.setState({
-                                zip_code: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="receive_address"
-                        label={LANG_PREFIX.receive_address}
-                        value={this.state.receive_address}
-                        onChange={event => {
-                            this.setState({
-                                receive_address: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
+                <TextField
+                    id="zip_code"
+                    label={LANG_PREFIX.zip_code}
+                    value={this.state.zip_code}
+                    onChange={event => {
+                        this.setState({
+                            zip_code: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="receive_address"
+                    label={LANG_PREFIX.receive_address}
+                    value={this.state.receive_address}
+                    onChange={event => {
+                        this.setState({
+                            receive_address: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
 
-                    <TextField
-                        id="district"
-                        label={LANG_PREFIX.district}
-                        value={this.state.district}
-                        onChange={event => {
-                            this.setState({
-                                district: event.target.value,
-                            });
-                        }}
-                        fullWidth>
+                <TextField
+                    id="district"
+                    label={LANG_PREFIX.district}
+                    value={this.state.district}
+                    onChange={event => {
+                        this.setState({
+                            district: event.target.value,
+                        });
+                    }}
+                    fullWidth>
 
-                    </TextField>
+                </TextField>
 
-                    <TextField
-                        id="receiver"
-                        label={LANG_PREFIX.receiver}
-                        value={this.state.receiver}
-                        onChange={event => {
-                            this.setState({
-                                receiver: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
+                <TextField
+                    id="receiver"
+                    label={LANG_PREFIX.receiver}
+                    value={this.state.receiver}
+                    onChange={event => {
+                        this.setState({
+                            receiver: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
 
-                    <TextField
-                        id="receive_phone"
-                        label={LANG_PREFIX.receive_phone}
-                        value={this.state.receive_phone}
-                        onChange={event => {
-                            this.setState({
-                                receive_phone: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <Button
-                        raised
-                        color="accent"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        {Lang[window.Lang].pages.main.certain_button}
-                    </Button>
-                </Paper>
-
-            </div>
+                <TextField
+                    id="receive_phone"
+                    label={LANG_PREFIX.receive_phone}
+                    value={this.state.receive_phone}
+                    onChange={event => {
+                        this.setState({
+                            receive_phone: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <Button
+                    raised
+                    color="accent"
+                    onClick={() => {
+                        this.submit();
+                    }}
+                >
+                    {Lang[window.Lang].pages.main.certain_button}
+                </Button>
+            </Paper>
         );
     }
 

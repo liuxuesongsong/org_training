@@ -11,6 +11,9 @@ import {
   CARD_TYPE_COMMON, CARD_TYPE_INFO, CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_EXAM, CARD_TYPE_UNARRANGE,
   STATUS_AGREED_UNDO, STATUS_AGREED_AGREE, STATUS_AGREED_REFUSED
 } from '../../enum';
+import {
+  getCity
+} from '../../utils/helpers';
 import Lang from '../../language';
 
 class ComCard extends Component {
@@ -162,14 +165,14 @@ class ComCard extends Component {
     return (
       <div>
         <Card style={{ display: 'flex', }}>
-         <CardMedia
-         style={{
-           width: 151,
-           height: 151,
-         }}
-         //image="/images/live-from-space.jpg"
-         title="Live from space album cover"
-       />
+          <CardMedia
+            style={{
+              width: 151,
+              height: 151,
+            }}
+            //image="/images/live-from-space.jpg"
+            title="Live from space album cover"
+          />
           <div style={{
             display: 'flex',
             flexDirection: 'column',
@@ -194,13 +197,13 @@ class ComCard extends Component {
                 {"客户等级:"}<br />
               </Typography>
               <Typography className={"nyx-card-value"}>
-                {level}
+                {level + "级"}
               </Typography>
               <Typography className={"nyx-card-name"}>
                 {"所在城市:"}
               </Typography>
               <Typography className={"nyx-card-value"}>
-                {city}
+                {getCity(city)}
               </Typography>
             </CardContent>
             <div style={{

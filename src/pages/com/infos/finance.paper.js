@@ -35,7 +35,6 @@ class Finance extends Component {
     }
 
     submit = () => {
-
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 window.CacheData.finance = arg.data;
@@ -55,86 +54,83 @@ class Finance extends Component {
     render() {
 
         return (
-            <div>
-
-                <Paper style={{ width: 600 }}>
-                    <TextField
-                        id="allname"
-                        label={LANG_PREFIX.allname}
-                        value={this.state.allname}
-                        onChange={event => {
-                            this.setState({
-                                allname: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="taxpayer_number"
-                        label={LANG_PREFIX.taxpayer_number}
-                        value={this.state.taxpayer_number}
-                        onChange={event => {
-                            this.setState({
-                                taxpayer_number: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="opening_bank"
-                        label={LANG_PREFIX.opening_bank}
-                        value={this.state.opening_bank}
-                        onChange={event => {
-                            this.setState({
-                                opening_bank: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="bank_account"
-                        label={LANG_PREFIX.bank_account}
-                        value={this.state.bank_account}
-                        onChange={event => {
-                            this.setState({
-                                bank_account: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="c_address"
-                        label={LANG_PREFIX.c_address}
-                        value={this.state.c_address}
-                        onChange={event => {
-                            this.setState({
-                                c_address: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <TextField
-                        id="financial_call"
-                        label={LANG_PREFIX.financial_call}
-                        value={this.state.financial_call}
-                        onChange={event => {
-                            this.setState({
-                                financial_call: event.target.value,
-                            });
-                        }}
-                        fullWidth>
-                    </TextField>
-                    <Button
-                        raised
-                        color="accent"
-                        onClick={() => {
-                            this.submit();
-                        }}
-                    >
-                        {Lang[window.Lang].pages.main.certain_button}
-                    </Button>
-                </Paper>
-            </div>
+            <Paper style={{ width: 600 }}>
+                <TextField
+                    id="allname"
+                    label={LANG_PREFIX.allname}
+                    value={this.state.allname}
+                    onChange={event => {
+                        this.setState({
+                            allname: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="taxpayer_number"
+                    label={LANG_PREFIX.taxpayer_number}
+                    value={this.state.taxpayer_number}
+                    onChange={event => {
+                        this.setState({
+                            taxpayer_number: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="opening_bank"
+                    label={LANG_PREFIX.opening_bank}
+                    value={this.state.opening_bank}
+                    onChange={event => {
+                        this.setState({
+                            opening_bank: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="bank_account"
+                    label={LANG_PREFIX.bank_account}
+                    value={this.state.bank_account}
+                    onChange={event => {
+                        this.setState({
+                            bank_account: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="c_address"
+                    label={LANG_PREFIX.c_address}
+                    value={this.state.c_address}
+                    onChange={event => {
+                        this.setState({
+                            c_address: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <TextField
+                    id="financial_call"
+                    label={LANG_PREFIX.financial_call}
+                    value={this.state.financial_call}
+                    onChange={event => {
+                        this.setState({
+                            financial_call: event.target.value,
+                        });
+                    }}
+                    fullWidth>
+                </TextField>
+                <Button
+                    raised
+                    color="accent"
+                    onClick={() => {
+                        this.submit();
+                    }}
+                >
+                    {Lang[window.Lang].pages.main.certain_button}
+                </Button>
+            </Paper>
         );
     }
 

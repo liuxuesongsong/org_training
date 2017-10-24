@@ -41,11 +41,9 @@ class Base extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 window.CacheData.base = arg.data;
-                // arg.self.state.data = 
             }
         }
 
-        // this.state.submit_obj
         var obj = {
             "c_name": document.getElementById("c_name").value,
             "c_area_id": document.getElementById("c_area_id").value,
@@ -107,9 +105,6 @@ class Base extends Component {
             </div>
         );
     }
-
-
-
 };
 
 export default Base;

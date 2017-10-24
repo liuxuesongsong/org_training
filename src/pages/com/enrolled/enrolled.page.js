@@ -139,9 +139,6 @@ class Enrolled extends Component {
                 for (var i = 0; i < window.CacheData.students.length; i++) {
                     if (window.CacheData.students[i].id === arg.id) {
                         window.CacheData.students.splice(i, 1);
-                        // this.setState({
-                        //     students: this.state.students
-                        // })
                         break;
                     }
                 }
@@ -162,7 +159,6 @@ class Enrolled extends Component {
             }
         }
         var id = this.state.selected.id;
-        //var id=sessionStorage.id;
         var obj = {
             name: document.getElementById("student_name").value,
             identity_card: document.getElementById("licence.code").value,
@@ -175,19 +171,6 @@ class Enrolled extends Component {
             wechat: document.getElementById("wechat").value,
         }
         getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: window.currentPage, data: obj });
-    }
-
-    kickClazz() {
-        var id = this.state.selectedStudentId;
-        var cb = (router, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                // let student = getStudent(arg.id);
-                // student.status[STATUS_ENROLLED].status = STATUS_ENROLLED_DID;
-                // student.status[STATUS_ARRANGED].status = STATUS_ARRANGED_UNDO;
-                // this.fresh();
-            }
-        }
-        getData(getRouter(EXIT_CLASS), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
     agreeArrange() {
@@ -327,7 +310,8 @@ class Enrolled extends Component {
                                 })
                             }}
                         >
-                            <AddIcon />
+
+                            {"新增"}
                         </Button>
                     </ListSubheader>}>
                         {this.state.newStudents.map(student =>
@@ -441,145 +425,80 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-
                         <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
-                            <div>
-                                <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.com.students.base_info}
-                                </Typography>
-                                <TextField
-                                    id="student_name"
-                                    label={Lang[window.Lang].pages.com.students.name}
-                                    defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="licence.code"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                    defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="course_id"
-                                    label={Lang[window.Lang].pages.com.students.level.title}
-                                    defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
-                                    fullWidth
-                                />
+                            <Typography type="headline" component="h3">
+                                {Lang[window.Lang].pages.com.students.base_info}
+                            </Typography>
+                            <TextField
+                                id="student_name"
+                                label={Lang[window.Lang].pages.com.students.name}
+                                defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
+                                fullWidth
+                            />
+                            <TextField
+                                id="licence.code"
+                                label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
+                                fullWidth>
+                            </TextField>
+                            <TextField
+                                id="course_id"
+                                label={Lang[window.Lang].pages.com.students.level.title}
+                                defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
+                                fullWidth
+                            />
 
-                                <TextField
-                                    id="register"
-                                    label={Lang[window.Lang].pages.com.students.register}
-                                    defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
-                                    fullWidth>
-                                </TextField>
+                            <TextField
+                                id="register"
+                                label={Lang[window.Lang].pages.com.students.register}
+                                defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
+                                fullWidth>
+                            </TextField>
 
-                            </div>
-                            <div>
-                                <Typography type="headline" component="h3">
-                                    {Lang[window.Lang].pages.com.students.personal_info.title}
-                                </Typography>
-                                <TextField
-                                    id="department"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.department}
-                                    defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="duty"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.duty}
-                                    defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    id="mobile"
-                                    label={Lang[window.Lang].pages.com.students.tel}
-                                    defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="mail"
-                                    label={Lang[window.Lang].pages.com.students.email}
-                                    defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
-                                    fullWidth
-                                />
-                                <TextField
-                                    id="wechat"
-                                    label={Lang[window.Lang].pages.com.students.personal_info.wechat}
-                                    defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
-                                    fullWidth
-                                />
+                            <Typography type="headline" component="h3">
+                                {Lang[window.Lang].pages.com.students.personal_info.title}
+                            </Typography>
+                            <TextField
+                                id="department"
+                                label={Lang[window.Lang].pages.com.students.personal_info.department}
+                                defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
+                                fullWidth>
+                            </TextField>
+                            <TextField
+                                id="duty"
+                                label={Lang[window.Lang].pages.com.students.personal_info.duty}
+                                defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
+                                fullWidth>
+                            </TextField>
+                            <TextField
+                                id="mobile"
+                                label={Lang[window.Lang].pages.com.students.tel}
+                                defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
+                                fullWidth
+                            />
+                            <TextField
+                                id="mail"
+                                label={Lang[window.Lang].pages.com.students.email}
+                                defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
+                                fullWidth
+                            />
+                            <TextField
+                                id="wechat"
+                                label={Lang[window.Lang].pages.com.students.personal_info.wechat}
+                                defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
+                                fullWidth
+                            />
 
 
-                                <Button
-                                    color="primary"
-                                    style={{ margin: 10 }}
-                                    onClick={(e) => {
-                                        this.modifyStudent(e)
-                                    }}>
-                                    {Lang[window.Lang].pages.main.certain_button}
-                                </Button>
-                            </div>
-                            {/* <div>
-                                    <Typography type="headline" component="h3">
-                                        {Lang[window.Lang].pages.com.students.proj_exp.title}
-                                    </Typography>
-                                    {
-                                        this.state.selected.proj_exp.map(exp =>
-                                            <div id={exp.id}>
-                                                <Typography type="body1" component="p">
-                                                    {exp.name}
-                                                </Typography>
-                                                <Typography type="body1" component="p">
-                                                    {getTimeString(exp.time)}
-                                                </Typography>
-                                                <Typography type="body1" component="p">
-                                                    {exp.actor}
-                                                </Typography>
-                                                <Typography type="body1" component="p">
-                                                    {exp.total_amount}
-                                                </Typography>
-                                                <Typography type="body1" component="p">
-                                                    {exp.soft_amount}
-                                                </Typography>
-                                                <Button color="primary" style={{ margin: 10 }}>
-                                                    {Lang[window.Lang].pages.main.certain_button}
-                                                </Button>
-                                            </div>)
-                                    }
-                                    <div>
-                                        <TextField
-                                            id="proj_name"
-                                            label={Lang[window.Lang].pages.com.students.proj_exp.name}
-                                            defaultValue={this.state.selected.proj_exp.name}>
-                                        </TextField>
-                                        <TextField
-                                            id="time"
-                                            label={Lang[window.Lang].pages.com.students.proj_exp.time}
-                                            defaultValue={this.state.selected.proj_exp.time}>
-                                        </TextField>
-                                        <TextField
-                                            id="actor"
-                                            label={Lang[window.Lang].pages.com.students.proj_exp.actor}
-                                            defaultValue={this.state.selected.proj_exp.actor}>
-                                        </TextField>
-                                        <TextField
-                                            id="exp_total_amount"
-                                            label={Lang[window.Lang].pages.com.students.proj_exp.total_amount}
-                                            defaultValue={this.state.selected.proj_exp.total_amount}>
-                                        </TextField>
-                                        <TextField
-                                            id="exp_soft_amount"
-                                            label={Lang[window.Lang].pages.com.students.proj_exp.soft_amount}
-                                            defaultValue={this.state.selected.proj_exp.soft_amount}>
-                                        </TextField>
-                                    </div>
-                                    <Button color="primary" style={{ margin: 10 }}>
-                                        {Lang[window.Lang].pages.main.certain_button}
-                                    </Button>
-                                </div> */}
+                            <Button
+                                color="primary"
+                                style={{ margin: 10 }}
+                                onClick={(e) => {
+                                    this.modifyStudent(e)
+                                }}>
+                                {Lang[window.Lang].pages.main.certain_button}
+                            </Button>
                         </Paper>
-
-
                     </div>
                 </Drawer>
                 {this.newStudentDialog()}
