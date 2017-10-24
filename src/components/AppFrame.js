@@ -39,7 +39,7 @@ import Lang from '../language';
 import Code from '../code';
 import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
-import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
+import { APP_TYPE_COMPANY,CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
 import Express from '../pages/com/infos/express.paper'
@@ -149,7 +149,7 @@ class AppFrame extends Component {
     showRegister: true,
     name: Lang[window.Lang].pages.main.input_your_account,
     password: "",
-    check_code: "1234",
+    check_code: "",
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -170,6 +170,7 @@ class AppFrame extends Component {
   componentWillMount() {
     window.CacheData = {};
     this.getRoutes();
+    this.get_check_code();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
@@ -222,6 +223,15 @@ class AppFrame extends Component {
     }
 
     getData({ url: config.routers }, { type: APP_TYPE_COMPANY, version: config.version }, cb);
+  }
+  get_check_code = ()=>{
+    var cb =  (route, message, arg) =>{
+      this.setState({
+        check_code:message.data.checkcode
+    });
+    }
+   
+    getData(getRouter(CHECK_CODE), {}, cb);
   }
 
   check_available = (account) => {
@@ -495,16 +505,25 @@ class AppFrame extends Component {
           onChange={event => this.setState({ password: event.target.value })}
         />
         <TextField
-          label={"验证码"}
-          id={"check_code" + this.state.index}
-          style={{
-            marginLeft: "auto",//styleManager.theme.spacing.unit,
-            marginRight: "auto",//theme.spacing.unit,  
-          }}
-          fullWidth={true}
-          defaultValue="1234"
-          onChange={event => this.setState({ check_code: event.target.value })}
-        />
+        label={"验证码"}
+        id={"check_code" + this.state.index}
+        style={{
+          marginLeft: "auto",//styleManager.theme.spacing.unit,
+          marginRight: "auto",//theme.spacing.unit, 
+          width:"50%" 
+        }}
+        defaultValue="1234"
+        fullWidth={true}
+      />
+      <TextField
+        style={{
+          marginLeft: "10px",//styleManager.theme.spacing.unit,
+          marginRight: "auto",//theme.spacing.unit, 
+          width:"20%" ,       
+        }}
+        fullWidth={true}
+        value={this.state.check_code}
+      />
         <Button
           raised
           color="primary"
@@ -512,7 +531,9 @@ class AppFrame extends Component {
           onClick={() => {
             var name = this.state.name;
             var password = this.state.password;
-            var check_code = this.state.check_code;
+            var check_code = document.getElementById("check_code" + this.state.index).value;
+            console.log(this.state.index);
+            console.log(document.getElementById("check_code" + this.state.index).value);
             if (name === "") {
               this.popUpNotice(NOTICE, 0, "您没有输入账号")
               return

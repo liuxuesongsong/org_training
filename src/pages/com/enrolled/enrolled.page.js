@@ -74,6 +74,7 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         var students = getCache(DATA_TYPE_STUDENT);
+        console.log(students);
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
     }
@@ -140,6 +141,7 @@ class Enrolled extends Component {
             }
             this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
         }
+        console.log(id);
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
@@ -425,13 +427,13 @@ class Enrolled extends Component {
                                     <TextField
                                         id="tel"
                                         label={Lang[window.Lang].pages.com.students.tel}
-                                        defaultValue={this.state.selected.tel}
+                                        defaultValue={this.state.selected.mobile}
                                         fullWidth
                                     />
                                     <TextField
                                         id="email"
                                         label={Lang[window.Lang].pages.com.students.email}
-                                        defaultValue={this.state.selected.email}
+                                        defaultValue={this.state.selected.mail}
                                         fullWidth
                                     />
                                     <TextField
@@ -485,18 +487,35 @@ class Enrolled extends Component {
                                     <Button color="primary" style={{ margin: 10 }} onClick={
                                         (e) => {
                                             var cb = (route, message, arg) => {
+                                                console.log(message);
                                                 if (message.code === Code.LOGIC_SUCCESS) {
                                                     for (var i = 0; i < getCache(student).length; i++) {
                                                         if (getCache(DATA_TYPE_STUDENT)[i].id === arg.id) {
+                                                            console.log(arg.id);
                                                             getCache(DATA_TYPE_STUDENT)[i][arg.key] = info;
                                                             break;
                                                         }
                                                     }
                                                 }
                                             }
+                                            var id = this.state.selected.id;
+                                            //var id=sessionStorage.id;
                                             var obj = {
+                                                name:document.getElementById("student_name").value,
+                                                tel:document.getElementById("tel").value,
+                                                email:document.getElementById("email").value,
+                                                area_id:document.getElementById("area_id").value,
+                                                course_id:document.getElementById("course_id").value,
+                                                identity_card:document.getElementById("licence.code").value,
+                                                education:document.getElementById("edu").value,
+                                                work_years:document.getElementById("working_time").value,
+                                                total_amount:document.getElementById("total_amount").value,
+                                                soft_amount:document.getElementById("soft_amount").value,
+                                                
 
                                             }
+                                            console.log(obj);
+                                            console.log(sessionStorage.session);
                                             getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: id, student: obj }, cb, { self: this, data: obj });
 
                                         }
