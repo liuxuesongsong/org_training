@@ -694,7 +694,7 @@ class AppFrame extends Component {
               </Toolbar>
             </AppBar>
             <AppDrawer
-              className={classes.drawer+'nyx-sidebar'}
+              className={classes.drawer+' nyx-sidebar'}
               docked={drawerDocked}
               routes={routes}
               onRequestClose={this.handleDrawerClose}

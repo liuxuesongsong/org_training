@@ -422,33 +422,33 @@ class Info extends Component {
                     </div>
                 )
             default:
-                return (<div>
+                return (<div className="nyx-info">
 
                     <List style={{
                         height: "100%"
                     }} disablePadding>
                         <ListSubheader>{"企业信息"}</ListSubheader>
                         <Paper>
-                            <ListItem button
+                            <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "componyName", }) }}>
-                                <ListItemText primary={"公司简称"} />
+                                <ListItemText className="nyx-info-select-title" primary={"公司简称"} />
                                 <div>
                                     {this.state.base.c_name}
                                 </div>
                             </ListItem>
-                            <ListItem button
+                            <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "area", }) }}>
-                                <ListItemText primary={"所属服务区"} />
+                                <ListItemText className="nyx-info-select-title" primary={"所属服务区"} />
                                 <div>
                                     {this.state.city}
                                 </div>
                             </ListItem>
 
-                            <ListItem button
+                            <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "qualification", }) }}>
-                                <ListItemText primary={"企业等级"} />
+                                <ListItemText className="nyx-info-select-title" primary={"企业等级"} />
                                 <div>
-                                    {this.state.base.c_level}
+                                    {this.state.base.c_level+"级"}
                                 </div>
                             </ListItem>
                         </Paper>
