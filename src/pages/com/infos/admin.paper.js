@@ -20,6 +20,8 @@ class Admin extends Component {
         name: "",
         mobile: "",
         mail: "",
+        duty: "",
+        department: "",
         temObj: {}
     }
 
