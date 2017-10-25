@@ -1063,6 +1063,38 @@
   width: 10em;
   flex: initial; }
 
+.nyx-form {
+  width: 100%;
+  padding: 2rem 2rem 5rem;
+  position: relative; }
+  .nyx-form button {
+    border-radius: 50%;
+    height: 64px;
+    width: 64px;
+    position: absolute;
+    float: right;
+    right: 0px;
+    top: 0px;
+    margin-right: 32px;
+    margin-top: -32px;
+    padding: 0;
+    min-width: initial;
+    background-color: #2196F3; }
+    .nyx-form button:hover {
+      background-color: #0D47A1; }
+
+.nyx-card-class {
+  width: 100%; }
+  .nyx-card-class .nyx-clazz-head {
+    float: left;
+    margin-right: 1rem;
+    line-height: 40px; }
+
+.nyx-info-listitem {
+  font-size: 14px !important; }
+  .nyx-info-listitem h3 {
+    font-size: 14px !important; }
+
 .nyx-company-paper {
   width: 800px; }
 

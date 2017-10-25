@@ -164,24 +164,24 @@ class Home extends Component {
                         <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                             {this.state.clazzes.map(clazz =>
                                 <ListItem dense button key={clazz.id}>
-                                    <Card>
+                                    <Card className="nyx-card-class">
                                         <CardMedia
-                                            style={{ height: 120, }}
+                                            className="nyx-card-class-img"
                                             title="Contemplative Reptile"
                                         />
                                         <CardContent>
                                             <Typography className="nyx-clazz-head" type="headline" component="h2">
-                                                {clazz.area_id}
+                                                {clazz.course_id=4?"重庆":"北京"}
                                             </Typography>
                                             <Typography  className="nyx-clazz-key" component="p">
-                                                {clazz.course_id}
+                                                {clazz.course_id=1?"中级":"高级"}
                                             </Typography>
                                             <Typography className="nyx-clazz-key" component="p">
-                                                {clazz.ti_id}
+                                                {clazz.ti_id=1?"中软培训":"赛迪"}
                                             </Typography>
-                                            <Typography  className="nyx-clazz-key" component="p">
+                                            {/* <Typography  className="nyx-clazz-key" component="p">
                                                 {clazz.train_starttime}
-                                            </Typography>
+                                            </Typography> */}
                                         </CardContent>
                                     </Card>
                                 </ListItem>,

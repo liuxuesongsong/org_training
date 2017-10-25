@@ -203,11 +203,12 @@ class Info extends Component {
                                 <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                             </IconButton>
                             <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                {"修改公司简称"}
+                                {"单位全称"}
                             </Typography>
 
                         </Toolbar>
                     </AppBar>
+                    <Paper className={"nyx-form"}>
                     <TextField
                         id="bank_account"
                         label={LANG_PREFIX.bank_account}
@@ -229,6 +230,7 @@ class Info extends Component {
                     >
                         {Lang[window.Lang].pages.main.certain_button}
                     </Button>
+                    </Paper>
                 </div>)
             case "area":
                 return (
@@ -242,12 +244,12 @@ class Info extends Component {
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                    {"修改所在区域"}
+                                    {"注册省市"}
                                 </Typography>
 
                             </Toolbar>
                         </AppBar>
-                        <paper>
+                        <Paper>
                             <List style={{
                                 height: "100%"
                             }} disablePadding>
@@ -266,7 +268,7 @@ class Info extends Component {
                                     </ListItem>)}
 
                             </List>
-                        </paper>
+                        </Paper>
                     </div>
                 )
             case "qualification":
@@ -338,7 +340,7 @@ class Info extends Component {
                                 }} />
                             </IconButton>
                             <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                {"修改邮政信息"}
+                                {"修改财务信息"}
                             </Typography>
                         </Toolbar>
                     </AppBar>
@@ -362,7 +364,7 @@ class Info extends Component {
                                     }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                    {"修改邮政信息"}
+                                    {"修改邮寄信息"}
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -388,7 +390,7 @@ class Info extends Component {
                                     }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                    {"修改管理员信息"}
+                                    {"修改联系人信息"}
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -433,14 +435,14 @@ class Info extends Component {
                         <Paper>
                             <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "componyName", }) }}>
-                                <ListItemText className="nyx-info-select-title" primary={"公司简称"} />
+                                <ListItemText className="nyx-info-select-title nyx-info-listitem" primary={"单位全称"} />
                                 <div>
                                     {this.state.base.c_name}
                                 </div>
                             </ListItem>
                             <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "area", }) }}>
-                                <ListItemText className="nyx-info-select-title" primary={"所属服务区"} />
+                                <ListItemText className="nyx-info-select-title nyx-info-listitem" primary={"注册省市"} />
                                 <div>
                                     {this.state.city}
                                 </div>
@@ -448,13 +450,24 @@ class Info extends Component {
 
                             <ListItem className="nyx-info-selectshow" button
                                 onClick={() => { this.setState({ show: "qualification", }) }}>
-                                <ListItemText className="nyx-info-select-title" primary={"企业等级"} />
+                                <ListItemText className="nyx-info-select-title nyx-info-listitem" primary={"企业等级"} />
                                 <div>
                                     {this.state.base.c_level+"级"}
                                 </div>
                             </ListItem>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"邮政信息"}</ListSubheader>
+                        <ListSubheader style={{ marginTop: 20 }}>{"联系人信息"}</ListSubheader>
+                        <Paper>
+                            <ListItem className="nyx-info-listitem" button
+                                onClick={() => { this.setState({ show: "admin", }) }}>
+                                *修改联系人信息（必填）&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
+                            </ListItem>
+                            {/* <ListItem button
+                                onClick={() => { this.setState({ show: "logout", }) }}>
+                                联系人&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.account}
+                            </ListItem> */}
+                        </Paper>
+                        <ListSubheader style={{ marginTop: 20 }}>{"邮寄信息"}</ListSubheader>
                         <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "express", }) }}>
@@ -469,20 +482,9 @@ class Info extends Component {
                         <Paper>
                             <ListItem button
                                 onClick={() => { this.setState({ show: "finance", }) }}>
-                                纳税信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.finance.allname}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.taxpayer_number}<br />
-                                银行信息&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.opening_bank}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.bank_account}<br />
-                                联系方式&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.c_address}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.finance.financial_call}
-                            </ListItem>
-                        </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"管理员信息"}</ListSubheader>
-                        <Paper>
-                            <ListItem button
-                                onClick={() => { this.setState({ show: "admin", }) }}>
-                                管理员信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
-                            </ListItem>
-                            <ListItem button
-                                onClick={() => { this.setState({ show: "logout", }) }}>
-                                登陆信息&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.account}
+                                纳税信息&nbsp;&nbsp;&nbsp;&nbsp;公司全称： {this.state.finance.allname}&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：{this.state.finance.taxpayer_number}<br />
+                                银行信息&nbsp;&nbsp;&nbsp;&nbsp;开户行：{this.state.finance.opening_bank}&nbsp;&nbsp;&nbsp;&nbsp;账号：{this.state.finance.bank_account}<br />
+                                联系方式&nbsp;&nbsp;&nbsp;&nbsp;地址：{this.state.finance.c_address}&nbsp;&nbsp;&nbsp;&nbsp;电话：{this.state.finance.financial_call}
                             </ListItem>
                         </Paper>
                     </List>

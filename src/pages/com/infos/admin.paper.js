@@ -9,7 +9,7 @@ import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 
 import { getData, getCache, getRouter } from '../../../utils/helpers';
-import { DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN } from '../../../enum';
+import { DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN,UPDATE_ADMIN } from '../../../enum';
 import Code from '../../../code';
 import Lang from '../../../language';
 
@@ -57,12 +57,12 @@ class Admin extends Component {
             department: this.state.department,
         }
 
-        getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
+        getData(getRouter(UPDATE_ADMIN), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
     }
 
     render() {
         return (
-            <Paper style={{ width: 600 }}>
+            <Paper className={"nyx-form"}>
                 <TextField
                     id="account"
                     label={Lang[window.Lang].pages.com.infos.admin.account}
@@ -112,10 +112,10 @@ class Admin extends Component {
                 <TextField
                     id="department"
                     label={Lang[window.Lang].pages.com.infos.admin.department}
-                    value={this.state.mail}
+                    value={this.state.department}
                     onChange={event => {
                         this.setState({
-                            mail: event.target.value,
+                            department: event.target.value,
                         });
                     }}
                     fullWidth>
@@ -148,6 +148,7 @@ class Admin extends Component {
                     onClick={() => {
                         this.submit();
                     }}
+                    className=""
                 >
                     {Lang[window.Lang].pages.main.certain_button}
                 </Button>

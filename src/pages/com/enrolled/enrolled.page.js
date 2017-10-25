@@ -229,7 +229,7 @@ class Enrolled extends Component {
                         <TextField
                             id="new_level"
                             label={Lang[window.Lang].pages.com.students.level.title}
-                            defaultValue={"1"}
+                            defaultValue={"中级"}
                             fullWidth
                         />
                     </div>
@@ -242,7 +242,7 @@ class Enrolled extends Component {
                                     name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
                                     mobile: document.getElementById("new_tel").value,
                                     mail: document.getElementById("new_mail").value,
-                                    course_id: document.getElementById("new_level").value,
+                                    course_id: document.getElementById("new_level").value="中级"?1:2,
                                 })
                             }}
                         >

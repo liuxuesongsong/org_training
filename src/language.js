@@ -60,7 +60,7 @@ const Language = {
                         financial_call: "电话"
                     },
                     express: {
-                        title: "邮政信息",
+                        title: "邮寄信息",
                         zip_code: "邮编",
                         receive_address: "收件地址",
                         district: "详细地址",
@@ -68,7 +68,7 @@ const Language = {
                         receive_phone: "联系方式"
                     },
                     admin: {
-                        title: "管理员信息",
+                        title: "联系人信息",
                         account: "用户名",
                         password: "密码",
                         name: "管理员姓名",
@@ -204,7 +204,7 @@ const Language = {
                 ThemeColor: "主题颜色",
                 Ligth: "明亮",
                 Dark: "灰暗",
-                Info: "登录信息",
+                Info: "联系人",
                 Reset: "修改密码",
                 Logout: "登出"
             },
@@ -321,7 +321,7 @@ const Language = {
                         tel: "电话"
                     },
                     express: {
-                        title: "邮政信息",
+                        title: "邮寄信息",
                         express_code: "邮编",
                         express_address: "收件地址",
                         address: "详细地址",
@@ -329,7 +329,7 @@ const Language = {
                         contact_way: "联系方式"
                     },
                     admin: {
-                        title: "管理员信息",
+                        title: "联系人信息",
                         account: "用户名",
                         password: "密码",
                         name: "管理员姓名",
@@ -430,7 +430,7 @@ const Language = {
                 ThemeColor: "主题颜色",
                 Ligth: "明亮",
                 Dark: "灰暗",
-                Info: "登录信息",
+                Info: "联系人",
                 Reset: "修改密码",
                 Logout: "登出"
             },

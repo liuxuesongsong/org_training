@@ -59,9 +59,7 @@ class Express extends Component {
 
     render() {
         return (
-            <Paper style={{ width: 600 }}>
-
-
+            <Paper className={"nyx-form"}>
                 <TextField
                     id="zip_code"
                     label={LANG_PREFIX.zip_code}

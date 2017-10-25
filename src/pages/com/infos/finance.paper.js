@@ -54,7 +54,7 @@ class Finance extends Component {
     render() {
 
         return (
-            <Paper style={{ width: 600 }}>
+            <Paper className={"nyx-form"}>
                 <TextField
                     id="allname"
                     label={LANG_PREFIX.allname}

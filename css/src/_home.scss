@@ -73,3 +73,45 @@
         flex:initial;
     }
 }
+.nyx-form{
+    width: 100%;
+    padding: 2rem 2rem 5rem;
+    
+    position: relative;
+    button {
+        border-radius: 50%;
+        height: 64px;
+        width: 64px;
+        position: absolute;
+        float: right;
+        right: 0px;
+        top:0px;
+        margin-right: 32px;
+        margin-top: -32px;
+        padding: 0;
+        min-width: initial;
+        background-color: $blue;
+        &:hover{
+            background-color: $blue900;
+
+        }
+    }
+}
+.nyx-card-class{
+    width: 100%;
+    .nyx-clazz-head{
+        float: left;
+        margin-right:1rem;
+        line-height: 40px;
+    }
+    .nyx-clazz-key{
+        
+    }
+}
+
+.nyx-info-listitem{
+    font-size: 14px !important;
+    h3{
+    font-size: 14px !important;
+    }
+}
