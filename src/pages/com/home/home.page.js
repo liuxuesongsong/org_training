@@ -167,7 +167,6 @@ class Home extends Component {
                                     <Card>
                                         <CardMedia
                                             style={{ height: 120, }}
-                                            image="/"
                                             title="Contemplative Reptile"
                                         />
                                         <CardContent>

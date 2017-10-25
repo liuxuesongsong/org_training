@@ -202,7 +202,7 @@ class Info extends Component {
                             }} color="default" aria-label="Menu">
                                 <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                             </IconButton>
-                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                            <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                 {"修改公司简称"}
                             </Typography>
 
@@ -235,36 +235,38 @@ class Info extends Component {
                     <div>
                         <AppBar position="static" color="default">
                             <Toolbar>
-                                <IconButton className={{
+                                <IconButton style={{
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                     {"修改所在区域"}
                                 </Typography>
 
                             </Toolbar>
                         </AppBar>
-                        <List style={{
-                            height: "100%"
-                        }} disablePadding>
-                            {getCache(DATA_TYPE_AREA).map(area =>
-                                <ListItem button
-                                    onClick={(e) => {
-                                        this.submit("base", {
-                                            c_area_id: area.id
-                                        })
-                                        this.setState({ show: "all" })
-                                    }}>
-                                    {area.area_name}
-                                    <div>
-                                        {area.id === this.state.base.c_area_id ? this.state.city : ""}
-                                    </div>
-                                </ListItem>)}
+                        <paper>
+                            <List style={{
+                                height: "100%"
+                            }} disablePadding>
+                                {getCache(DATA_TYPE_AREA).map(area =>
+                                    <ListItem button 
+                                        onClick={(e) => {
+                                            this.submit("base", {
+                                                c_area_id: area.id
+                                            })
+                                            this.setState({ show: "all" })
+                                        }}>
+                                        {area.area_name}
+                                        <div>
+                                            {area.id === this.state.base.c_area_id ? this.state.city : ""}
+                                        </div>
+                                    </ListItem>)}
 
-                        </List>
+                            </List>
+                        </paper>
                     </div>
                 )
             case "qualification":
@@ -272,13 +274,13 @@ class Info extends Component {
                     <div>
                         <AppBar position="static" color="default">
                             <Toolbar>
-                                <IconButton className={{
+                                <IconButton style={{
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                     {"修改企业等级"}
                                 </Typography>
                             </Toolbar>
@@ -298,7 +300,7 @@ class Info extends Component {
                 return <div>
                     <AppBar position="static" color="default">
                         <Toolbar>
-                            <IconButton className={{
+                            <IconButton style={{
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
@@ -310,7 +312,7 @@ class Info extends Component {
                                     });
                                 }} />
                             </IconButton>
-                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                            <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                 {"修改财务信息"}
                             </Typography>
                         </Toolbar>
@@ -321,7 +323,7 @@ class Info extends Component {
                 return (<div>
                     <AppBar position="static" color="default">
                         <Toolbar>
-                            <IconButton className={{
+                            <IconButton style={{
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
@@ -335,7 +337,7 @@ class Info extends Component {
                                     }
                                 }} />
                             </IconButton>
-                            <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                            <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                 {"修改邮政信息"}
                             </Typography>
                         </Toolbar>
@@ -347,7 +349,7 @@ class Info extends Component {
                     <div>
                         <AppBar position="static" color="default">
                             <Toolbar>
-                                <IconButton className={{
+                                <IconButton style={{
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
@@ -359,7 +361,7 @@ class Info extends Component {
                                         });
                                     }} />
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                     {"修改邮政信息"}
                                 </Typography>
                             </Toolbar>
@@ -371,7 +373,7 @@ class Info extends Component {
                     <div>
                         <AppBar position="static" color="default">
                             <Toolbar>
-                                <IconButton className={{
+                                <IconButton style={{
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
@@ -385,7 +387,7 @@ class Info extends Component {
                                         }
                                     }} />
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                     {"修改管理员信息"}
                                 </Typography>
                             </Toolbar>
@@ -397,13 +399,13 @@ class Info extends Component {
                     <div>
                         <AppBar position="static" color="default">
                             <Toolbar>
-                                <IconButton className={{
+                                <IconButton style={{
                                     marginLeft: -12,
                                     marginRight: 20,
                                 }} color="default" aria-label="Menu">
                                     <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                                 </IconButton>
-                                <Typography type="title" color="inherit" className={{ flex: 1 }}>
+                                <Typography type="title" color="inherit" style={{ flex: 1 }}>
                                     {"登出当前账号"}
                                 </Typography>
                             </Toolbar>
