@@ -197,7 +197,7 @@ class ComCard extends Component {
                 {"客户等级:"}<br />
               </Typography>
               <Typography className={"nyx-card-value"}>
-                {level + "级"}
+                {(level === 1 ? "中" : "高") + "级"}
               </Typography>
               <Typography className={"nyx-card-name"}>
                 {"所在城市:"}
