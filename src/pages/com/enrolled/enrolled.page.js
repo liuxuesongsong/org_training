@@ -13,6 +13,8 @@ import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
+import { LabelRadio, RadioGroup } from 'material-ui/Radio';
+import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -43,6 +45,7 @@ const Style = {
 
 class Enrolled extends Component {
     state = {
+        course: "0",
         students: [],
         newStudents: [],
         unarragedStudents: [],
@@ -162,7 +165,7 @@ class Enrolled extends Component {
         var obj = {
             name: document.getElementById("student_name").value,
             identity_card: document.getElementById("licence.code").value,
-            course_id: document.getElementById("course_id").value === "未设置" ? 0 : document.getElementById("course_id").value,
+            course_id: Number(this.state.course),
             register: document.getElementById("register").value,
             department: document.getElementById("department").value,
             duty: document.getElementById("duty").value,
@@ -197,6 +200,12 @@ class Enrolled extends Component {
         getData(getRouter(REFUSE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
 
+    selectedStudent(student) {
+        this.state.selectedStudentId = student.id;
+        this.state.selected = student;
+        this.state.course = student.course_id.toString();
+    }
+
     newStudentDialog() {
         return (
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
@@ -226,12 +235,20 @@ class Enrolled extends Component {
                             defaultValue={""}
                             fullWidth
                         />
-                        <TextField
-                            id="new_level"
-                            label={Lang[window.Lang].pages.com.students.level.title}
-                            defaultValue={"中级"}
-                            fullWidth
-                        />
+                        <FormControl required>
+                            <FormLabel>{"等级"}</FormLabel>
+                            <RadioGroup
+                                aria-label="gender"
+                                name="gender"
+                                selectedValue={this.state.course}
+                                onChange={(e, value) => {
+                                    this.handleChangeCourse(e, value)
+                                }}
+                            >
+                                <LabelRadio value={"1"} label="中级" />
+                                <LabelRadio value={"2"} label="高级" />
+                            </RadioGroup>
+                        </FormControl>
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -242,7 +259,7 @@ class Enrolled extends Component {
                                     name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
                                     mobile: document.getElementById("new_tel").value,
                                     mail: document.getElementById("new_mail").value,
-                                    course_id: document.getElementById("new_level").value="中级"?1:2,
+                                    course_id: Number(this.state.course),
                                 })
                             }}
                         >
@@ -263,7 +280,7 @@ class Enrolled extends Component {
 
     handleRequestClose = () => {
         this.setState({
-            openNewStudentDialog: false
+            openNewStudentDialog: false,
         })
     }
 
@@ -298,6 +315,11 @@ class Enrolled extends Component {
         });
     };
 
+
+    handleChangeCourse = (event, value) => {
+        this.setState({ course: value });
+    };
+
     render() {
         return (
             <div className={'nyx-page'}>
@@ -306,11 +328,11 @@ class Enrolled extends Component {
                         <Button fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                             onClick={() => {
                                 this.setState({
-                                    openNewStudentDialog: true
+                                    openNewStudentDialog: true,
+                                    course: "1",
                                 })
                             }}
                         >
-
                             {"新增"}
                         </Button>
                     </ListSubheader>}>
@@ -324,9 +346,7 @@ class Enrolled extends Component {
                                 level={Number(student.course_id)}
                                 city={Number(student.area_id)}
                                 action={[() => {
-                                    this.state.selected = student;
-                                    this.state.selectedStudentId = student.id;
-                                    this.state.showInfo = true;
+                                    this.selectedStudent(student);
                                     this.toggleDrawer(true)()
                                 }, () => {
                                     this.state.selectedStudentId = student.id;
@@ -441,13 +461,20 @@ class Enrolled extends Component {
                                 defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
                                 fullWidth>
                             </TextField>
-                            <TextField
-                                id="course_id"
-                                label={Lang[window.Lang].pages.com.students.level.title}
-                                defaultValue={this.state.selected.course_id ? this.state.selected.course_id.toString() : "未设置"}
-                                fullWidth
-                            />
-
+                            <FormControl required>
+                                <FormLabel>{"等级"}</FormLabel>
+                                <RadioGroup
+                                    aria-label="gender"
+                                    name="gender"
+                                    selectedValue={this.state.course}
+                                    onChange={(e, value) => {
+                                        this.handleChangeCourse(e, value)
+                                    }}
+                                >
+                                    <LabelRadio value={"1"} label="中级" />
+                                    <LabelRadio value={"2"} label="高级" />
+                                </RadioGroup>
+                            </FormControl>
                             <TextField
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
