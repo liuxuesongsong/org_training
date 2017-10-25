@@ -18,7 +18,7 @@
     }
 }
 .nyx-list-paper{
-    height: 550px;
+    min-height: 550px;
 }
 .nyx-card {
     border-bottom: 2px $blue solid;
@@ -44,7 +44,7 @@
         white-space: nowrap;    
     }
     .nyx-card-name{
-        font-size:1.5rem;
+        font-size:1.2rem;
         line-height: 40px;
         width: 3em;
         @extend .nyx-oneline;
@@ -96,6 +96,13 @@
 
         }
     }
+    .nyx-form-div{
+        width: 50%;
+        display: inline-block;
+    div{
+        width: 98%;
+    }
+    }
 }
 .nyx-card-class{
     width: 100%;
@@ -114,4 +121,12 @@
     h3{
     font-size: 14px !important;
     }
+}
+.nyx-info-span{
+    width: 10em;
+    display: block;
+    float: left;
+}
+.nyx-info-line-height{
+    line-height: 45px;
 }

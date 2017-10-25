@@ -66,6 +66,7 @@ class Admin extends Component {
         return (
             <Paper className={"nyx-form"}>
                 <TextField
+                    className="nyx-form-div"
                     id="account"
                     label={Lang[window.Lang].pages.com.infos.admin.account}
                     value={this.state.account}
@@ -78,6 +79,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="password"
                     label={Lang[window.Lang].pages.com.infos.admin.password}
                     value={this.state.password}
@@ -89,6 +91,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="name"
                     label={Lang[window.Lang].pages.com.infos.admin.name}
                     value={this.state.name}
@@ -101,6 +104,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="duty"
                     label={Lang[window.Lang].pages.com.infos.admin.duty}
                     value={this.state.duty}
@@ -112,6 +116,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="department"
                     label={Lang[window.Lang].pages.com.infos.admin.department}
                     value={this.state.department}
@@ -123,6 +128,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="mobile"
                     label={Lang[window.Lang].pages.com.infos.admin.mobile}
                     value={this.state.mobile}
@@ -134,6 +140,7 @@ class Admin extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="mail"
                     label={Lang[window.Lang].pages.com.infos.admin.mail}
                     value={this.state.mail}

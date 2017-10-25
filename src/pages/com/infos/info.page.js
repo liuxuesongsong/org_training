@@ -263,7 +263,7 @@ class Info extends Component {
                                         }}>
                                         {area.area_name}
                                         <div>
-                                            {area.id === this.state.base.c_area_id ? this.state.city : ""}
+                                            {area.id === this.state.base.c_area_id ? " - 当前所属" : ""}
                                         </div>
                                     </ListItem>)}
 
@@ -457,34 +457,34 @@ class Info extends Component {
                             </ListItem>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"联系人信息"}</ListSubheader>
-                        <Paper>
+                        <Paper className="nyx-info-listitem">
                             <ListItem className="nyx-info-listitem" button
                                 onClick={() => { this.setState({ show: "admin", }) }}>
                                 *修改联系人信息（必填）&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
                             </ListItem>
-                            {/* <ListItem button
+                            {/* <ListItem button    
                                 onClick={() => { this.setState({ show: "logout", }) }}>
                                 联系人&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.account}
                             </ListItem> */}
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"邮寄信息"}</ListSubheader>
                         <Paper>
-                            <ListItem button
+                            <div button className="nyx-info-line-height" style={{display:"flow-root"}}
                                 onClick={() => { this.setState({ show: "express", }) }}>
                                 {/* <ListItemText primary={LANG_PREFIX.express.title} /> */}
-                                收件人&nbsp;&nbsp;&nbsp;&nbsp; {this.state.express.receiver}<br />
-                                联系电话&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.receive_phone}<br />
-                                所在区域&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}<br />
-                                收件地址&nbsp;&nbsp;&nbsp;&nbsp;{this.state.express.district}
-                            </ListItem>
+                                <div><span className="nyx-info-span">收件人</span>{this.state.express.receiver}</div>
+                                <div><span className="nyx-info-span">联系电话</span>{this.state.express.receive_phone}</div>
+                                <div><span className="nyx-info-span">所在区域</span>{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}</div>
+                                <div><span className="nyx-info-span">收件地址</span>{this.state.express.district}</div>
+                            </div>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
                         <Paper>
-                            <ListItem button
+                            <ListItem button  className="nyx-info-line-height" style={{display:"flow-root"}}
                                 onClick={() => { this.setState({ show: "finance", }) }}>
-                                纳税信息&nbsp;&nbsp;&nbsp;&nbsp;公司全称： {this.state.finance.allname}&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：{this.state.finance.taxpayer_number}<br />
-                                银行信息&nbsp;&nbsp;&nbsp;&nbsp;开户行：{this.state.finance.opening_bank}&nbsp;&nbsp;&nbsp;&nbsp;账号：{this.state.finance.bank_account}<br />
-                                联系方式&nbsp;&nbsp;&nbsp;&nbsp;地址：{this.state.finance.c_address}&nbsp;&nbsp;&nbsp;&nbsp;电话：{this.state.finance.financial_call}
+                                <div><span className="nyx-info-span">纳税信息</span><span>公司全称：</span> {this.state.finance.allname}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：</span>{this.state.finance.taxpayer_number}</div>
+                                <div><span className="nyx-info-span">银行信息</span><span>开户行：</span> {this.state.finance.opening_bank}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;账号：</span>{this.state.finance.bank_account}</div>
+                                <div><span className="nyx-info-span">联系方式</span><span>地址：</span> {this.state.finance.c_address}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：</span>{this.state.finance.financial_call}</div>
                             </ListItem>
                         </Paper>
                     </List>

@@ -60,7 +60,8 @@ class Express extends Component {
     render() {
         return (
             <Paper className={"nyx-form"}>
-                <TextField
+                <TextField 
+                    className="nyx-form-div"
                     id="zip_code"
                     label={LANG_PREFIX.zip_code}
                     value={this.state.zip_code}
@@ -72,6 +73,7 @@ class Express extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="receive_address"
                     label={LANG_PREFIX.receive_address}
                     value={this.state.receive_address}
@@ -84,6 +86,7 @@ class Express extends Component {
                 </TextField>
 
                 <TextField
+                    className="nyx-form-div"
                     id="district"
                     label={LANG_PREFIX.district}
                     value={this.state.district}
@@ -97,6 +100,7 @@ class Express extends Component {
                 </TextField>
 
                 <TextField
+                    className="nyx-form-div"
                     id="receiver"
                     label={LANG_PREFIX.receiver}
                     value={this.state.receiver}
@@ -109,6 +113,7 @@ class Express extends Component {
                 </TextField>
 
                 <TextField
+                    className="nyx-form-div"
                     id="receive_phone"
                     label={LANG_PREFIX.receive_phone}
                     value={this.state.receive_phone}

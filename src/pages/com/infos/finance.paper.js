@@ -55,7 +55,8 @@ class Finance extends Component {
 
         return (
             <Paper className={"nyx-form"}>
-                <TextField
+                <TextField 
+                    className="nyx-form-div"
                     id="allname"
                     label={LANG_PREFIX.allname}
                     value={this.state.allname}
@@ -67,6 +68,7 @@ class Finance extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="taxpayer_number"
                     label={LANG_PREFIX.taxpayer_number}
                     value={this.state.taxpayer_number}
@@ -78,6 +80,7 @@ class Finance extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="opening_bank"
                     label={LANG_PREFIX.opening_bank}
                     value={this.state.opening_bank}
@@ -89,6 +92,7 @@ class Finance extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="bank_account"
                     label={LANG_PREFIX.bank_account}
                     value={this.state.bank_account}
@@ -100,6 +104,7 @@ class Finance extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="c_address"
                     label={LANG_PREFIX.c_address}
                     value={this.state.c_address}
@@ -111,6 +116,7 @@ class Finance extends Component {
                     fullWidth>
                 </TextField>
                 <TextField
+                    className="nyx-form-div"
                     id="financial_call"
                     label={LANG_PREFIX.financial_call}
                     value={this.state.financial_call}
