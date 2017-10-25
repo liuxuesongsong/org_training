@@ -167,20 +167,20 @@ class Home extends Component {
                                     <Card>
                                         <CardMedia
                                             style={{ height: 120, }}
-                                            image="/static/images/cards/contemplative-reptile.jpg"
+                                            image="/"
                                             title="Contemplative Reptile"
                                         />
                                         <CardContent>
-                                            <Typography type="headline" component="h2">
+                                            <Typography className="nyx-clazz-head" type="headline" component="h2">
                                                 {clazz.area_id}
                                             </Typography>
-                                            <Typography component="p">
+                                            <Typography  className="nyx-clazz-key" component="p">
                                                 {clazz.course_id}
                                             </Typography>
-                                            <Typography component="p">
+                                            <Typography className="nyx-clazz-key" component="p">
                                                 {clazz.ti_id}
                                             </Typography>
-                                            <Typography component="p">
+                                            <Typography  className="nyx-clazz-key" component="p">
                                                 {clazz.train_starttime}
                                             </Typography>
                                         </CardContent>

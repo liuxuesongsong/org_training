@@ -164,54 +164,46 @@ class ComCard extends Component {
 
     return (
       <div>
-        <Card style={{ display: 'flex', }}>
+        <Card className="nyx-card-list" style={{ display: 'flex', }}>
           <CardMedia
             style={{
-              width: 151,
-              height: 151,
+              width: 0,
+              height: 0
             }}
             //image="/images/live-from-space.jpg"
             title="Live from space album cover"
           />
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-          }}>
-            <CardContent style={{ flex: '1 0 auto', }}>
+          <div className="nyx-card">
+            <CardContent className={"nyx-card-body"}>
               <Typography className={"nyx-card-name"}>
                 {name}
               </Typography>
               <Typography className={"nyx-card-key"}>
-                {"联系电话:"}
+                {"电话"}
               </Typography>
               <Typography className={"nyx-card-value"}>
                 {mobile}
               </Typography>
-              <Typography className={"nyx-card-name"}>
-                {"电子邮件:"}
+              <Typography className={"nyx-card-key"}>
+                {"邮件"}
               </Typography>
               <Typography className={"nyx-card-value"}>
                 {email}
               </Typography>
-              <Typography className={"nyx-card-name"}>
-                {"客户等级:"}<br />
+              <Typography className={"nyx-card-key"}>
+                {""}<br />
               </Typography>
-              <Typography className={"nyx-card-value"}>
+              <Typography className={"nyx-card-value nyx-card-value-sm"}>
                 {(level === 1 ? "中" : "高") + "级"}
               </Typography>
-              <Typography className={"nyx-card-name"}>
-                {"所在城市:"}
+              <Typography className={"nyx-card-key nyx-card-value-sm"}>
+                {"城市"}
               </Typography>
               <Typography className={"nyx-card-value"}>
                 {getCity(city)}
               </Typography>
             </CardContent>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              paddingLeft: "px",
-              paddingBottom: "px"
-            }}>
+            <div className="nyx-card-action">
               {this.buttonActions()}
             </div>
           </div>

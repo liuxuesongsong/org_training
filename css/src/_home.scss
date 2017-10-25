@@ -20,3 +20,56 @@
 .nyx-list-paper{
     height: 550px;
 }
+.nyx-card {
+    border-bottom: 2px $blue solid;
+    padding:1rem 0;
+    &>div{
+        padding:0 1rem;
+    }
+    .nyx-card-body{
+        height:60px;
+    }
+    .nyx-card-action{
+        height: 33px;
+    }
+    .nyx-card-action>{
+        height: 33px;
+    }
+    .nyx-oneline{
+
+        display: block;
+        float: left;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;    
+    }
+    .nyx-card-name{
+        font-size:1.5rem;
+        line-height: 40px;
+        width: 3em;
+        @extend .nyx-oneline;
+    }
+    .nyx-card-key{
+        width:0;
+        @extend .nyx-oneline;
+    }
+    .nyx-card-value{
+        width:8rem;
+        @extend .nyx-oneline;
+        &.nyx-card-value-sm{
+            width: 4rem;
+        }
+    }
+}
+.nyx-card-list{
+    width: 100%;
+}
+.nyx-info{
+    .nyx-info-selectshow>div{
+        @extend .nyx-oneline;
+    }
+    .nyx-info-select-title{
+        width:10em;
+        flex:initial;
+    }
+}
