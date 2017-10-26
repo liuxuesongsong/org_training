@@ -469,14 +469,14 @@ class Info extends Component {
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"邮寄信息"}</ListSubheader>
                         <Paper>
-                            <div button className="nyx-info-line-height" style={{display:"flow-root"}}
+                            <ListItem button  className="nyx-info-line-height" style={{display:"flow-root"}}
                                 onClick={() => { this.setState({ show: "express", }) }}>
                                 {/* <ListItemText primary={LANG_PREFIX.express.title} /> */}
                                 <div><span className="nyx-info-span">收件人</span>{this.state.express.receiver}</div>
                                 <div><span className="nyx-info-span">联系电话</span>{this.state.express.receive_phone}</div>
                                 <div><span className="nyx-info-span">所在区域</span>{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}</div>
                                 <div><span className="nyx-info-span">收件地址</span>{this.state.express.district}</div>
-                            </div>
+                            </ListItem>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
                         <Paper>

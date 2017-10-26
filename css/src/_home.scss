@@ -5,12 +5,20 @@
 #companyid{
     height: 150px;
 }
+.nyx-company-name{
+    font-size: 16px;
+    font-weight: 600;
+    font-family: simsun;
+    padding: 0.5rem 0;
+    margin: 0rem 0.5rem;
+    border-bottom: 1px solid $grey400;
+}
 .nyx-area-paper{
     height:350px;
 }
 .nyx-paper{
     float: left;
-    width: 300px;
+    width: 320px;
     margin: 1rem;
     padding: 1rem;
     .nyx-paper-header{
@@ -28,6 +36,9 @@
     }
     .nyx-card-body{
         height:60px;
+        p{
+            font-size:12px !important;
+        }
     }
     .nyx-card-action{
         height: 33px;
@@ -44,7 +55,7 @@
         white-space: nowrap;    
     }
     .nyx-card-name{
-        font-size:1.2rem;
+        font-size:12px;
         line-height: 40px;
         width: 3em;
         @extend .nyx-oneline;

@@ -150,16 +150,18 @@ class Home extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
-                <div className={'nyx-paper'}>
-                    <div id="companyid" >
-                        <Typography type="headline" component="h5">
-                            {this.state.name}
-                        </Typography>
+                <div style={{paddingTop:"0"}} className={'nyx-paper'}>
+                    
+                    <Paper id="companyid" >
+                        <div className="nyx-company-name"> 
+                          {this.state.name}
+                        </div>
                         <Typography type="body1" component="p">
                             {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.enrolled + ":"
                                 + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
                         </Typography>
-                    </div>
+                    </Paper>
+                    
                     <div className={'nyx-area-paper'} >
                         <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
                             {this.state.clazzes.map(clazz =>

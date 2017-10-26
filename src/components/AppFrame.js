@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
+import List, {ListItem} from 'material-ui/List';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import withWidth, { isWidthUp } from 'material-ui/utils/withWidth';
@@ -150,6 +151,7 @@ class AppFrame extends Component {
     name: Lang[window.Lang].pages.main.input_your_account,
     password: "",
     check_code: "",
+    image:"",
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -227,10 +229,11 @@ class AppFrame extends Component {
   get_check_code = ()=>{
     var cb =  (route, message, arg) =>{
       this.setState({
-        check_code:message.data.checkcode
+        check_code:message.data.checkcode,
+        image:message.data.image
     });
+    document.getElementById("code_img").src=message.data.image;
     }
-   
     getData(getRouter(CHECK_CODE), {}, cb);
   }
 
@@ -512,18 +515,28 @@ class AppFrame extends Component {
           marginRight: "auto",//theme.spacing.unit, 
           width:"50%" 
         }}
-        defaultValue="1234"
+        defaultValue=""
+        onFocus={(e) => {
+             // document.getElementById("code_img").innerHTML="1234"
+            }}
         fullWidth={true}
       />
-      <TextField
-        style={{
-          marginLeft: "10px",//styleManager.theme.spacing.unit,
+      
+      <ListItem
+     
+      onClick={() => {this.get_check_code(); }}
+      style={{
+          marginLeft: "auto",//styleManager.theme.spacing.unit,
           marginRight: "auto",//theme.spacing.unit, 
-          width:"20%" ,       
-        }}
-        fullWidth={true}
-        value={this.state.check_code}
-      />
+          width:"25%",
+          display: "inline-block" 
+        }}>
+        <img
+        id="code_img"
+         src={this.state.image}
+         />
+       
+        </ListItem>
         <Button
           raised
           color="primary"

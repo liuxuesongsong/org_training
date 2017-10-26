@@ -210,8 +210,6 @@ export function getRouter(key) {
  * - clazz 所属班级
  */
 export function getCache(key = DATA_TYPE_ALL) {
-  console.log(key);
-  console.log(CacheData);
   if (key === DATA_TYPE_ALL) {
     return window.CacheData;
   }
