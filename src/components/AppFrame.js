@@ -223,7 +223,6 @@ class AppFrame extends Component {
       } catch (e) {
       }
     }
-    console.log(config);
     getData({ url: config.routers }, { type: APP_TYPE_COMPANY, version: config.version }, cb);
   }
   get_check_code = ()=>{
