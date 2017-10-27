@@ -70,7 +70,12 @@ class Info extends Component {
             receiver: "未设置",
             receive_phone: "未设置"
         },
-        admin: {},
+        admin: {
+            account: "未设置",
+            name: "未设置",
+            mobile: "未设置",
+            mail: "未设置"
+        },
 
         // 提示状态
         alertOpen: false,
@@ -97,7 +102,6 @@ class Info extends Component {
         });
         if (getCache(DATA_TYPE_BASE) !== undefined) {
             var data = getCache(DATA_TYPE_BASE);
-            console.log(data);
             var currentCity = getCity(data.c_area_id);
             window.currentPage.setState({
                 base: data,
@@ -329,7 +333,7 @@ class Info extends Component {
                                 marginLeft: -12,
                                 marginRight: 20,
                             }} color="default" aria-label="Menu">
-                                <BackIcon onClick={() => {
+                                <BackIcon onClick={() => {                 
                                     if (getCache(DATA_TYPE_FINANCE) !== undefined) {
                                         var data = getCache(DATA_TYPE_FINANCE)
                                         this.setState({
@@ -456,11 +460,14 @@ class Info extends Component {
                                 </div>
                             </ListItem>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"联系人信息"}</ListSubheader>
+                        <ListSubheader style={{ marginTop: 20 }}>{"*联系人信息（必填）"}</ListSubheader>
                         <Paper className="nyx-info-listitem">
-                            <ListItem className="nyx-info-listitem" button
+                            <ListItem className="nyx-info-listitem nyx-info-line-height" button style={{display:"flow-root"}}
                                 onClick={() => { this.setState({ show: "admin", }) }}>
-                                *修改联系人信息（必填）&nbsp;&nbsp;&nbsp;&nbsp; {this.state.admin.name}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mobile}&nbsp;&nbsp;&nbsp;&nbsp;{this.state.admin.mail}
+                                <div><span className="nyx-info-span">用户名</span>{this.state.admin.account}</div>
+                                <div><span className="nyx-info-span">管理员姓名</span>{this.state.admin.name}</div>
+                                <div><span className="nyx-info-span">电话</span>{this.state.admin.mobile}</div>
+                                <div><span className="nyx-info-span">邮箱</span>{this.state.admin.mail}</div>
                             </ListItem>
                             {/* <ListItem button    
                                 onClick={() => { this.setState({ show: "logout", }) }}>

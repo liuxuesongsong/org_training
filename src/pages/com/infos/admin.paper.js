@@ -43,10 +43,11 @@ class Admin extends Component {
     submit = (sendObj) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-
-                for (var key in this.state.temObj) {
-                    window.CacheData.admin[key] = this.state.temObj[key];
-                }
+                window.CacheData.admin = arg.data;
+                // for (var key in this.state.temObj) {
+                //     console.log(temObj);
+                //     window.CacheData.admin[key] = this.state.temObj[key];
+                // }
             }
         }
         var obj = {
@@ -81,6 +82,7 @@ class Admin extends Component {
                 <TextField
                     className="nyx-form-div"
                     id="password"
+                    type="password"
                     label={Lang[window.Lang].pages.com.infos.admin.password}
                     value={this.state.password}
                     onChange={event => {

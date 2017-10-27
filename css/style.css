@@ -134,8 +134,8 @@
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url("fonts/glyphicons-halflings-regular.eot");
-  src: url("fonts/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("fonts/glyphicons-halflings-regular.woff2") format("woff2"), url("fonts/glyphicons-halflings-regular.woff") format("woff"), url("fonts/glyphicons-halflings-regular.ttf") format("truetype"), url("fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
+  src: url("font/glyphicons-halflings-regular.eot");
+  src: url("font/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("font/glyphicons-halflings-regular.woff2") format("woff2"), url("font/glyphicons-halflings-regular.woff") format("woff"), url("font/glyphicons-halflings-regular.ttf") format("truetype"), url("font/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 
 .glyphicon {
@@ -1325,19 +1325,45 @@
 
 #companyid {
   height: 150px;
+  position: relative;
 }
 
 .nyx-company-name {
-  font-size: 16px;
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 14px;
   font-weight: 600;
   font-family: simsun;
-  padding: 0.5rem 0;
+  padding: 0.5rem 0.5rem 0.25rem;
   margin: 0rem 0.5rem;
   border-bottom: 1px solid #BDBDBD;
 }
 
+.nyx-arranged-per, .nyx-enrolled-per {
+  height: 10px;
+  display: block;
+  left: 0.5rem;
+  position: absolute;
+}
+
+.nyx-arranged-per {
+  background: #ddd;
+  width: 272px;
+  box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) inset;
+}
+
+.nyx-enrolled-per {
+  background: #2196F3;
+  min-width: 2px;
+}
+
+.nyx-arranger-enrolled-title {
+  margin: 1rem 0.5rem 0.5rem;
+  font-size: 12px;
+}
+
 .nyx-area-paper {
   height: 350px;
+  margin-top: 1rem;
 }
 
 .nyx-paper {
@@ -1450,13 +1476,26 @@
 }
 
 .nyx-card-class {
-  width: 100%;
+  margin: 2rem 3rem 0rem 3rem;
+  border-bottom: 1px solid #BDBDBD;
+  font-size: 12px;
 }
 
 .nyx-card-class .nyx-clazz-head {
   float: left;
   margin-right: 1rem;
   line-height: 40px;
+}
+
+.nyx-card-class:hover {
+  border-bottom: 1px solid #2196F3;
+}
+
+.nyx-clazz-key {
+  text-align: center;
+  padding-top: -1rem;
+  position: relative;
+  top: -0.7rem;
 }
 
 .nyx-info-listitem {
@@ -1475,6 +1514,12 @@
 
 .nyx-info-line-height {
   line-height: 45px;
+}
+
+.nyx-flexible {
+  color: #2196F3;
+  float: right;
+  line-height: 1.5rem;
 }
 
 .nyx-company-paper {

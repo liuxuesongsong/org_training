@@ -4,17 +4,39 @@
 }
 #companyid{
     height: 150px;
+    position: relative;
 }
 .nyx-company-name{
-    font-size: 16px;
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 14px;
     font-weight: 600;
     font-family: simsun;
-    padding: 0.5rem 0;
+    padding: 0.5rem 0.5rem 0.25rem;
     margin: 0rem 0.5rem;
     border-bottom: 1px solid $grey400;
 }
+.nyx-arranged-per,.nyx-enrolled-per{
+    height: 10px; 
+    display: block;
+    left: 0.5rem;
+    position: absolute;
+}
+.nyx-arranged-per{
+    background: #ddd;
+    width: 272px;
+    box-shadow: 1px 1px 2px rgba(0,0,0,.3) inset;
+}
+.nyx-enrolled-per{
+    background: $blue;
+    min-width: 2px;
+}
+.nyx-arranger-enrolled-title{
+    margin: 1rem 0.5rem 0.5rem;
+    font-size: 12px;
+}
 .nyx-area-paper{
     height:350px;
+    margin-top: 1rem;
 }
 .nyx-paper{
     float: left;
@@ -116,17 +138,24 @@
     }
 }
 .nyx-card-class{
-    width: 100%;
+    margin: 2rem 3rem 0rem 3rem;
+    border-bottom: 1px solid $grey400;
+    font-size: 12px;
     .nyx-clazz-head{
         float: left;
         margin-right:1rem;
         line-height: 40px;
-    }
-    .nyx-clazz-key{
-        
-    }
+    }   
 }
-
+.nyx-card-class:hover{
+    border-bottom:1px solid $blue;
+}
+.nyx-clazz-key{
+    text-align: center; 
+    padding-top: -1rem;
+    position: relative;
+    top:-0.7rem; 
+  }
 .nyx-info-listitem{
     font-size: 14px !important;
     h3{
@@ -140,4 +169,9 @@
 }
 .nyx-info-line-height{
     line-height: 45px;
+}
+.nyx-flexible{
+    color: $blue;
+    float: right;
+    line-height: 1.5rem;
 }

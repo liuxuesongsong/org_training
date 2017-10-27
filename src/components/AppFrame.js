@@ -172,7 +172,8 @@ class AppFrame extends Component {
   componentWillMount() {
     window.CacheData = {};
     this.getRoutes();
-    this.get_check_code();
+    //document.getElementById("code_img").src=getRouter(CHECK_CODE).url;
+   // this.get_check_code();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
@@ -228,11 +229,13 @@ class AppFrame extends Component {
   }
   get_check_code = ()=>{
     var cb =  (route, message, arg) =>{
-      this.setState({
-        check_code:message.data.checkcode,
-        image:message.data.image
-    });
-    document.getElementById("code_img").src=message.data.image;
+      console.log(message);
+    //   this.setState({
+    //     url:message.data.url,
+    //     image:message.data.image
+    // });
+    //document.getElementById("code_img").src=message.data.image;
+   // console.log(document.getElementById("code_img"));
     }
     getData(getRouter(CHECK_CODE), {}, cb);
   }
@@ -517,14 +520,15 @@ class AppFrame extends Component {
         }}
         defaultValue=""
         onFocus={(e) => {
-             // document.getElementById("code_img").innerHTML="1234"
+         
+             
             }}
         fullWidth={true}
       />
       
       <ListItem
      
-      onClick={() => {this.get_check_code(); }}
+      /* onClick={() => {this.get_check_code(); }} */
       style={{
           marginLeft: "auto",//styleManager.theme.spacing.unit,
           marginRight: "auto",//theme.spacing.unit, 
@@ -533,7 +537,14 @@ class AppFrame extends Component {
         }}>
         <img
         id="code_img"
-         src={this.state.image}
+        style={{height:"45px",
+                position:"absolute",
+                width:"80%"}}
+         src={getRouter(CHECK_CODE).url}
+         onClick={() => {
+          // console.log(document.getElementById("code_img"));
+           document.getElementById("code_img").src=getRouter(CHECK_CODE).url+"&time="+Math.random();
+         }}
          />
        
         </ListItem>

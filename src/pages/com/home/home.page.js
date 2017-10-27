@@ -74,6 +74,11 @@ class Home extends Component {
                 arrangedStudents.push(students[i]);
             }
         }
+        //已安排占已报名的百分比
+        var per = (arranged/enrolled*272);    
+        if(arranged!=0){
+            document.getElementById("enrolled-per").style.width=per+"px";
+        }
         var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).c_name : "";
         window.currentPage.setState({
             name: name,
@@ -153,43 +158,73 @@ class Home extends Component {
                 <div style={{paddingTop:"0"}} className={'nyx-paper'}>
                     
                     <Paper id="companyid" >
+                       
                         <div className="nyx-company-name"> 
-                          {this.state.name}
+                          {this.state.name} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
-                        <Typography type="body1" component="p">
-                            {Lang[window.Lang].pages.com.home.arranged + "/" + Lang[window.Lang].pages.com.home.enrolled + ":"
-                                + this.state.arranged + Lang[window.Lang].pages.com.home.human + "/" + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
-                        </Typography>
+                       <div className="nyx-arranger-enrolled-title">
+                       <span>
+                        {Lang[window.Lang].pages.com.home.arranged + ":"
+                                + this.state.arranged + Lang[window.Lang].pages.com.home.human}
+                        </span>
+                        <span style={{float:"right"}}>
+                        {Lang[window.Lang].pages.com.home.enrolled + ":"
+                                + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
+                        </span>
+                       </div>
+                        <span className="nyx-arranged-per">
+                            
+                        </span>
+                        <span id="enrolled-per" className="nyx-enrolled-per">
+                       
+                        </span>
+                        
+                       
                     </Paper>
                     
-                    <div className={'nyx-area-paper'} >
-                        <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
+                    <Paper className={'nyx-area-paper'} >
+                        <List>
+                        <div className="nyx-company-name"> 
+                          {Lang[window.Lang].pages.com.home.clazz_title} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
                             {this.state.clazzes.map(clazz =>
-                                <ListItem dense button key={clazz.id}>
-                                    <Card className="nyx-card-class">
-                                        <CardMedia
-                                            className="nyx-card-class-img"
-                                            title="Contemplative Reptile"
-                                        />
-                                        <CardContent>
-                                            <Typography className="nyx-clazz-head" type="headline" component="h2">
-                                                {clazz.course_id=4?"重庆":"北京"}
-                                            </Typography>
-                                            <Typography  className="nyx-clazz-key" component="p">
-                                                {clazz.course_id=1?"中级":"高级"}
-                                            </Typography>
-                                            <Typography className="nyx-clazz-key" component="p">
-                                                {clazz.ti_id=1?"中软培训":"赛迪"}
-                                            </Typography>
-                                            {/* <Typography  className="nyx-clazz-key" component="p">
-                                                {clazz.train_starttime}
-                                            </Typography> */}
-                                        </CardContent>
-                                    </Card>
-                                </ListItem>,
+                            <div key={clazz.id} className="nyx-card-class">
+                                <div style={{float:"left"}}>
+                                {clazz.course_id=1?"中级":"高级"}
+                                </div>
+                                <div style={{float:"right"}}>
+                                {clazz.course_id=4?"重庆":"北京"}
+                                </div>
+                                <div className="nyx-clazz-key">
+                                {clazz.ti_id=1?"中软培训":"赛迪"}
+                                </div>
+                                
+                            </div>
+                                // <ListItem dense button key={clazz.id}>
+                                //     <Card className="nyx-card-class">
+                                //         <CardMedia
+                                //             className="nyx-card-class-img"
+                                //             title="Contemplative Reptile"
+                                //         />
+                                //         <CardContent>
+                                //             <Typography className="nyx-clazz-head" type="headline" component="h2">
+                                //                 {clazz.course_id=4?"重庆":"北京"}
+                                //             </Typography>
+                                //             <Typography  className="nyx-clazz-key" component="p">
+                                //                 {clazz.course_id=1?"中级":"高级"}
+                                //             </Typography>
+                                //             <Typography className="nyx-clazz-key" component="p">
+                                //                 {clazz.ti_id=1?"中软培训":"赛迪"}
+                                //             </Typography>
+                                //             {/* <Typography  className="nyx-clazz-key" component="p">
+                                //                 {clazz.train_starttime}
+                                //             </Typography> */}
+                                //         </CardContent>
+                                //     </Card>
+                                // </ListItem>
                             )}
                         </List>
-                    </div>
+                    </Paper>
                 </div>
                 <Paper className={'nyx-paper nyx-list-paper'}>
                     <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
