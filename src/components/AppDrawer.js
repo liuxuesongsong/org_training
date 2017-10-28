@@ -10,6 +10,7 @@ import Typography from 'material-ui/Typography';
 import Divider from 'material-ui/Divider';
 import AppDrawerNavItem from 'training/src/components/AppDrawerNavItem';
 import Link from 'training/src/components/Link';
+import Config from '../config';
 
 import { APP_TYPE_COMPANY, APP_TYPE_ORANIZATION } from "../enum";
 
@@ -87,10 +88,11 @@ function AppDrawer(props) {
       keepMounted
     >
       <div className={classes.nav}>
-        <Toolbar className={classes.toolbar+' nyx-logo'}>
+        <Toolbar className={classes.toolbar + ' nyx-logo'}>
           <Typography type="title" gutterBottom color="inherit">
             {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? "企业登陆" : "机构登陆"}
           </Typography>
+          <div>{"v." + Config.version}</div>
           {
             /**<Link className={classes.title} to="/" onClick={props.onRequestClose}>
             
