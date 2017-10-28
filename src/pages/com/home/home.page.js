@@ -159,7 +159,7 @@ class Home extends Component {
                     
                     <Paper id="companyid" >
                        
-                        <div className="nyx-company-name"> 
+                        <div className="nyx-head-name"> 
                           {this.state.name} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                        <div className="nyx-arranger-enrolled-title">
@@ -183,8 +183,8 @@ class Home extends Component {
                     </Paper>
                     
                     <Paper className={'nyx-area-paper'} >
-                        <List>
-                        <div className="nyx-company-name"> 
+                        <List style={{padding:0}}>
+                        <div className="nyx-head-name"> 
                           {Lang[window.Lang].pages.com.home.clazz_title} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                             {this.state.clazzes.map(clazz =>
@@ -226,8 +226,11 @@ class Home extends Component {
                         </List>
                     </Paper>
                 </div>
-                <Paper className={'nyx-paper nyx-list-paper'}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
+                <Paper style={{padding:0}} className={'nyx-paper nyx-list-paper'}>
+                    <List style={{padding:0}}>
+                    <div className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.home.unarranged_title} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
                         {this.state.unarragedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}

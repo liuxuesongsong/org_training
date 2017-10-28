@@ -151,6 +151,7 @@ class AppFrame extends Component {
     name: Lang[window.Lang].pages.main.input_your_account,
     password: "",
     check_code: "",
+    code_img:"",
     image:"",
     activeStep: 0,
     index: 0,
@@ -225,18 +226,6 @@ class AppFrame extends Component {
       }
     }
     getData({ url: config.routers }, { type: APP_TYPE_COMPANY, version: config.version }, cb);
-  }
-  get_check_code = ()=>{
-    var cb =  (route, message, arg) =>{
-      console.log(message);
-    //   this.setState({
-    //     url:message.data.url,
-    //     image:message.data.image
-    // });
-    //document.getElementById("code_img").src=message.data.image;
-   // console.log(document.getElementById("code_img"));
-    }
-    getData(getRouter(CHECK_CODE), {}, cb);
   }
 
   check_available = (account) => {
@@ -517,11 +506,7 @@ class AppFrame extends Component {
           marginRight: "auto",//theme.spacing.unit, 
           width:"50%" 
         }}
-        defaultValue=""
-        onFocus={(e) => {
-         
-             
-            }}
+        onChange={event => this.setState({ check_code: event.target.value })}
         fullWidth={true}
       />
       
@@ -535,15 +520,14 @@ class AppFrame extends Component {
           display: "inline-block" 
         }}>
         <img
-        id="code_img"
+        id={"code_img" + this.state.index}
         style={{height:"45px",
                 position:"absolute",
                 width:"80%"}}
          src={getRouter(CHECK_CODE).url}
-         onClick={() => {
-          // console.log(document.getElementById("code_img"));
-           document.getElementById("code_img").src=getRouter(CHECK_CODE).url+"&time="+Math.random();
-         }}
+         onClick={event => this.setState({ code_img: event.target.src=getRouter(CHECK_CODE).url+"&time="+Math.random()})}
+         
+         
          />
        
         </ListItem>
@@ -554,9 +538,7 @@ class AppFrame extends Component {
           onClick={() => {
             var name = this.state.name;
             var password = this.state.password;
-            var check_code = document.getElementById("check_code" + this.state.index).value;
-            console.log(this.state.index);
-            console.log(document.getElementById("check_code" + this.state.index).value);
+            var check_code = this.state.check_code;
             if (name === "") {
               this.popUpNotice(NOTICE, 0, "您没有输入账号")
               return

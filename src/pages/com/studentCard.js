@@ -51,15 +51,15 @@ class ComCard extends Component {
         return this.getStatusDescribe();
       case CARD_TYPE_INFO:
         return <CardActions>
-          <Button
+          <Button 
             dense
             onClick={this.state.action[0]}>
             {Lang[window.Lang].pages.com.card.modify}
           </Button>
           <Button
+           className="glyphicon glyphicon-trash"
             dense
             onClick={this.state.action[1]}>
-            {Lang[window.Lang].pages.com.card.remove}
           </Button>
         </CardActions>
       case CARD_TYPE_ENROLL:
@@ -75,9 +75,10 @@ class ComCard extends Component {
             {Lang[window.Lang].pages.com.card.enroll}
           </Button>
           <Button
+          
             dense
             onClick={this.state.action[2]}>
-            {Lang[window.Lang].pages.com.card.remove}
+           <i className="glyphicon glyphicon-trash"></i>
           </Button>
         </CardActions>
       case CARD_TYPE_ARRANGE:
