@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import compose from 'recompose/compose';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Typography from 'material-ui/Typography';
-import List, {ListItem} from 'material-ui/List';
+import List, { ListItem } from 'material-ui/List';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import withWidth, { isWidthUp } from 'material-ui/utils/withWidth';
@@ -40,7 +40,7 @@ import Lang from '../language';
 import Code from '../code';
 import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
-import { APP_TYPE_COMPANY,CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
+import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
 import Express from '../pages/com/infos/express.paper'
@@ -151,8 +151,8 @@ class AppFrame extends Component {
     name: Lang[window.Lang].pages.main.input_your_account,
     password: "",
     check_code: "",
-    code_img:"",
-    image:"",
+    code_img_url: "",
+    image: "",
     activeStep: 0,
     index: 0,
     unavailable: false,
@@ -174,7 +174,7 @@ class AppFrame extends Component {
     window.CacheData = {};
     this.getRoutes();
     //document.getElementById("code_img").src=getRouter(CHECK_CODE).url;
-   // this.get_check_code();
+    // this.get_check_code();
     if (!sessionStorage.logged || sessionStorage.logged === false) {
       this.context.router.push("/");
       addEventListener("login_success", (e) => {
@@ -219,6 +219,9 @@ class AppFrame extends Component {
           for (var key in message.data.routelist) {
             sessionStorage.setItem(key, JSON.stringify(message.data.routelist[key]));
           }
+          var img_url = getRouter(CHECK_CODE).url;
+          this.setState({ code_img_url: img_url });
+          // this.setState({ code_img: this.getElementById("code_img" + this.state.index).src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })
         } else {
           this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, message.msg);
         }
@@ -499,37 +502,39 @@ class AppFrame extends Component {
           onChange={event => this.setState({ password: event.target.value })}
         />
         <TextField
-        label={"验证码"}
-        id={"check_code" + this.state.index}
-        style={{
-          marginLeft: "auto",//styleManager.theme.spacing.unit,
-          marginRight: "auto",//theme.spacing.unit, 
-          width:"50%" 
-        }}
-        onChange={event => this.setState({ check_code: event.target.value })}
-        fullWidth={true}
-      />
-      
-      <ListItem
-     
-      /* onClick={() => {this.get_check_code(); }} */
-      style={{
-          marginLeft: "auto",//styleManager.theme.spacing.unit,
-          marginRight: "auto",//theme.spacing.unit, 
-          width:"25%",
-          display: "inline-block" 
-        }}>
-        <img
-        id={"code_img" + this.state.index}
-        style={{height:"45px",
-                position:"absolute",
-                width:"80%"}}
-         src={getRouter(CHECK_CODE).url}
-         onClick={event => this.setState({ code_img: event.target.src=getRouter(CHECK_CODE).url+"&time="+Math.random()})}
-         
-         
-         />
-       
+          label={"验证码"}
+          id={"check_code" + this.state.index}
+          style={{
+            marginLeft: "auto",//styleManager.theme.spacing.unit,
+            marginRight: "auto",//theme.spacing.unit, 
+            width: "50%"
+          }}
+          onChange={event => this.setState({ check_code: event.target.value })}
+          fullWidth={true}
+        />
+
+        <ListItem
+
+          /* onClick={() => {this.get_check_code(); }} */
+          style={{
+            marginLeft: "auto",//styleManager.theme.spacing.unit,
+            marginRight: "auto",//theme.spacing.unit, 
+            width: "25%",
+            display: "inline-block"
+          }}>
+          <img
+            id={"code_img" + this.state.index}
+            style={{
+              height: "45px",
+              position: "absolute",
+              width: "80%"
+            }}
+            src={this.state.code_img_url}
+            onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
+
+
+          />
+
         </ListItem>
         <Button
           raised
@@ -620,35 +625,35 @@ class AppFrame extends Component {
 
   LoginTable = () => {
     return <div className={'nyx-login-bg'}>
-        <div className={'nyx-login'}>
-          <div className={'nyx-login-window'}>
-            <AppBar position="static" color="default">
-              <Tabs
-                index={this.state.index}
-                onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                fullWidth
-              >
-                <Tab label="公司登陆" />
-                <Tab label="公司注册" />
-                <Tab label="机构登陆" />
-              </Tabs>
-            </AppBar>
-            <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
-              <TabContainer>
-                {this.LoginView()}
-              </TabContainer>
-              <TabContainer>
-                {this.RegisterView()}
-              </TabContainer>
-              <TabContainer>
-                {this.LoginView()}
-              </TabContainer>
-            </SwipeableViews>
-          </div>
+      <div className={'nyx-login'}>
+        <div className={'nyx-login-window'}>
+          <AppBar position="static" color="default">
+            <Tabs
+              index={this.state.index}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              fullWidth
+            >
+              <Tab label="公司登陆" />
+              <Tab label="公司注册" />
+              <Tab label="机构登陆" />
+            </Tabs>
+          </AppBar>
+          <SwipeableViews index={this.state.index} onChangeIndex={this.handleChangeIndex}>
+            <TabContainer>
+              {this.LoginView()}
+            </TabContainer>
+            <TabContainer>
+              {this.RegisterView()}
+            </TabContainer>
+            <TabContainer>
+              {this.LoginView()}
+            </TabContainer>
+          </SwipeableViews>
         </div>
       </div>
+    </div>
   }
 
   render() {
@@ -675,7 +680,7 @@ class AppFrame extends Component {
       <div className="nyx">
         {sessionStorage.getItem("logged") === "true" ?
           <div className={classes.appFrame}>
-            <AppBar className={appBarClassName+'nyx-topbar'}>
+            <AppBar className={appBarClassName + 'nyx-topbar'}>
               <Toolbar>
                 <IconButton
                   color="contrast"
@@ -699,7 +704,7 @@ class AppFrame extends Component {
               </Toolbar>
             </AppBar>
             <AppDrawer
-              className={classes.drawer+' nyx-sidebar'}
+              className={classes.drawer + ' nyx-sidebar'}
               docked={drawerDocked}
               routes={routes}
               onRequestClose={this.handleDrawerClose}
