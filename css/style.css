@@ -1334,20 +1334,20 @@
   font-weight: 600;
   font-family: simsun;
   padding: 1rem 0rem 0.25rem;
-  margin: 0rem 0.5rem;
+  margin: 0rem 1rem;
   border-bottom: 1px solid #BDBDBD;
 }
 
 .nyx-arranged-per, .nyx-enrolled-per {
   height: 10px;
   display: block;
-  left: 0.5rem;
+  left: 1rem;
   position: absolute;
 }
 
 .nyx-arranged-per {
   background: #ddd;
-  width: 272px;
+  width: 256px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) inset;
 }
 
@@ -1357,7 +1357,7 @@
 }
 
 .nyx-arranger-enrolled-title {
-  margin: 1rem 0.5rem 0.5rem;
+  margin: 1rem 1rem 0.5rem;
   font-size: 12px;
 }
 
@@ -1378,12 +1378,17 @@
 }
 
 .nyx-list-paper {
-  min-height: 550px;
+  height: 300px;
+  overflow-y: auto;
+}
+
+.nyx-list-paper-change {
+  min-height: 300px !important;
 }
 
 .nyx-card {
-  border-bottom: 2px #2196F3 solid;
-  padding: 1rem 0;
+  font-size: 12px;
+  padding: 0.3rem 0.5rem 0 0.7rem;
 }
 
 .nyx-card > div {
@@ -1391,15 +1396,47 @@
 }
 
 .nyx-card .nyx-card-body {
-  height: 60px;
+  height: 50px;
+  float: left;
+  position: relative;
+  margin-left: 0.5rem;
+  padding: 0rem 0rem 0rem 1rem;
+  border-left: 1px solid #BDBDBD;
 }
 
 .nyx-card .nyx-card-body p {
   font-size: 12px !important;
 }
 
+.nyx-card .nyx-card:last-child(nyx-card-body) {
+  border: none;
+}
+
+.nyx-card .nyx-card-round-ing {
+  width: 12px;
+  height: 12px;
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  border-radius: 50%;
+  box-shadow: 1px 1px 7px 0 #2196F3;
+  background-color: #2196F3;
+}
+
 .nyx-card .nyx-card-action {
-  height: 33px;
+  float: left;
+  margin: 0;
+  padding: 0;
+}
+
+.nyx-card .nyx-card-unarrange-button {
+  color: #FFFFFF;
+  font-size: 12px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  margin: 0.8rem 0rem 0rem 1.1rem;
+  border: none;
+  background-color: #2196F3;
 }
 
 .nyx-card .nyx-card-action > {
@@ -1407,25 +1444,29 @@
 }
 
 .nyx-card .nyx-oneline, .nyx-card .nyx-card-name, .nyx-card .nyx-card-key, .nyx-card .nyx-card-value, .nyx-card .nyx-info .nyx-info-selectshow > div, .nyx-info .nyx-card .nyx-info-selectshow > div {
-  display: block;
-  float: left;
+  display: inline-block;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .nyx-card .nyx-card-name {
-  font-size: 12px;
-  line-height: 40px;
-  width: 3em;
+  width: 7em;
+  color: #212121;
 }
 
-.nyx-card .nyx-card-key {
-  width: 0;
+.nyx-card .nyx-card-first-info {
+  color: #212121;
+  margin-top: -7px;
+}
+
+.nyx-card .nyx-card-second-info {
+  color: #9E9E9E;
+  margin-bottom: 0.5rem;
 }
 
 .nyx-card .nyx-card-value {
-  width: 8rem;
+  width: 4.5rem;
 }
 
 .nyx-card .nyx-card-value.nyx-card-value-sm {

@@ -117,13 +117,10 @@ class ComCard extends Component {
         </CardActions>
       case CARD_TYPE_UNARRANGE:
         return (
-          <CardActions>
-            <Button
-              dense
-              onClick={this.state.action[0]}>
-              {"取消"}
-            </Button>
-          </CardActions>
+          <button
+          className="nyx-card-unarrange-button"
+           onClick={this.state.action[0]}>取消</button>
+          
         )
       default:
         return this.getStatusDescribe();
@@ -165,7 +162,52 @@ class ComCard extends Component {
 
     return (
       <div>
-        <Card className="nyx-card-list" style={{ display: 'flex', }}>
+        <div className="nyx-card-list" style={{ display: 'flex', }}>
+        <CardMedia
+            style={{
+              width: 0,
+              height: 0
+            }}
+            //image="/images/live-from-space.jpg"
+            title="Live from space album cover"
+          />
+          <div className="nyx-card">
+            <div className="nyx-card-body">
+              <div className="nyx-card-round-ing"></div>
+              <div className="nyx-card-first-info">
+              <div className={"nyx-card-name"}>
+                  {name}
+              </div>
+              <div className={"nyx-card-key"}>
+              {(level === 1 ? "中" : "高") + "级"}
+              </div>
+              <div style={{float:"right"}}>
+              {getCity(city)}
+              </div>
+              </div>
+              <div className="nyx-card-second-info">
+              <span className={"nyx-card-key"}>
+              {"电话:"}
+              </span>
+              <div className={"nyx-card-value"}>
+              {mobile}
+              </div>
+              <div className={"nyx-card-key"}>
+              {"邮件:"}
+              </div>
+              <div className={"nyx-card-value"}>
+              {email}
+              </div>
+              </div>
+              
+              
+            </div>
+            <div className="nyx-card-action">
+              {this.buttonActions()}
+            </div>
+          </div>
+        </div>
+        {/* <Card className="nyx-card-list" style={{ display: 'flex', }}>
           <CardMedia
             style={{
               width: 0,
@@ -208,7 +250,7 @@ class ComCard extends Component {
               {this.buttonActions()}
             </div>
           </div>
-        </Card>
+        </Card> */}
       </div>
     );
   }

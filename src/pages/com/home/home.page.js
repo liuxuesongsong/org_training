@@ -36,6 +36,7 @@ class Home extends Component {
         arranged: 0,
         examing: 0,
         passed: 0,
+        change_height:"",
         unarragedStudents: [],
         arrangedStudents: [],
         clazzes: [],
@@ -75,7 +76,7 @@ class Home extends Component {
             }
         }
         //已安排占已报名的百分比
-        var per = (arranged/enrolled*272);    
+        var per = (arranged/enrolled*256);    
         if(arranged!=0){
             document.getElementById("enrolled-per").style.width=per+"px";
         }
@@ -228,11 +229,17 @@ class Home extends Component {
                 </div>
                 <Paper style={{padding:0}} className={'nyx-paper nyx-list-paper'}>
                     <List style={{padding:0}}>
-                    <div className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.home.unarranged_title} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.home.unarranged_title} <i
+                          onClick={event => this.setState({ change_height: event.target.parentNode.parentNode.parentNode.classList.add("nyx-list-paper-change"),
+                                                            change_height: event.target.parentNode.parentNode.parentNode.classList.remove("nyx-list-paper")})}
+         
+                         
+                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         {this.state.unarragedStudents.map(student =>
-                            <StudentCard
+                            <StudentCard 
+                           
                                 type={CARD_TYPE_UNARRANGE}
                                 key={CARD_TYPE_UNARRANGE + student.id}
                                 name={student.name}
