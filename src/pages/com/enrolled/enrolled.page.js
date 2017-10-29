@@ -46,9 +46,9 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
-        unarranged_height:1,
-        arranged_height:1,
-        unenrolled_height:1,
+        unarranged_height: 1,
+        arranged_height: 1,
+        unenrolled_height: 1,
         students: [],
         newStudents: [],
         unarragedStudents: [],
@@ -327,157 +327,157 @@ class Enrolled extends Component {
         return (
             <div className={'nyx-page'}>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
-                <List style={{padding:0}}>
-                <div style={{marginBottom:"1rem",position:"relative"}} className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.enrolled.unenrolled} <i
-                          onClick={() => {
-                              if(this.state.unenrolled_height==0){
-                                  this.setState({unenrolled_height:1})
-                              }else{
-                                this.setState({unenrolled_height:0})
-                              }
-                          }}
-                         
-                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                           <Button style={{position:"absolute",right:"28px"}} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
-                            onClick={() => {
-                                this.setState({
-                                    openNewStudentDialog: true,
-                                    course: "1",
-                                })
-                            }}
-                        >
-                            {"新增"}
-                        </Button>
-                        </div>
-                        <div className={this.state.unenrolled_height?"nyx-list-paper":"nyx-list-paper-change"}>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
+                            {Lang[window.Lang].pages.com.enrolled.unenrolled} <i
+                                onClick={() => {
+                                    if (this.state.unenrolled_height == 0) {
+                                        this.setState({ unenrolled_height: 1 })
+                                    } else {
+                                        this.setState({ unenrolled_height: 0 })
+                                    }
+                                }}
 
-                    
-                        {this.state.newStudents.map(student =>
-                            <StudentCard
-                                type={CARD_TYPE_ENROLL}
-                                key={student.id}
-                                name={student.name.toString()}
-                                mobile={student.mobile === undefined ? "" : student.mobile.toString()}
-                                email={student.mail.toString() === undefined ? "" : student.mail.toString()}
-                                level={Number(student.course_id)}
-                                city={Number(student.area_id)}
-                                action={[() => {
-                                    this.selectedStudent(student);
-                                    this.toggleDrawer(true)()
-                                }, () => {
-                                    this.state.selectedStudentId = student.id;
-                                    this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
-                                        () => {
-                                            this.erollStudent(student.id);
-                                            this.closeNotice();
-                                        }, () => {
-                                            this.closeNotice();
-                                        }]);
-                                }, () => {
-                                    this.state.selected = student;
-                                    this.popUpNotice(ALERT, 0, "删除学生" + student.name, [
-                                        () => {
-                                            this.removeStudent(student.id);
-                                            this.closeNotice();
-                                        }, () => {
-                                            this.closeNotice();
-                                        }]);
-                                }]}>
-                            </StudentCard>
-                        )}
-                        </div>
-                    </List>
-                </Paper>
-                <Paper style={{padding:0}} className={'nyx-paper nyx-enroller-list'}>
-                    <List style={{padding:0}}>
-                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.enrolled.unarrange} <i
-                          onClick={() => {
-                              if(this.state.unarranged_height==0){
-                                  this.setState({unarranged_height:1})
-                              }else{
-                                this.setState({unarranged_height:0})
-                              }
-                          }}
-                         
-                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                        </div>
-                        <div className={this.state.unarranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
-                        {this.state.unarragedStudents.map(student =>
-                            <StudentCard
-                                type={CARD_TYPE_UNARRANGE}
-                                key={student.id}
-                                name={student.name.toString()}
-                                tel={student.mobile === undefined ? "" : student.mobile}
-                                email={student.mail === undefined ? "" : student.mail}
-                                level={Number(student.course_id)}
-                                city={Number(student.area_id)}
-                                action={[() => {
-                                    this.state.selectedStudentId = student.id;
-                                    this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                        () => {
-                                            this.cancelEnroll(student.id);
-                                            this.closeNotice();
-                                        }, () => {
-                                            this.closeNotice();
-                                        }]);
-                                }]}
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                            <Button style={{ position: "absolute", right: "28px" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
+                                onClick={() => {
+                                    this.setState({
+                                        openNewStudentDialog: true,
+                                        course: "1",
+                                    })
+                                }}
                             >
-                            </StudentCard>
-                        )}
+                                {"新增"}
+                            </Button>
                         </div>
-                    </List>
-                </Paper>
-                <Paper style={{padding:0}} className={'nyx-paper nyx-enroller-list'}>
-                <List style={{padding:0}}>
-                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.enrolled.arranged} <i
-                          onClick={() => {
-                              if(this.state.arranged_height==0){
-                                  this.setState({arranged_height:1})
-                              }else{
-                                this.setState({arranged_height:0})
-                              }
-                          }}
-                         
-                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                        </div>
-                        <div className={this.state.arranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
-                        {this.state.arrangedStudents.map(student =>
-                            <StudentCard
-                                type={CARD_TYPE_ARRANGE}
-                                key={student.id}
-                                name={student.name.toString()}
-                                tel={student.mobile === undefined ? "" : student.mobile}
-                                email={student.mail === undefined ? "" : student.mail}
-                                level={Number(student.course_id)}
-                                city={Number(student.area_id)}
-                                action={[
-                                    () => {
+                        <div className={this.state.unenrolled_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
+
+
+                            {this.state.newStudents.map(student =>
+                                <StudentCard
+                                    type={CARD_TYPE_ENROLL}
+                                    key={student.id}
+                                    name={student.name.toString()}
+                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
+                                    email={student.mail.toString() === undefined ? "" : student.mail.toString()}
+                                    level={Number(student.course_id)}
+                                    city={Number(student.area_id)}
+                                    action={[() => {
+                                        this.selectedStudent(student);
+                                        this.toggleDrawer(true)()
+                                    }, () => {
                                         this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
                                             () => {
-                                                this.agreeArrange();
+                                                this.erollStudent(student.id);
                                                 this.closeNotice();
                                             }, () => {
                                                 this.closeNotice();
                                             }]);
-                                    },
-                                    () => {
-                                        this.state.selectedStudentId = student.id;
-
-                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                    }, () => {
+                                        this.state.selected = student;
+                                        this.popUpNotice(ALERT, 0, "删除学生" + student.name, [
                                             () => {
-                                                this.refuseArrange();
+                                                this.removeStudent(student.id);
                                                 this.closeNotice();
                                             }, () => {
                                                 this.closeNotice();
                                             }]);
                                     }]}>
-                            </StudentCard>
-                        )}
-                         </div>
+                                </StudentCard>
+                            )}
+                        </div>
+                    </List>
+                </Paper>
+                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-list'}>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                            {Lang[window.Lang].pages.com.enrolled.unarrange} <i
+                                onClick={() => {
+                                    if (this.state.unarranged_height == 0) {
+                                        this.setState({ unarranged_height: 1 })
+                                    } else {
+                                        this.setState({ unarranged_height: 0 })
+                                    }
+                                }}
+
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
+                        <div className={this.state.unarranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
+                            {this.state.unarragedStudents.map(student =>
+                                <StudentCard
+                                    type={CARD_TYPE_UNARRANGE}
+                                    key={student.id}
+                                    name={student.name.toString()}
+                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
+                                    email={student.mail.toString() === undefined ? "" : student.mail.toString()}
+                                    level={Number(student.course_id)}
+                                    city={Number(student.area_id)}
+                                    action={[() => {
+                                        this.state.selectedStudentId = student.id;
+                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                            () => {
+                                                this.cancelEnroll(student.id);
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
+                                    }]}
+                                >
+                                </StudentCard>
+                            )}
+                        </div>
+                    </List>
+                </Paper>
+                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-list'}>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                            {Lang[window.Lang].pages.com.enrolled.arranged} <i
+                                onClick={() => {
+                                    if (this.state.arranged_height == 0) {
+                                        this.setState({ arranged_height: 1 })
+                                    } else {
+                                        this.setState({ arranged_height: 0 })
+                                    }
+                                }}
+
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
+                        <div className={this.state.arranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
+                            {this.state.arrangedStudents.map(student =>
+                                <StudentCard
+                                    type={CARD_TYPE_ARRANGE}
+                                    key={student.id}
+                                    name={student.name.toString()}
+                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
+                                    email={student.mail === undefined ? "" : student.mail.toString()}
+                                    level={Number(student.course_id)}
+                                    city={Number(student.area_id)}
+                                    action={[
+                                        () => {
+                                            this.state.selectedStudentId = student.id;
+                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                () => {
+                                                    this.agreeArrange();
+                                                    this.closeNotice();
+                                                }, () => {
+                                                    this.closeNotice();
+                                                }]);
+                                        },
+                                        () => {
+                                            this.state.selectedStudentId = student.id;
+
+                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                () => {
+                                                    this.refuseArrange();
+                                                    this.closeNotice();
+                                                }, () => {
+                                                    this.closeNotice();
+                                                }]);
+                                        }]}>
+                                </StudentCard>
+                            )}
+                        </div>
                     </List>
                 </Paper>
                 <Drawer
@@ -491,7 +491,7 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <Paper style={{ margin: 10, width: 800, float: "left",boxShadow:"none",fontSize:"12px"}} elevation={4}>
+                        <Paper style={{ margin: 10, width: 800, float: "left", boxShadow: "none", fontSize: "12px" }} elevation={4}>
                             <Typography type="headline" component="h3">
                                 {Lang[window.Lang].pages.com.students.base_info}
                             </Typography>
@@ -510,7 +510,7 @@ class Enrolled extends Component {
                             <FormControl required>
                                 <FormLabel>{"等级"}</FormLabel>
                                 <RadioGroup
-                                    style={{display:"block"}}
+                                    style={{ display: "block" }}
                                     aria-label="gender"
                                     name="gender"
                                     selectedValue={this.state.course}
@@ -566,7 +566,7 @@ class Enrolled extends Component {
 
                             <Button
                                 color="primary"
-                                style={{ margin: 10,float:"right"}}
+                                style={{ margin: 10, float: "right" }}
                                 onClick={(e) => {
                                     this.modifyStudent(e)
                                 }}>

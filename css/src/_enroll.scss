@@ -10,10 +10,14 @@
 .nyx-card-enrroll-button{
     color: $white;
     font-size: 12px;
+    line-height: 24px;
     padding: 0.1rem 0.3rem;
     border-radius: 3px;
     border: none;
     background-color: $blue;
+    &:hover{
+        background-color: $blue900;
+    }
 }
 .nyx-enroller-list{
     width: 384px;

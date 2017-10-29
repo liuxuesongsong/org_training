@@ -249,7 +249,7 @@ class Home extends Component {
                                 type={CARD_TYPE_UNARRANGE}
                                 key={CARD_TYPE_UNARRANGE + student.id}
                                 name={student.name}
-                                mobile={student.mobile}
+                                mobile={student.mobile.toString()}
                                 email={student.mail}
                                 level={student.course_id}
                                 city={student.area_id}

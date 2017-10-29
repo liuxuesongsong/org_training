@@ -576,33 +576,11 @@ class Clazz extends Component {
 
     render() {
         return (
-            <div style={{ marginTop: 64, width: "100%" }}>
-                <TextField
-                    id="search_input"
-                    label={"搜索"}
-                    value={this.state.search_input}
-                    onChange={event => {
-                        this.setState({
-                            search_input: event.target.value,
-                        });
-                    }}
-                    fullWidth
-                />
-                <Button
-                    color="primary"
-                    onClick={() => {
-                        this.state.queryCondition.company_name = document.getElementById("search_input").value;
-                        this.state.selectedStudentID = [];
-                        this.state.currentPageSelectedID = [];
-                        this.queryStudents(1, true);
-                    }}
-                    style={{ margin: 10 }}
-                >
-                    {"搜索"}
-                </Button>
-                {this.getCondition()}
-                <div style={{ margin: 10, width: 400, float: "left" }}>
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
+        <div style={{ marginTop: 80, width: "100%" }}>
+            <div className="nyx-left-list" >
+                
+                <div className="nyx-left-top-list">
+                    <List subheader={<ListSubheader >{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                         <ListSubheader>
                             <Button
                                 color="primary"
@@ -618,43 +596,37 @@ class Clazz extends Component {
                         </ListSubheader>
                         {this.state.clazzes.map(clazz =>
                             <Card
-                                key={clazz.id}
-                                style={{ display: 'flex', }}>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}>
-                                    <CardContent>
-                                        <Typography>
-                                            {clazz.id}
-                                        </Typography>
-                                        <Typography component="h2">
-                                            {clazz.name}
-                                        </Typography>
-                                        <Typography type="body1">
-                                            {getCity(clazz.area_id)}
-                                        </Typography>
-                                        <Typography type="body1">
-                                            {getCourse(clazz.course_id)}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {clazz.train_starttime}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {clazz.class_head}
-                                        </Typography>
-                                        <Typography type="body1">
+                                key={clazz.id} className="nyx-card"
+                            >
+                                <div className="nyx-card-body">
+                                    <CardContent className="nyx-card-first-info">
+                                        <div className={'nyx-card-name'}>
                                             {getInst(clazz.ti_id)}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {clazz.address}
-                                        </Typography>
+                                        </div>
+                                        <div className={'nyx-card-name'}>
+                                            {getCity(clazz.area_id)}
+                                        </div>
+                                        <div className={'nyx-card-name'}>
+                                            {getCourse(clazz.course_id)}
+                                        </div>
                                     </CardContent>
+                                    {/* <CardContent className="nyx-card-second-info">
+                                        <div className={'nyx-card-value'}>
+                                            {clazz.train_starttime}
+                                        </div>
+                                        <div className={'nyx-card-value'}>
+                                            {clazz.class_head}
+                                        </div>
+                                        <div className={'nyx-card-value'}>
+                                            {clazz.address}
+                                        </div>
+                                    </CardContent> */}
                                 </div>
                                 {
                                     this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
-                                        <CardActions>
+                                        <CardActions className="nyx-card-action">
                                             <Button
+                                                className="nyx-card-button"
                                                 dense
                                                 onClick={() => {
                                                     this.setState({
@@ -668,6 +640,7 @@ class Clazz extends Component {
                                                 {"确定"}
                                             </Button>
                                             <Button
+                                                className="nyx-card-button"
                                                 dense
                                                 onClick={() => {
                                                     this.setState({
@@ -691,8 +664,9 @@ class Clazz extends Component {
                                         </CardActions>
                                     </div> :
                                         <div>
-                                            <CardActions>
-                                                <Button
+                                            <CardActions  className="nyx-card-action">
+                                                <i
+                                                className="glyphicon glyphicon-pencil"
                                                     dense
                                                     onClick={() => {
                                                         this.state.selected = clazz;
@@ -700,8 +674,9 @@ class Clazz extends Component {
                                                         {/* this.toggleDrawer(true)() */ }
                                                     }}>
                                                     {Lang[window.Lang].pages.com.card.modify}
-                                                </Button>
-                                                <Button
+                                                </i>
+                                                <i
+                                                className="glyphicon glyphicon-trash" 
                                                     dense
                                                     onClick={() => {
                                                         this.state.selected = clazz;
@@ -716,8 +691,21 @@ class Clazz extends Component {
                                                             }]);
                                                     }}>
                                                     {Lang[window.Lang].pages.com.card.remove}
-                                                </Button>
+                                                </i>
+                                                <i
+                                                className="glyphicon glyphicon-search"
+                                                    dense
+                                                    onClick={() => {
+                                                        console.log("123")
+                                                        this.queryClazzStudents(clazz.id);
+                                                        // this.state.selected = clazz;
+                                                        // this.state.showInfo = true;
+                                                        {/* this.toggleDrawer(true)() */ }
+                                                    }}>
+                                                    {"查看学生"}
+                                                </i>
                                                 <Button
+                                                className="nyx-card-button"
                                                     dense
                                                     onClick={() => {
 
@@ -732,17 +720,6 @@ class Clazz extends Component {
                                                         this.queryStudents(1, true);
                                                     }}>
                                                     {"添加学生"}
-                                                </Button>
-                                                <Button
-                                                    dense
-                                                    onClick={() => {
-                                                        console.log("123")
-                                                        this.queryClazzStudents(clazz.id);
-                                                        // this.state.selected = clazz;
-                                                        // this.state.showInfo = true;
-                                                        {/* this.toggleDrawer(true)() */ }
-                                                    }}>
-                                                    {"查看学生"}
                                                 </Button>
                                             </CardActions>
                                         </div>
@@ -795,8 +772,42 @@ class Clazz extends Component {
                             </Card>
                         })}
                     </List>
+                
+                
                 </div>
-                <div style={{ margin: 10, width: 800, float: "right", clear: "none" }}>
+
+                <div className="nyx-left-bottom-paper">
+
+                </div>
+            </div>
+            <div className="nyx-right-form">
+                <div className="nyx-right-top-search">
+                <TextField
+                    id="search_input"
+                    label={"搜索"}
+                    value={this.state.search_input}
+                    onChange={event => {
+                        this.setState({
+                            search_input: event.target.value,
+                        });
+                    }}
+                    fullWidth
+                />
+                <Button
+                    color="primary"
+                    onClick={() => {
+                        this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                        this.state.selectedStudentID = [];
+                        this.state.currentPageSelectedID = [];
+                        this.queryStudents(1, true);
+                    }}
+                    style={{ margin: 10 }}
+                >
+                    {"搜索"}
+                </Button>
+                {this.getCondition()}
+                </div>
+                <div className="nyx-right-bottom-table">
                     <ReactDataGrid
                         rowKey="id"
                         columns={
@@ -937,9 +948,6 @@ class Clazz extends Component {
                         open={this.state.right}
                         onRequestClose={this.toggleDrawer(false)}
                     >
-
-
-
                     </Drawer> : <div />}
                 {this.newClazzDialog()}
                 <CommonAlert
@@ -950,7 +958,9 @@ class Clazz extends Component {
                     action={this.state.alertAction}
                 >
                 </CommonAlert>
+            
             </div>
+        </div>
         )
     }
 
