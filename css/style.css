@@ -1378,15 +1378,18 @@
 }
 
 .nyx-list-paper {
-  height: 300px;
+  height: 400px;
+  padding-top: 0.2rem;
   overflow-y: auto;
 }
 
 .nyx-list-paper-change {
-  min-height: 300px !important;
+  min-height: 400px;
+  padding-top: 0.1rem;
 }
 
 .nyx-card {
+  width: 100%;
   font-size: 12px;
   padding: 0.3rem 0.5rem 0 0.7rem;
 }
@@ -1396,7 +1399,7 @@
 }
 
 .nyx-card .nyx-card-body {
-  height: 50px;
+  width: 78%;
   float: left;
   position: relative;
   margin-left: 0.5rem;
@@ -1424,8 +1427,9 @@
 }
 
 .nyx-card .nyx-card-action {
-  float: left;
+  float: right;
   margin: 0;
+  margin-right: 0.4rem;
   padding: 0;
 }
 
@@ -1456,8 +1460,10 @@
 }
 
 .nyx-card .nyx-card-first-info {
+  width: 220px;
   color: #212121;
-  margin-top: -7px;
+  margin-right: 2rem;
+  color: #212121;
 }
 
 .nyx-card .nyx-card-second-info {
@@ -1563,12 +1569,55 @@
   line-height: 1.5rem;
 }
 
+@media screen and (min-width: 320px) and (max-width: 1280px) {
+  .nyx-form .nyx-form-div {
+    width: 100%;
+    display: inline-block;
+  }
+  .nyx-form .nyx-form-div div {
+    width: 98%;
+  }
+}
+
 .nyx-company-paper {
   width: 800px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 800px) {
+  .nyx-company-paper {
+    width: 320px;
+  }
 }
 
 .nyx-paper-header-btn {
   float: right;
   position: relative;
   bottom: -28px;
+}
+
+.nyx-enroller-paper {
+  width: 800px;
+  float: none;
+}
+
+.nyx-card-enrroll-button {
+  color: #FFFFFF;
+  font-size: 12px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  border: none;
+  background-color: #2196F3;
+}
+
+.nyx-enroller-list {
+  width: 384px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 800px) {
+  .nyx-enroller-paper {
+    width: 320px;
+  }
+  .nyx-enroller-list {
+    width: 320px;
+  }
 }

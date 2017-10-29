@@ -48,13 +48,16 @@
     }
 }
 .nyx-list-paper{
-    height: 300px;
+    height: 400px;
+    padding-top: 0.2rem;
     overflow-y: auto;
 }
 .nyx-list-paper-change{
-    min-height: 300px !important;
+    min-height: 400px;
+    padding-top: 0.1rem;
 }
 .nyx-card {
+    width: 100%;
     font-size:12px;
    // border-bottom: 2px $blue solid;
     padding:0.3rem 0.5rem 0 0.7rem;
@@ -64,7 +67,7 @@
   
    
     .nyx-card-body{
-        height: 50px;
+        width: 78%;
         float: left;
         position: relative;
         //width: 80%;
@@ -89,8 +92,9 @@
         background-color: $blue;
     }
     .nyx-card-action{
-        float: left;
+        float: right;
         margin: 0;
+        margin-right: 0.4rem;
         padding: 0;
     }
     .nyx-card-unarrange-button{
@@ -123,8 +127,10 @@
         @extend .nyx-oneline;
     }
     .nyx-card-first-info{
+        width: 220px;
+        color: #212121;
+        margin-right: 2rem;
         color: $grey900;
-        margin-top: -7px;
     }
     .nyx-card-second-info{
         color: $grey500;
@@ -222,4 +228,15 @@
     color: $blue;
     float: right;
     line-height: 1.5rem;
+}
+@media screen and (min-width: 320px) and (max-width: 1280px){
+    .nyx-form{
+        .nyx-form-div{
+           width: 100%;
+            display: inline-block;
+        div{
+            width: 98%;
+        }
+        }
+    } 
 }

@@ -36,7 +36,8 @@ class Home extends Component {
         arranged: 0,
         examing: 0,
         passed: 0,
-        change_height:"",
+        unarranged_height:1,
+        arranged_height:1,
         unarragedStudents: [],
         arrangedStudents: [],
         clazzes: [],
@@ -227,16 +228,21 @@ class Home extends Component {
                         </List>
                     </Paper>
                 </div>
-                <Paper style={{padding:0}} className={'nyx-paper nyx-list-paper'}>
+                <Paper style={{padding:0}} className={'nyx-paper'}>
                     <List style={{padding:0}}>
                     <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
                           {Lang[window.Lang].pages.com.home.unarranged_title} <i
-                          onClick={event => this.setState({ change_height: event.target.parentNode.parentNode.parentNode.classList.add("nyx-list-paper-change"),
-                                                            change_height: event.target.parentNode.parentNode.parentNode.classList.remove("nyx-list-paper")})}
-         
+                          onClick={() => {
+                              if(this.state.unarranged_height==0){
+                                  this.setState({unarranged_height:1})
+                              }else{
+                                this.setState({unarranged_height:0})
+                              }
+                          }}
                          
                            className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
+                        <div className={this.state.unarranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
                         {this.state.unarragedStudents.map(student =>
                             <StudentCard 
                            
@@ -260,11 +266,26 @@ class Home extends Component {
                             >
                             </StudentCard>
                         )}
+                        </div>
                     </List>
                 </Paper>
-                <Paper className={'nyx-paper nyx-list-paper'}>
+                <Paper  style={{padding:0}} className={'nyx-paper'}>
 
-                    <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
+                    <List style={{padding:0}}>
+                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.home.arranged_title} <i
+                          onClick={() => {
+                              if(this.state.arranged_height==0){
+                                  this.setState({arranged_height:1})
+                              }else{
+                                this.setState({arranged_height:0})
+                              }
+                          }}
+                         
+                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
+                        <div className={this.state.arranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
+
                         {this.state.arrangedStudents.map(student => {
                             switch (student.is_inlist) {
                                 case STATUS_AGREED_UNDO:
@@ -325,6 +346,7 @@ class Home extends Component {
                                     </StudentCard>)
                             }
                         })}
+                        </div>
                     </List>
                 </Paper>
                 <CommonAlert

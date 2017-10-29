@@ -3,3 +3,26 @@
     position: relative;
     bottom: -28px;
 }
+.nyx-enroller-paper{
+    width: 800px;
+    float: none;
+}
+.nyx-card-enrroll-button{
+    color: $white;
+    font-size: 12px;
+    padding: 0.1rem 0.3rem;
+    border-radius: 3px;
+    border: none;
+    background-color: $blue;
+}
+.nyx-enroller-list{
+    width: 384px;
+}
+@media screen and (min-width: 320px) and (max-width: 800px){
+    .nyx-enroller-paper{
+        width: 320px;
+    }
+    .nyx-enroller-list{
+        width: 320px;
+    } 
+}

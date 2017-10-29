@@ -63,23 +63,19 @@ class ComCard extends Component {
           </Button>
         </CardActions>
       case CARD_TYPE_ENROLL:
-        return <CardActions>
-          <Button
-            dense
-            onClick={this.state.action[0]}>
-            {Lang[window.Lang].pages.com.card.modify}
-          </Button>
-          <Button
-            dense
-            onClick={this.state.action[1]}>
-            {Lang[window.Lang].pages.com.card.enroll}
-          </Button>
-          <Button
+        return <CardActions style={{height:"1.5rem"}}>
           
-            dense
-            onClick={this.state.action[2]}>
-           <i className="glyphicon glyphicon-trash"></i>
-          </Button>
+          <i
+             onClick={this.state.action[0]}
+             className="glyphicon glyphicon-pencil"></i><br/>
+          <button
+          className="nyx-card-enrroll-button"
+          onClick={this.state.action[1]}>
+          {Lang[window.Lang].pages.com.card.enroll}
+          </button><br/>
+           <i
+           onClick={this.state.action[2]}
+           className="glyphicon glyphicon-trash"></i>
         </CardActions>
       case CARD_TYPE_ARRANGE:
         return <CardActions>
@@ -174,7 +170,7 @@ class ComCard extends Component {
           <div className="nyx-card">
             <div className="nyx-card-body">
               <div className="nyx-card-round-ing"></div>
-              <div className="nyx-card-first-info">
+              <div style={{float:"left"}} className="nyx-card-first-info">
               <div className={"nyx-card-name"}>
                   {name}
               </div>
@@ -185,7 +181,7 @@ class ComCard extends Component {
               {getCity(city)}
               </div>
               </div>
-              <div className="nyx-card-second-info">
+              <div style={{float:"left"}} className="nyx-card-second-info">
               <span className={"nyx-card-key"}>
               {"电话:"}
               </span>

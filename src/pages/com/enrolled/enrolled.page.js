@@ -46,6 +46,9 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
+        unarranged_height:1,
+        arranged_height:1,
+        unenrolled_height:1,
         students: [],
         newStudents: [],
         unarragedStudents: [],
@@ -323,9 +326,20 @@ class Enrolled extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
-                <Paper className={'nyx-paper nyx-list-paper'}>
-                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.unenrolled}
-                        <Button fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
+                <Paper className={'nyx-paper nyx-enroller-paper'}>
+                <List style={{padding:0}}>
+                <div style={{marginBottom:"1rem",position:"relative"}} className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.enrolled.unenrolled} <i
+                          onClick={() => {
+                              if(this.state.unenrolled_height==0){
+                                  this.setState({unenrolled_height:1})
+                              }else{
+                                this.setState({unenrolled_height:0})
+                              }
+                          }}
+                         
+                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                           <Button style={{position:"absolute",right:"28px"}} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                             onClick={() => {
                                 this.setState({
                                     openNewStudentDialog: true,
@@ -335,7 +349,10 @@ class Enrolled extends Component {
                         >
                             {"新增"}
                         </Button>
-                    </ListSubheader>}>
+                        </div>
+                        <div className={this.state.unenrolled_height?"nyx-list-paper":"nyx-list-paper-change"}>
+
+                    
                         {this.state.newStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ENROLL}
@@ -369,10 +386,24 @@ class Enrolled extends Component {
                                 }]}>
                             </StudentCard>
                         )}
+                        </div>
                     </List>
                 </Paper>
-                <Paper className={'nyx-paper nyx-list-paper'}>
-                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.unarrange}</ListSubheader>}>
+                <Paper style={{padding:0}} className={'nyx-paper nyx-enroller-list'}>
+                    <List style={{padding:0}}>
+                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.enrolled.unarrange} <i
+                          onClick={() => {
+                              if(this.state.unarranged_height==0){
+                                  this.setState({unarranged_height:1})
+                              }else{
+                                this.setState({unarranged_height:0})
+                              }
+                          }}
+                         
+                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
+                        <div className={this.state.unarranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
                         {this.state.unarragedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_UNARRANGE}
@@ -395,10 +426,24 @@ class Enrolled extends Component {
                             >
                             </StudentCard>
                         )}
+                        </div>
                     </List>
                 </Paper>
-                <Paper className={'nyx-paper nyx-list-paper'}>
-                    <List subheader={<ListSubheader className={'nyx-paper-header'}>{Lang[window.Lang].pages.com.enrolled.arranged}</ListSubheader>}>
+                <Paper style={{padding:0}} className={'nyx-paper nyx-enroller-list'}>
+                <List style={{padding:0}}>
+                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
+                          {Lang[window.Lang].pages.com.enrolled.arranged} <i
+                          onClick={() => {
+                              if(this.state.arranged_height==0){
+                                  this.setState({arranged_height:1})
+                              }else{
+                                this.setState({arranged_height:0})
+                              }
+                          }}
+                         
+                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                        </div>
+                        <div className={this.state.arranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
                         {this.state.arrangedStudents.map(student =>
                             <StudentCard
                                 type={CARD_TYPE_ARRANGE}
@@ -432,6 +477,7 @@ class Enrolled extends Component {
                                     }]}>
                             </StudentCard>
                         )}
+                         </div>
                     </List>
                 </Paper>
                 <Drawer
@@ -445,7 +491,7 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <Paper style={{ margin: 10, width: 800, float: "left" }} elevation={4}>
+                        <Paper style={{ margin: 10, width: 800, float: "left",boxShadow:"none",fontSize:"12px"}} elevation={4}>
                             <Typography type="headline" component="h3">
                                 {Lang[window.Lang].pages.com.students.base_info}
                             </Typography>
@@ -464,6 +510,7 @@ class Enrolled extends Component {
                             <FormControl required>
                                 <FormLabel>{"等级"}</FormLabel>
                                 <RadioGroup
+                                    style={{display:"block"}}
                                     aria-label="gender"
                                     name="gender"
                                     selectedValue={this.state.course}
@@ -519,7 +566,7 @@ class Enrolled extends Component {
 
                             <Button
                                 color="primary"
-                                style={{ margin: 10 }}
+                                style={{ margin: 10,float:"right"}}
                                 onClick={(e) => {
                                     this.modifyStudent(e)
                                 }}>
