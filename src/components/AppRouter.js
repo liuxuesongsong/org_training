@@ -16,7 +16,6 @@ import Students from '../pages/com/students/students.page.js';
 import Exams from '../pages/com/exams/exams.page.js';
 import Infos from '../pages/com/infos/info.page.js';
 
-import Enroll from '../pages/org/enroll';
 import OrganizationHome from '../pages/org/home';
 import Area from '../pages/org/area';
 import Score from '../pages/org/score';
@@ -73,13 +72,13 @@ var AppRouter =
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : AppFrame}
       />
-      <Route
+      {/* <Route
         title={titleize(Lang[window.Lang].pages.org.enroll.title)}
         path={'/org/enroll'}
         content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
-      />
+      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.org.clazz.title)}
         path={'/org/clazz'}

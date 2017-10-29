@@ -1,6 +1,6 @@
 // @flow
 import config from "../config";
-import { DATA_TYPE_ALL, QUERY, APP_TYPE_COMPANY, DATA_TYPE_STUDENT } from "../enum";
+import { DATA_TYPE_ALL, QUERY, INST_QUERY, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, DATA_TYPE_STUDENT } from "../enum";
 import Code from "../code";
 
 export function kebabCase(string: String) {
@@ -121,8 +121,14 @@ export function getData(router, json, callback = null, args = {}) {
           break;
         case "area":
           break;
+        case "object":
+          if (isJson(json[key])) {
+            console.log("is object");
+          } else {
+            console.log("is not object");
+          }
+          break;
       }
-
     }
   }
   fetch(router.url, {
@@ -164,6 +170,14 @@ function logout() {
   dispatchEvent(e);
 }
 
+export function getTotalPage(count, rows = 10) {
+  let pageNum = Math.ceil(count / rows);
+  if (pageNum === 0) {
+    pageNum = 1;
+  }
+  return pageNum;
+}
+
 export function getStudent(id) {
   for (var i = 0; i < window.CacheData.students.length; i++) {
     if (window.CacheData.students[i].id === id) {
@@ -171,6 +185,21 @@ export function getStudent(id) {
     }
   }
   return {}
+}
+
+export function getInst(id) {
+  var inst = ""
+  for (var i = 0; i < window.CacheData.insts.length; i++) {
+    if (window.CacheData.insts[i].id === id) {
+      inst = window.CacheData.insts[i].institution_name;
+      break;
+    }
+  }
+  return inst
+}
+
+export function getCourse(id) {
+  return id === 1 ? "中级" : id === 2 ? "高级" : "未定义"
 }
 
 export function getCity(id) {
@@ -181,7 +210,6 @@ export function getCity(id) {
       break;
     }
   }
-  console.log(city);
   return city
 }
 
@@ -238,7 +266,14 @@ export function initCache(callback = () => { }) {
         callback()
       }
     }
-    getData(getRouter(QUERY), { session: sessionStorage.session }, cb, { callback: callback });
+    if (Number(sessionStorage.apptype) === APP_TYPE_COMPANY) {
+      getData(getRouter(QUERY), { session: sessionStorage.session }, cb, { callback: callback });
+
+    } else if (Number(sessionStorage.apptype) === APP_TYPE_ORANIZATION) {
+      getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, { callback: callback });
+    } else {
+      console.log("error app type query");
+    }
   } else {
     logout();
   }

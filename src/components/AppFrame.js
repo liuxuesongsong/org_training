@@ -295,7 +295,7 @@ class AppFrame extends Component {
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
-        this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
+        this.popUpNotice(NOTICE, message.code, message.msg);
       }
     }
 
