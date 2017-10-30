@@ -30,8 +30,8 @@ import CommonAlert from '../../components/CommonAlert';
 
 class Clazz extends Component {
     state = {
-        clazzes: [],    
-        students: [],   
+        clazzes: [],
+        students: [],
         areas: [],
         allData: [],                //表格中所有数据
         tableData: [],              //表格内当前显示数据
@@ -49,7 +49,6 @@ class Clazz extends Component {
         onloading: false,
         selected: {},
         search_input: "",
-
 
         // 提示状态
         alertOpen: false,
@@ -288,133 +287,38 @@ class Clazz extends Component {
     /**
      * 按班级建造下载数据
      */
-    handleMakeDownloadData = (id = true) => {
-        var cb = (id, message, arg) => {
-            if (id != DOWNLOAD_RECHARGE_CODE_S2C) {
-                return;
-            }
-            var self = arg[0];
-            // var default_file_name = arg[1];
-            var result = [];
-            if (message.code === LOGIC_SUCCESS) {
-                var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
-                result = message.rci;
-                // var tableHeadEn = ['id', 'recharge_code', 'admin', 'game_coin', 'status', 'player', 'gen_time', 'use_time'];
-                var tableContent = [];
-                var item = [];
-                var title = []
-                for (let key in result[0]) {
-                    switch (key) {
-                        case 'id':
-                            item.push(String(parseInt(result[0][key])));
-                            title.push("充值码id")
-                            break;
-                        case 'game_coin':
-                            item.push(String(result[0][key]));
-                            title.push("充值金额");
-                            break;
-                        case 'gen_time':
-                            item.push(Util.time.getTimeString(result[0][key]));
-                            title.push("生成时间");
-                            break;
-                        case 'use_time':
-                            item.push(result[0][key] === 0 ? '--' : Util.time.getTimeString(result[0][key]));
-                            title.push("使用时间");
-                            break;
-                        case 'status':
-                            // item.push(result[0][key]);
-                            item.push(Lang[window.Lang].Setting.rechargeCodeStatus[result[0][key]]);
-                            title.push("状态");
-                            break;
-                        case 'admin':
-                            item.push(result[0][key]);
-                            title.push("管理员");
-                            break;
-                        case 'player':
-                            item.push(result[0][key] == 0 ? "--" : result[0][key]);
-                            title.push("使用玩家");
-                            break;
-                        case 'recharge_code':
-                            item.push(result[0][key]);
-                            title.push("充值码");
-                            break;
-                        default:
-                            break;
-                    }
+    handleMakeDownloadData = (result) => {
+        var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
+        var tableHeadKey = ['id', 'name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
+        var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
+        var tableContent = [];
+        var item = [];
+        tableContent.push(tableHeadTitle.join(','));
+        for (var j = 0; j < result.length; j++) {
+            item = [];
+            for (let key in tableHeadKey) {
+                switch (key) {
+                    case 'time':
+                        item.push(getTimeString(result[j][key]));
+                        break;
+                    default:
+                        item.push(result[j][key]);
+                        break;
                 }
-                tableContent.push(title.join(','));
-                tableContent.push(item.join(','));
-                for (var j = 1; j < result.length; j++) {
-                    item = [];
-
-                    for (let key in result[j]) {
-                        switch (key) {
-                            case 'id':
-                                item.push(String(parseInt(result[j][key])));
-                                break;
-                            case 'game_coin':
-                                item.push(String(result[j][key]));
-                                break;
-                            case 'gen_time':
-                                item.push(Util.time.getTimeString(result[j][key]));
-                                break;
-                            case 'use_time':
-                                item.push(result[j][key] === 0 ? '--' : Util.time.getTimeString(result[j][key]));
-                                break;
-                            case 'status':
-                                // item.push(result[j][key]);
-                                item.push(Lang[window.Lang].Setting.rechargeCodeStatus[result[j][key]]);
-                                break;
-                            case 'admin':
-                                item.push(result[j][key]);
-                                break;
-                            case 'player':
-                                item.push(result[j][key] == 0 ? "--" : result[j][key]);
-                                break;
-                            case 'recharge_code':
-                                item.push(result[j][key]);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                    tableContent.push(item.join(','));
-                }
-
-                downloadData.push(tableContent.join('\n'));
-                self.setState({
-                    download_num: message.count,
-                    filename: Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count,
-                    showRechargeInfo: "download"
-                })
-                self.state.filename = Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count;
-                self.state.download_data = downloadData;
-                self.handleDownloadFile();
-            } else {
-                self.popUpNotice('notice', 0, "没有满足搜索条件的充值码");
             }
-            // 
+            tableContent.push(item.join(','));
         }
 
-        if (search_selected === true && this.state.selectedStudentID.length > 0) {
-            var obj = {
-                search: JSON.stringify({ id: this.state.selectedStudentID }),
-                sort: JSON.stringify(this.state.sort)
-            }
-            MsgEmitter.emit(DOWNLOAD_RECHARGE_CODE_C2S, obj, cb, [this]);
-        } else if (search_selected === false) {
-            var obj = {
-                search: this.makeSearchObj(),
-                sort: JSON.stringify(this.state.sort)
-            }
-            MsgEmitter.emit(DOWNLOAD_RECHARGE_CODE_C2S, obj, cb, [this]);
-        } else {
-            var obj = {
-                search: this.makeSearchObj(),
-                sort: JSON.stringify(this.state.sort)
-            }
-            MsgEmitter.emit(DOWNLOAD_RECHARGE_CODE_C2S, obj, cb, [this]);
-        }
+        downloadData.push(tableContent.join('\n'));
+        this.setState({
+            // download_num: message.count,
+            // filename: Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count,
+            // showRechargeInfo: "download"
+        })
+        // this.state.filename = Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count;
+        // this.state.download_data = downloadData;
+        this.handleDownloadFile();
+
     }
 
     handleUptateAllData = (newData) => {
@@ -572,41 +476,41 @@ class Clazz extends Component {
 
     render() {
         return (
-        <div style={{ marginTop: 80, width: "100%" }}>
-            <div className="nyx-left-list" >
-                
-                <div className="nyx-left-top-list">
-                    <List subheader={<ListSubheader >{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
-                        <ListSubheader>
-                            <Button
-                                color="primary"
-                                onClick={() => {
-                                    this.setState({
-                                        openNewClazzDialog: true
-                                    });
-                                }}
-                                style={{ margin: 10 }}
-                            >
-                                {Lang[window.Lang].pages.org.clazz.new}
-                            </Button>
-                        </ListSubheader>
-                        {this.state.clazzes.map(clazz =>
-                            <Card
-                                key={clazz.id} className="nyx-card"
-                            >
-                                <div className="nyx-card-body">
-                                    <CardContent className="nyx-card-first-info">
-                                        <div className={'nyx-card-name'}>
-                                            {getInst(clazz.ti_id)}
-                                        </div>
-                                        <div className={'nyx-card-name'}>
-                                            {getCity(clazz.area_id)}
-                                        </div>
-                                        <div className={'nyx-card-name'}>
-                                            {getCourse(clazz.course_id)}
-                                        </div>
-                                    </CardContent>
-                                    {/* <CardContent className="nyx-card-second-info">
+            <div style={{ marginTop: 80, width: "100%" }}>
+                <div className="nyx-left-list" >
+
+                    <div className="nyx-left-top-list">
+                        <List subheader={<ListSubheader >{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
+                            <ListSubheader>
+                                <Button
+                                    color="primary"
+                                    onClick={() => {
+                                        this.setState({
+                                            openNewClazzDialog: true
+                                        });
+                                    }}
+                                    style={{ margin: 10 }}
+                                >
+                                    {Lang[window.Lang].pages.org.clazz.new}
+                                </Button>
+                            </ListSubheader>
+                            {this.state.clazzes.map(clazz =>
+                                <Card
+                                    key={clazz.id} className="nyx-card"
+                                >
+                                    <div className="nyx-card-body">
+                                        <CardContent className="nyx-card-first-info">
+                                            <div className={'nyx-card-name'}>
+                                                {getInst(clazz.ti_id)}
+                                            </div>
+                                            <div className={'nyx-card-name'}>
+                                                {getCity(clazz.area_id)}
+                                            </div>
+                                            <div className={'nyx-card-name'}>
+                                                {getCourse(clazz.course_id)}
+                                            </div>
+                                        </CardContent>
+                                        {/* <CardContent className="nyx-card-second-info">
                                         <div className={'nyx-card-value'}>
                                             {clazz.train_starttime}
                                         </div>
@@ -617,66 +521,35 @@ class Clazz extends Component {
                                             {clazz.address}
                                         </div>
                                     </CardContent> */}
-                                </div>
-                                {
-                                    this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
-                                        <CardActions className="nyx-card-action">
-                                            <Button
-                                                className="nyx-card-button"
-                                                dense
-                                                onClick={() => {
-                                                    this.setState({
-                                                        queryCondition: {},
-                                                        selected: {},
-                                                        stateSelected: false
-                                                    })
-                                                    this.createTrain(clazz.id);
-                                                }}>
-                                                {"确定"}
-                                            </Button>
-                                            <Button
-                                                className="nyx-card-button"
-                                                dense
-                                                onClick={() => {
-                                                    this.setState({
-                                                        queryCondition: {},
-                                                        selected: {},
-                                                        stateSelected: false
-                                                    })
-                                                    return
-                                                    this.state.selected = clazz;
-                                                    this.deleteClazz(clazz.id);
-                                                    this.popUpNotice(ALERT, 0, "删除该班级", [
-                                                        () => {
-                                                            this.removeStudent(clazz.id);
-                                                            this.closeNotice();
-                                                        }, () => {
-                                                            this.closeNotice();
-                                                        }]);
-                                                }}>
-                                                {"取消"}
-                                            </Button>
-                                        </CardActions>
-                                    </div> :
-                                        <div>
-                                            <CardActions  className="nyx-card-action">
-                                                <i
-                                                className="glyphicon glyphicon-pencil"
+                                    </div>
+                                    {
+                                        this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
+                                            <CardActions className="nyx-card-action">
+                                                <Button
+                                                    className="nyx-card-button"
                                                     dense
                                                     onClick={() => {
-                                                        this.state.selected = clazz;
-                                                        this.state.showInfo = true;
-                                                        {/* this.toggleDrawer(true)() */ }
+                                                        this.setState({
+                                                            queryCondition: {},
+                                                            selected: {},
+                                                            stateSelected: false
+                                                        })
+                                                        this.createTrain(clazz.id);
                                                     }}>
-                                                    {Lang[window.Lang].pages.com.card.modify}
-                                                </i>
-                                                <i
-                                                className="glyphicon glyphicon-trash" 
+                                                    {"确定"}
+                                                </Button>
+                                                <Button
+                                                    className="nyx-card-button"
                                                     dense
                                                     onClick={() => {
+                                                        this.setState({
+                                                            queryCondition: {},
+                                                            selected: {},
+                                                            stateSelected: false
+                                                        })
+                                                        return
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
-                                                        return
                                                         this.popUpNotice(ALERT, 0, "删除该班级", [
                                                             () => {
                                                                 this.removeStudent(clazz.id);
@@ -685,276 +558,307 @@ class Clazz extends Component {
                                                                 this.closeNotice();
                                                             }]);
                                                     }}>
-                                                    {Lang[window.Lang].pages.com.card.remove}
-                                                </i>
-                                                <i
-                                                className="glyphicon glyphicon-search"
-                                                    dense
-                                                    onClick={() => {
-                                                        this.queryClazzStudents(clazz.id);
-                                                        // this.state.selected = clazz;
-                                                        // this.state.showInfo = true;
-                                                        {/* this.toggleDrawer(true)() */ }
-                                                    }}>
-                                                    {"查看学生"}
-                                                </i>
-                                                <Button
-                                                className="nyx-card-button"
-                                                    dense
-                                                    onClick={() => {
-
-                                                        this.state.selected = clazz;
-                                                        this.state.showStudents = true;
-                                                        this.state.queryCondition = {}
-                                                        this.state.queryCondition.course_id = clazz.course_id;
-                                                        this.state.queryCondition.area_id = clazz.area_id;
-                                                        this.setState({
-                                                            stateSelected: true
-                                                        })
-                                                        this.queryStudents(1, true);
-                                                    }}>
-                                                    {"添加学生"}
+                                                    {"取消"}
                                                 </Button>
                                             </CardActions>
-                                        </div>
-                                }
-                            </Card>
-                        )}
-                        {this.state.clazzStudents.map(student => {
-                            <Card
-                                key={clazz.id}
-                                style={{ display: 'flex', }}>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}>
-                                    <CardContent>
-                                        <Typography>
-                                            {student.id}
-                                        </Typography>
-                                        <Typography component="h2">
-                                            {student.name}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.company_name}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.company_admin}
-                                        </Typography>
-                                        <Typography type="body1">
-                                            {student.mobile}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.mail}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.time}
-                                        </Typography>
-                                    </CardContent>
-                                </div>
-                                <div>
-                                    <CardActions>
-                                        <Button
-                                            dense
-                                            onClick={() => {
+                                        </div> :
+                                            <div>
+                                                <CardActions className="nyx-card-action">
+                                                    <i
+                                                        className="glyphicon glyphicon-pencil"
+                                                        dense
+                                                        onClick={() => {
+                                                            this.state.selected = clazz;
+                                                            this.state.showInfo = true;
+                                                            {/* this.toggleDrawer(true)() */ }
+                                                        }}>
+                                                        {Lang[window.Lang].pages.com.card.modify}
+                                                    </i>
+                                                    <i
+                                                        className="glyphicon glyphicon-trash"
+                                                        dense
+                                                        onClick={() => {
+                                                            this.state.selected = clazz;
+                                                            this.deleteClazz(clazz.id);
+                                                            return
+                                                            this.popUpNotice(ALERT, 0, "删除该班级", [
+                                                                () => {
+                                                                    this.removeStudent(clazz.id);
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                        }}>
+                                                        {Lang[window.Lang].pages.com.card.remove}
+                                                    </i>
+                                                    <i
+                                                        className="glyphicon glyphicon-search"
+                                                        dense
+                                                        onClick={() => {
+                                                            this.queryClazzStudents(clazz.id);
+                                                            // this.state.selected = clazz;
+                                                            // this.state.showInfo = true;
+                                                            {/* this.toggleDrawer(true)() */ }
+                                                        }}>
+                                                        {"查看学生"}
+                                                    </i>
+                                                    <Button
+                                                        className="nyx-card-button"
+                                                        dense
+                                                        onClick={() => {
 
-                                            }}>
-                                            {"删除"}
-                                        </Button>
-                                    </CardActions>
-                                </div>
-                            </Card>
-                        })}
-                    </List>
-                
-                
+                                                            this.state.selected = clazz;
+                                                            this.state.showStudents = true;
+                                                            this.state.queryCondition = {}
+                                                            this.state.queryCondition.course_id = clazz.course_id;
+                                                            this.state.queryCondition.area_id = clazz.area_id;
+                                                            this.setState({
+                                                                stateSelected: true
+                                                            })
+                                                            this.queryStudents(1, true);
+                                                        }}>
+                                                        {"添加学生"}
+                                                    </Button>
+                                                </CardActions>
+                                            </div>
+                                    }
+                                </Card>
+                            )}
+                            {this.state.clazzStudents.map(student => {
+                                <Card
+                                    key={clazz.id}
+                                    style={{ display: 'flex', }}>
+                                    <div style={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                    }}>
+                                        <CardContent>
+                                            <Typography>
+                                                {student.id}
+                                            </Typography>
+                                            <Typography component="h2">
+                                                {student.name}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {student.company_name}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {student.company_admin}
+                                            </Typography>
+                                            <Typography type="body1">
+                                                {student.mobile}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {student.mail}
+                                            </Typography>
+                                            <Typography component="p">
+                                                {student.time}
+                                            </Typography>
+                                        </CardContent>
+                                    </div>
+                                    <div>
+                                        <CardActions>
+                                            <Button
+                                                dense
+                                                onClick={() => {
+
+                                                }}>
+                                                {"删除"}
+                                            </Button>
+                                        </CardActions>
+                                    </div>
+                                </Card>
+                            })}
+                        </List>
+
+
+                    </div>
+
+                    <div className="nyx-left-bottom-paper">
+
+                    </div>
                 </div>
-
-                <div className="nyx-left-bottom-paper">
-
-                </div>
-            </div>
-            <div className="nyx-right-form">
-                <div className="nyx-right-top-search">
-                <TextField
-                    id="search_input"
-                    label={"搜索"}
-                    value={this.state.search_input}
-                    onChange={event => {
-                        this.setState({
-                            search_input: event.target.value,
-                        });
-                    }}
-                    fullWidth
-                />
-                <Button
-                    color="primary"
-                    onClick={() => {
-                        this.state.queryCondition.company_name = document.getElementById("search_input").value;
-                        this.state.selectedStudentID = [];
-                        this.state.currentPageSelectedID = [];
-                        this.queryStudents(1, true);
-                    }}
-                    style={{ margin: 10 }}
-                >
-                    {"搜索"}
-                </Button>
-                {this.getCondition()}
-                </div>
-                <div className="nyx-right-bottom-table">
-                    <ReactDataGrid
-                        rowKey="id"
-                        columns={
-                            [
-                                {
-                                    key: "id",
-                                    name: "#",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "student_name",
-                                    name: "项目经理",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "company_name",
-                                    name: "公司",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "company_admin",
-                                    name: "联系人",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "mobile",
-                                    name: "电话",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "mail",
-                                    name: "邮箱",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "area_name",
-                                    name: "区域",
-                                    width: 100,
-                                    resizable: true
-                                },
-                                {
-                                    key: "course_name",
-                                    name: "课程",
-                                    width: 100,
-                                    resizable: true
-                                }
-                            ]
-                        }
-                        onGridSort={(sortColumn, sortDirection) => {
-                            this.state.sort = {}
-                            if (sortDirection === 'ASC') {
-                                this.state.sort[sortColumn] = 1
-                            } else {
-                                this.state.sort[sortColumn] = -1
-                            }
-                        }}
-                        rowGetter={(i) => {
-                            if (i === -1) { return {} }
-                            return {
-                                id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
-                                student_id: this.state.tableData[i].id,
-                                student_name: this.state.tableData[i].student_name,
-                                company_name: this.state.tableData[i].company_name,
-                                company_admin: this.state.tableData[i].company_admin,
-                                mobile: this.state.tableData[i].mobile,
-                                mail: this.state.tableData[i].mail,
-                                area_name: getCity(this.state.tableData[i].area_id),
-                                course_name: getCourse(this.state.tableData[i].course_id)
-                            }
-                        }}
-                        rowsCount={this.state.tableData.length}
-                        onRowClick={(rowIdx, row) => {
-                            if (rowIdx !== -1) {
-                                this.handleSelection(rowIdx, row);
-                            }
-                        }}
-                        renderColor={(idx) => { return "black" }}
-                        maxHeight={800}
-                        enableRowSelect={true}
-                        minHeight={800}
-                        rowHeight={30}
-                        rowSelection={{
-                            showCheckbox: true,
-                            onRowsSelected: this.onRowsSelected,
-                            onRowsDeselected: this.onRowsDeselected,
-                            selectBy: {
-                                keys: {
-                                    rowKey: 'id',
-                                    values: this.state.currentPageSelectedID
-                                }
-                            }
-                        }}
-                        onGridKeyDown={(e) => {
-                            if (e.ctrlKey && e.keyCode === 65) {
-                                e.preventDefault();
-
-                                let rows = [];
-                                this.state.tableData.forEach((r) => {
-                                    rows.push(Object.assign({}, r, { isSelected: true }));
+                <div className="nyx-right-form">
+                    <div className="nyx-right-top-search">
+                        <TextField
+                            id="search_input"
+                            label={"搜索"}
+                            value={this.state.search_input}
+                            onChange={event => {
+                                this.setState({
+                                    search_input: event.target.value,
                                 });
-
-                                this.setState({ rows });
+                            }}
+                            fullWidth
+                        />
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                                this.state.selectedStudentID = [];
+                                this.state.currentPageSelectedID = [];
+                                this.queryStudents(1, true);
+                            }}
+                            style={{ margin: 10 }}
+                        >
+                            {"搜索"}
+                        </Button>
+                        {this.getCondition()}
+                    </div>
+                    <div className="nyx-right-bottom-table">
+                        <ReactDataGrid
+                            rowKey="id"
+                            columns={
+                                [
+                                    {
+                                        key: "id",
+                                        name: "#",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "student_name",
+                                        name: "项目经理",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "company_name",
+                                        name: "公司",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "company_admin",
+                                        name: "联系人",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "mobile",
+                                        name: "电话",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "mail",
+                                        name: "邮箱",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "area_name",
+                                        name: "区域",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "course_name",
+                                        name: "课程",
+                                        width: 100,
+                                        resizable: true
+                                    }
+                                ]
                             }
+                            onGridSort={(sortColumn, sortDirection) => {
+                                this.state.sort = {}
+                                if (sortDirection === 'ASC') {
+                                    this.state.sort[sortColumn] = 1
+                                } else {
+                                    this.state.sort[sortColumn] = -1
+                                }
+                            }}
+                            rowGetter={(i) => {
+                                if (i === -1) { return {} }
+                                return {
+                                    id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
+                                    student_id: this.state.tableData[i].id,
+                                    student_name: this.state.tableData[i].student_name,
+                                    company_name: this.state.tableData[i].company_name,
+                                    company_admin: this.state.tableData[i].company_admin,
+                                    mobile: this.state.tableData[i].mobile,
+                                    mail: this.state.tableData[i].mail,
+                                    area_name: getCity(this.state.tableData[i].area_id),
+                                    course_name: getCourse(this.state.tableData[i].course_id)
+                                }
+                            }}
+                            rowsCount={this.state.tableData.length}
+                            onRowClick={(rowIdx, row) => {
+                                if (rowIdx !== -1) {
+                                    this.handleSelection(rowIdx, row);
+                                }
+                            }}
+                            renderColor={(idx) => { return "black" }}
+                            maxHeight={800}
+                            enableRowSelect={true}
+                            minHeight={800}
+                            rowHeight={30}
+                            rowSelection={{
+                                showCheckbox: true,
+                                onRowsSelected: this.onRowsSelected,
+                                onRowsDeselected: this.onRowsDeselected,
+                                selectBy: {
+                                    keys: {
+                                        rowKey: 'id',
+                                        values: this.state.currentPageSelectedID
+                                    }
+                                }
+                            }}
+                            onGridKeyDown={(e) => {
+                                if (e.ctrlKey && e.keyCode === 65) {
+                                    e.preventDefault();
+
+                                    let rows = [];
+                                    this.state.tableData.forEach((r) => {
+                                        rows.push(Object.assign({}, r, { isSelected: true }));
+                                    });
+
+                                    this.setState({ rows });
+                                }
+                            }}
+                        />
+                    </div>
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            this.showPre();
                         }}
-                    />
-                </div>
-                <Button
-                    color="primary"
-                    onClick={() => {
-                        this.showPre();
-                    }}
-                    style={{ margin: 10 }}
-                >
-                    {"上页"}
-                </Button>
-                {this.state.currentPage + "/" + this.state.totalPage}
-                <Button
-                    color="primary"
-                    onClick={() => {
-                        this.showNext();
-                    }}
-                    style={{ margin: 10 }}
-                >
-                    {"下页"}
-                </Button>
-
-                {this.state.selectedStudentID.length + "/" + this.state.count}
-
-                {this.state.showStudents === true ?
-                    <Drawer
-                        anchor="right"
-                        open={this.state.right}
-                        onRequestClose={this.toggleDrawer(false)}
+                        style={{ margin: 10 }}
                     >
-                    </Drawer> : <div />}
-                {this.newClazzDialog()}
-                <CommonAlert
-                    show={this.state.alertOpen}
-                    type={this.state.alertType}
-                    code={this.state.alertCode}
-                    content={this.state.alertContent}
-                    action={this.state.alertAction}
-                >
-                </CommonAlert>
-            
+                        {"上页"}
+                    </Button>
+                    {this.state.currentPage + "/" + this.state.totalPage}
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            this.showNext();
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"下页"}
+                    </Button>
+
+                    {this.state.selectedStudentID.length + "/" + this.state.count}
+
+                    {this.state.showStudents === true ?
+                        <Drawer
+                            anchor="right"
+                            open={this.state.right}
+                            onRequestClose={this.toggleDrawer(false)}
+                        >
+                        </Drawer> : <div />}
+                    {this.newClazzDialog()}
+                    <CommonAlert
+                        show={this.state.alertOpen}
+                        type={this.state.alertType}
+                        code={this.state.alertCode}
+                        content={this.state.alertContent}
+                        action={this.state.alertAction}
+                    >
+                    </CommonAlert>
+
+                </div>
             </div>
-        </div>
         )
     }
 
