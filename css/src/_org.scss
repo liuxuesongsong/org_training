@@ -2,8 +2,93 @@
     float: left; width: 300px;
     margin-left: 10px;
   }
-.nyx-right-form {
-    margin-left: 320px;
-    position: absolute;
-    width:800px;
+  
+div.nyx-chip {
+  float: right;
+  height: 24px;
+  margin: 10px 2px;
+}
+.nyx-clazz-form{
+  background: #fff;
+  min-height: 650px;
+  margin-left: 320px;
+  position: absolute;
+  width:800px;
+  @extend .nyx-z2;
+}
+div.nyx-clazz-list{
+  background: #fff;
+  position: absolute;
+  width:300px;
+  min-height: 650px;
+  @extend .nyx-z2;
+  i{
+    color:$blue;
+    display: inline-block;
+    line-height: 18px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px $grey100 solid;
+    &:hover{
+      background: $grey100;
+      border: 1px $blue200 solid;
+      @extend .nyx-z2;
+    }
+    &:active{
+      background: $grey200;
+      border: 1px $blue200 solid;
+      @extend .nyx-z0;
+    }
   }
+  $btn-size:48px;
+  button.nyx-btn-circle{
+      background: $blue;
+      color: #fff;
+      border-radius: 50%;
+      height: 48px;
+      width: 48px;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      margin-bottom: 24px;
+      margin-right: 24px;
+      padding: 0;
+      min-width: initial;
+      float: right;
+      top: 0;
+      margin-top:48px; 
+      &:hover{
+        background: $blue900;
+        @extend .nyx-z2;
+      }
+  }
+}
+.nyx-class-list-title{
+  margin: 1rem;
+  padding-left: 1rem;
+  border-left: 5px $blue solid;
+}
+
+.nyx-clazz-card{
+  margin:0.5rem 1rem;
+  padding:0.5rem 1rem;
+  border-top:2px $blue200 solid;
+}
+button.nyx-clazz-card-button{
+  background: $blue;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  position: absolute;
+  right: 1rem;
+  &:hover{
+    background: $blue900;
+  }
+}
+.nyx-left-bottom-paper{
+  
+}

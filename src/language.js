@@ -180,7 +180,8 @@ const Language = {
                 },
                 clazz: {
                     title: "班级安排",
-                    new: "新建班级",
+                    new: "新建",
+                    clazz_list:"班级列表",
                     info: {
                         area: "地区",
                         class_name: "级别",

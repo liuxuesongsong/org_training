@@ -1,5 +1,5 @@
 @charset "UTF-8";
-.nyx-z0 {
+.nyx-z0, div.nyx-clazz-list i:active {
   -webkit-box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.2), 0px 0px 0px 0px rgba(0, 0, 0, 0.14), 0px 0px 0px 0px rgba(0, 0, 0, 0.12); }
 
@@ -7,7 +7,7 @@
   -webkit-box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); }
 
-.nyx-z2, .nyx-login {
+.nyx-z2, .nyx-login, .nyx-clazz-form, div.nyx-clazz-list, div.nyx-clazz-list i:hover, div.nyx-clazz-list button.nyx-btn-circle:hover {
   -webkit-box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); }
 
@@ -909,11 +909,14 @@
   content: "\e260"; }
 
 .nyx {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.5;
   font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif; }
   .nyx a, .nyx h1, .nyx h2, .nyx h3, .nyx h4, .nyx h5, .nyx h6, .nyx p, .nyx div, .nyx span, .nyx input, .nyx label {
     font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif; }
+
+.react-grid-HeaderCell {
+  padding: 0 !important; }
 
 .nyx-login-bg {
   background-color: #2196F3;
@@ -994,6 +997,11 @@
 .nyx-login-body > div > div {
   margin-bottom: 1rem; }
 
+.nyx-clazz-card {
+  margin: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px #FAFAFA solid; }
+
 .nyx-topbar {
   height: 64px; }
 
@@ -1032,7 +1040,7 @@
 
 .nyx-arranged-per {
   background: #ddd;
-  width: 256px;
+  width: 288px;
   box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) inset; }
 
 .nyx-enrolled-per {
@@ -1254,9 +1262,77 @@
   width: 300px;
   margin-left: 10px; }
 
-.nyx-right-form {
+div.nyx-chip {
+  float: right;
+  height: 24px;
+  margin: 10px 2px; }
+
+.nyx-clazz-form {
+  background: #fff;
+  min-height: 650px;
   margin-left: 320px;
   position: absolute;
   width: 800px; }
+
+div.nyx-clazz-list {
+  background: #fff;
+  position: absolute;
+  width: 300px;
+  min-height: 650px; }
+  div.nyx-clazz-list i {
+    color: #2196F3;
+    display: inline-block;
+    line-height: 18px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px #F5F5F5 solid; }
+    div.nyx-clazz-list i:hover {
+      background: #F5F5F5;
+      border: 1px #90CAF9 solid; }
+    div.nyx-clazz-list i:active {
+      background: #EEEEEE;
+      border: 1px #90CAF9 solid; }
+  div.nyx-clazz-list button.nyx-btn-circle {
+    background: #2196F3;
+    color: #fff;
+    border-radius: 50%;
+    height: 48px;
+    width: 48px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin-bottom: 24px;
+    margin-right: 24px;
+    padding: 0;
+    min-width: initial;
+    float: right;
+    top: 0;
+    margin-top: 48px; }
+    div.nyx-clazz-list button.nyx-btn-circle:hover {
+      background: #0D47A1; }
+
+.nyx-class-list-title {
+  margin: 1rem;
+  padding-left: 1rem;
+  border-left: 5px #2196F3 solid; }
+
+.nyx-clazz-card {
+  margin: 0.5rem 1rem;
+  padding: 0.5rem 1rem;
+  border-top: 2px #90CAF9 solid; }
+
+button.nyx-clazz-card-button {
+  background: #2196F3;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  position: absolute;
+  right: 1rem; }
+  button.nyx-clazz-card-button:hover {
+    background: #0D47A1; }
 
 /*# sourceMappingURL=style.css.map */

@@ -183,7 +183,7 @@ class Clazz extends Component {
         return (
             <Dialog open={this.state.openNewClazzDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
-                    新增班级
+                    +新增班级
                 </DialogTitle>
                 <DialogContent>
                     <div>
@@ -450,21 +450,21 @@ class Clazz extends Component {
         for (var k in this.state.queryCondition) {
             if (k === "area_id") {
                 chips.push(
-                    <Chip
+                    <Chip className="nyx-chip"
                         label={"地区" + ":" + getCity(this.state.queryCondition[k])}
                         onRequestDelete={() => { this.state.queryCondition.delete(k) }}
                     />
                 )
             } else if (k === "course_id") {
                 chips.push(
-                    <Chip
+                    <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}
                         onRequestDelete={() => { this.state.queryCondition.delete(k) }}
                     />
                 )
             } else if (k === "company_name") {
                 chips.push(
-                    <Chip
+                    <Chip className="nyx-chip"
                         label={"公司" + ":" + this.state.queryCondition[k]}
                         onRequestDelete={() => { this.state.queryCondition.delete(k) }}
                     />
@@ -478,78 +478,82 @@ class Clazz extends Component {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
                 <div className="nyx-left-list" >
-
-                    <div className="nyx-left-top-list">
-                        <List subheader={<ListSubheader >{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
-                            <ListSubheader>
-                                <Button
-                                    color="primary"
-                                    onClick={() => {
-                                        this.setState({
-                                            openNewClazzDialog: true
-                                        });
-                                    }}
-                                    style={{ margin: 10 }}
-                                >
-                                    {Lang[window.Lang].pages.org.clazz.new}
-                                </Button>
-                            </ListSubheader>
-                            {this.state.clazzes.map(clazz =>
-                                <Card
-                                    key={clazz.id} className="nyx-card"
-                                >
-                                    <div className="nyx-card-body">
-                                        <CardContent className="nyx-card-first-info">
-                                            <div className={'nyx-card-name'}>
-                                                {getInst(clazz.ti_id)}
-                                            </div>
-                                            <div className={'nyx-card-name'}>
-                                                {getCity(clazz.area_id)}
-                                            </div>
-                                            <div className={'nyx-card-name'}>
-                                                {getCourse(clazz.course_id)}
-                                            </div>
-                                        </CardContent>
-                                        {/* <CardContent className="nyx-card-second-info">
-                                        <div className={'nyx-card-value'}>
-                                            {clazz.train_starttime}
-                                        </div>
-                                        <div className={'nyx-card-value'}>
-                                            {clazz.class_head}
-                                        </div>
-                                        <div className={'nyx-card-value'}>
-                                            {clazz.address}
-                                        </div>
-                                    </CardContent> */}
-                                    </div>
-                                    {
-                                        this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
+                    <List className="nyx-clazz-list" subheader={<ListSubheader className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
+                        <ListSubheader>
+                            <Button className="nyx-btn-circle"
+                                color="primary"
+                                onClick={() => {
+                                    this.setState({
+                                        openNewClazzDialog: true
+                                    });
+                                }}
+                            >
+                                {Lang[window.Lang].pages.org.clazz.new}
+                            </Button>
+                        </ListSubheader>
+                        {this.state.clazzes.map(clazz =>
+                            <div key={clazz.id} className="nyx-clazz-card">
+                                <div className="nyx-card-body">
+                                    {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)}
+                                </div>
+                                {
+                                    this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
+                                        <CardActions className="nyx-card-action">
+                                            <Button
+                                                className="nyx-clazz-card-button"
+                                                dense
+                                                onClick={() => {
+                                                    this.setState({
+                                                        queryCondition: {},
+                                                        selected: {},
+                                                        stateSelected: false
+                                                    })
+                                                    this.createTrain(clazz.id);
+                                                }}>
+                                                {"确定"}
+                                            </Button>
+                                            <Button
+                                            className="nyx-clazz-card-button"
+                                                dense
+                                                onClick={() => {
+                                                    this.setState({
+                                                        queryCondition: {},
+                                                        selected: {},
+                                                        stateSelected: false
+                                                    })
+                                                    return
+                                                    this.state.selected = clazz;
+                                                    this.deleteClazz(clazz.id);
+                                                    this.popUpNotice(ALERT, 0, "删除该班级", [
+                                                        () => {
+                                                            this.removeStudent(clazz.id);
+                                                            this.closeNotice();
+                                                        }, () => {
+                                                            this.closeNotice();
+                                                        }]);
+                                                }}>
+                                                {"取消"}
+                                            </Button>
+                                        </CardActions>
+                                    </div> :
+                                        <div>
                                             <CardActions className="nyx-card-action">
-                                                <Button
-                                                    className="nyx-card-button"
+                                                <i
+                                                    className="glyphicon glyphicon-pencil"
                                                     dense
                                                     onClick={() => {
-                                                        this.setState({
-                                                            queryCondition: {},
-                                                            selected: {},
-                                                            stateSelected: false
-                                                        })
-                                                        this.createTrain(clazz.id);
+                                                        this.state.selected = clazz;
+                                                        this.state.showInfo = true;
+                                                        {/* this.toggleDrawer(true)() */ }
                                                     }}>
-                                                    {"确定"}
-                                                </Button>
-                                                <Button
-                                                    className="nyx-card-button"
+                                                </i>
+                                                <i
+                                                    className="glyphicon glyphicon-trash"
                                                     dense
                                                     onClick={() => {
-                                                        this.setState({
-                                                            queryCondition: {},
-                                                            selected: {},
-                                                            stateSelected: false
-                                                        })
-                                                        return
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
+                                                        return
                                                         this.popUpNotice(ALERT, 0, "删除该班级", [
                                                             () => {
                                                                 this.removeStudent(clazz.id);
@@ -558,139 +562,91 @@ class Clazz extends Component {
                                                                 this.closeNotice();
                                                             }]);
                                                     }}>
-                                                    {"取消"}
+                                                </i>
+                                                <i
+                                                    className="glyphicon glyphicon-search"
+                                                    dense
+                                                    onClick={() => {
+                                                        this.queryClazzStudents(clazz.id);
+                                                        // this.state.selected = clazz;
+                                                        // this.state.showInfo = true;
+                                                        {/* this.toggleDrawer(true)() */ }
+                                                    }}>
+                                                </i>
+                                                <Button
+                                                className="nyx-clazz-card-button"
+                                                    dense
+                                                    onClick={() => {
+
+                                                        this.state.selected = clazz;
+                                                        this.state.showStudents = true;
+                                                        this.state.queryCondition = {}
+                                                        this.state.queryCondition.course_id = clazz.course_id;
+                                                        this.state.queryCondition.area_id = clazz.area_id;
+                                                        this.setState({
+                                                            stateSelected: true
+                                                        })
+                                                        this.queryStudents(1, true);
+                                                    }}>
+                                                    {"添加学生"}
                                                 </Button>
                                             </CardActions>
-                                        </div> :
-                                            <div>
-                                                <CardActions className="nyx-card-action">
-                                                    <i
-                                                        className="glyphicon glyphicon-pencil"
-                                                        dense
-                                                        onClick={() => {
-                                                            this.state.selected = clazz;
-                                                            this.state.showInfo = true;
-                                                            {/* this.toggleDrawer(true)() */ }
-                                                        }}>
-                                                        {Lang[window.Lang].pages.com.card.modify}
-                                                    </i>
-                                                    <i
-                                                        className="glyphicon glyphicon-trash"
-                                                        dense
-                                                        onClick={() => {
-                                                            this.state.selected = clazz;
-                                                            this.deleteClazz(clazz.id);
-                                                            return
-                                                            this.popUpNotice(ALERT, 0, "删除该班级", [
-                                                                () => {
-                                                                    this.deleteClazz(clazz.id);
-                                                                    this.closeNotice();
-                                                                }, () => {
-                                                                    this.closeNotice();
-                                                                }]);
-                                                        }}>
-                                                        {Lang[window.Lang].pages.com.card.remove}
-                                                    </i>
-                                                    <i
-                                                        className="glyphicon glyphicon-search"
-                                                        dense
-                                                        onClick={() => {
-                                                            this.queryClazzStudents(clazz.id);
-                                                            // this.state.selected = clazz;
-                                                            // this.state.showInfo = true;
-                                                            {/* this.toggleDrawer(true)() */ }
-                                                        }}>
-                                                        {"查看学生"}
-                                                    </i>
-                                                    <Button
-                                                        className="nyx-card-button"
-                                                        dense
-                                                        onClick={() => {
+                                        </div>
+                                }
+                            </div>
+                        )}
+                        {this.state.clazzStudents.map(student => {
+                            <Card
+                                key={clazz.id}
+                                style={{ display: 'flex', }}>
+                                <div style={{
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}>
+                                    <CardContent>
+                                        <Typography>
+                                            {student.id}
+                                        </Typography>
+                                        <Typography component="h2">
+                                            {student.name}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {student.company_name}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {student.company_admin}
+                                        </Typography>
+                                        <Typography type="body1">
+                                            {student.mobile}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {student.mail}
+                                        </Typography>
+                                        <Typography component="p">
+                                            {student.time}
+                                        </Typography>
+                                    </CardContent>
+                                </div>
+                                <div>
+                                    <CardActions>
+                                        <Button
+                                            dense
+                                            onClick={() => {
 
-                                                            this.state.selected = clazz;
-                                                            this.state.showStudents = true;
-                                                            this.state.queryCondition = {}
-                                                            this.state.queryCondition.course_id = clazz.course_id;
-                                                            this.state.queryCondition.area_id = clazz.area_id;
-                                                            this.setState({
-                                                                stateSelected: true
-                                                            })
-                                                            this.queryStudents(1, true);
-                                                        }}>
-                                                        {"添加学生"}
-                                                    </Button>
-                                                </CardActions>
-                                            </div>
-                                    }
-                                </Card>
-                            )}
-                            {this.state.clazzStudents.map(student => {
-                                <Card
-                                    key={clazz.id}
-                                    style={{ display: 'flex', }}>
-                                    <div style={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                    }}>
-                                        <CardContent>
-                                            <Typography>
-                                                {student.id}
-                                            </Typography>
-                                            <Typography component="h2">
-                                                {student.name}
-                                            </Typography>
-                                            <Typography component="p">
-                                                {student.company_name}
-                                            </Typography>
-                                            <Typography component="p">
-                                                {student.company_admin}
-                                            </Typography>
-                                            <Typography type="body1">
-                                                {student.mobile}
-                                            </Typography>
-                                            <Typography component="p">
-                                                {student.mail}
-                                            </Typography>
-                                            <Typography component="p">
-                                                {student.time}
-                                            </Typography>
-                                        </CardContent>
-                                    </div>
-                                    <div>
-                                        <CardActions>
-                                            <Button
-                                                dense
-                                                onClick={() => {
-
-                                                }}>
-                                                {"删除"}
-                                            </Button>
-                                        </CardActions>
-                                    </div>
-                                </Card>
-                            })}
-                        </List>
-
-
-                    </div>
-
+                                            }}>
+                                            {"删除"}
+                                        </Button>
+                                    </CardActions>
+                                </div>
+                            </Card>
+                        })}
+                    </List>
                     <div className="nyx-left-bottom-paper">
 
                     </div>
                 </div>
-                <div className="nyx-right-form">
+                <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
-                        <TextField
-                            id="search_input"
-                            label={"搜索"}
-                            value={this.state.search_input}
-                            onChange={event => {
-                                this.setState({
-                                    search_input: event.target.value,
-                                });
-                            }}
-                            fullWidth
-                        />
                         <Button
                             color="primary"
                             onClick={() => {
@@ -703,9 +659,19 @@ class Clazz extends Component {
                         >
                             {"搜索"}
                         </Button>
+                        <TextField
+                            id="search_input"
+                            label={"搜索公司名称"}
+                            value={this.state.search_input}
+                            onChange={event => {
+                                this.setState({
+                                    search_input: event.target.value,
+                                });
+                            }}
+                        />
                         {this.getCondition()}
                     </div>
-                    <div className="nyx-right-bottom-table">
+                    <div className="nyx-right-bottom-table" >
                         <ReactDataGrid
                             rowKey="id"
                             columns={
@@ -713,25 +679,25 @@ class Clazz extends Component {
                                     {
                                         key: "id",
                                         name: "#",
-                                        width: 100,
+                                        width: 40,
                                         resizable: true
                                     },
                                     {
                                         key: "student_name",
                                         name: "项目经理",
-                                        width: 100,
+                                        width: 80,
                                         resizable: true
                                     },
                                     {
                                         key: "company_name",
                                         name: "公司",
-                                        width: 100,
+                                        width: 200,
                                         resizable: true
                                     },
                                     {
                                         key: "company_admin",
                                         name: "联系人",
-                                        width: 100,
+                                        width: 80,
                                         resizable: true
                                     },
                                     {
@@ -743,19 +709,19 @@ class Clazz extends Component {
                                     {
                                         key: "mail",
                                         name: "邮箱",
-                                        width: 100,
+                                        width: 120,
                                         resizable: true
                                     },
                                     {
                                         key: "area_name",
                                         name: "区域",
-                                        width: 100,
+                                        width: 50,
                                         resizable: true
                                     },
                                     {
                                         key: "course_name",
                                         name: "课程",
-                                        width: 100,
+                                        width: 50,
                                         resizable: true
                                     }
                                 ]
@@ -791,8 +757,8 @@ class Clazz extends Component {
                             renderColor={(idx) => { return "black" }}
                             maxHeight={800}
                             enableRowSelect={true}
-                            minHeight={800}
-                            rowHeight={30}
+                            minHeight={500}
+                            rowHeight={20}
                             rowSelection={{
                                 showCheckbox: true,
                                 onRowsSelected: this.onRowsSelected,
