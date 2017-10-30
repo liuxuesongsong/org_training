@@ -200,6 +200,9 @@ export function getCourse(id) {
  */
 export function getAreas() {
   var areas = [], areaData = getCache(DATA_TYPE_AREA);
+  if (areaData === undefined) {
+    return [];
+  }
   var area;
   for (var i = 1; i <= areaData.length; i++) {
     area = new Object();

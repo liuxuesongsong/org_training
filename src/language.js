@@ -45,7 +45,16 @@ const Language = {
                     title: "企业信息",
                     base: {
                         title: "基本信息",
-
+                        base_info: {
+                            account: "单位全称",
+                            name: "联系人",
+                            mobile: "手机",
+                            tel: "电话",
+                            mail: "E-mail",
+                            department: "部门",
+                            duty: "职务",
+                            wechat: "微信/QQ"
+                        },
                         city: "企业名称",
                         c_area_id: "省市地区",
                         c_level: "企业资质"
@@ -79,19 +88,19 @@ const Language = {
                     }
                 },
                 students: {
-                    input: 
+                    input:
                     {
-                        "name":"姓名",
+                        "name": "姓名",
                         "department": "部门",
                         "duty": "职务",
                         "mobile": "手机",
                         "mail": "E-mail",
-                        "wechat":"微信/QQ",
-                        "id_type":"证件类型",
-                        "identity_card":"证件编号",
+                        "wechat": "微信/QQ",
+                        "id_type": "证件类型",
+                        "identity_card": "证件编号",
                         "register": "临时登记编号"
-                        },
-                select:
+                    },
+                    select:
                     {
                         "course_id": "中项或高项",
                         "area_id": "培训城市"
@@ -198,7 +207,7 @@ const Language = {
                 clazz: {
                     title: "班级安排",
                     new: "新建",
-                    clazz_list:"班级列表",
+                    clazz_list: "班级列表",
                     info: {
                         area: "地区",
                         class_name: "级别",
@@ -240,7 +249,7 @@ const Language = {
             1001: "密码不能为空",
             1002: "账号不能为空",
             // 10101:""
-           
+
         }
     },
     Eng: {
@@ -284,7 +293,9 @@ const Language = {
                 infos: {
                     base: {
                         title: "基本信息",
+                        base_info: {
 
+                        },
                         company_name: "企业名称",
                         province: "省市地区",
                         qualification: "企业资质"
@@ -321,7 +332,7 @@ const Language = {
                     del_student: "删除",
                     exam_record: "考试记录",
                     fix_student: "修改",
-                    base_infobase_info: "基本信息",
+                    base_info: "基本信息",
                     name: "姓名",
                     tel: "电话",
                     email: "电子邮件",

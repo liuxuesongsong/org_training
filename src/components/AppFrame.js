@@ -496,7 +496,7 @@ class AppFrame extends Component {
             onChange={event => this.setState({ name: event.target.value })}
           />
           <TextField
-            label={Lang[window.Lang].pages.main.password}
+            label={"手机验证"}
             id={"phone_number" + this.state.index}
             type="phone_number"
             style={{
@@ -507,7 +507,7 @@ class AppFrame extends Component {
             onChange={event => this.setState({ phone_number: event.target.value })}
           />
           <TextField
-            label={Lang[window.Lang].pages.main.password}
+            label={"验证码"}
             id={"phone_code" + this.state.index}
             type="phone_code"
             style={{
@@ -517,41 +517,6 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ phone_code: event.target.value })}
           />
-          <TextField
-            label={"验证码"}
-            id={"check_code" + this.state.index}
-            style={{
-              marginLeft: "auto",//styleManager.theme.spacing.unit,
-              marginRight: "auto",//theme.spacing.unit, 
-              width: "50%"
-            }}
-            onChange={event => this.setState({ check_code: event.target.value })}
-            fullWidth={true}
-          />
-
-          <ListItem
-
-            /* onClick={() => {this.get_check_code(); }} */
-            style={{
-              marginLeft: "auto",//styleManager.theme.spacing.unit,
-              marginRight: "auto",//theme.spacing.unit, 
-              width: "25%",
-              display: "inline-block"
-            }}>
-            <img
-              id={"code_img" + this.state.index}
-              style={{
-                height: "45px",
-                position: "absolute",
-                width: "80%"
-              }}
-              src={this.state.code_img_url}
-              onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
-
-
-            />
-
-          </ListItem>
           <Button
             raised
             color="primary"
