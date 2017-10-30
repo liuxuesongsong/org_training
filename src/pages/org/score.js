@@ -40,7 +40,7 @@ class Score extends Component {
             <div style={{ margin: 10, width: 400, float: "left" }}>
                 <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     {this.state.clazzes.map(clazz =>
-                        <Card style={{ display: 'flex', }}>
+                        <Card key={clazz.id} style={{ display: 'flex', }}>
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -66,7 +66,7 @@ class Score extends Component {
             <div style={{ margin: 10, width: 400, float: "left" }}>
                 <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.students.list_title}</ListSubheader>}>
                     {this.state.students.map(student =>
-                        <Card style={{ display: 'flex', }}>
+                        <Card key={student.id} style={{ display: 'flex', }}>
                             <div style={{
                                 display: 'flex',
                                 flexDirection: 'column',

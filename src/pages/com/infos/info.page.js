@@ -182,7 +182,7 @@ class Info extends Component {
         var items = [1, 2, 3, 4];
         items.map((item) => {
             components.push(
-                <ListItem button id={item} onClick={() => {
+                <ListItem button key={item} onClick={() => {
                     this.submit("base", {
                         c_level: item
                     })
@@ -258,7 +258,7 @@ class Info extends Component {
                                 height: "100%"
                             }} disablePadding>
                                 {getCache(DATA_TYPE_AREA).map(area =>
-                                    <ListItem button 
+                                    <ListItem button key={area.id}
                                         onClick={(e) => {
                                             this.submit("base", {
                                                 c_area_id: area.id
