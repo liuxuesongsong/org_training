@@ -497,7 +497,7 @@ class AppFrame extends Component {
           />
           <TextField
             label={"手机验证"}
-            id={"phone_number" + this.state.index}
+            id={"phone_number"}
             type="phone_number"
             style={{
               marginLeft: "auto",//styleManager.theme.spacing.unit,
@@ -506,6 +506,20 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ phone_number: event.target.value })}
           />
+          <Button
+            raised
+            color="primary"
+            className={'nyx-btn-circle'}
+            onClick={() => {
+              console.log(getRouter("forget_code"))
+              fetch(getRouter("forget_code").url, {
+                method: 'POST',
+                body: "mobile=" + document.getElementById("phone_number").value
+              })
+            }}
+          >
+            {"手机验证码"}
+          </Button>
           <TextField
             label={"验证码"}
             id={"phone_code" + this.state.index}
@@ -522,26 +536,31 @@ class AppFrame extends Component {
             color="primary"
             className={'nyx-btn-circle'}
             onClick={() => {
-              var name = this.state.name;
-              var password = this.state.password;
-              var check_code = this.state.check_code;
-              if (name === "") {
-                this.popUpNotice(NOTICE, 0, "您没有输入账号")
-                return
-              } else if (password === "") {
-                this.popUpNotice(NOTICE, 0, "您没有输入密码")
-                return
-              } else if (check_code === "") {
-                this.popUpNotice(NOTICE, 0, "您没有输入验证码")
-                return
-              }
+              var cb = (route, message, arg) => {
+                // Code.LOGIC_SUCCESS
+                if (message.code === Code.LOGIC_SUCCESS) {
+                  sessionStorage.logged = true;
+                  sessionStorage.account = arg["account"];
+                  sessionStorage.session = message.data.session;
+                  sessionStorage.apptype = arg["type"];
 
-              this.login(name, password, check_code);
+                  let e = new Event("login_success");
+                  dispatchEvent(e);
+                  this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
+                  // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
+                } else {
+                  console.log(message.msg)
+                  this.popUpNotice(NOTICE, 0, message.msg);
+                }
+              }
+              var code = document.getElementById("phone_code").value;
+              var apptype = APP_TYPE_COMPANY;
+              getData(getRouter("forget_code_login"), { account: account, code: code, }, cb, { account: account, type: apptype });
             }}
           >
-            {Lang[window.Lang].pages.main.login_button}
+            {"登录"}
           </Button>
-        </div> :
+        </div > :
         <div>
           <TextField
             id={"login_name" + this.state.index}
@@ -564,6 +583,11 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ password: event.target.value })}
           />
+          <a onClick={() => {
+            this.setState({
+              findPassword: true
+            })
+          }}>忘记密码</a>
           <TextField
             label={"验证码"}
             id={"check_code" + this.state.index}
