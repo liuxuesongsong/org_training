@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
-import { initCache, getData, getRouter, getCache, getStudent } from '../../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent,getCity,getInst} from '../../../utils/helpers';
 import {
     UNROLL_STUDENT, STUDENT_INFOS, STATUS_ENROLLED_UNDO,
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
@@ -77,7 +77,7 @@ class Home extends Component {
             }
         }
         //已安排占已报名的百分比
-        var per = (arranged/enrolled*256);    
+        var per = (arranged/enrolled*288);    
         if(arranged!=0){
             document.getElementById("enrolled-per").style.width=per+"px";
         }
@@ -195,10 +195,10 @@ class Home extends Component {
                                 {clazz.course_id=1?"中级":"高级"}
                                 </div>
                                 <div style={{float:"right"}}>
-                                {clazz.course_id=4?"重庆":"北京"}
+                                {getCity(clazz.course_id)}
                                 </div>
                                 <div className="nyx-clazz-key">
-                                {clazz.ti_id=1?"中软培训":"赛迪"}
+                                {getInst(clazz.ti_id)}
                                 </div>
                                 
                             </div>
