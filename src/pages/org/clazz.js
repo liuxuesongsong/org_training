@@ -30,21 +30,21 @@ import CommonAlert from '../../components/CommonAlert';
 
 class Clazz extends Component {
     state = {
-        clazzes: [],
-        students: [],
+        clazzes: [],    
+        students: [],   
         areas: [],
-        allData: [],
-        queryCondition: {},
-        tableData: [],
-        selectedStudentID: [],
-        currentPageSelectedID: [],
-        clazzStudents: [],
+        allData: [],                //表格中所有数据
+        tableData: [],              //表格内当前显示数据
+        queryCondition: {},         //搜索条件
+        selectedStudentID: [],      //所有选择的学生ID
+        currentPageSelectedID: [],  //当前页面选择的序列ID
+        clazzStudents: [],          //班级内的学生
         currentPage: 1,
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
         totalPage: 1,
-        rowsPerPage: 5,
+        rowsPerPage: 25,             //每页显示数据
         count: 0,
         onloading: false,
         selected: {},
@@ -75,15 +75,19 @@ class Clazz extends Component {
         });
     }
 
+    /**
+     * 按条件查询所有学生
+     * @param query_page 查询页码
+     * @param reload 重新载入数据
+     */
     queryStudents = (query_page = 1, reload = false) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 var result = message.data.students;
                 this.handleUptateAllData(result);
                 this.handleUpdateData(this.state.currentPage);
-                console.log(message.data.count)
                 this.setState({
-                    totalPage: getTotalPage(message.data.count, 5),
+                    totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
                     count: message.data.count
                 })
                 this.state.count = message.data.count
@@ -104,14 +108,77 @@ class Clazz extends Component {
         getData(getRouter(SELECT_STUDNETS), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
+    // 查询一个班级的学生
     queryClazzStudents = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({ clazzStudents: message.data.students })
+                this.setState({ clazzStudents: message.data.students });
+                // this.handleMakeDownloadData(message.data.students)
             }
         }
         getData(getRouter(SELECT_CLAZZ_STUDENTS), { session: sessionStorage.session, clazz_id: id }, cb, {});
     }
+
+    newClazz = (clazz) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                Object.assign({ id: message.data.clazz_id }, clazz)
+                this.state.clazzes.push(clazz)
+                this.setState({ clazzes: this.state.clazzes })
+                this.fresh();
+            }
+        }
+        var obj = {
+            session: sessionStorage.session,
+        }
+        getData(getRouter(CREATE_CLAZZ), Object.assign(clazz, obj), cb, {});
+    }
+
+    createTrain = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedStudentID = [];
+                this.state.currentPageSelectedID = [];
+                this.queryStudents(1, true)
+            }
+        }
+        var obj = {
+            session: sessionStorage.session,
+            clazz_id: id,
+            student_ids: this.state.selectedStudentID
+        }
+        getData(getRouter(CREATE_TRAIN), obj, cb, {});
+    }
+
+    modifyClazz = (id, clazz) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({ clazzes: message.clazz })
+            }
+        }
+        getData(getRouter(EDIT_CLASS), { session: sessionStorage.session, id: id, "class": clazz }, cb, {});
+
+    }
+
+    deleteClazz = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                for (var i = 0; i < this.state.clazzes.length; i++) {
+                    if (this.state.clazzes[i].id === arg.id) {
+                        this.state.clazzes.splice(i, 1);
+                        this.setState({
+                            clazzes: this.state.clazzes
+                        })
+                        break;
+                    }
+                }
+                this.fresh();
+                // this.setState({ clazzes: this.state.clazzes })
+            }
+        }
+        getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
+    }
+
 
     newClazzDialog = () => {
         return (
@@ -177,77 +244,11 @@ class Clazz extends Component {
         )
     }
 
-    newClazz = (clazz) => {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                Object.assign({ id: message.data.clazz_id }, clazz)
-                this.state.clazzes.push(clazz)
-                this.setState({ clazzes: this.state.clazzes })
-                this.fresh();
-            }
-        }
-        var obj = {
-            session: sessionStorage.session,
-        }
-        getData(getRouter(CREATE_CLAZZ), Object.assign(clazz, obj), cb, {});
-    }
-
-    createTrain = (id) => {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(message.data.train_id)
-                this.state.selectedStudentID = [];
-                this.state.currentPageSelectedID = [];
-                this.queryStudents(1, true)
-            }
-        }
-        var obj = {
-            session: sessionStorage.session,
-            clazz_id: id,
-            student_ids: this.state.selectedStudentID
-        }
-        getData(getRouter(CREATE_TRAIN), obj, cb, {});
-    }
-
-    modifyClazz = (id, clazz) => {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({ clazzes: message.clazz })
-            }
-        }
-        getData(getRouter(EDIT_CLASS), { session: sessionStorage.session, id: id, "class": clazz }, cb, {});
-
-    }
-
-    deleteClazz = (id) => {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                for (var i = 0; i < this.state.clazzes.length; i++) {
-                    if (this.state.clazzes[i].id === arg.id) {
-                        this.state.clazzes.splice(i, 1);
-                        this.setState({
-                            clazzes: this.state.clazzes
-                        })
-                        break;
-                    }
-                }
-                this.fresh();
-                // this.setState({ clazzes: this.state.clazzes })
-            }
-        }
-        getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
-    }
-
     handleRequestClose = () => {
         this.setState({
             openNewClazzDialog: false
         })
     }
-
-    freshStudents = () => {
-
-    }
-
 
     handleDownloadFile = () => {
         window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
@@ -284,7 +285,10 @@ class Clazz extends Component {
         });
     }
 
-    handleDownloadRechargeCode = (search_selected = true) => {
+    /**
+     * 按班级建造下载数据
+     */
+    handleMakeDownloadData = (id = true) => {
         var cb = (id, message, arg) => {
             if (id != DOWNLOAD_RECHARGE_CODE_S2C) {
                 return;
@@ -461,7 +465,6 @@ class Clazz extends Component {
         if (this.state.onloading === true) {
             return;
         } else {
-            console.log(this.state.currentPage);
             this.handleUpdateData(this.state.currentPage + 1);
         }
     }
@@ -470,8 +473,6 @@ class Clazz extends Component {
     onRowsDeselected = (rowArray) => {
         var tranform = new Set(this.state.selectedStudentID);
         this.state.selectedStudentID = [...tranform];
-        console.log(rowArray);
-        console.log(this.state.currentPageSelectedID);
         if (rowArray.length > 1) {
             for (var j = 0; j < rowArray.length; j++) {
                 if (this.state.selectedStudentID.indexOf(rowArray[j].row.student_id) === -1) {
@@ -523,8 +524,6 @@ class Clazz extends Component {
                 this.state.currentPageSelectedID.splice(this.state.currentPageSelectedID.indexOf((this.state.currentPage - 1) * this.state.rowsPerPage + index + 1), 1)
             }
         }
-        console.log(this.state.currentPageSelectedID)
-        console.log(this.state.selectedStudentID)
         this.setState({
             currentPageSelectedID: this.state.currentPageSelectedID,
             selectedStudentID: this.state.selectedStudentID
@@ -535,15 +534,12 @@ class Clazz extends Component {
         this.setState({ type: type, code: code, content: content, alertOpen: true });
     }
 
+
     toggleDrawer = (open) => () => {
         this.setState({
             right: open,
         });
     };
-
-    handleRequestDelete = () => {
-
-    }
 
     getCondition = () => {
         var chips = []
@@ -634,7 +630,6 @@ class Clazz extends Component {
                                                         selected: {},
                                                         stateSelected: false
                                                     })
-                                                    console.log(clazz.id)
                                                     this.createTrain(clazz.id);
                                                 }}>
                                                 {"确定"}
@@ -696,7 +691,6 @@ class Clazz extends Component {
                                                 className="glyphicon glyphicon-search"
                                                     dense
                                                     onClick={() => {
-                                                        console.log("123")
                                                         this.queryClazzStudents(clazz.id);
                                                         // this.state.selected = clazz;
                                                         // this.state.showInfo = true;
@@ -891,10 +885,10 @@ class Clazz extends Component {
                             }
                         }}
                         renderColor={(idx) => { return "black" }}
-                        maxHeight={330}
+                        maxHeight={800}
                         enableRowSelect={true}
-                        minHeight={440}
-                        rowHeight={40}
+                        minHeight={800}
+                        rowHeight={30}
                         rowSelection={{
                             showCheckbox: true,
                             onRowsSelected: this.onRowsSelected,
