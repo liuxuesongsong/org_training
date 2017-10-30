@@ -24,7 +24,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLASS, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../enum';
+import { ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -43,6 +43,7 @@ class Clazz extends Component {
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
+        openEditClazzDialog: false,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
         count: 0,
@@ -150,12 +151,14 @@ class Clazz extends Component {
     }
 
     modifyClazz = (id, clazz) => {
+        console.log(this.state.selected)
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
+                console.log("444")
                 this.setState({ clazzes: message.clazz })
             }
         }
-        getData(getRouter(EDIT_CLASS), { session: sessionStorage.session, id: id, "class": clazz }, cb, {});
+        getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
 
     }
 
@@ -176,6 +179,131 @@ class Clazz extends Component {
             }
         }
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
+    }
+
+    editClazzDialog = () => {
+        return (
+            <Dialog open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    修改班级
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"class_head"}
+                            id={"class_head"}
+                            label={"班主任"}
+                            value={this.state.selected["class_head"] === null ? "" : this.state.selected["class_head"]}
+                            onChange={(event) => {
+                                this.state.selected["class_head"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"teacher"}
+                            id={"teacher"}
+                            label={"老师"}
+                            value={this.state.selected["teacher"] === null ? "" : this.state.selected["teacher"]}
+                            onChange={(event) => {
+                                this.state.selected["teacher"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"address"}
+                            id={"address"}
+                            label={"开班地址"}
+                            value={this.state.selected["address"] === null ? "" : this.state.selected["address"]}
+                            onChange={(event) => {
+                                this.state.selected["address"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"train_starttime"}
+                            id={"train_starttime"}
+                            label={"开班时间"}
+                            value={this.state.selected["train_starttime"] === null ? "" : this.state.selected["train_starttime"]}
+                            onChange={(event) => {
+                                this.state.selected["train_starttime"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"train_endtime"}
+                            id={"train_endtime"}
+                            label={"结束时间"}
+                            value={this.state.selected["train_endtime"] === null ? "" : this.state.selected["train_endtime"]}
+                            onChange={(event) => {
+                                this.state.selected["train_endtime"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"class_code"}
+                            id={"class_code"}
+                            label={"班级编号"}
+                            value={this.state.selected["class_code"] === null ? "" : this.state.selected["class_code"]}
+                            onChange={(event) => {
+                                this.state.selected["class_code"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                var class_head = Number(document.getElementById("class_head").value);
+                                var teacher = Number(document.getElementById("teacher").value);
+                                var address = Number(document.getElementById("address").value);
+                                var train_starttime = Number(document.getElementById("train_starttime").value);
+                                var train_endtime = Number(document.getElementById("train_endtime").value);
+                                var class_code = Number(document.getElementById("class_code").value);
+                                this.modifyClazz(this.state.selected.id, {
+                                    class_head:class_head,
+                                    teacher:teacher,
+                                    address:address,
+                                    train_starttime: train_starttime,
+                                    train_endtime:train_endtime,
+                                    class_code: class_code
+                                })
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
     }
 
 
@@ -245,7 +373,8 @@ class Clazz extends Component {
 
     handleRequestClose = () => {
         this.setState({
-            openNewClazzDialog: false
+            openNewClazzDialog: false,
+            openEditClazzDialog: false
         })
     }
 
@@ -542,7 +671,8 @@ class Clazz extends Component {
                                                     className="glyphicon glyphicon-pencil"
                                                     onClick={() => {
                                                         this.state.selected = clazz;
-                                                        this.state.showInfo = true;
+                                                        // this.state.showInfo = true;
+                                                        this.setState({ openEditClazzDialog: true });
                                                         {/* this.toggleDrawer(true)() */ }
                                                     }}>
                                                 </i>
@@ -810,6 +940,8 @@ class Clazz extends Component {
                         >
                         </Drawer> : <div />}
                     {this.newClazzDialog()}
+
+                    {this.editClazzDialog()}
                     <CommonAlert
                         show={this.state.alertOpen}
                         type={this.state.alertType}

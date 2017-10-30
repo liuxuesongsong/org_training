@@ -583,11 +583,11 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ password: event.target.value })}
           />
-          <a onClick={() => {
+          {this.state.index === 0 ?<a onClick={() => {
             this.setState({
               findPassword: true
             })
-          }}>忘记密码</a>
+          }}>忘记密码</a>:""}
           <TextField
             label={"验证码"}
             id={"check_code" + this.state.index}
