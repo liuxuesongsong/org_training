@@ -88,10 +88,10 @@ class ComCard extends Component {
         return (
           <CardActions>
               <div>
-            <button className="nyx-card-button"  dense onClick={this.props.action[0]}>
+            <button className="nyx-card-button"   onClick={this.props.action[0]}>
               {Lang[window.Lang].pages.com.card.retry}
             </button>
-            <button  className="nyx-card-button"  dense onClick={this.props.action[1]}>
+            <button  className="nyx-card-button"   onClick={this.props.action[1]}>
               {Lang[window.Lang].pages.com.card.giveup}
             </button>
               </div>

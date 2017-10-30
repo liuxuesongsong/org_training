@@ -196,7 +196,7 @@ class Clazz extends Component {
                             defaultValue={""}
                         >
                             {this.state.areas.map((area) => {
-                                return <option id={area.id} value={area.id}>{area.area_name}</option>
+                                return <option key={area.id} value={area.id}>{area.area_name}</option>
                             })}
                         </select>
                         <select
@@ -540,7 +540,6 @@ class Clazz extends Component {
                                             <CardActions className="nyx-card-action">
                                                 <i
                                                     className="glyphicon glyphicon-pencil"
-                                                    dense
                                                     onClick={() => {
                                                         this.state.selected = clazz;
                                                         this.state.showInfo = true;
@@ -549,7 +548,6 @@ class Clazz extends Component {
                                                 </i>
                                                 <i
                                                     className="glyphicon glyphicon-trash"
-                                                    dense
                                                     onClick={() => {
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
@@ -565,7 +563,6 @@ class Clazz extends Component {
                                                 </i>
                                                 <i
                                                     className="glyphicon glyphicon-search"
-                                                    dense
                                                     onClick={() => {
                                                         this.queryClazzStudents(clazz.id);
                                                         // this.state.selected = clazz;
@@ -575,7 +572,6 @@ class Clazz extends Component {
                                                 </i>
                                                 <Button
                                                     className="nyx-clazz-card-button"
-                                                    dense
                                                     onClick={() => {
 
                                                         this.state.selected = clazz;
