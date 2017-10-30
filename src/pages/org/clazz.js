@@ -583,7 +583,7 @@ class Clazz extends Component {
                                                             return
                                                             this.popUpNotice(ALERT, 0, "删除该班级", [
                                                                 () => {
-                                                                    this.removeStudent(clazz.id);
+                                                                    this.deleteClazz(clazz.id);
                                                                     this.closeNotice();
                                                                 }, () => {
                                                                     this.closeNotice();
