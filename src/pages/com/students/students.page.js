@@ -102,7 +102,7 @@ class Students extends Component {
                     }
                 }
             }
-            this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(REMOVE_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }

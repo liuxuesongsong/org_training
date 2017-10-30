@@ -1,6 +1,6 @@
 // @flow
 import config from "../config";
-import { DATA_TYPE_ALL, QUERY, INST_QUERY, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, DATA_TYPE_STUDENT } from "../enum";
+import { DATA_TYPE_ALL, QUERY, INST_QUERY, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, DATA_TYPE_STUDENT, DATA_TYPE_AREA } from "../enum";
 import Code from "../code";
 
 export function kebabCase(string: String) {
@@ -188,11 +188,26 @@ export function getStudent(id) {
 }
 
 export function getInst(id) {
-  return  window.CacheData.insts[id];
+  return window.CacheData.insts[id];
 }
 
 export function getCourse(id) {
-  return  window.CacheData.courses[id];
+  return window.CacheData.courses[id];
+}
+
+/**
+ * areaData 中序列从1开始
+ */
+export function getAreas() {
+  var areas = [], areaData = getCache(DATA_TYPE_AREA);
+  var area;
+  for (var i = 1; i <= areaData.length; i++) {
+    area = new Object();
+    area.id = i;
+    area.area_name = areaData[i];
+    areas.push(area)
+  }
+  return areas;
 }
 
 export function getCity(id) {

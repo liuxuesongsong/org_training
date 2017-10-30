@@ -112,7 +112,7 @@ class Home extends Component {
                 this.fresh();
 
             }
-            this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, Lang[window.Lang].ErrorCode[Code.ERROE_REQUEST_ROUTER]);
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }

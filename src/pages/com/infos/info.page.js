@@ -31,7 +31,7 @@ import Finance from './finance.paper';
 import Express from './express.paper';
 import Admin from './admin.paper';
 
-import { initCache, getCache, getData, getRouter, getCity } from '../../../utils/helpers';
+import { initCache, getCache, getData, getRouter, getCity, getAreas } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 
@@ -257,7 +257,7 @@ class Info extends Component {
                             <List style={{
                                 height: "100%"
                             }} disablePadding>
-                                {getCache(DATA_TYPE_AREA).map(area =>
+                                {getAreas().map(area =>
                                     <ListItem button key={area.id}
                                         onClick={(e) => {
                                             this.submit("base", {

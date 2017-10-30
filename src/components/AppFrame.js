@@ -161,6 +161,9 @@ class AppFrame extends Component {
     available_result: "",
     password_result: "",
     repeat_result: "",
+    phone_number: "",
+    findPassword: false,
+    phone_code: "",
 
     // 提示状态
     alertOpen: false,
@@ -295,7 +298,8 @@ class AppFrame extends Component {
         this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
-        this.popUpNotice(NOTICE, message.code, message.msg);
+        console.log(message.msg)
+        this.popUpNotice(NOTICE, 0, message.msg);
       }
     }
 
@@ -479,88 +483,182 @@ class AppFrame extends Component {
 
   LoginView = () => {
     return (
-      <div>
-        <TextField
-          id={"login_name" + this.state.index}
-          label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
-          style={{
-            marginLeft: "auto",//styleManager.theme.spacing.unit,
-            marginRight: "auto",//theme.spacing.unit,  
-          }}
-          fullWidth={true}
-          onChange={event => this.setState({ name: event.target.value })}
-        />
-        <TextField
-          label={Lang[window.Lang].pages.main.password}
-          id={"login_password" + this.state.index}
-          type="password"
-          style={{
-            marginLeft: "auto",//styleManager.theme.spacing.unit,
-            marginRight: "auto",//theme.spacing.unit,  
-          }}
-          fullWidth={true}
-          onChange={event => this.setState({ password: event.target.value })}
-        />
-        <TextField
-          label={"验证码"}
-          id={"check_code" + this.state.index}
-          style={{
-            marginLeft: "auto",//styleManager.theme.spacing.unit,
-            marginRight: "auto",//theme.spacing.unit, 
-            width: "50%"
-          }}
-          onChange={event => this.setState({ check_code: event.target.value })}
-          fullWidth={true}
-        />
-
-        <ListItem
-
-          /* onClick={() => {this.get_check_code(); }} */
-          style={{
-            marginLeft: "auto",//styleManager.theme.spacing.unit,
-            marginRight: "auto",//theme.spacing.unit, 
-            width: "25%",
-            display: "inline-block"
-          }}>
-          <img
-            id={"code_img" + this.state.index}
+      this.state.findPassword ?
+        <div>
+          <TextField
+            id={"login_name" + this.state.index}
+            label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
             style={{
-              height: "45px",
-              position: "absolute",
-              width: "80%"
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit,  
             }}
-            src={this.state.code_img_url}
-            onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
-
-
+            fullWidth={true}
+            onChange={event => this.setState({ name: event.target.value })}
+          />
+          <TextField
+            label={Lang[window.Lang].pages.main.password}
+            id={"phone_number" + this.state.index}
+            type="phone_number"
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit,  
+            }}
+            fullWidth={true}
+            onChange={event => this.setState({ phone_number: event.target.value })}
+          />
+          <TextField
+            label={Lang[window.Lang].pages.main.password}
+            id={"phone_code" + this.state.index}
+            type="phone_code"
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit,  
+            }}
+            fullWidth={true}
+            onChange={event => this.setState({ phone_code: event.target.value })}
+          />
+          <TextField
+            label={"验证码"}
+            id={"check_code" + this.state.index}
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit, 
+              width: "50%"
+            }}
+            onChange={event => this.setState({ check_code: event.target.value })}
+            fullWidth={true}
           />
 
-        </ListItem>
-        <Button
-          raised
-          color="primary"
-          className={'nyx-btn-circle'}
-          onClick={() => {
-            var name = this.state.name;
-            var password = this.state.password;
-            var check_code = this.state.check_code;
-            if (name === "") {
-              this.popUpNotice(NOTICE, 0, "您没有输入账号")
-              return
-            } else if (password === "") {
-              this.popUpNotice(NOTICE, 0, "您没有输入密码")
-              return
-            } else if (check_code === "") {
-              this.popUpNotice(NOTICE, 0, "您没有输入验证码")
-              return
-            }
+          <ListItem
 
-            this.login(name, password, check_code);
-          }}
-        >
-          {Lang[window.Lang].pages.main.login_button}
-        </Button>
-      </div>
+            /* onClick={() => {this.get_check_code(); }} */
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit, 
+              width: "25%",
+              display: "inline-block"
+            }}>
+            <img
+              id={"code_img" + this.state.index}
+              style={{
+                height: "45px",
+                position: "absolute",
+                width: "80%"
+              }}
+              src={this.state.code_img_url}
+              onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
+
+
+            />
+
+          </ListItem>
+          <Button
+            raised
+            color="primary"
+            className={'nyx-btn-circle'}
+            onClick={() => {
+              var name = this.state.name;
+              var password = this.state.password;
+              var check_code = this.state.check_code;
+              if (name === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入账号")
+                return
+              } else if (password === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入密码")
+                return
+              } else if (check_code === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入验证码")
+                return
+              }
+
+              this.login(name, password, check_code);
+            }}
+          >
+            {Lang[window.Lang].pages.main.login_button}
+          </Button>
+        </div> :
+        <div>
+          <TextField
+            id={"login_name" + this.state.index}
+            label={COMPANY_LOING_INDEX === this.state.index ? Lang[window.Lang].pages.main.com_account : Lang[window.Lang].pages.main.org_account}
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit,  
+            }}
+            fullWidth={true}
+            onChange={event => this.setState({ name: event.target.value })}
+          />
+          <TextField
+            label={Lang[window.Lang].pages.main.password}
+            id={"login_password" + this.state.index}
+            type="password"
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit,  
+            }}
+            fullWidth={true}
+            onChange={event => this.setState({ password: event.target.value })}
+          />
+          <TextField
+            label={"验证码"}
+            id={"check_code" + this.state.index}
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit, 
+              width: "50%"
+            }}
+            onChange={event => this.setState({ check_code: event.target.value })}
+            fullWidth={true}
+          />
+
+          <ListItem
+
+            /* onClick={() => {this.get_check_code(); }} */
+            style={{
+              marginLeft: "auto",//styleManager.theme.spacing.unit,
+              marginRight: "auto",//theme.spacing.unit, 
+              width: "25%",
+              display: "inline-block"
+            }}>
+            <img
+              id={"code_img" + this.state.index}
+              style={{
+                height: "45px",
+                position: "absolute",
+                width: "80%"
+              }}
+              src={this.state.code_img_url}
+              onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
+
+
+            />
+
+          </ListItem>
+          <Button
+            raised
+            color="primary"
+            className={'nyx-btn-circle'}
+            onClick={() => {
+              var name = this.state.name;
+              var password = this.state.password;
+              var check_code = this.state.check_code;
+              if (name === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入账号")
+                return
+              } else if (password === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入密码")
+                return
+              } else if (check_code === "") {
+                this.popUpNotice(NOTICE, 0, "您没有输入验证码")
+                return
+              }
+
+              this.login(name, password, check_code);
+            }}
+          >
+            {Lang[window.Lang].pages.main.login_button}
+          </Button>
+        </div>
     )
   }
 

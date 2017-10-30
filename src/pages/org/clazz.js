@@ -18,7 +18,7 @@ import Drawer from 'material-ui/Drawer';
 import { LabelRadio, RadioGroup } from 'material-ui/Radio';
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 
-import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
 import ReactDataGrid from 'angon_react_data_grid';
 
@@ -68,7 +68,7 @@ class Clazz extends Component {
 
     cacheToState() {
         window.currentPage.queryStudents();
-        window.currentPage.state.areas = getCache("areas");
+        window.currentPage.state.areas = getAreas();
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
@@ -513,7 +513,7 @@ class Clazz extends Component {
                                                 {"确定"}
                                             </Button>
                                             <Button
-                                            className="nyx-clazz-card-button"
+                                                className="nyx-clazz-card-button"
                                                 dense
                                                 onClick={() => {
                                                     this.setState({
@@ -574,7 +574,7 @@ class Clazz extends Component {
                                                     }}>
                                                 </i>
                                                 <Button
-                                                className="nyx-clazz-card-button"
+                                                    className="nyx-clazz-card-button"
                                                     dense
                                                     onClick={() => {
 
