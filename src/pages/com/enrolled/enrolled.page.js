@@ -46,10 +46,12 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
+        city:"0",
         unarranged_height: 1,
         arranged_height: 1,
         unenrolled_height: 1,
         students: [],
+        areas:[],
         newStudents: [],
         unarragedStudents: [],
         arrangedStudents: [],
@@ -80,6 +82,7 @@ class Enrolled extends Component {
     cacheToState() {
         // 设置界面
         var students = getCache(DATA_TYPE_STUDENT);
+        window.currentPage.state.areas = getCache("areas");
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
     }
@@ -138,6 +141,60 @@ class Enrolled extends Component {
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
+    newStudentList(){
+        var components = [];
+       var newStudentInput=Lang[window.Lang].pages.com.students.input;
+        for(var p in newStudentInput){
+            components.push(<TextField
+             key={p}
+            id={"new_"+p}
+            label={newStudentInput[p]}
+            defaultValue={""}
+        />)
+        }
+     return components
+    }
+    newStudentCity(){
+        var components = [];
+       var newStudentAreas=window.CacheData.areas;
+        for(var p in newStudentAreas){
+            components.push(
+               
+                    <option  value={p} key={p}>{newStudentAreas[p]}</option>
+               
+
+
+                
+            //     <FormControl key={p} required>
+            //     <FormLabel>{newStudentSelect[p]}</FormLabel>
+            //     <RadioGroup
+            //         aria-label="gender"
+            //         name="gender"
+            //         selectedValue={this.state.course}
+            //         onChange={(e, value) => {
+            //             this.handleChangeCourse(e, value)
+            //         }}
+            //     >
+            //         <LabelRadio value={"1"} label="中级" />
+            //         <LabelRadio value={"2"} label="高级" />
+            //     </RadioGroup>
+            // </FormControl>
+            )
+        }
+     return components
+    }
+    newStudentInst(){
+        var components = [];
+       var newStudentInsts=window.CacheData.insts;
+        for(var p in newStudentInsts){
+            components.push(
+               
+                    <option value={p} key={p}>{newStudentInsts[p]}</option>
+            )
+        }
+     return components
+    }
+
 
     removeStudent(id) {
         var cb = (route, message, arg) => {
@@ -217,41 +274,26 @@ class Enrolled extends Component {
                 </DialogTitle>
                 <DialogContent>
                     <div>
-                        <Typography type="headline" component="h3">
-                            {Lang[window.Lang].pages.com.students.title}
-                        </Typography>
-                        <TextField
-                            id="new_name"
-                            label={Lang[window.Lang].pages.com.students.name}
+                        {this.newStudentList()}
+
+                        <select
+                            id="new_area_id"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
-                            fullWidth
-                        />
-                        <TextField
-                            id="new_tel"
-                            label={Lang[window.Lang].pages.com.students.tel}
+                        >
+                          {this.newStudentCity()}
+                        </select>
+                        <select
+                            id="new_course_id"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
-                            fullWidth
-                        />
-                        <TextField
-                            id="new_mail"
-                            label={Lang[window.Lang].pages.com.students.email}
-                            defaultValue={""}
-                            fullWidth
-                        />
-                        <FormControl required>
-                            <FormLabel>{"等级"}</FormLabel>
-                            <RadioGroup
-                                aria-label="gender"
-                                name="gender"
-                                selectedValue={this.state.course}
-                                onChange={(e, value) => {
-                                    this.handleChangeCourse(e, value)
-                                }}
-                            >
-                                <LabelRadio value={"1"} label="中级" />
-                                <LabelRadio value={"2"} label="高级" />
-                            </RadioGroup>
-                        </FormControl>
+                        >
+                            <option value={1}>{"中级"}</option>
+                            <option value={2}>{"高级"}</option>
+                        </select>
+
+                        
+                        
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -259,10 +301,19 @@ class Enrolled extends Component {
                         <Button
                             onClick={() => {
                                 this.newStudent({
+
+                                    
                                     name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
-                                    mobile: document.getElementById("new_tel").value,
+                                    department: document.getElementById("new_department").value,
+                                    duty: document.getElementById("new_duty").value,
+                                    mobile: document.getElementById("new_mobile").value,
                                     mail: document.getElementById("new_mail").value,
-                                    course_id: Number(this.state.course),
+                                    wechat: document.getElementById("new_wechat").value,
+                                    id_type: document.getElementById("new_id_type").value,
+                                    identity_card: document.getElementById("new_identity_card").value,
+                                    register: document.getElementById("new_register").value,
+                                    area_id: document.getElementById("new_area_id").value,
+                                    course_id: document.getElementById("new_course_id").value
                                 })
                             }}
                         >
@@ -320,6 +371,9 @@ class Enrolled extends Component {
 
 
     handleChangeCourse = (event, value) => {
+        this.setState({ course: value });
+    };
+    handleChangeCity = (event, value) => {
         this.setState({ course: value });
     };
 

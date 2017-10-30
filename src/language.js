@@ -79,6 +79,23 @@ const Language = {
                     }
                 },
                 students: {
+                    input: 
+                    {
+                        "name":"姓名",
+                        "department": "部门",
+                        "duty": "职务",
+                        "mobile": "手机",
+                        "mail": "E-mail",
+                        "wechat":"微信/QQ",
+                        "id_type":"证件类型",
+                        "identity_card":"证件编号",
+                        "register": "临时登记编号"
+                        },
+                select:
+                    {
+                        "course_id": "中项或高项",
+                        "area_id": "培训城市"
+                    },
                     title: "学生",
                     list_title: "学员列表",
                     new_student: "新增",

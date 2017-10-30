@@ -233,6 +233,11 @@
     font-size: 14px !important;
     }
 }
+.nyx-info-listitem-hover:hover{
+    background-color: rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+}
+
 .nyx-info-span{
     width: 10em;
     display: block;
@@ -240,6 +245,7 @@
 }
 .nyx-info-line-height{
     line-height: 45px;
+    padding-left:16px; 
 }
 .nyx-flexible{
     color: $blue;

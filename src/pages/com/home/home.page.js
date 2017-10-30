@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
-import { initCache, getData, getRouter, getCache, getStudent,getCity,getInst} from '../../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent,getCourse,getCity,getInst} from '../../../utils/helpers';
 import {
     UNROLL_STUDENT,
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
@@ -192,10 +192,10 @@ class Home extends Component {
                             {this.state.clazzes.map(clazz =>
                             <div key={clazz.id} className="nyx-card-class">
                                 <div style={{float:"left"}}>
-                                {clazz.course_id=1?"中级":"高级"}
+                                {getCourse(clazz.course_id)}
                                 </div>
                                 <div style={{float:"right"}}>
-                                {getCity(clazz.course_id)}
+                                 {getCity(clazz.area_id)} 
                                 </div>
                                 <div className="nyx-clazz-key">
                                 {getInst(clazz.ti_id)}
@@ -293,7 +293,7 @@ class Home extends Component {
                                         type={CARD_TYPE_ARRANGE}
                                         key={CARD_TYPE_ARRANGE + student.id}
                                         name={student.name}
-                                        mobile={student.mobile}
+                                        mobile={student.mobile.toString()}
                                         email={student.mail}
                                         level={student.course_id}
                                         city={student.area_id}
@@ -325,7 +325,7 @@ class Home extends Component {
                                         type={CARD_TYPE_ARRANGE}
                                         key={CARD_TYPE_ARRANGE + student.id}
                                         name={student.name}
-                                        mobile={student.mobile}
+                                        mobile={student.mobile.toString()}
                                         email={student.mail}
                                         level={student.course_id}
                                         city={student.area_id}
@@ -337,7 +337,7 @@ class Home extends Component {
                                         type={CARD_TYPE_ARRANGE}
                                         key={CARD_TYPE_ARRANGE + student.id}
                                         name={student.name}
-                                        mobile={student.mobile}
+                                        mobile={student.mobile.toString()}
                                         email={student.mail}
                                         level={student.course_id}
                                         city={student.area_id}

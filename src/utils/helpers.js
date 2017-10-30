@@ -188,29 +188,15 @@ export function getStudent(id) {
 }
 
 export function getInst(id) {
-  var inst = ""
-  for (var i = 0; i < window.CacheData.insts.length; i++) {
-    if (window.CacheData.insts[i].id === id) {
-      inst = window.CacheData.insts[i].institution_name;
-      break;
-    }
-  }
-  return inst
+  return  window.CacheData.insts[id];
 }
 
 export function getCourse(id) {
-  return id === 1 ? "中级" : id === 2 ? "高级" : "未定义"
+  return  window.CacheData.courses[id];
 }
 
 export function getCity(id) {
-  var city = ""
-  for (var i = 0; i < window.CacheData.areas.length; i++) {
-    if (window.CacheData.areas[i].id === id) {
-      city = window.CacheData.areas[i].area_name;
-      break;
-    }
-  }
-  return city
+  return window.CacheData.areas[id];
 }
 
 export function isJson(obj) {
