@@ -154,8 +154,8 @@ class Clazz extends Component {
         console.log(this.state.selected)
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log("444")
-                this.setState({ clazzes: message.clazz })
+                this.fresh();
+                // this.setState({ clazzes: message.clazz })
             }
         }
         getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
