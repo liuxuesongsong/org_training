@@ -506,10 +506,10 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ phone_number: event.target.value })}
           />
-          <Button
-            raised
+          <a
+            
             color="primary"
-            className={'nyx-btn-circle'}
+            className={'nyx-send-checkcode'}
             onClick={() => {
               console.log(getRouter("forget_code"))
               fetch(getRouter("forget_code").url, {
@@ -518,13 +518,14 @@ class AppFrame extends Component {
               })
             }}
           >
-            {"手机验证码"}
-          </Button>
+            {"发送手机验证码"}
+          </a>
           <TextField
             label={"验证码"}
             id={"phone_code" + this.state.index}
             type="phone_code"
             style={{
+              width:"75%",
               marginLeft: "auto",//styleManager.theme.spacing.unit,
               marginRight: "auto",//theme.spacing.unit,  
             }}
@@ -583,11 +584,15 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ password: event.target.value })}
           />
-          {this.state.index === 0 ?<a onClick={() => {
+         
+          {this.state.index === 0 ?<a
+          className="nyx-findpassword"
+           onClick={() => {
             this.setState({
               findPassword: true
             })
-          }}>忘记密码</a>:""}
+          }}>忘记密码?</a>:""}
+         
           <TextField
             label={"验证码"}
             id={"check_code" + this.state.index}

@@ -135,11 +135,14 @@
         white-space: nowrap;    
     }
     .nyx-card-name{
-        //display: block;
-        //margin-top: -0.7rem;
-        //line-height: 28px;
-        //line-height: 40px;
+      
         width: 4em;
+        color: $grey900;
+        @extend .nyx-oneline;
+    }
+    .nyx-card-name-lg{
+      
+        width: 8em;
         color: $grey900;
         @extend .nyx-oneline;
     }
@@ -207,6 +210,37 @@
         width: 98%;
     }
     }
+    
+    .nyx-form-div-middle{
+        width: 30%;
+        display: inline-block;
+    div{
+        width: 95%;
+    }
+    }
+    .nyx-info-select{
+        width: 49%;
+        margin-right: 1%;
+        border: none;
+        color: rgba(0, 0, 0, 0.54);
+        outline: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+    }
+
+    
+    .nyx-info-select-middle{
+        width: 30%;
+        margin-right: 1%;
+        border: none;
+        color: rgba(0, 0, 0, 0.54);
+        outline: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+    }
+    .nyx-info-select-label{
+        width: 50%;
+        float: left;
+        color: rgba(0, 0, 0, 0.54);
+    }
 }
 .nyx-card-class{
     margin: 2rem 3rem 0rem 3rem;
@@ -260,6 +294,9 @@
         div{
             width: 98%;
         }
+        }
+        .nyx-info-select-label{
+            width: 100%;
         }
     } 
 }

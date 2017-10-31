@@ -71,14 +71,14 @@ const Language = {
                     express: {
                         title: "邮寄信息",
                         zip_code: "邮编",
-                        receive_address: "收件地址",
+                        receive_address: "省市",
                         district: "详细地址",
                         receiver: "收件人",
                         receive_phone: "联系方式"
                     },
                     admin: {
                         title: "联系人信息",
-                        account: "用户名",
+                        account: "单位全称",
                         password: "密码",
                         name: "管理员姓名",
                         mobile: "手机",

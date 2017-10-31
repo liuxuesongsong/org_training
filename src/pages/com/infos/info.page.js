@@ -432,7 +432,8 @@ class Info extends Component {
                     <List style={{
                         height: "100%"
                     }} disablePadding>
-                        <Paper>
+                        <Paper 
+                        className="nyx-form">
                             <h3>{"企业负责人相关信息"}</h3>
                             <TextField
                                 className="nyx-form-div"
@@ -538,7 +539,14 @@ class Info extends Component {
                                     });
                                 }}>
                             </TextField>
+                            <p
+                            className="nyx-info-select-label"
+                            >所在地区</p>
+                            <p
+                            className="nyx-info-select-label"
+                            >企业资质等级</p>
                             <select
+                                className="nyx-info-select"
                                 id="input_c_area_id"
                                 label={Lang[window.Lang].pages.org.clazz.info.area}
                                 value={this.state.base.c_area_id === null ? "" : this.state.base.c_area_id}
@@ -554,8 +562,9 @@ class Info extends Component {
                                 })}
                             </select>
                             <select
+                                className="nyx-info-select"
                                 id="input_c_level"
-                                label={"企业等级"}
+                                label={"企业资质等级"}
                                 value={this.state.base.c_level === null ? "" : this.state.base.c_level}
                                 onChange={(e) => {
                                     this.state.base["c_level"] = Number(e.target.value);
@@ -571,6 +580,8 @@ class Info extends Component {
                             </select>
                             <Button
                                 raised
+                                style={{position:"relative",
+                                       marginTop:"0.5rem"}}
                                 color="accent"
                                 onClick={() => {
                                     var cb = (route, message, arg) => {
@@ -620,7 +631,6 @@ class Info extends Component {
                                 {/* <ListItemText primary={LANG_PREFIX.express.title} /> */}
                                 <div><span className="nyx-info-span">收件人</span>{this.state.express.receiver}</div>
                                 <div><span className="nyx-info-span">联系电话</span>{this.state.express.receive_phone}</div>
-                                <div><span className="nyx-info-span">所在区域</span>{this.state.express.receive_address}&nbsp;&nbsp;{this.state.express.zip_code}</div>
                                 <div><span className="nyx-info-span">收件地址</span>{this.state.express.district}</div>
                             </div>
                         </Paper>
@@ -628,19 +638,17 @@ class Info extends Component {
                         <Paper style={{ marginBottom: 20 }} className="nyx-info-listitem nyx-info-listitem-hover">
                             <div className="nyx-info-line-height"
                                 onClick={() => { this.setState({ show: "finance", }) }}>
-                                <div><span className="nyx-info-span">纳税信息</span><span>公司全称：</span> {this.state.finance.allname}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：</span>{this.state.finance.taxpayer_number}</div>
+                                <div><span className="nyx-info-span">纳税信息</span><span>单位全称：</span> {this.state.finance.allname}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：</span>{this.state.finance.taxpayer_number}</div>
                                 <div><span className="nyx-info-span">银行信息</span><span>开户行：</span> {this.state.finance.opening_bank}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;账号：</span>{this.state.finance.bank_account}</div>
                                 <div><span className="nyx-info-span">联系方式</span><span>地址：</span> {this.state.finance.c_address}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：</span>{this.state.finance.financial_call}</div>
                             </div>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"修改密码"}</ListSubheader>
-                        <Paper>
+                        <ListSubheader style={{ marginTop: 20}}>{"修改密码"}</ListSubheader>
+                        <Paper style={{marginBottom: 80}} >
                             <div className="nyx-info-line-height"
                                 onClick={() => { this.setState({ show: "admin", }) }}>
-                                <div><span className="nyx-info-span">用户名</span>{this.state.admin.account}</div>
-                                <div><span className="nyx-info-span">管理员姓名</span>{this.state.admin.name}</div>
-                                <div><span className="nyx-info-span">电话</span>{this.state.admin.mobile}</div>
-                                <div><span className="nyx-info-span">邮箱</span>{this.state.admin.mail}</div>
+                                <div><span className="nyx-info-span">单位全称</span>{this.state.admin.account}</div>
+                                <div><span className="nyx-info-span">密码</span>******</div>
                             </div>
                         </Paper>
                     </List>

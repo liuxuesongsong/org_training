@@ -15,7 +15,7 @@ import {
   CARD_TYPE_UNARRANGE,
   STATUS_AGREED_AGREE,
 } from '../../enum';
-import { getCity } from '../../utils/helpers';
+import { getCity,getCourse } from '../../utils/helpers';
 import Lang from '../../language';
 
 class ComCard extends Component {
@@ -144,7 +144,7 @@ class ComCard extends Component {
               <div className="nyx-card-round-ing" />
               <div className="nyx-card-first-info">
                 <div className={'nyx-card-name'}>{name}</div>
-                <div className={'nyx-card-name'}>{`${level === 1 ? '中' : '高'}级`}</div>
+                <div className={'nyx-card-name-lg'}>{getCourse(level)}</div>
                 <div className={'nyx-card-name'}>{getCity(city)}</div>
               </div>
               <div className="nyx-card-second-info">

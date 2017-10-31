@@ -92,7 +92,7 @@ class Admin extends Component {
                     }}
                     fullWidth>
                 </TextField>
-                <TextField
+                {/* <TextField
                     className="nyx-form-div"
                     id="name"
                     label={Lang[window.Lang].pages.com.infos.admin.name}
@@ -152,12 +152,19 @@ class Admin extends Component {
                         });
                     }}
                     fullWidth>
-                </TextField>
+                </TextField> */}
                 <Button
                     raised
                     color="accent"
                     onClick={() => {
                         this.submit();
+                        
+                        
+                        // var data = getCache(DATA_TYPE_BASE);
+                        // this.setState({
+                        //     show: "all",
+                        //     base: data
+                        // });
                     }}
                     className=""
                 >

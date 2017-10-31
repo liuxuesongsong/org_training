@@ -146,6 +146,7 @@ class Enrolled extends Component {
        var newStudentInput=Lang[window.Lang].pages.com.students.input;
         for(var p in newStudentInput){
             components.push(<TextField
+            className="nyx-form-div"
              key={p}
             id={"new_"+p}
             label={newStudentInput[p]}
@@ -273,23 +274,30 @@ class Enrolled extends Component {
                     新增学员
                 </DialogTitle>
                 <DialogContent>
-                    <div>
+                    <div className="nyx-form">
                         {this.newStudentList()}
-
+                        <br />
+                        <span
+                        className="nyx-form-div"
+                        >培训城市</span>
                         <select
+                        className="nyx-info-select-middle"
                             id="new_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
                           {this.newStudentCity()}
                         </select>
+                        <span
+                        className="nyx-form-div"
+                        >中项或高项</span>
                         <select
                             id="new_course_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
-                            <option value={1}>{"中级"}</option>
-                            <option value={2}>{"高级"}</option>
+                            <option value={1}>{"项目经理"}</option>
+                            <option value={2}>{"高级项目经理"}</option>
                         </select>
 
                         
@@ -572,8 +580,8 @@ class Enrolled extends Component {
                                         this.handleChangeCourse(e, value)
                                     }}
                                 >
-                                    <LabelRadio value={"1"} label="中级" />
-                                    <LabelRadio value={"2"} label="高级" />
+                                    <LabelRadio value={"1"} label="项目经理" />
+                                    <LabelRadio value={"2"} label="高级项目经理" />
                                 </RadioGroup>
                             </FormControl>
                             <TextField
