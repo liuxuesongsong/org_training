@@ -85,6 +85,7 @@ class Students extends Component {
                     students: this.state.students
                 })
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
@@ -117,6 +118,7 @@ class Students extends Component {
                     }
                 }
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
 
         switch (key) {

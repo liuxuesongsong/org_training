@@ -127,6 +127,7 @@ class Clazz extends Component {
                 this.setState({ clazzes: this.state.clazzes })
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
             session: sessionStorage.session,
@@ -141,6 +142,7 @@ class Clazz extends Component {
                 this.state.currentPageSelectedID = [];
                 this.queryStudents(1, true)
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
             session: sessionStorage.session,
@@ -157,6 +159,7 @@ class Clazz extends Component {
                 this.fresh();
                 // this.setState({ clazzes: message.clazz })
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
 
@@ -174,6 +177,7 @@ class Clazz extends Component {
                         break;
                     }
                 }
+                this.popUpNotice(NOTICE, 0, message.msg);
                 this.fresh();
                 // this.setState({ clazzes: this.state.clazzes })
             }

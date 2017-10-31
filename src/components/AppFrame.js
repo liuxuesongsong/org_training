@@ -277,9 +277,8 @@ class AppFrame extends Component {
         this.handleNext();
         this.state.account = arg.account;
         this.state.password = arg.password;
-        this.popUpNotice(NOTICE, Code.REGISTER_SUCCESS, Lang[window.Lang].ErrorCode[Code.REGISTER_SUCCESS]);
       }
-      this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
+      this.popUpNotice(NOTICE, 0, message.msg);
     }
     
     console.log( { account: account, password: password, type: APP_TYPE_COMPANY });

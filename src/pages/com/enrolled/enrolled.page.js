@@ -394,15 +394,19 @@ class Enrolled extends Component {
                             </Button>
                         </div>
                         <div className={this.state.unenrolled_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-
-
                             {this.state.newStudents.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_ENROLL}
                                     key={student.id}
+<<<<<<< HEAD
                                     name={student.name}
                                     mobile={student.mobile === undefined ? "" : student.mobile}
                                     email={student.mail === undefined ? "" : student.mail}
+=======
+                                    name={student.name.toString()}
+                                    mobile={student.mobile ? "" : student.mobile}
+                                    email={student.mail ? "" : student.mail}
+>>>>>>> 增加pop 提示
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -451,9 +455,15 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
+<<<<<<< HEAD
                                     name={student.name}
                                     mobile={student.mobile === undefined ? "" : student.mobile}
                                     email={student.mail === undefined ? "" : student.mail}
+=======
+                                    name={student.name ? "" : student.name}
+                                    mobile={student.mobile === null ? "" : student.mobile}
+                                    email={student.mail ? "" : student.mail}
+>>>>>>> 增加pop 提示
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -491,9 +501,15 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ARRANGE}
                                     key={student.id}
+<<<<<<< HEAD
                                     name={student.name}
                                     mobile={student.mobile === undefined ? "" : student.mobile}
                                     email={student.mail === undefined ? "" : student.mail}
+=======
+                                    name={student.name.toString()}
+                                    mobile={student.mobile ? "" : student.mobile}
+                                    email={student.mail ? "" : student.mail}
+>>>>>>> 增加pop 提示
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[
