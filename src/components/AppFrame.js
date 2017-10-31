@@ -236,7 +236,7 @@ class AppFrame extends Component {
 
   check_available = (account) => {
     var cb = (route, message, arg) => {
-      if (message.code === Code.ACCOUNT_CAN_USE) {
+      if (message.code === 0) {
         this.setState({
           unavailable: false,
           available_result: Lang[window.Lang].pages.com.home.available
@@ -281,6 +281,8 @@ class AppFrame extends Component {
       }
       this.popUpNotice(NOTICE, message.code, Lang[window.Lang].ErrorCode[message.code]);
     }
+    
+    console.log( { account: account, password: password, type: APP_TYPE_COMPANY });
     getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, { account: account, password: password });
   }
 
@@ -341,11 +343,11 @@ class AppFrame extends Component {
   RegisterStep = () => {
     switch (this.state.activeStep) {
       // 遵守协议
+      // case 0:
+      //   return <div>
+      //     <Typography>遵循中软科技以下条款</Typography>
+      //   </div>
       case 0:
-        return <div>
-          <Typography>遵循中软科技以下条款</Typography>
-        </div>
-      case 1:
         return <div>
           <TextField
             error={this.state.unavailable}
@@ -357,11 +359,12 @@ class AppFrame extends Component {
             onFocus={(e) => {
               this.setState({
                 unavailable: false,
-                available_result: ""
+                available_result: "请输入单位全称"
               })
             }}
             onBlur={(e) => {
-              this.check_available(document.getElementById("register_account").value);
+              if (document.getElementById("register_account").value===""){}else{
+              this.check_available(document.getElementById("register_account").value);}
             }}
             helperText={this.state.available_result}
           />
@@ -371,31 +374,39 @@ class AppFrame extends Component {
             id="register_password"
             label={Lang[window.Lang].pages.main.password}
             style={{
-              marginTop: 20,
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  marginTop: 20,
             }}
             type="password"
             fullWidth={true}
             onBlur={(e) => {
-              if (document.getElementById("register_password").value === "") {
-                this.setState({
-                  password_error: true,
-                  password_result: Lang[window.Lang].ErrorCode[1001]
-                })
-              } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
-                this.setState({
-                  password_error: true,
-                  password_result: Lang[window.Lang].ErrorCode[1000]
-                })
-              } else {
-                this.setState({
-                  password_error: false,
-                  password_result: ""
-                })
-              }
+              // if (document.getElementById("register_password").value === "") {
+              //   this.setState({
+              //     password_error: true,
+              //     password_result: Lang[window.Lang].ErrorCode[1001]
+              //   })
+              // } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
+              //   this.setState({
+              //     password_error: true,
+              //     password_result: Lang[window.Lang].ErrorCode[1000]
+              //   })
+              // } else {
+              //   this.setState({
+              //     password_error: false,
+              //     password_result: ""
+              //   })
+              // }
             }}
             helperText={this.state.password_result}
           />
           <TextField
+            style={{
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  width: "75%",
+                  marginTop: 20,
+            }}
             error={this.state.repeat_error}
             name="repeat_password"
             id="repeat_password"
@@ -403,6 +414,14 @@ class AppFrame extends Component {
             type="password"
             fullWidth={true}
             onBlur={(e) => {
+              if(document.getElementById("register_password").value === "" && document.getElementById("repeat_password").value ===""){
+                this.setState({
+                  repeat_error: false,
+                  password_error: false,
+                  repeat_result: "",
+                  password_result: ""
+                })
+              }else{
               if (document.getElementById("register_password").value === "") {
                 this.setState({
                   repeat_error: true,
@@ -420,18 +439,20 @@ class AppFrame extends Component {
                   repeat_result: "",
                   password_result: ""
                 })
-              }
+              }}
             }}
             helperText={this.state.repeat_result}
           />
           <Button
+            className="nyx-btn-circle"
             raised
-            color="accent"
+            color="primary"
             onClick={() => {
               let account = document.getElementById("register_account").value;
               let password = document.getElementById("register_password").value;
               let repeat = document.getElementById("repeat_password").value;
-              this.register(account, password, repeat);
+              this.register(account, password, repeat);//TODO
+                            
             }}
           >
             {Lang[window.Lang].pages.main.register_button}
@@ -460,7 +481,7 @@ class AppFrame extends Component {
     return (
       <div>
         {this.RegisterStep()}
-        <MobileStepper
+        {/* <MobileStepper
           nextButtonText={this.state.activeStep !== 5 ? Lang[window.Lang].pages.main.next_step : "登陆"}
           backButtonText={Lang[window.Lang].pages.main.pre_step}
           type="text"
@@ -475,7 +496,7 @@ class AppFrame extends Component {
           onNext={this.handleNext}
           disableBack={this.state.activeStep === 0 || this.state.activeStep === 2}
           disableNext={this.state.activeStep === 1}
-        />
+        /> */}
 
       </div>
     )

@@ -391,7 +391,7 @@ class Info extends Component {
                                     }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                    {"修改联系人信息"}
+                                    {"修改密码"}
                                 </Typography>
                             </Toolbar>
                         </AppBar>

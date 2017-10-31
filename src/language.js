@@ -11,7 +11,7 @@ const Language = {
                 enrolled_title: "报名信息",
                 exam_title: "考试成绩",
                 input_your_account: "输入账号",
-                com_account: "公司账号",
+                com_account: "单位全称",
                 org_account: "机构账号",
                 password: "密码",
                 repeat_password: "密码确认",
@@ -38,7 +38,7 @@ const Language = {
                     unarranged_title: "待安排的学员",
                     arranged_title: "已安排的学员",
                     clazz_title: "企业所属地区正在开设班级的",
-                    available: "可以使用",
+                    available: "单位名称可以使用",
                     being_reroll: "正在重新排队"
                 },
                 infos: {
@@ -79,7 +79,7 @@ const Language = {
                     admin: {
                         title: "联系人信息",
                         account: "单位全称",
-                        password: "密码",
+                        password: "修改密码",
                         name: "管理员姓名",
                         mobile: "手机",
                         mail: "邮箱",
@@ -244,7 +244,8 @@ const Language = {
             }
         },
         ErrorCode: {
-            0: "操作成功",
+            0: "单位名称可用",
+            10001:"该单位已注册",
             1000: "两次密码不相同",
             1001: "密码不能为空",
             1002: "账号不能为空",
@@ -287,7 +288,7 @@ const Language = {
                     unarranged_title: "待安排的学员",
                     arranged_title: "已安排的学员",
                     clazz_title: "企业所属地区正在开设班级的",
-                    available: "可以使用",
+                    available: "单位名称可以使用",
                     being_reroll: "正在重新排队"
                 },
                 infos: {

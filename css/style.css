@@ -1276,7 +1276,7 @@
   margin-top: -2.5em;
   margin-left: -6em;
   color: #fff;
-  content: "系统集成级服务项目管理人员";
+  content: "信息系统集成及服务项目管理人员";
   text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -1294,13 +1294,14 @@
 .nyx-login-body {
   height: 272px;
   padding: 2rem;
+  position: relative;
 }
 
 .nyx-login-body .nyx-btn-circle {
   border-radius: 50%;
   height: 64px;
   width: 64px;
-  position: relative;
+  position: absolute;
   right: 0;
   bottom: 0;
   margin-bottom: 32px;

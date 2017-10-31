@@ -264,7 +264,7 @@ class Enrolled extends Component {
     selectedStudent(student) {
         this.state.selectedStudentId = student.id;
         this.state.selected = student;
-        this.state.course = student.course_id.toString();
+        this.state.course = student.course_id;
     }
 
     newStudentDialog() {
@@ -276,32 +276,32 @@ class Enrolled extends Component {
                 <DialogContent>
                     <div className="nyx-form">
                         {this.newStudentList()}
-                        <br />
-                        <span
-                        className="nyx-form-div"
-                        >培训城市</span>
+                        <div>
+                        <p
+                            className="nyx-info-select-label"
+                            >培训城市</p>
+                            <p
+                            className="nyx-info-select-label"
+                            >中项或高项</p>
+                        </div>
                         <select
-                        className="nyx-info-select-middle"
+                        className="nyx-info-select"
                             id="new_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
                           {this.newStudentCity()}
                         </select>
-                        <span
-                        className="nyx-form-div"
-                        >中项或高项</span>
+                      
                         <select
+                            className="nyx-info-select"
                             id="new_course_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
-                        </select>
-
-                        
-                        
+                        </select>       
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -419,9 +419,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ENROLL}
                                     key={student.id}
-                                    name={student.name.toString()}
-                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
-                                    email={student.mail.toString() === undefined ? "" : student.mail.toString()}
+                                    name={student.name}
+                                    mobile={student.mobile === undefined ? "" : student.mobile}
+                                    email={student.mail === undefined ? "" : student.mail}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -470,9 +470,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
-                                    name={student.name.toString()}
-                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
-                                    email={student.mail.toString() === undefined ? "" : student.mail.toString()}
+                                    name={student.name}
+                                    mobile={student.mobile === undefined ? "" : student.mobile}
+                                    email={student.mail === undefined ? "" : student.mail}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -510,9 +510,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ARRANGE}
                                     key={student.id}
-                                    name={student.name.toString()}
-                                    mobile={student.mobile === undefined ? "" : student.mobile.toString()}
-                                    email={student.mail === undefined ? "" : student.mail.toString()}
+                                    name={student.name}
+                                    mobile={student.mobile === undefined ? "" : student.mobile}
+                                    email={student.mail === undefined ? "" : student.mail}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[
@@ -560,13 +560,13 @@ class Enrolled extends Component {
                             <TextField
                                 id="student_name"
                                 label={Lang[window.Lang].pages.com.students.name}
-                                defaultValue={this.state.selected.name ? this.state.selected.name.toString() : "未设置"}
+                                defaultValue={this.state.selected.name ? this.state.selected.name : "未设置"}
                                 fullWidth
                             />
                             <TextField
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card.toString() : "未设置"}
+                                defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card : "未设置"}
                                 fullWidth>
                             </TextField>
                             <FormControl required>
@@ -587,7 +587,7 @@ class Enrolled extends Component {
                             <TextField
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
-                                defaultValue={this.state.selected.register ? this.state.selected.register.toString() : "未设置"}
+                                defaultValue={this.state.selected.register ? this.state.selected.register : "未设置"}
                                 fullWidth>
                             </TextField>
 
@@ -597,31 +597,31 @@ class Enrolled extends Component {
                             <TextField
                                 id="department"
                                 label={Lang[window.Lang].pages.com.students.personal_info.department}
-                                defaultValue={this.state.selected.department ? this.state.selected.department.toString() : "未设置"}
+                                defaultValue={this.state.selected.department ? this.state.selected.department : "未设置"}
                                 fullWidth>
                             </TextField>
                             <TextField
                                 id="duty"
                                 label={Lang[window.Lang].pages.com.students.personal_info.duty}
-                                defaultValue={this.state.selected.duty ? this.state.selected.duty.toString() : "未设置"}
+                                defaultValue={this.state.selected.duty ? this.state.selected.duty : "未设置"}
                                 fullWidth>
                             </TextField>
                             <TextField
                                 id="mobile"
                                 label={Lang[window.Lang].pages.com.students.tel}
-                                defaultValue={this.state.selected.mobile ? this.state.selected.mobile.toString() : "未设置"}
+                                defaultValue={this.state.selected.mobile ? this.state.selected.mobile : "未设置"}
                                 fullWidth
                             />
                             <TextField
                                 id="mail"
                                 label={Lang[window.Lang].pages.com.students.email}
-                                defaultValue={this.state.selected.mail ? this.state.selected.mail.toString() : "未设置"}
+                                defaultValue={this.state.selected.mail ? this.state.selected.mail : "未设置"}
                                 fullWidth
                             />
                             <TextField
                                 id="wechat"
                                 label={Lang[window.Lang].pages.com.students.personal_info.wechat}
-                                defaultValue={this.state.selected.wechat ? this.state.selected.wechat.toString() : "未设置"}
+                                defaultValue={this.state.selected.wechat ? this.state.selected.wechat : "未设置"}
                                 fullWidth
                             />
 

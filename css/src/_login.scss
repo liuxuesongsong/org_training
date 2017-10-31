@@ -70,7 +70,7 @@ $btn-size:64px;
     margin-top: -2.5em;
     margin-left: -6em;
     color: #fff;
-    content: "系统集成级服务项目管理人员";
+    content: "信息系统集成及服务项目管理人员";
     text-shadow: 2px 2px 2px rgba(0,0,0,.3);
 }
 
@@ -87,12 +87,13 @@ $btn-size:64px;
 .nyx-login-body{
     height: $body-height;
     padding: 2rem;
+    position: relative;
     
     .nyx-btn-circle{
         border-radius: 50%;
         height: $btn-size;
         width: $btn-size;
-        position: relative;
+        position: absolute;
         right:0;
         bottom:0;
         margin-bottom: $btn-size/2;
