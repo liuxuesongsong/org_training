@@ -145,7 +145,6 @@ class Home extends Component {
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
                                 {this.state.areas.map(area => {
-                                    console.log(area)
                                     return <div key={area.id}>{getCity(area.id) + getCourse(area.course[0].id) + area.course[0].inlist + "/" + area.course[0].reg + "\n" +
                                         getCourse(area.course[1].id) + area.course[1].inlist + "/" + area.course[1].reg}</div>
                                 }

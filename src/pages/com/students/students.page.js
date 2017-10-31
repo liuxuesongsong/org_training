@@ -79,7 +79,7 @@ class Students extends Component {
 
     newStudent(student) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.INSERT_SUCCESS) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.students.push(student)
                 this.setState({
                     students: this.state.students
@@ -91,7 +91,7 @@ class Students extends Component {
 
     removeStudent(id) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.REMOVE_SUCCESS) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 for (var i = 0; i < this.state.students.length; i++) {
                     if (this.state.students[i].id === arg.id) {
                         this.state.students.splice(i, 1);

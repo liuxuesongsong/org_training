@@ -273,12 +273,12 @@ class Clazz extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                                var class_head = Number(document.getElementById("class_head").value);
-                                var teacher = Number(document.getElementById("teacher").value);
-                                var address = Number(document.getElementById("address").value);
+                                var class_head = (document.getElementById("class_head").value);
+                                var teacher = (document.getElementById("teacher").value);
+                                var address = (document.getElementById("address").value);
                                 var train_starttime = Number(document.getElementById("train_starttime").value);
                                 var train_endtime = Number(document.getElementById("train_endtime").value);
-                                var class_code = Number(document.getElementById("class_code").value);
+                                var class_code = document.getElementById("class_code").value;
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head:class_head,
                                     teacher:teacher,

@@ -49,7 +49,7 @@ class Area extends Component {
 
     queryArea = () => {
         var cb = (router, message, arg) => {
-            if (message.code === 10033) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 this.setState({ areas: message.area })
             }
         }
@@ -105,7 +105,7 @@ class Area extends Component {
 
     newArea = (area) => {
         var cb = (router, message, arg) => {
-            if (message.code === 10032) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 Object.assign(arg.area, { id: message.id })
                 this.state.areas.push(arg.area)
                 this.setState({ areas: this.state.areas })
@@ -121,7 +121,7 @@ class Area extends Component {
 
     delArea = (id) => {
         var cb = (router, message, arg) => {
-            if (message.code === 10034) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 for (var i = 0; i < this.state.areas.length; i++) {
                     if (this.state.areas[i].id === arg.id) {
                         this.state.areas.splice(i, 1);

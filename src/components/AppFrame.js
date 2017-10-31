@@ -226,7 +226,7 @@ class AppFrame extends Component {
           this.setState({ code_img_url: img_url });
           // this.setState({ code_img: this.getElementById("code_img" + this.state.index).src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })
         } else {
-          this.popUpNotice(NOTICE, Code.ERROE_REQUEST_ROUTER, message.msg);
+          this.popUpNotice(NOTICE, 0, message.msg);
         }
       } catch (e) {
       }
@@ -236,15 +236,15 @@ class AppFrame extends Component {
 
   check_available = (account) => {
     var cb = (route, message, arg) => {
-      if (message.code === 0) {
+      if (message.msg_code === Code.ACCOUNT_CAN_USE) {
         this.setState({
           unavailable: false,
-          available_result: Lang[window.Lang].pages.com.home.available
+          available_result: message.msg
         })
       } else {
         this.setState({
           unavailable: true,
-          available_result: Lang[window.Lang].ErrorCode[message.code]
+          available_result: message.msg
         })
         // if (message.code === 0) {
         //   this.setState({
@@ -273,7 +273,7 @@ class AppFrame extends Component {
       return;
     }
     var cb = (route, message, arg) => {
-      if (message.code === Code.REGISTER_SUCCESS) {
+      if (message.code === Code.LOGIC_SUCCESS) {
         this.handleNext();
         this.state.account = arg.account;
         this.state.password = arg.password;

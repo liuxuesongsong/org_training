@@ -23,8 +23,6 @@ import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
 import Code from '../../../code';
 
-import Style from '../../../Style';
-
 import CommonAlert from '../../../components/CommonAlert';
 
 class Home extends Component {
