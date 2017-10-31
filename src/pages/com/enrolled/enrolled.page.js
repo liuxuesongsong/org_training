@@ -404,9 +404,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ENROLL}
                                     key={student.id}
-                                    name={student.name.toString()}
-                                    mobile={student.mobile ? "" : student.mobile}
-                                    email={student.mail ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -455,9 +455,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
-                                    name={student.name ? "" : student.name}
-                                    mobile={student.mobile === null ? "" : student.mobile}
-                                    email={student.mail ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -495,9 +495,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ARRANGE}
                                     key={student.id}
-                                    name={student.name.toString()}
-                                    mobile={student.mobile ? "" : student.mobile}
-                                    email={student.mail ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[

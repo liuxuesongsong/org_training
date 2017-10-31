@@ -20,13 +20,13 @@ import Lang from '../../language';
 
 class ComCard extends Component {
   static propTypes = {
-    action: PropTypes.array.isRequired,
+    action: PropTypes.array,
     city: PropTypes.number.isRequired,
-    email: PropTypes.string.isRequired,
+    // email: PropTypes.string,
     level: PropTypes.number.isRequired,
-    mobile: PropTypes.string.isRequired,
-    name: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
+    // mobile: PropTypes.string,
+    // name: PropTypes.string,
+    // status: PropTypes.string,
     type: PropTypes.string.isRequired,
   };
 
