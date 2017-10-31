@@ -65,27 +65,32 @@ class Admin extends Component {
 
     render() {
         return (
-            <Paper className={"nyx-form"}>
+            <Paper
+            style={{margin:"auto",width:"800px",marginTop:"5rem"}}
+             className={"nyx-form nyx-info-listitem"}>
                 <TextField
                     className="nyx-form-div"
+                    key={"account"}
                     id="account"
                     label={Lang[window.Lang].pages.com.infos.admin.account}
                     value={this.state.account}
                     onChange={(event, value) => {
                         this.state.temObj.account = value;
-                        // this.setState({
-                        //     account: event.target.value,
-                        // });
+                        this.setState({
+                             account: event.target.value,
+                        });
                     }}
                     fullWidth>
                 </TextField>
                 <TextField
                     className="nyx-form-div"
+                    key={"password"}
                     id="password"
                     type="password"
                     label={Lang[window.Lang].pages.com.infos.admin.password}
                     value={this.state.password}
                     onChange={event => {
+                        this.state.temObj.password = value;
                         this.setState({
                             password: event.target.value,
                         });
@@ -154,6 +159,8 @@ class Admin extends Component {
                     fullWidth>
                 </TextField> */}
                 <Button
+                style={{position:"relative",
+                                       marginTop:"0.5rem"}}
                     raised
                     color="accent"
                     onClick={() => {

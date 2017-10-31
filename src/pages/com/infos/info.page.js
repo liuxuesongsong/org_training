@@ -625,23 +625,197 @@ class Info extends Component {
                             </Button>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"邮寄信息"}</ListSubheader>
-                        <Paper className="nyx-info-listitem nyx-info-listitem-hover">
-                            <div className="nyx-info-line-height"
-                                onClick={() => { this.setState({ show: "express", }) }}>
-                                {/* <ListItemText primary={LANG_PREFIX.express.title} /> */}
-                                <div><span className="nyx-info-span">收件人</span>{this.state.express.receiver}</div>
-                                <div><span className="nyx-info-span">联系电话</span>{this.state.express.receive_phone}</div>
-                                <div><span className="nyx-info-span">收件地址</span>{this.state.express.district}</div>
-                            </div>
+                        <Paper className="nyx-form nyx-info-listitem">
+                        <TextField
+                                className="nyx-form-div"
+                                key={"receiver"}
+                                id={"input_receiver"}
+                                label={Lang[window.Lang].pages.com.infos.express.receiver}
+                                value={this.state.express["receiver"] === null ? "" : this.state.express["receiver"]}
+                                onChange={(event) => {
+                                    this.state.express["receiver"] = event.target.value
+                                    this.setState({
+                                        express: this.state.express
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"district"}
+                                id={"input_district"}
+                                label={Lang[window.Lang].pages.com.infos.express.district}
+                                value={this.state.express["district"] === null ? "" : this.state.express["district"]}
+                                onChange={(event) => {
+                                    this.state.express["district"] = event.target.value
+                                    this.setState({
+                                        express: this.state.express
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"receive_phone"}
+                                id={"input_receive_phone"}
+                                label={Lang[window.Lang].pages.com.infos.express.district}
+                                value={this.state.express["receive_phone"] === null ? "" : this.state.express["receive_phone"]}
+                                onChange={(event) => {
+                                    this.state.express["receive_phone"] = event.target.value
+                                    this.setState({
+                                        express: this.state.express
+                                    });
+                                }}>  
+                                </TextField>
+                                <Button
+                                raised
+                                style={{position:"relative",
+                                       marginTop:"0.5rem"}}
+                                color="accent"
+                                onClick={() => {
+                                    var cb = (route, message, arg) => {
+                                        if (message.code === Code.LOGIC_SUCCESS) {
+                                            window.CacheData.base = arg.data;
+                                        }
+                                        this.fresh();
+                                    }
+
+                                    var receiver = document.getElementById("input_receiver").value;
+                                    var district = document.getElementById("input_district").value;
+                                    var receive_phone = document.getElementById("input_receive_phone").value;
+                                    
+                                    var obj = {
+                                        receiver: receiver === "" ? null : receiver,
+                                        district: district === "" ? null : district,
+                                        receive_phone: receive_phone === "" ? null : receive_phone,
+                                        
+                                    }
+                                    console.log(obj);
+
+                                    getData(getRouter(UPDATE_COMPANY), {
+                                        session: sessionStorage.session, company: obj
+                                    }, cb, { self: this, data: obj });
+
+                                }}
+                            >
+                                {Lang[window.Lang].pages.main.certain_button}
+                            </Button>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
-                        <Paper style={{ marginBottom: 20 }} className="nyx-info-listitem nyx-info-listitem-hover">
-                            <div className="nyx-info-line-height"
-                                onClick={() => { this.setState({ show: "finance", }) }}>
-                                <div><span className="nyx-info-span">纳税信息</span><span>单位全称：</span> {this.state.finance.allname}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;纳税人识别号：</span>{this.state.finance.taxpayer_number}</div>
-                                <div><span className="nyx-info-span">银行信息</span><span>开户行：</span> {this.state.finance.opening_bank}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;账号：</span>{this.state.finance.bank_account}</div>
-                                <div><span className="nyx-info-span">联系方式</span><span>地址：</span> {this.state.finance.c_address}<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;电话：</span>{this.state.finance.financial_call}</div>
-                            </div>
+                        <Paper style={{ marginBottom: 20 }} className="nyx-form nyx-info-listitem">
+                        <TextField
+                                className="nyx-form-div"
+                                key={"allname"}
+                                id={"input_allname"}
+                                label={Lang[window.Lang].pages.com.infos.finance.allname}
+                                value={this.state.finance["allname"] === null ? "" : this.state.finance["allname"]}
+                                onChange={(event) => {
+                                    this.state.finance["allname"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"taxpayer_number"}
+                                id={"input_taxpayer_number"}
+                                label={Lang[window.Lang].pages.com.infos.finance.taxpayer_number}
+                                value={this.state.finance["taxpayer_number"] === null ? "" : this.state.finance["taxpayer_number"]}
+                                onChange={(event) => {
+                                    this.state.finance["taxpayer_number"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"opening_bank"}
+                                id={"input_opening_bank"}
+                                label={Lang[window.Lang].pages.com.infos.finance.opening_bank}
+                                value={this.state.finance["opening_bank"] === null ? "" : this.state.finance["opening_bank"]}
+                                onChange={(event) => {
+                                    this.state.finance["opening_bank"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"bank_account"}
+                                id={"input_bank_account"}
+                                label={Lang[window.Lang].pages.com.infos.finance.bank_account}
+                                value={this.state.finance["bank_account"] === null ? "" : this.state.finance["bank_account"]}
+                                onChange={(event) => {
+                                    this.state.finance["bank_account"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"c_address"}
+                                id={"input_c_address"}
+                                label={Lang[window.Lang].pages.com.infos.finance.c_address}
+                                value={this.state.finance["c_address"] === null ? "" : this.state.finance["c_address"]}
+                                onChange={(event) => {
+                                    this.state.finance["c_address"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"financial_call"}
+                                id={"input_financial_call"}
+                                label={Lang[window.Lang].pages.com.infos.finance.financial_call}
+                                value={this.state.finance["financial_call"] === null ? "" : this.state.finance["financial_call"]}
+                                onChange={(event) => {
+                                    this.state.finance["financial_call"] = event.target.value
+                                    this.setState({
+                                        finance: this.state.finance
+                                    });
+                                }}>  
+                                </TextField>
+                                <Button
+                                raised
+                                style={{position:"relative",
+                                       marginTop:"0.5rem"}}
+                                color="accent"
+                                onClick={() => {
+                                    var cb = (route, message, arg) => {
+                                        if (message.code === Code.LOGIC_SUCCESS) {
+                                            window.CacheData.base = arg.data;
+                                        }
+                                        this.fresh();
+                                    }
+
+                                    var allname = document.getElementById("input_allname").value;
+                                    var taxpayer_number = document.getElementById("input_taxpayer_number").value;
+                                    var opening_bank = document.getElementById("input_opening_bank").value;
+                                    var bank_account = document.getElementById("input_bank_account").value;
+                                    var c_address = document.getElementById("input_c_address").value;
+                                    var financial_call = document.getElementById("input_financial_call").value;
+                                    var obj = {
+                                        allname: allname === "" ? null : allname,
+                                        taxpayer_number: taxpayer_number === "" ? null : taxpayer_number,
+                                        opening_bank: opening_bank === "" ? null : opening_bank,
+                                        bank_account: bank_account === "" ? null : bank_account,
+                                        c_address: c_address === "" ? null : c_address,
+                                        financial_call: financial_call === "" ? null : financial_call,
+                                    }
+                                    console.log(obj);
+
+                                    getData(getRouter(UPDATE_COMPANY), {
+                                        session: sessionStorage.session, company: obj
+                                    }, cb, { self: this, data: obj });
+
+                                }}
+                            >
+                                {Lang[window.Lang].pages.main.certain_button}
+                            </Button>
                         </Paper>
                         <ListSubheader style={{ marginTop: 20}}>{"修改密码"}</ListSubheader>
                         <Paper style={{marginBottom: 80}} >
