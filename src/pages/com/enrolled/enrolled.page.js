@@ -10,9 +10,7 @@ import List, {
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import AppBar from 'material-ui/AppBar';
-import Toolbar from 'material-ui/Toolbar';
 import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
 import { LabelRadio, RadioGroup } from 'material-ui/Radio';
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 import Dialog, {
@@ -46,12 +44,12 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
-        city:"0",
+        city: "0",
         unarranged_height: 1,
         arranged_height: 1,
         unenrolled_height: 1,
         students: [],
-        areas:[],
+        areas: [],
         newStudents: [],
         unarragedStudents: [],
         arrangedStudents: [],
@@ -114,6 +112,7 @@ class Enrolled extends Component {
                 this.fresh();
             }
             this.handleRequestClose()
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(UNROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -125,6 +124,7 @@ class Enrolled extends Component {
                 let student = getStudent(arg.id);
                 student.is_inlist = STATUS_ENROLLED_DID;
                 this.updateStudents();
+                this.popUpNotice(NOTICE, 0, message.msg);
                 // this.fresh();
             }
         }
@@ -138,64 +138,48 @@ class Enrolled extends Component {
                 this.fresh();
             }
             this.handleRequestClose()
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
-    newStudentList(){
+
+    newStudentList() {
         var components = [];
-       var newStudentInput=Lang[window.Lang].pages.com.students.input;
-        for(var p in newStudentInput){
+        var newStudentInput = Lang[window.Lang].pages.com.students.input;
+        for (var p in newStudentInput) {
             components.push(<TextField
-            className="nyx-form-div"
-             key={p}
-            id={"new_"+p}
-            label={newStudentInput[p]}
-            defaultValue={""}
-        />)
+                className="nyx-form-div"
+                key={p}
+                id={"new_" + p}
+                label={newStudentInput[p]}
+                defaultValue={""}
+            />)
         }
-     return components
+        return components
     }
-    newStudentCity(){
+
+    newStudentCity() {
         var components = [];
-       var newStudentAreas=window.CacheData.areas;
-        for(var p in newStudentAreas){
+        var newStudentAreas = window.CacheData.areas;
+        for (var p in newStudentAreas) {
             components.push(
-               
-                    <option  value={p} key={p}>{newStudentAreas[p]}</option>
-               
-
-
-                
-            //     <FormControl key={p} required>
-            //     <FormLabel>{newStudentSelect[p]}</FormLabel>
-            //     <RadioGroup
-            //         aria-label="gender"
-            //         name="gender"
-            //         selectedValue={this.state.course}
-            //         onChange={(e, value) => {
-            //             this.handleChangeCourse(e, value)
-            //         }}
-            //     >
-            //         <LabelRadio value={"1"} label="中级" />
-            //         <LabelRadio value={"2"} label="高级" />
-            //     </RadioGroup>
-            // </FormControl>
+                <option value={p} key={p}>{newStudentAreas[p]}</option>
             )
         }
-     return components
-    }
-    newStudentInst(){
-        var components = [];
-       var newStudentInsts=window.CacheData.insts;
-        for(var p in newStudentInsts){
-            components.push(
-               
-                    <option value={p} key={p}>{newStudentInsts[p]}</option>
-            )
-        }
-     return components
+        return components
     }
 
+    newStudentInst() {
+        var components = [];
+        var newStudentInsts = window.CacheData.insts;
+        for (var p in newStudentInsts) {
+            components.push(
+
+                <option value={p} key={p}>{newStudentInsts[p]}</option>
+            )
+        }
+        return components
+    }
 
     removeStudent(id) {
         var cb = (route, message, arg) => {
@@ -221,6 +205,7 @@ class Enrolled extends Component {
                 });
                 arg.self.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         var id = this.state.selected.id;
         var obj = {
@@ -244,6 +229,7 @@ class Enrolled extends Component {
                 getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -257,6 +243,7 @@ class Enrolled extends Component {
                 student.status[STATUS_ARRANGED].status = STATUS_ARRANGED_UNDO;
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(REFUSE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -277,22 +264,22 @@ class Enrolled extends Component {
                     <div className="nyx-form">
                         {this.newStudentList()}
                         <div>
-                        <p
-                            className="nyx-info-select-label"
+                            <p
+                                className="nyx-info-select-label"
                             >培训城市</p>
                             <p
-                            className="nyx-info-select-label"
+                                className="nyx-info-select-label"
                             >中项或高项</p>
                         </div>
                         <select
-                        className="nyx-info-select"
+                            className="nyx-info-select"
                             id="new_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
-                          {this.newStudentCity()}
+                            {this.newStudentCity()}
                         </select>
-                      
+
                         <select
                             className="nyx-info-select"
                             id="new_course_id"
@@ -301,7 +288,7 @@ class Enrolled extends Component {
                         >
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
-                        </select>       
+                        </select>
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -310,7 +297,7 @@ class Enrolled extends Component {
                             onClick={() => {
                                 this.newStudent({
 
-                                    
+
                                     name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
                                     department: document.getElementById("new_department").value,
                                     duty: document.getElementById("new_duty").value,
@@ -413,15 +400,13 @@ class Enrolled extends Component {
                             </Button>
                         </div>
                         <div className={this.state.unenrolled_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-
-
                             {this.state.newStudents.map(student =>
                                 <StudentCard
                                     type={CARD_TYPE_ENROLL}
                                     key={student.id}
-                                    name={student.name}
-                                    mobile={student.mobile === undefined ? "" : student.mobile}
-                                    email={student.mail === undefined ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -470,9 +455,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
-                                    name={student.name}
-                                    mobile={student.mobile === undefined ? "" : student.mobile}
-                                    email={student.mail === undefined ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[() => {
@@ -510,9 +495,9 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ARRANGE}
                                     key={student.id}
-                                    name={student.name}
-                                    mobile={student.mobile === undefined ? "" : student.mobile}
-                                    email={student.mail === undefined ? "" : student.mail}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
                                     action={[

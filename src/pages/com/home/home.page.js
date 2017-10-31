@@ -11,7 +11,7 @@ import Typography from 'material-ui/Typography';
 import Card, { CardActions, CardContent, CardMedia } from 'material-ui/Card';
 import Button from 'material-ui/Button';
 
-import { initCache, getData, getRouter, getCache, getStudent,getCourse,getCity,getInst} from '../../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent, getCourse, getCity, getInst } from '../../../utils/helpers';
 import {
     UNROLL_STUDENT,
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
@@ -22,8 +22,6 @@ import {
 import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
 import Code from '../../../code';
-
-import Style from '../../../Style';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -36,8 +34,8 @@ class Home extends Component {
         arranged: 0,
         examing: 0,
         passed: 0,
-        unarranged_height:1,
-        arranged_height:1,
+        unarranged_height: 1,
+        arranged_height: 1,
         unarragedStudents: [],
         arrangedStudents: [],
         clazzes: [],
@@ -77,9 +75,9 @@ class Home extends Component {
             }
         }
         //已安排占已报名的百分比
-        var per = (arranged/enrolled*288);    
-        if(arranged!=0){
-            document.getElementById("enrolled-per").style.width=per+"px";
+        var per = (arranged / enrolled * 288);
+        if (arranged != 0) {
+            document.getElementById("enrolled-per").style.width = per + "px";
         }
         var name = getCache(DATA_TYPE_BASE) !== undefined ? getCache(DATA_TYPE_BASE).c_name : "";
         window.currentPage.setState({
@@ -157,151 +155,195 @@ class Home extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
-                <div style={{paddingTop:"0"}} className={'nyx-paper'}>
-                    
+                <div style={{ paddingTop: "0" }} className={'nyx-paper'}>
+
                     <Paper id="companyid" >
-                       
-                        <div className="nyx-head-name"> 
-                          {this.state.name} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+
+                        <div className="nyx-head-name">
+                            {this.state.name} <i className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
-                       <div className="nyx-arranger-enrolled-title">
-                       <span>
-                        {Lang[window.Lang].pages.com.home.arranged + ":"
-                                + this.state.arranged + Lang[window.Lang].pages.com.home.human}
-                        </span>
-                        <span style={{float:"right"}}>
-                        {Lang[window.Lang].pages.com.home.enrolled + ":"
-                                + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
-                        </span>
-                       </div>
+                        <div className="nyx-arranger-enrolled-title">
+                            <span>
+                                {Lang[window.Lang].pages.com.home.arranged + ":"
+                                    + this.state.arranged + Lang[window.Lang].pages.com.home.human}
+                            </span>
+                            <span style={{ float: "right" }}>
+                                {Lang[window.Lang].pages.com.home.enrolled + ":"
+                                    + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
+                            </span>
+                        </div>
                         <span className="nyx-arranged-per">
-                            
+
                         </span>
                         <span id="enrolled-per" className="nyx-enrolled-per">
-                       
+
                         </span>
-                        
-                       
+
+
+                    </Paper>
+
+                    <Paper className={'nyx-area-paper'} >
+                        <List style={{ padding: 0 }}>
+                            <div className="nyx-head-name">
+                                {Lang[window.Lang].pages.com.home.clazz_title} <i className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                            </div>
+                            {this.state.clazzes.map(clazz =>
+                                <div key={clazz.id} className="nyx-card-class">
+                                    <div style={{ float: "left" }}>
+                                        {getCourse(clazz.course_id)}
+                                    </div>
+                                    <div style={{ float: "right" }}>
+                                        {getCity(clazz.area_id)}
+                                    </div>
+                                    <div className="nyx-clazz-key">
+                                        {getInst(clazz.ti_id)}
+                                    </div>
+
+                                </div>
+                                // <ListItem dense button key={clazz.id}>
+                                //     <Card className="nyx-card-class">
+                                //         <CardMedia
+                                //             className="nyx-card-class-img"
+                                //             title="Contemplative Reptile"
+                                //         />
+                                //         <CardContent>
+                                //             <Typography className="nyx-clazz-head" type="headline" component="h2">
+                                //                 {clazz.course_id=4?"重庆":"北京"}
+                                //             </Typography>
+                                //             <Typography  className="nyx-clazz-key" component="p">
+                                //                 {clazz.course_id=1?"中级":"高级"}
+                                //             </Typography>
+                                //             <Typography className="nyx-clazz-key" component="p">
+                                //                 {clazz.ti_id=1?"中软培训":"赛迪"}
+                                //             </Typography>
+                                //             {/* <Typography  className="nyx-clazz-key" component="p">
+                                //                 {clazz.train_starttime}
+                                //             </Typography> */}
+                                //         </CardContent>
+                                //     </Card>
+                                // </ListItem>
+                            )}
+                        </List>
                     </Paper>
                 </div>
-                <Paper style={{padding:0}} className={'nyx-paper'}>
-                    <List style={{padding:0}}>
-                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.home.unarranged_title} <i
-                          onClick={() => {
-                              if(this.state.unarranged_height==0){
-                                  this.setState({unarranged_height:1})
-                              }else{
-                                this.setState({unarranged_height:0})
-                              }
-                          }}
-                         
-                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                <Paper style={{ padding: 0 }} className={'nyx-paper'}>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                            {Lang[window.Lang].pages.com.home.unarranged_title} <i
+                                onClick={() => {
+                                    if (this.state.unarranged_height == 0) {
+                                        this.setState({ unarranged_height: 1 })
+                                    } else {
+                                        this.setState({ unarranged_height: 0 })
+                                    }
+                                }}
+
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
-                        <div className={this.state.unarranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
-                        {this.state.unarragedStudents.map(student =>
-                            <StudentCard 
-                           
-                                type={CARD_TYPE_UNARRANGE}
-                                key={CARD_TYPE_UNARRANGE + student.id}
-                                name={student.name}
-                                mobile={student.mobile.toString()}
-                                email={student.mail}
-                                level={student.course_id}
-                                city={student.area_id}
-                                action={[() => {
-                                    this.state.selectedStudentId = student.id;
-                                    this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                        () => {
-                                            this.cancelEnroll(student.id);
-                                            this.closeNotice();
-                                        }, () => {
-                                            this.closeNotice();
-                                        }]);
-                                }]}
-                            >
-                            </StudentCard>
-                        )}
+                        <div className={this.state.unarranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
+                            {this.state.unarragedStudents.map(student =>
+                                <StudentCard
+
+                                    type={CARD_TYPE_UNARRANGE}
+                                    key={CARD_TYPE_UNARRANGE + student.id}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
+                                    level={student.course_id === null ? 0 : student.course_id}
+                                    city={student.area_id === null ? 0 : student.area_id}
+                                    action={[() => {
+                                        this.state.selectedStudentId = student.id;
+                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                            () => {
+                                                this.cancelEnroll(student.id);
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
+                                    }]}
+                                >
+                                </StudentCard>
+                            )}
                         </div>
                     </List>
                 </Paper>
-                <Paper  style={{padding:0}} className={'nyx-paper'}>
+                <Paper style={{ padding: 0 }} className={'nyx-paper'}>
 
-                    <List style={{padding:0}}>
-                    <div style={{marginBottom:"1rem"}} className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.home.arranged_title} <i
-                          onClick={() => {
-                              if(this.state.arranged_height==0){
-                                  this.setState({arranged_height:1})
-                              }else{
-                                this.setState({arranged_height:0})
-                              }
-                          }}
-                         
-                           className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                            {Lang[window.Lang].pages.com.home.arranged_title} <i
+                                onClick={() => {
+                                    if (this.state.arranged_height == 0) {
+                                        this.setState({ arranged_height: 1 })
+                                    } else {
+                                        this.setState({ arranged_height: 0 })
+                                    }
+                                }}
+
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
-                        <div className={this.state.arranged_height?"nyx-list-paper":"nyx-list-paper-change"}>
+                        <div className={this.state.arranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
 
-                        {this.state.arrangedStudents.map(student => {
-                            switch (student.is_inlist) {
-                                case STATUS_AGREED_UNDO:
-                                    return (<StudentCard
-                                        type={CARD_TYPE_ARRANGE}
-                                        key={CARD_TYPE_ARRANGE + student.id}
-                                        name={student.name}
-                                        mobile={student.mobile.toString()}
-                                        email={student.mail}
-                                        level={student.course_id}
-                                        city={student.area_id}
-                                        action={[
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-                                                this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
-                                                    () => {
-                                                        this.agreeArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            },
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-                                                this.popUpNotice(ALERT, 0, "拒绝" + student.base_info.name + "课程安排？", [
-                                                    () => {
-                                                        this.refuseArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            }]}
-                                    >
-                                    </StudentCard>)
-                                case STATUS_AGREED_AGREE:
-                                    return (<StudentCard
-                                        type={CARD_TYPE_ARRANGE}
-                                        key={CARD_TYPE_ARRANGE + student.id}
-                                        name={student.name}
-                                        mobile={student.mobile.toString()}
-                                        email={student.mail}
-                                        level={student.course_id}
-                                        city={student.area_id}
-                                        status={"已通过"}
-                                    >
-                                    </StudentCard>)
-                                case STATUS_AGREED_REFUSED:
-                                    return (<StudentCard
-                                        type={CARD_TYPE_ARRANGE}
-                                        key={CARD_TYPE_ARRANGE + student.id}
-                                        name={student.name}
-                                        mobile={student.mobile.toString()}
-                                        email={student.mail}
-                                        level={student.course_id}
-                                        city={student.area_id}
-                                        status={"已拒绝"}
-                                    >
-                                    </StudentCard>)
-                            }
-                        })}
+                            {this.state.arrangedStudents.map(student => {
+                                switch (student.is_inlist) {
+                                    case STATUS_AGREED_UNDO:
+                                        return (<StudentCard
+                                            type={CARD_TYPE_ARRANGE}
+                                            key={CARD_TYPE_ARRANGE + student.id}
+                                            name={student.name === null ? "" : student.name}
+                                            mobile={student.mobile === null ? "" : student.mobile}
+                                            email={student.mail === null ? "" : student.mail}
+                                            level={student.course_id === null ? 0 : student.course_id}
+                                            city={student.area_id === null ? 0 : student.area_id}
+                                            action={[
+                                                () => {
+                                                    this.state.selectedStudentId = student.id;
+                                                    this.popUpNotice(ALERT, 0, "通过" + student.base_info.name + "课程安排？", [
+                                                        () => {
+                                                            this.agreeArrange();
+                                                            this.closeNotice();
+                                                        }, () => {
+                                                            this.closeNotice();
+                                                        }]);
+                                                },
+                                                () => {
+                                                    this.state.selectedStudentId = student.id;
+                                                    this.popUpNotice(ALERT, 0, "拒绝" + student.base_info.name + "课程安排？", [
+                                                        () => {
+                                                            this.refuseArrange();
+                                                            this.closeNotice();
+                                                        }, () => {
+                                                            this.closeNotice();
+                                                        }]);
+                                                }]}
+                                        >
+                                        </StudentCard>)
+                                    case STATUS_AGREED_AGREE:
+                                        return (<StudentCard
+                                            type={CARD_TYPE_ARRANGE}
+                                            key={CARD_TYPE_ARRANGE + student.id}
+                                            name={student.name === null ? "" : student.name.toString()}
+                                            mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                            email={student.mail === null ? "" : student.mail.toString()}
+                                            level={student.course_id === null ? 0 : student.course_id}
+                                            city={student.area_id === null ? 0 : student.area_id}
+                                            status={"已通过"}
+                                        >
+                                        </StudentCard>)
+                                    case STATUS_AGREED_REFUSED:
+                                        return (<StudentCard
+                                            type={CARD_TYPE_ARRANGE}
+                                            key={CARD_TYPE_ARRANGE + student.id}
+                                            name={student.name === null ? "" : student.name.toString()}
+                                            mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                            email={student.mail === null ? "" : student.mail.toString()}
+                                            level={student.course_id === null ? 0 : student.course_id}
+                                            city={student.area_id === null ? 0 : student.area_id}
+                                            status={"已拒绝"}
+                                        >
+                                        </StudentCard>)
+                                }
+                            })}
                         </div>
                     </List>
                 </Paper>

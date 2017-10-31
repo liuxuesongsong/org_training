@@ -79,19 +79,20 @@ class Students extends Component {
 
     newStudent(student) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.INSERT_SUCCESS) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.students.push(student)
                 this.setState({
                     students: this.state.students
                 })
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
 
     removeStudent(id) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.REMOVE_SUCCESS) {
+            if (message.code === Code.LOGIC_SUCCESS) {
                 for (var i = 0; i < this.state.students.length; i++) {
                     if (this.state.students[i].id === arg.id) {
                         this.state.students.splice(i, 1);
@@ -117,6 +118,7 @@ class Students extends Component {
                     }
                 }
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
 
         switch (key) {
