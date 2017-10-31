@@ -451,7 +451,7 @@ class Enrolled extends Component {
                         </div>
                     </List>
                 </Paper>
-                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-list'}>
+                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
                             {Lang[window.Lang].pages.com.enrolled.unarrange} <i
@@ -477,7 +477,7 @@ class Enrolled extends Component {
                                     city={Number(student.area_id)}
                                     action={[() => {
                                         this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                        this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
                                             () => {
                                                 this.cancelEnroll(student.id);
                                                 this.closeNotice();
@@ -491,7 +491,7 @@ class Enrolled extends Component {
                         </div>
                     </List>
                 </Paper>
-                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-list'}>
+                <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
                             {Lang[window.Lang].pages.com.enrolled.arranged} <i
@@ -518,7 +518,7 @@ class Enrolled extends Component {
                                     action={[
                                         () => {
                                             this.state.selectedStudentId = student.id;
-                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                            this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
                                                 () => {
                                                     this.agreeArrange();
                                                     this.closeNotice();

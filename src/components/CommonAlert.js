@@ -94,7 +94,9 @@ export default class CommonAlert extends Component {
             onRequestClose={action[0]}
           >
           </Snackbar> :
-          <Dialog open={this.state.open} onRequestClose={this.handleRequestClose}>
+          <Dialog 
+          className="nyx-notice"
+           open={this.state.open} onRequestClose={this.handleRequestClose}>
             <DialogTitle>
               {type === "warning" ? Lang[window.Lang].components.CommonAlert.warning : Lang[window.Lang].components.CommonAlert.notice}
             </DialogTitle>

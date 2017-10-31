@@ -804,19 +804,19 @@ class Clazz extends Component {
                                 [
                                     {
                                         key: "id",
-                                        name: "#",
+                                        name: "序号",
                                         width: 40,
                                         resizable: true
                                     },
                                     {
                                         key: "student_name",
-                                        name: "项目经理",
+                                        name: "姓名",
                                         width: 80,
                                         resizable: true
                                     },
                                     {
                                         key: "company_name",
-                                        name: "公司",
+                                        name: "单位全称",
                                         width: 200,
                                         resizable: true
                                     },
@@ -828,26 +828,26 @@ class Clazz extends Component {
                                     },
                                     {
                                         key: "mobile",
-                                        name: "电话",
+                                        name: "联系电话",
                                         width: 100,
                                         resizable: true
                                     },
                                     {
                                         key: "mail",
-                                        name: "邮箱",
+                                        name: "联系邮箱",
                                         width: 120,
                                         resizable: true
                                     },
                                     {
                                         key: "area_name",
-                                        name: "区域",
-                                        width: 50,
+                                        name: "培训城市",
+                                        width: 100,
                                         resizable: true
                                     },
                                     {
                                         key: "course_name",
                                         name: "课程",
-                                        width: 50,
+                                        width: 100,
                                         resizable: true
                                     }
                                 ]

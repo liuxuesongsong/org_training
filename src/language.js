@@ -170,7 +170,7 @@ const Language = {
                     unpassed: "未通过考试",
                 },
                 enrolled: {
-                    title: "报名",
+                    title: "培训报名",
                     unenrolled: "未报名列表",
                     unarrange: "待安排列表",
                     arranged: "已安排列表",
@@ -238,9 +238,9 @@ const Language = {
                 Logout: "登出"
             },
             CommonAlert: {
-                warning: "警告",
-                alert: "提示",
-                notice: "通知"
+                warning: " ",
+                alert: " ",
+                notice: " "
             }
         },
         ErrorCode: {
@@ -425,9 +425,9 @@ const Language = {
                 Logout: "登出"
             },
             CommonAlert: {
-                warning: "警告",
-                alert: "提示",
-                notice: "通知"
+                warning: " ",
+                alert: " ",
+                notice: " "
             }
         },
         ErrorCode: {

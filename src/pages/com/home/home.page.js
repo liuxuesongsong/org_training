@@ -183,50 +183,6 @@ class Home extends Component {
                         
                        
                     </Paper>
-                    
-                    <Paper className={'nyx-area-paper'} >
-                        <List style={{padding:0}}>
-                        <div className="nyx-head-name"> 
-                          {Lang[window.Lang].pages.com.home.clazz_title} <i  className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                        </div>
-                            {this.state.clazzes.map(clazz =>
-                            <div key={clazz.id} className="nyx-card-class">
-                                <div style={{float:"left"}}>
-                                {getCourse(clazz.course_id)}
-                                </div>
-                                <div style={{float:"right"}}>
-                                 {getCity(clazz.area_id)} 
-                                </div>
-                                <div className="nyx-clazz-key">
-                                {getInst(clazz.ti_id)}
-                                </div>
-                                
-                            </div>
-                                // <ListItem dense button key={clazz.id}>
-                                //     <Card className="nyx-card-class">
-                                //         <CardMedia
-                                //             className="nyx-card-class-img"
-                                //             title="Contemplative Reptile"
-                                //         />
-                                //         <CardContent>
-                                //             <Typography className="nyx-clazz-head" type="headline" component="h2">
-                                //                 {clazz.course_id=4?"重庆":"北京"}
-                                //             </Typography>
-                                //             <Typography  className="nyx-clazz-key" component="p">
-                                //                 {clazz.course_id=1?"中级":"高级"}
-                                //             </Typography>
-                                //             <Typography className="nyx-clazz-key" component="p">
-                                //                 {clazz.ti_id=1?"中软培训":"赛迪"}
-                                //             </Typography>
-                                //             {/* <Typography  className="nyx-clazz-key" component="p">
-                                //                 {clazz.train_starttime}
-                                //             </Typography> */}
-                                //         </CardContent>
-                                //     </Card>
-                                // </ListItem>
-                            )}
-                        </List>
-                    </Paper>
                 </div>
                 <Paper style={{padding:0}} className={'nyx-paper'}>
                     <List style={{padding:0}}>

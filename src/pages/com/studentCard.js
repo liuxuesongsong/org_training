@@ -68,21 +68,22 @@ class ComCard extends Component {
         );
       case CARD_TYPE_ARRANGE:
         return (
-          <CardActions>
-            {this.state.status === '' ? (
-              <div>
+          <div>
+            {this.state.status === '' ? 
+            (
+              <CardActions>
                 <button className="nyx-card-button" onClick={this.props.action[0]}>
-                  {Lang[window.Lang].pages.com.card.agree}
+                    已收到                  
                 </button>
-                <br />
+                {/* <br />
                 <button className="nyx-card-button" onClick={this.props.action[1]}>
                   {Lang[window.Lang].pages.com.card.refuse}
-                </button>
-              </div>
-            ) : (
-                Lang[window.Lang].pages.com.card.status[1]
-              )}
-          </CardActions>
+                </button> */}
+              </CardActions>
+            ) : 
+            (Lang[window.Lang].pages.com.card.status[1])
+            }
+          </div>
         );
       case CARD_TYPE_EXAM:
         return (
@@ -148,9 +149,7 @@ class ComCard extends Component {
                 <div className={'nyx-card-name'}>{getCity(city)}</div>
               </div>
               <div className="nyx-card-second-info">
-                <span className={'nyx-card-key'}>{'电话:'}</span>
                 <div className={'nyx-card-value'}>{mobile}</div>
-                <div className={'nyx-card-key'}>{'邮件:'}</div>
                 <div className={'nyx-card-value'}>{email}</div>
               </div>
             </div>
