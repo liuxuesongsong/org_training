@@ -112,6 +112,7 @@ class Enrolled extends Component {
                 this.fresh();
             }
             this.handleRequestClose()
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(UNROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -123,6 +124,7 @@ class Enrolled extends Component {
                 let student = getStudent(arg.id);
                 student.is_inlist = STATUS_ENROLLED_DID;
                 this.updateStudents();
+                this.popUpNotice(NOTICE, 0, message.msg);
                 // this.fresh();
             }
         }
@@ -136,6 +138,7 @@ class Enrolled extends Component {
                 this.fresh();
             }
             this.handleRequestClose()
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(INSERT_STUDENT), { session: sessionStorage.session, student: student }, cb, { student: student });
     }
@@ -202,6 +205,7 @@ class Enrolled extends Component {
                 });
                 arg.self.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         var id = this.state.selected.id;
         var obj = {
@@ -225,6 +229,7 @@ class Enrolled extends Component {
                 getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
@@ -238,6 +243,7 @@ class Enrolled extends Component {
                 student.status[STATUS_ARRANGED].status = STATUS_ARRANGED_UNDO;
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(REFUSE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
