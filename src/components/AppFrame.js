@@ -768,7 +768,7 @@ class AppFrame extends Component {
               {this.LoginView()}
             </TabContainer>
           </SwipeableViews>
-          <h3 style={{color:"#FFFFFF"}}>注*</h3>
+          <h3 style={{color:"#FFFFFF"}}>说明</h3>
           <div className="nyx-login-window-acctention">
           已经做过临时登记的企业用户以单位全称和初始密码进行登陆
           </div>

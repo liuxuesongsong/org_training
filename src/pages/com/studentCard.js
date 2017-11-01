@@ -17,7 +17,7 @@ import {
   CARD_TYPE_KNOW,
   STATUS_AGREED_AGREE,
 } from '../../enum';
-import { getCity,getCourse } from '../../utils/helpers';
+import { getCity,getCourse,getInst } from '../../utils/helpers';
 import Lang from '../../language';
 
 class ComCard extends Component {
@@ -151,12 +151,12 @@ class ComCard extends Component {
   }
 
   render() {
-    const { type, name, mobile, email, level, city, action, status } = this.props;
+    const { type, name, mobile, email, level, city, action, status,institution } = this.props;
 
     this.state.type = type;
     this.state.status = status;
     this.state.action = action;
-
+    console.log(institution);
     return (
       <div>
         <div className="nyx-card-list" style={{ display: 'flex' }}>
@@ -179,6 +179,7 @@ class ComCard extends Component {
               <div className="nyx-card-second-info">
                 <div className={'nyx-card-value'}>{mobile}</div>
                 <div className={'nyx-card-value'}>{email}</div>
+                <div className={'nyx-card-value'}>{institution===0?"":getInst(institution)}</div>
               </div>
             </div>
             <div className="nyx-card-action">{this.buttonActions()}</div>

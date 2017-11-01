@@ -381,8 +381,8 @@ class Enrolled extends Component {
         return (
             <div className={'nyx-page'}>
                 <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】"+
-                        "第一步：请在下表中点击【修改】确认信息无误。"+
-                        "第二步：点击【报名】进行报名"}</p></div>
+                        "第一步：请在下表中点击【修改】补充完整人员信息。"+
+                        "第二步：点击【报名】进行培训报名"}</p></div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -408,6 +408,7 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                    institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.selectedStudent(student);
                                         this.toggleDrawer(true)()
@@ -474,6 +475,7 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                        institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.selectedStudent(student);
                                         this.toggleDrawer(true)()
@@ -525,6 +527,7 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                        institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
@@ -567,12 +570,13 @@ class Enrolled extends Component {
                                         name={student.name === null ? "" : student.name.toString()}
                                         mobile={student.mobile === null ? "" : student.mobile.toString()}
                                         email={student.mail === null ? "" : student.mail.toString()}
-                                        level={Number(student.course_id)}
+                                        level={Number(student.course_id)} 
                                         city={Number(student.area_id)}
+                                        institution={student.institution === null ? "" : Number(student.institution)}
                                         action={[
                                             () => {
                                                 this.state.selectedStudentId = student.id;
-                                                this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
+                                                this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
                                                     () => {
                                                         this.agreeArrange();
                                                         this.closeNotice();
@@ -603,6 +607,7 @@ class Enrolled extends Component {
                                         email={student.mail === null ? "" : student.mail.toString()}
                                         level={Number(student.course_id)}
                                         city={Number(student.area_id)}
+                                        institution={student.institution === null ? "" : Number(student.institution)}
                                         action={[
                                             () => {
                                                 this.state.selectedStudentId = student.id;
