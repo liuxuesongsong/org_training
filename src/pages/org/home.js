@@ -47,18 +47,9 @@ class Home extends Component {
         initCache(this.cacheToState);
     }
 
-    // areas insts courses 
 
     cacheToState() {
-
-        // window.currentPage.state.clazzes = window.CacheData.clazzes;
-        // window.currentPage.state.areas = window.CacheData.areas;
-
         var cb = (router, message, arg) => {
-            // window.currentPage.state.clazzes = message.clazzes;
-            // window.currentPage.state.areas = message.areas;
-            console.log(message)
-
             window.currentPage.setState({
                 areas: message.data.info.areas,
                 clazzes: message.data.info.clazzes,
@@ -68,45 +59,6 @@ class Home extends Component {
             // all_students
         }
         getData(getRouter(LAST_COUNT), { session: sessionStorage.session }, cb, {});
-
-        // let students = getCache(DATA_TYPE_STUDENT);
-        // let enrolled = 0, arranged = 0, passed = 0, examing = 0,
-        //     unarragedStudents = [], arrangedStudents = [];
-        // for (var i = 0; i < students.length; i++) {
-        //     if (students[i].status[STATUS_ENROLLED].status === STATUS_ENROLLED_DID) {
-        //         enrolled++
-        //         if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_UNDO) {
-        //             unarragedStudents.push(students[i]);
-        //         }
-        //     }
-        //     if (students[i].status[STATUS_ARRANGED].status === STATUS_ARRANGED_DOING) {
-        //         arranged++
-        //         arrangedStudents.push(students[i]);
-        //     }
-        //     // if (students[i].status['agreed'].status === 1) {
-        //     //     this.state.agreed.push(students[i]);
-        //     // }
-        //     if (students[i].status[STATUS_EXAMING].status === STATUS_EXAMING_DID) {
-        //         examing++
-        //     }
-        //     if (students[i].status[STATUS_PASSED].status === STATUS_PASSED_DID) {
-        //         passed++
-        //     }
-        //     // if (students[i].status['retry'].status === 1) {
-        //     //     this.state.retry.push(students[i]);
-        //     // }
-
-        // }
-        // window.currentPage.setState({
-        //     name: getCache(DATA_TYPE_BASE).company_name,
-        //     arranged_nums: enrolled,
-        //     arranged: arranged,
-        //     examing: examing,
-        //     passed: passed,
-        //     unarragedStudents: unarragedStudents,
-        //     arrangedStudents: arrangedStudents,
-        //     clazz: getCache(DATA_TYPE_CLAZZ)
-        // })
     }
 
     popUpNotice = (type, code, content) => {
@@ -130,15 +82,6 @@ class Home extends Component {
                             </Typography>
 
                         </Paper>
-                        {/* <Paper elevation={4} style={{ width: "500px", }}>
-
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.unarranged_title}</ListSubheader>}>
-                                {this.state.areas.map(area =>
-                                    <Card>
-                                    </Card>
-                                )}
-                            </List>
-                        </Paper> */}
                     </div>
                     <div style={{ margin: 10, width: 800, float: "left" }}>
                         <Paper elevation={4}>
@@ -164,10 +107,7 @@ class Home extends Component {
                                         {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}
                                         <ListItemText primary={`班级 ${value + 1}`} />
                                         <ListItemSecondaryAction>
-                                            {/* <Checkbox
-                  onClick={event => this.handleToggle(event, value)}
-                  checked={this.state.checked.indexOf(value) !== -1}
-                /> */}
+
                                         </ListItemSecondaryAction>
                                     </ListItem>,
                                 )}

@@ -8,19 +8,14 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" async defer />
   <link href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" rel="stylesheet" async defer />
-  <link href="/css/style.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet"/>
 </head>
 
 <body>
   <script>
     window.Lang = "Chin";
-    console.log(window.location.search);
-    if (window.location.search.indexOf("?admin") !== -1) {
-      window.type = 2;
-    } else {
-      window.type = 1;
-    }
-
+    window.type = 2;
+    // window.admin = true;
   </script>
   <div id="app"></div>
   <script src="/build/dll.bundle.js"></script>

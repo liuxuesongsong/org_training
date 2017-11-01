@@ -17,7 +17,7 @@ import {
   CARD_TYPE_KNOW,
   STATUS_AGREED_AGREE,
 } from '../../enum';
-import { getCity,getCourse,getInst } from '../../utils/helpers';
+import { getCity, getCourse, getInst } from '../../utils/helpers';
 import Lang from '../../language';
 
 class ComCard extends Component {
@@ -60,70 +60,70 @@ class ComCard extends Component {
           <CardActions style={{ height: '1.5rem' }}>
             <br />
             <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
-            <i  className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
+              <i className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
             </button>
             <br />
             <br />
-            <button className="nyx-card-enrroll-button"onClick={this.props.action[0]}>
-          <i  className="glyphicon glyphicon-pencil " /> {"修改"}
-          </button>
-            
+            <button className="nyx-card-enrroll-button" onClick={this.props.action[0]}>
+              <i className="glyphicon glyphicon-pencil " /> {"修改"}
+            </button>
+
             <br />
-           <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
+            <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
           </CardActions>
         );
-        case CARD_TYPE_ENROLL:
-          return (
-            <CardActions style={{ height: '1.5rem' }}>
-              <br />
-              <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
-              <i  className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
-              </button>
-              <br />
-              <button className="nyx-card-enrroll-button"onClick={this.props.action[0]}>
-            <i  className="glyphicon glyphicon-pencil " /> {"修改"}
+      case CARD_TYPE_ENROLL:
+        return (
+          <CardActions style={{ height: '1.5rem' }}>
+            <br />
+            <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
+              <i className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
             </button>
-              <br />
-              <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
-            </CardActions>
-          );
-          case CARD_TYPE_ARRANGE:
-            return (
-              <CardActions style={{ height: '1.5rem' }}>
-                {this.state.status === '' ? 
-                (
-                    <button className="nyx-card-button" onClick={this.props.action[0]}>
-                        已收到                  
+            <br />
+            <button className="nyx-card-enrroll-button" onClick={this.props.action[0]}>
+              <i className="glyphicon glyphicon-pencil " /> {"修改"}
+            </button>
+            <br />
+            <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
+          </CardActions>
+        );
+      case CARD_TYPE_ARRANGE:
+        return (
+          <CardActions style={{ height: '1.5rem' }}>
+            {this.state.status === '' ?
+              (
+                <button className="nyx-card-button" onClick={this.props.action[0]}>
+                  已收到
                     </button>
-                ) : 
-                (Lang[window.Lang].pages.com.card.status[1])
-                }
-              </CardActions>
-            );
-            case CARD_TYPE_KNOW:
-              return (
-                <CardActions style={{ height: '1.5rem' }}>
-                  {this.state.status === '' ? 
-                  (
-                      <div>
-                          已通知                  
+              ) :
+              (Lang[window.Lang].pages.com.card.status[1])
+            }
+          </CardActions>
+        );
+      case CARD_TYPE_KNOW:
+        return (
+          <CardActions style={{ height: '1.5rem' }}>
+            {this.state.status === '' ?
+              (
+                <div>
+                  已通知
                       </div>
-                  ) : 
-                  (Lang[window.Lang].pages.com.card.status[1])
-                  }
-                </CardActions>
-              );
+              ) :
+              (Lang[window.Lang].pages.com.card.status[1])
+            }
+          </CardActions>
+        );
       case CARD_TYPE_EXAM:
         return (
           <CardActions>
-              <div>
-            <button className="nyx-card-button"   onClick={this.props.action[0]}>
-              {Lang[window.Lang].pages.com.card.retry}
-            </button>
-            <button  className="nyx-card-button"   onClick={this.props.action[1]}>
-              {Lang[window.Lang].pages.com.card.giveup}
-            </button>
-              </div>
+            <div>
+              <button className="nyx-card-button" onClick={this.props.action[0]}>
+                {Lang[window.Lang].pages.com.card.retry}
+              </button>
+              <button className="nyx-card-button" onClick={this.props.action[1]}>
+                {Lang[window.Lang].pages.com.card.giveup}
+              </button>
+            </div>
           </CardActions>
         );
       case CARD_TYPE_UNARRANGE:
@@ -131,7 +131,7 @@ class ComCard extends Component {
           <button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
             取消
           </button>
-        );        
+        );
       default:
         return this.getStatusDescribe();
     }
@@ -151,7 +151,7 @@ class ComCard extends Component {
   }
 
   render() {
-    const { type, name, mobile, email, level, city, action, status,institution } = this.props;
+    const { type, name, mobile, email, level, city, action, status, institution } = this.props;
 
     this.state.type = type;
     this.state.status = status;
@@ -179,56 +179,12 @@ class ComCard extends Component {
               <div className="nyx-card-second-info">
                 <div className={'nyx-card-value'}>{mobile}</div>
                 <div className={'nyx-card-value'}>{email}</div>
-                <div className={'nyx-card-value'}>{institution===0?"":getInst(institution)}</div>
+                {institution !== 0 ? <div className={'nyx-card-value'}>{getInst(institution)}</div> : null}
               </div>
             </div>
             <div className="nyx-card-action">{this.buttonActions()}</div>
           </div>
         </div>
-        {/* <Card className="nyx-card-list" style={{ display: 'flex', }}>
-          <CardMedia
-            style={{
-              width: 0,
-              height: 0
-            }}
-            //image="/images/live-from-space.jpg"
-            title="Live from space album cover"
-          />
-          <div className="nyx-card">
-            <CardContent className={"nyx-card-body"}>
-              <Typography className={"nyx-card-name"}>
-                {name}
-              </Typography>
-              <Typography className={"nyx-card-key"}>
-                {"电话"}
-              </Typography>
-              <Typography className={"nyx-card-value"}>
-                {mobile}
-              </Typography>
-              <Typography className={"nyx-card-key"}>
-                {"邮件"}
-              </Typography>
-              <Typography className={"nyx-card-value"}>
-                {email}
-              </Typography>
-              <Typography className={"nyx-card-key"}>
-                {""}<br />
-              </Typography>
-              <Typography className={"nyx-card-value nyx-card-value-sm"}>
-                {(level === 1 ? "中" : "高") + "级"}
-              </Typography>
-              <Typography className={"nyx-card-key nyx-card-value-sm"}>
-                {"城市"}
-              </Typography>
-              <Typography className={"nyx-card-value"}>
-                {getCity(city)}
-              </Typography>
-            </CardContent>
-            <div className="nyx-card-action">
-              {this.buttonActions()}
-            </div>
-          </div>
-        </Card> */}
       </div>
     );
   }

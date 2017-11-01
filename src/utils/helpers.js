@@ -205,6 +205,9 @@ export function getAreas() {
   }
   var area;
   for (var i = 1; i <= areaData.length; i++) {
+    if (areaData[i] === undefined) {
+      continue;
+    }
     area = new Object();
     area.id = i;
     area.area_name = areaData[i];

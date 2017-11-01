@@ -720,8 +720,6 @@ class Enrolled extends Component {
                                 defaultValue={this.state.selected.wechat ? this.state.selected.wechat : ""}
                                 fullWidth
                             />
-
-
                             <Button
                                 color="primary"
                                 style={{ margin: 10, float: "right" }}

@@ -28,45 +28,38 @@ import Lang from '../language';
 
 import { APP_TYPE_UNLOGIN, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION } from '../enum';
 
-var AppRouter =
-
-  <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-    <Route title="Training" path="/" component={AppFrame}>
-      <IndexRoute dockDrawer title={null} nav component={AppFrame} />
+var AppRouter = {
+  1: (<Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+    <Route title="Training" path="/" component={AppFrame} >
+      <IndexRoute dockDrawer title={titleize(Lang[window.Lang].pages.com.home.title)} nav component={CompanyHome} />
       <Route
         title={titleize(Lang[window.Lang].pages.com.home.title)}
         path={'/com/home'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? CompanyHome : AppFrame}
+        content={CompanyHome}
+        nav
+        component={CompanyHome}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.infos.title)}
         path={'/com/infos'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Infos : AppFrame}
+        content={Infos}
+        nav
+        component={Infos}
       />
-      {/* <Route
-        title={titleize(Lang[window.Lang].pages.com.students.title)}
-        path={'/com/students'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Students : AppFrame}
-      /> */}
+      
       <Route
         title={titleize(Lang[window.Lang].pages.com.enrolled.title)}
         path={'/com/enrolled'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Enrolled : AppFrame}
+        content={Enrolled}
+        nav
+        component={Enrolled}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.infos.admin.password)}
         path={'/com/password'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Password : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Password : AppFrame}
+        content={Password}
+        nav
+        component={Password}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.com.instructions.title)}
@@ -75,49 +68,37 @@ var AppRouter =
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Instructions : AppFrame}
       />
-      {/* <Route
-        title={titleize(Lang[window.Lang].pages.com.exams.title)}
-        path={'/com/exams'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Exams : AppFrame}
-      /> */}
+    </Route>
+    
+  </Router>),
+  2: (<Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+    <Route title="Training" path="/" component={AppFrame}>
+      <IndexRoute dockDrawer title={titleize(Lang[window.Lang].pages.org.home.title)} nav component={OrganizationHome} />
       <Route
         title={titleize(Lang[window.Lang].pages.org.home.title)}
         path={'/org/home'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? OrganizationHome : AppFrame}
+        content={OrganizationHome}
+        nav
+        component={OrganizationHome}
       />
-      {/* <Route
-        title={titleize(Lang[window.Lang].pages.org.enroll.title)}
-        path={'/org/enroll'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Enroll : AppFrame}
-      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.org.clazz.title)}
         path={'/org/clazz'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Clazz : AppFrame}
+        content={Clazz}
+        nav
+        component={Clazz}
       />
-      {/* <Route
-        title={titleize(Lang[window.Lang].pages.org.score.title)}
-        path={'/org/score'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Score : AppFrame}
-      /> */}
       <Route
         title={titleize(Lang[window.Lang].pages.org.area.title)}
         path={'/org/area'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_ORANIZATION ? Area : AppFrame}
+        content={Area}
+        nav
+        component={Area}
       />
     </Route>
-  </Router>
+  </Router>)
+}
+
+
 
 export default AppRouter;
