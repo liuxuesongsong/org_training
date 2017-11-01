@@ -29,8 +29,8 @@ import StudentCard from '../studentCard.js';
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
     UNROLL_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
-    STATUS_ENROLLED_UNDO,STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
-    CARD_TYPE_ENROLL,CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE,CARD_TYPE_KNOW
+    STATUS_ENROLLED_UNDO, STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
+    CARD_TYPE_ENROLL, CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE, CARD_TYPE_KNOW
 } from '../../../enum';
 import Lang from '../../../language';
 import Code from '../../../code';
@@ -45,7 +45,7 @@ class Enrolled extends Component {
     state = {
         course: "0",
         city: "0",
-        fkenrolled_height:1,
+        fkenrolled_height: 1,
         unarranged_height: 1,
         arranged_height: 1,
         unenrolled_height: 1,
@@ -99,7 +99,7 @@ class Enrolled extends Component {
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID) {
                 unarragedStudents.push(this.state.students[i]);
             }
-            if (this.state.students[i].is_inlist == STATUS_ARRANGED_DID || this.state.students[i].is_inlist == 3 ) {
+            if (this.state.students[i].is_inlist == STATUS_ARRANGED_DID || this.state.students[i].is_inlist == 3) {
                 arrangedStudents.push(this.state.students[i]);
             }
         }
@@ -380,9 +380,9 @@ class Enrolled extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
-                <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】"+
-                        "第一步：请在下表中点击【修改】补充完整人员信息。"+
-                        "第二步：点击【报名】进行培训报名"}</p></div>
+                <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】" +
+                    "第一步：请在下表中点击【修改】补充完整人员信息。" +
+                    "第二步：点击【报名】进行培训报名"}</p></div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -437,10 +437,10 @@ class Enrolled extends Component {
                     </List>
                 </Paper>
                 <div className={'nyx-tips'}>
-                        {"【未临时登记的项目经理】"+
-                        "第一步：请在下表中点击【添加】新增人员，输入完整信息。"+
+                    {"【未临时登记的项目经理】" +
+                        "第一步：请在下表中点击【添加】新增人员，输入完整信息。" +
                         "第二步：点击【报名】进行报名"
-                        }</div>
+                    }</div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -454,8 +454,12 @@ class Enrolled extends Component {
                                 }}
 
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                            <Button style={{ position: "absolute", right: "28px",top:"0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
+                            <Button style={{ position: "absolute", right: "28px", top: "0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                                 onClick={() => {
+                                    if (getCache("base").c_area_id === 0) {
+                                        this.popUpNotice("alert", 0, "请先补全企业信息");
+                                        return
+                                    }
                                     this.setState({
                                         openNewStudentDialog: true,
                                         course: "1",
@@ -475,7 +479,7 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
-                                        institution={student.institution === null ? "" : Number(student.institution)}
+                                    institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.selectedStudent(student);
                                         this.toggleDrawer(true)()
@@ -527,7 +531,7 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
-                                        institution={student.institution === null ? "" : Number(student.institution)}
+                                    institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
@@ -559,81 +563,81 @@ class Enrolled extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         <div className={this.state.arranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-                            {this.state.arrangedStudents.map(student =>{
+                            {this.state.arrangedStudents.map(student => {
 
-                            switch (student.is_inlist) {
-                                case 2:
-                                    return (
-                                        <StudentCard
-                                        type={CARD_TYPE_ARRANGE}
-                                        key={student.id}
-                                        name={student.name === null ? "" : student.name.toString()}
-                                        mobile={student.mobile === null ? "" : student.mobile.toString()}
-                                        email={student.mail === null ? "" : student.mail.toString()}
-                                        level={Number(student.course_id)} 
-                                        city={Number(student.area_id)}
-                                        institution={student.institution === null ? "" : Number(student.institution)}
-                                        action={[
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-                                                this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
+                                switch (student.is_inlist) {
+                                    case 2:
+                                        return (
+                                            <StudentCard
+                                                type={CARD_TYPE_ARRANGE}
+                                                key={student.id}
+                                                name={student.name === null ? "" : student.name.toString()}
+                                                mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                email={student.mail === null ? "" : student.mail.toString()}
+                                                level={Number(student.course_id)}
+                                                city={Number(student.area_id)}
+                                                institution={student.institution === null ? "" : Number(student.institution)}
+                                                action={[
                                                     () => {
-                                                        this.agreeArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            },
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-    
-                                                this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                        this.state.selectedStudentId = student.id;
+                                                        this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
+                                                            () => {
+                                                                this.agreeArrange();
+                                                                this.closeNotice();
+                                                            }, () => {
+                                                                this.closeNotice();
+                                                            }]);
+                                                    },
                                                     () => {
-                                                        this.refuseArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            }]}>
-                                    </StudentCard>)
-                                case 3:
-                                {
-                                     return (
-                                        <StudentCard
-                                        type={CARD_TYPE_KNOW}
-                                        key={student.id}
-                                        name={student.name === null ? "" : student.name.toString()}
-                                        mobile={student.mobile === null ? "" : student.mobile.toString()}
-                                        email={student.mail === null ? "" : student.mail.toString()}
-                                        level={Number(student.course_id)}
-                                        city={Number(student.area_id)}
-                                        institution={student.institution === null ? "" : Number(student.institution)}
-                                        action={[
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-                                                this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
-                                                    () => {
-                                                        this.agreeArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            },
-                                            () => {
-                                                this.state.selectedStudentId = student.id;
-    
-                                                this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                    () => {
-                                                        this.refuseArrange();
-                                                        this.closeNotice();
-                                                    }, () => {
-                                                        this.closeNotice();
-                                                    }]);
-                                            }]}>
-                                    </StudentCard>)
+                                                        this.state.selectedStudentId = student.id;
+
+                                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                            () => {
+                                                                this.refuseArrange();
+                                                                this.closeNotice();
+                                                            }, () => {
+                                                                this.closeNotice();
+                                                            }]);
+                                                    }]}>
+                                            </StudentCard>)
+                                    case 3:
+                                        {
+                                            return (
+                                                <StudentCard
+                                                    type={CARD_TYPE_KNOW}
+                                                    key={student.id}
+                                                    name={student.name === null ? "" : student.name.toString()}
+                                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                    email={student.mail === null ? "" : student.mail.toString()}
+                                                    level={Number(student.course_id)}
+                                                    city={Number(student.area_id)}
+                                                    institution={student.institution === null ? "" : Number(student.institution)}
+                                                    action={[
+                                                        () => {
+                                                            this.state.selectedStudentId = student.id;
+                                                            this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
+                                                                () => {
+                                                                    this.agreeArrange();
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                        },
+                                                        () => {
+                                                            this.state.selectedStudentId = student.id;
+
+                                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                                () => {
+                                                                    this.refuseArrange();
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                        }]}>
+                                                </StudentCard>)
+                                        }
                                 }
-                            }
-                                })
+                            })
                             }
                         </div>
                     </List>
