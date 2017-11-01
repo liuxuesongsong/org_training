@@ -63,7 +63,10 @@ $btn-size:64px;
         height: $bar-height;
     }
 }
-
+.nyx-login-window-acctention{
+    color: $white;
+    margin-top: 1rem;
+}
 .nyx-login-window:before {
     position: absolute;
     font-size: 2.5rem;

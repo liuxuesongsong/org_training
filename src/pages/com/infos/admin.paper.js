@@ -19,8 +19,8 @@ class Admin extends Component {
         gotData: false,
         show: "all",
         admin: {
-            account: "未设置",
-            password:"未设置"
+            account: "",
+            password:""
         }
     }
     componentDidMount() {
@@ -199,7 +199,7 @@ class Admin extends Component {
 
     render() {
         return (
-            <div className={'nyx-page'}>
+            <div style={{marginTop:20}} className={'nyx-page'}>
             <div className={'nyx-company-paper'}>
                 <div>
                     {this.subShow()}

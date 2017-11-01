@@ -19,6 +19,22 @@
         background-color: $blue900;
     }
 }
+
+.nyx-card-enrroll-button-sm{
+    color: #2196F3;
+    display: inline-block;
+    line-height: 18px;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    padding: 5px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px #F5F5F5 solid;
+    &:hover {
+  background: #F5F5F5;
+  border: 1px #90CAF9 solid;}
+}
 .nyx-enroller-list{
     width: 384px;
 }

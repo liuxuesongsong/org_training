@@ -17,7 +17,7 @@ import {
     DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, QUERY, DATA_TYPE_STUDENT,
     CARD_TYPE_UNARRANGE, CARD_TYPE_ARRANGE, AGREE_ARRANGE, REFUSE_ARRANGE, STATUS_AGREED_AGREE, STATUS_AGREED, STATUS_AGREED_UNDO,
-    STATUS_AGREED_REFUSED, NOTICE, ALERT, STATUS_ARRANGED_DID
+    STATUS_AGREED_REFUSED, NOTICE, ALERT, STATUS_ARRANGED_DID,STATUS_AGREED_KNOW,CARD_TYPE_KNOW
 } from '../../../enum';
 import Lang from '../../../language';
 import StudentCard from '../studentCard.js';
@@ -168,8 +168,8 @@ class Home extends Component {
                                     + this.state.arranged + Lang[window.Lang].pages.com.home.human}
                             </span>
                             <span style={{ float: "right" }}>
-                                {Lang[window.Lang].pages.com.home.enrolled + ":"
-                                    + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
+                                {Lang[window.Lang].pages.com.home.unarranged + ":"
+                                    + (this.state.enrolled-this.state.arranged) + Lang[window.Lang].pages.com.home.human}
                             </span>
                         </div>
                         <span className="nyx-arranged-per">
@@ -178,53 +178,14 @@ class Home extends Component {
                         <span id="enrolled-per" className="nyx-enrolled-per">
 
                         </span>
-
-
+                        <div className="nyx-arranger-enrolled-title" style={{ paddingTop:"1rem",textAlign: "center"}}>
+                        <span>
+                                {Lang[window.Lang].pages.com.home.enrolled + "共:"
+                                    + this.state.enrolled + Lang[window.Lang].pages.com.home.human}
+                            </span>
+                        </div>
                     </Paper>
 
-                    <Paper className={'nyx-area-paper'} >
-                        <List style={{ padding: 0 }}>
-                            <div className="nyx-head-name">
-                                {Lang[window.Lang].pages.com.home.clazz_title} <i className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                            </div>
-                            {this.state.clazzes.map(clazz =>
-                                <div key={clazz.id} className="nyx-card-class">
-                                    <div style={{ float: "left" }}>
-                                        {getCourse(clazz.course_id)}
-                                    </div>
-                                    <div style={{ float: "right" }}>
-                                        {getCity(clazz.area_id)}
-                                    </div>
-                                    <div className="nyx-clazz-key">
-                                        {getInst(clazz.ti_id)}
-                                    </div>
-
-                                </div>
-                                // <ListItem dense button key={clazz.id}>
-                                //     <Card className="nyx-card-class">
-                                //         <CardMedia
-                                //             className="nyx-card-class-img"
-                                //             title="Contemplative Reptile"
-                                //         />
-                                //         <CardContent>
-                                //             <Typography className="nyx-clazz-head" type="headline" component="h2">
-                                //                 {clazz.course_id=4?"重庆":"北京"}
-                                //             </Typography>
-                                //             <Typography  className="nyx-clazz-key" component="p">
-                                //                 {clazz.course_id=1?"中级":"高级"}
-                                //             </Typography>
-                                //             <Typography className="nyx-clazz-key" component="p">
-                                //                 {clazz.ti_id=1?"中软培训":"赛迪"}
-                                //             </Typography>
-                                //             {/* <Typography  className="nyx-clazz-key" component="p">
-                                //                 {clazz.train_starttime}
-                                //             </Typography> */}
-                                //         </CardContent>
-                                //     </Card>
-                                // </ListItem>
-                            )}
-                        </List>
-                    </Paper>
                 </div>
                 <Paper style={{ padding: 0 }} className={'nyx-paper'}>
                     <List style={{ padding: 0 }}>
@@ -340,6 +301,18 @@ class Home extends Component {
                                             level={student.course_id === null ? 0 : student.course_id}
                                             city={student.area_id === null ? 0 : student.area_id}
                                             status={"已拒绝"}
+                                        >
+                                        </StudentCard>)
+                                    case STATUS_AGREED_KNOW:
+                                        return (<StudentCard
+                                            type={CARD_TYPE_KNOW}
+                                            key={CARD_TYPE_KNOW + student.id}
+                                            name={student.name === null ? "" : student.name.toString()}
+                                            mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                            email={student.mail === null ? "" : student.mail.toString()}
+                                            level={student.course_id === null ? 0 : student.course_id}
+                                            city={student.area_id === null ? 0 : student.area_id}
+                                            status={"已通知"}
                                         >
                                         </StudentCard>)
                                 }

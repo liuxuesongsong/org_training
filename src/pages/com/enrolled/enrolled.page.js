@@ -29,8 +29,8 @@ import StudentCard from '../studentCard.js';
 import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
     UNROLL_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
-    STATUS_ENROLLED_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
-    CARD_TYPE_ENROLL, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_REFUSED, NOTICE
+    STATUS_ENROLLED_UNDO,STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
+    CARD_TYPE_ENROLL,CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE,CARD_TYPE_KNOW
 } from '../../../enum';
 import Lang from '../../../language';
 import Code from '../../../code';
@@ -45,11 +45,13 @@ class Enrolled extends Component {
     state = {
         course: "0",
         city: "0",
+        fkenrolled_height:1,
         unarranged_height: 1,
         arranged_height: 1,
         unenrolled_height: 1,
         students: [],
         areas: [],
+        fkStudents: [],
         newStudents: [],
         unarragedStudents: [],
         arrangedStudents: [],
@@ -86,20 +88,23 @@ class Enrolled extends Component {
     }
 
     updateStudents = () => {
-        let newStudents = [], unarragedStudents = [], arrangedStudents = [];
+        let fkStudents = [], newStudents = [], unarragedStudents = [], arrangedStudents = [];
         for (var i = 0; i < this.state.students.length; i++) {
-
+            if (this.state.students[i].is_inlist == STATUS_FK_UNDO) {
+                fkStudents.push(this.state.students[i]);
+            }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_UNDO) {
                 newStudents.push(this.state.students[i]);
             }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID) {
                 unarragedStudents.push(this.state.students[i]);
             }
-            if (this.state.students[i].is_inlist == STATUS_ARRANGED_DID) {
+            if (this.state.students[i].is_inlist == STATUS_ARRANGED_DID || this.state.students[i].is_inlist == 3 ) {
                 arrangedStudents.push(this.state.students[i]);
             }
         }
         this.setState({
+            fkStudents: fkStudents,
             newStudents: newStudents,
             unarragedStudents: unarragedStudents,
             arrangedStudents: arrangedStudents
@@ -258,7 +263,7 @@ class Enrolled extends Component {
         return (
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
-                    新增学员
+                    添加学员
                 </DialogTitle>
                 <DialogContent>
                     <div className="nyx-form">
@@ -375,11 +380,66 @@ class Enrolled extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
-                <div className={'nyx-tips'}>{"【已临时登记的项目经理】"+
-                        "第一步：请在报名人员信息及管理列表中确认已有报名信息"+
-                        "第二步：点击[报名]按钮报名"+
-                        "【未临时登记的项目经理】"+
-                        "新增报名人员请点击【添加】，输入完整信息后报名}"}</div>
+                <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】"+
+                        "第一步：请在下表中点击【修改】确认信息无误。"+
+                        "第二步：点击【报名】进行报名"}</p></div>
+                <Paper className={'nyx-paper nyx-enroller-paper'}>
+                    <List style={{ padding: 0 }}>
+                        <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
+                            {"已临时登记的报名人员信息及管理"} <i
+                                onClick={() => {
+                                    if (this.state.fkenrolled_height == 0) {
+                                        this.setState({ fkenrolled_height: 1 })
+                                    } else {
+                                        this.setState({ fkenrolled_height: 0 })
+                                    }
+                                }}
+
+                                className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+
+                        </div>
+                        <div className={this.state.fkenrolled_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
+                            {this.state.fkStudents.map(student =>
+                                <StudentCard
+                                    type={CARD_TYPE_FK}
+                                    key={student.id}
+                                    name={student.name === null ? "" : student.name.toString()}
+                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                    email={student.mail === null ? "" : student.mail.toString()}
+                                    level={Number(student.course_id)}
+                                    city={Number(student.area_id)}
+                                    action={[() => {
+                                        this.selectedStudent(student);
+                                        this.toggleDrawer(true)()
+                                    }, () => {
+                                        this.state.selectedStudentId = student.id;
+                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
+                                            () => {
+                                                this.erollStudent(student.id);
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
+                                    }, () => {
+                                        this.state.selected = student;
+                                        this.popUpNotice(ALERT, 0, "删除学生" + student.name, [
+                                            () => {
+                                                this.removeStudent(student.id);
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
+                                    }]}>
+                                </StudentCard>
+                            )}
+                        </div>
+                    </List>
+                </Paper>
+                <div className={'nyx-tips'}>
+                        {"【未临时登记的项目经理】"+
+                        "第一步：请在下表中点击【添加】新增人员，输入完整信息。"+
+                        "第二步：点击【报名】进行报名"
+                        }</div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -393,7 +453,7 @@ class Enrolled extends Component {
                                 }}
 
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
-                            <Button style={{ position: "absolute", right: "28px" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
+                            <Button style={{ position: "absolute", right: "28px",top:"0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                                 onClick={() => {
                                     this.setState({
                                         openNewStudentDialog: true,
@@ -401,7 +461,7 @@ class Enrolled extends Component {
                                     })
                                 }}
                             >
-                                {"新增"}
+                                {"添加"}
                             </Button>
                         </div>
                         <div className={this.state.unenrolled_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
@@ -496,39 +556,80 @@ class Enrolled extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         <div className={this.state.arranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-                            {this.state.arrangedStudents.map(student =>
-                                <StudentCard
-                                    type={CARD_TYPE_ARRANGE}
-                                    key={student.id}
-                                    name={student.name === null ? "" : student.name.toString()}
-                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
-                                    email={student.mail === null ? "" : student.mail.toString()}
-                                    level={Number(student.course_id)}
-                                    city={Number(student.area_id)}
-                                    action={[
-                                        () => {
-                                            this.state.selectedStudentId = student.id;
-                                            this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
-                                                () => {
-                                                    this.agreeArrange();
-                                                    this.closeNotice();
-                                                }, () => {
-                                                    this.closeNotice();
-                                                }]);
-                                        },
-                                        () => {
-                                            this.state.selectedStudentId = student.id;
+                            {this.state.arrangedStudents.map(student =>{
 
-                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                () => {
-                                                    this.refuseArrange();
-                                                    this.closeNotice();
-                                                }, () => {
-                                                    this.closeNotice();
-                                                }]);
-                                        }]}>
-                                </StudentCard>
-                            )}
+                            switch (student.is_inlist) {
+                                case 2:
+                                    return (
+                                        <StudentCard
+                                        type={CARD_TYPE_ARRANGE}
+                                        key={student.id}
+                                        name={student.name === null ? "" : student.name.toString()}
+                                        mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                        email={student.mail === null ? "" : student.mail.toString()}
+                                        level={Number(student.course_id)}
+                                        city={Number(student.area_id)}
+                                        action={[
+                                            () => {
+                                                this.state.selectedStudentId = student.id;
+                                                this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
+                                                    () => {
+                                                        this.agreeArrange();
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                            },
+                                            () => {
+                                                this.state.selectedStudentId = student.id;
+    
+                                                this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                    () => {
+                                                        this.refuseArrange();
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                            }]}>
+                                    </StudentCard>)
+                                case 3:
+                                {
+                                     return (
+                                        <StudentCard
+                                        type={CARD_TYPE_KNOW}
+                                        key={student.id}
+                                        name={student.name === null ? "" : student.name.toString()}
+                                        mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                        email={student.mail === null ? "" : student.mail.toString()}
+                                        level={Number(student.course_id)}
+                                        city={Number(student.area_id)}
+                                        action={[
+                                            () => {
+                                                this.state.selectedStudentId = student.id;
+                                                this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
+                                                    () => {
+                                                        this.agreeArrange();
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                            },
+                                            () => {
+                                                this.state.selectedStudentId = student.id;
+    
+                                                this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                    () => {
+                                                        this.refuseArrange();
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                            }]}>
+                                    </StudentCard>)
+                                }
+                            }
+                                })
+                            }
                         </div>
                     </List>
                 </Paper>
@@ -550,13 +651,13 @@ class Enrolled extends Component {
                             <TextField
                                 id="student_name"
                                 label={Lang[window.Lang].pages.com.students.name}
-                                defaultValue={this.state.selected.name ? this.state.selected.name : "未设置"}
+                                defaultValue={this.state.selected.name ? this.state.selected.name : ""}
                                 fullWidth
                             />
                             <TextField
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
-                                defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card : "未设置"}
+                                defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card : ""}
                                 fullWidth>
                             </TextField>
                             <FormControl required>
@@ -577,7 +678,7 @@ class Enrolled extends Component {
                             <TextField
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
-                                defaultValue={this.state.selected.register ? this.state.selected.register : "未设置"}
+                                defaultValue={this.state.selected.register ? this.state.selected.register : ""}
                                 fullWidth>
                             </TextField>
 
@@ -587,31 +688,31 @@ class Enrolled extends Component {
                             <TextField
                                 id="department"
                                 label={Lang[window.Lang].pages.com.students.personal_info.department}
-                                defaultValue={this.state.selected.department ? this.state.selected.department : "未设置"}
+                                defaultValue={this.state.selected.department ? this.state.selected.department : ""}
                                 fullWidth>
                             </TextField>
                             <TextField
                                 id="duty"
                                 label={Lang[window.Lang].pages.com.students.personal_info.duty}
-                                defaultValue={this.state.selected.duty ? this.state.selected.duty : "未设置"}
+                                defaultValue={this.state.selected.duty ? this.state.selected.duty : ""}
                                 fullWidth>
                             </TextField>
                             <TextField
                                 id="mobile"
                                 label={Lang[window.Lang].pages.com.students.tel}
-                                defaultValue={this.state.selected.mobile ? this.state.selected.mobile : "未设置"}
+                                defaultValue={this.state.selected.mobile ? this.state.selected.mobile : ""}
                                 fullWidth
                             />
                             <TextField
                                 id="mail"
                                 label={Lang[window.Lang].pages.com.students.email}
-                                defaultValue={this.state.selected.mail ? this.state.selected.mail : "未设置"}
+                                defaultValue={this.state.selected.mail ? this.state.selected.mail : ""}
                                 fullWidth
                             />
                             <TextField
                                 id="wechat"
                                 label={Lang[window.Lang].pages.com.students.personal_info.wechat}
-                                defaultValue={this.state.selected.wechat ? this.state.selected.wechat : "未设置"}
+                                defaultValue={this.state.selected.wechat ? this.state.selected.wechat : ""}
                                 fullWidth
                             />
 

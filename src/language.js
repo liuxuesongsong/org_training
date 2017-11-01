@@ -31,10 +31,11 @@ const Language = {
                 home: {
                     title: "首页",
                     arranged: "已安排",
+                    unarranged: "待安排",
                     enrolled: "已报名",
                     passed: "已通过",
                     trained: "已培训",
-                    human: "人次",
+                    human: "人",
                     unarranged_title: "待安排的培训报名学员",
                     arranged_title: "已安排的培训报名学员",
                     clazz_title: "企业所属地区正在开设班级的",
@@ -174,6 +175,9 @@ const Language = {
                     unenrolled: "报名人员信息及管理",
                     unarrange: "待安排培训报名列表",
                     arranged: "已安排培训报名列表",
+                },
+                instructions:{
+                    title:"填报说明"
                 },
                 card: {
                     modify: "修改",

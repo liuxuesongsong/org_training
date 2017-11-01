@@ -9,10 +9,12 @@ import Typography from 'material-ui/Typography';
 import {
   CARD_TYPE_COMMON,
   CARD_TYPE_INFO,
+  CARD_TYPE_FK,
   CARD_TYPE_ENROLL,
   CARD_TYPE_ARRANGE,
   CARD_TYPE_EXAM,
   CARD_TYPE_UNARRANGE,
+  CARD_TYPE_KNOW,
   STATUS_AGREED_AGREE,
 } from '../../enum';
 import { getCity,getCourse } from '../../utils/helpers';
@@ -53,38 +55,64 @@ class ComCard extends Component {
             <Button className="glyphicon glyphicon-trash" dense onClick={this.props.action[1]} />
           </CardActions>
         );
-      case CARD_TYPE_ENROLL:
+      case CARD_TYPE_FK:
         return (
           <CardActions style={{ height: '1.5rem' }}>
             <br />
             <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
-              {Lang[window.Lang].pages.com.card.enroll}
+            <i  className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
             </button>
             <br />
-            <i onClick={this.props.action[0]} className="glyphicon glyphicon-pencil" />
             <br />
-            <i onClick={this.props.action[2]} className="glyphicon glyphicon-trash" />
+            <button className="nyx-card-enrroll-button"onClick={this.props.action[0]}>
+          <i  className="glyphicon glyphicon-pencil " /> {"修改"}
+          </button>
+            
+            <br />
+           <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
           </CardActions>
         );
-      case CARD_TYPE_ARRANGE:
-        return (
-          <div>
-            {this.state.status === '' ? 
-            (
-              <CardActions>
-                <button className="nyx-card-button" onClick={this.props.action[0]}>
-                    已收到                  
-                </button>
-                {/* <br />
-                <button className="nyx-card-button" onClick={this.props.action[1]}>
-                  {Lang[window.Lang].pages.com.card.refuse}
-                </button> */}
+        case CARD_TYPE_ENROLL:
+          return (
+            <CardActions style={{ height: '1.5rem' }}>
+              <br />
+              <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
+              <i  className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
+              </button>
+              <br />
+              <button className="nyx-card-enrroll-button"onClick={this.props.action[0]}>
+            <i  className="glyphicon glyphicon-pencil " /> {"修改"}
+            </button>
+              <br />
+              <i className="glyphicon glyphicon-trash nyx-card-enrroll-button-sm" onClick={this.props.action[2]} />
+            </CardActions>
+          );
+          case CARD_TYPE_ARRANGE:
+            return (
+              <CardActions style={{ height: '1.5rem' }}>
+                {this.state.status === '' ? 
+                (
+                    <button className="nyx-card-button" onClick={this.props.action[0]}>
+                        已收到                  
+                    </button>
+                ) : 
+                (Lang[window.Lang].pages.com.card.status[1])
+                }
               </CardActions>
-            ) : 
-            (Lang[window.Lang].pages.com.card.status[1])
-            }
-          </div>
-        );
+            );
+            case CARD_TYPE_KNOW:
+              return (
+                <CardActions style={{ height: '1.5rem' }}>
+                  {this.state.status === '' ? 
+                  (
+                      <div>
+                          已通知                  
+                      </div>
+                  ) : 
+                  (Lang[window.Lang].pages.com.card.status[1])
+                  }
+                </CardActions>
+              );
       case CARD_TYPE_EXAM:
         return (
           <CardActions>
@@ -103,7 +131,7 @@ class ComCard extends Component {
           <button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
             取消
           </button>
-        );
+        );        
       default:
         return this.getStatusDescribe();
     }

@@ -513,10 +513,11 @@ class AppFrame extends Component {
               marginRight: "auto",//theme.spacing.unit,  
             }}
             fullWidth={true}
-            onChange={event => this.setState({ name: event.target.value })}
+            onChange={
+              event => this.setState({ name: event.target.value })}
           />
           <TextField
-            label={"手机验证"}
+            label={"预留联系人手机号"}
             id={"phone_number"}
             type="phone_number"
             style={{
@@ -531,11 +532,12 @@ class AppFrame extends Component {
             color="primary"
             className={'nyx-send-checkcode'}
             onClick={() => {
-              console.log(getRouter("forget_code"))
-              fetch(getRouter("forget_code").url, {
-                method: 'POST',
-                body: "mobile=" + document.getElementById("phone_number").value
-              })
+              var cb = (route, message, arg) => {
+                // Code.LOGIC_SUCCESS
+                  this.popUpNotice(NOTICE, 0, message.msg);
+              }
+              getData(getRouter("forget_code"), { account: this.state.name, tel: this.state.phone_number, }, cb, {});
+             
             }}
           >
             {"发送手机验证码"}
@@ -574,9 +576,10 @@ class AppFrame extends Component {
                   this.popUpNotice(NOTICE, 0, message.msg);
                 }
               }
-              var code = document.getElementById("phone_code").value;
+              // console.log(account)
+              // var code = document.getElementById("phone_code").value;
               var apptype = APP_TYPE_COMPANY;
-              getData(getRouter("forget_code_login"), { account: account, code: code, }, cb, { account: account, type: apptype });
+              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.code, }, cb, {});
             }}
           >
             {"登录"}
@@ -672,7 +675,9 @@ class AppFrame extends Component {
           >
             {Lang[window.Lang].pages.main.login_button}
           </Button>
+         
         </div>
+        
     )
   }
 
@@ -747,8 +752,8 @@ class AppFrame extends Component {
               textColor="primary"
               fullWidth
             >
-              <Tab label="公司登陆" />
-              <Tab label="公司注册" />
+              <Tab label="用户登陆" />
+              <Tab label="用户注册" />
               <Tab label="机构登陆" />
             </Tabs>
           </AppBar>
@@ -763,6 +768,16 @@ class AppFrame extends Component {
               {this.LoginView()}
             </TabContainer>
           </SwipeableViews>
+          <h3 style={{color:"#FFFFFF"}}>注*</h3>
+          <div className="nyx-login-window-acctention">
+          已经做过临时登记的企业用户以单位全称和初始密码进行登陆
+          </div>
+          <div className="nyx-login-window-acctention">
+          未做过临时登记的企业用户以单位全称进行注册
+          </div>
+          <div className="nyx-login-window-acctention">
+          系统维护电话：010-51527580
+          </div>
         </div>
       </div>
     </div>

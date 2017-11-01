@@ -11,6 +11,8 @@ import Home from 'training/src/pages/Home';
 // import { componentAPIs, requireMarkdown, demos, requireDemo } from 'training/src/components/files';
 
 import Enrolled from '../pages/com/enrolled/enrolled.page.js';
+
+import Instructions from '../pages/com/instructions/instructions.page.js';
 import Password from '../pages/com/infos/admin.paper.js';
 import CompanyHome from '../pages/com/home/home.page.js';
 import Students from '../pages/com/students/students.page.js';
@@ -65,6 +67,13 @@ var AppRouter =
         content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Password : AppFrame}
         nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
         component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Password : AppFrame}
+      />
+      <Route
+        title={titleize(Lang[window.Lang].pages.com.instructions.title)}
+        path={'/com/instructions'}
+        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Instructions : AppFrame}
+        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
+        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Instructions : AppFrame}
       />
       {/* <Route
         title={titleize(Lang[window.Lang].pages.com.exams.title)}

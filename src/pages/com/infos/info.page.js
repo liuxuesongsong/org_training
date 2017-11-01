@@ -35,7 +35,7 @@ import { initCache, getCache, getData, getRouter, getCity, getAreas } from '../.
 import Lang from '../../../language';
 import Code from '../../../code';
 
-import { DATA_TYPE_AREA, DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
+import { NOTICE,DATA_TYPE_AREA, DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_FINANCE, DATA_TYPE_EXPRESS, DATA_TYPE_ADMIN } from '../../../enum';
 
 import CommonAlert from '../../../components/CommonAlert';
 
@@ -82,7 +82,7 @@ class Info extends Component {
             mobile: "未设置",
             mail: "未设置"
         },
-
+        
         // 提示状态
         alertOpen: false,
         alertType: "notice",
@@ -176,7 +176,7 @@ class Info extends Component {
 
     qualificationItems = () => {
         var components = []
-        var items = [1, 2, 3, 4];
+        var items = ["1级", "2级", "3级", "4级","无等级"];
         items.map((item) => {
             components.push(
                 <ListItem button key={item} onClick={() => {
@@ -185,9 +185,9 @@ class Info extends Component {
                     })
                     this.setState({ show: "all" })
                 }}>
-                    <ListItemText primary={(item) + "级"} />
+                    <ListItemText primary={(item)} />
                 </ListItem>)
-        })
+        });
         return components
     }
 
@@ -432,9 +432,10 @@ class Info extends Component {
                     <List style={{
                         height: "100%"
                     }} disablePadding>
+                    <ListSubheader style={{ marginTop: 20 }}>{"企业培训相关管理人员信息"}</ListSubheader>
                         <Paper 
                         className="nyx-form">
-                            <h3>{"企业培训相关管理人员信息"}</h3>
+                        
                             <TextField
                                 className="nyx-form-div"
                                 key={"account"}
@@ -577,6 +578,7 @@ class Info extends Component {
                                 <option value={2}>{"2级"}</option>
                                 <option value={3}>{"3级"}</option>
                                 <option value={4}>{"4级"}</option>
+                                <option value={5}>{"无等级"}</option>
                             </select>
                             <Button
                                 raised
@@ -589,6 +591,7 @@ class Info extends Component {
                                             window.CacheData.base = arg.data;
                                         }
                                         this.fresh();
+                                        this.popUpNotice(NOTICE, 0, message.msg);
                                     }
 
                                     var account = document.getElementById("input_account").value;
@@ -656,10 +659,23 @@ class Info extends Component {
                                 className="nyx-form-div"
                                 key={"receive_phone"}
                                 id={"input_receive_phone"}
-                                label={Lang[window.Lang].pages.com.infos.express.district}
+                                label={Lang[window.Lang].pages.com.infos.express.receive_phone}
                                 value={this.state.express["receive_phone"] === null ? "" : this.state.express["receive_phone"]}
                                 onChange={(event) => {
                                     this.state.express["receive_phone"] = event.target.value
+                                    this.setState({
+                                        express: this.state.express
+                                    });
+                                }}>  
+                                </TextField>
+                                <TextField
+                                className="nyx-form-div"
+                                key={"zip_code"}
+                                id={"zip_code"}
+                                label={Lang[window.Lang].pages.com.infos.express.zip_code}
+                                value={this.state.express["zip_code"] === null ? "" : this.state.express["zip_code"]}
+                                onChange={(event) => {
+                                    this.state.express["zip_code"] = event.target.value
                                     this.setState({
                                         express: this.state.express
                                     });
@@ -674,10 +690,14 @@ class Info extends Component {
                                     var cb = (route, message, arg) => {
                                         if (message.code === Code.LOGIC_SUCCESS) {
                                             window.CacheData.base = arg.data;
+                                            
                                         }
+                                        
                                         this.fresh();
+                                        this.popUpNotice(NOTICE, 0, message.msg);
                                     }
-
+                                    
+                                    var zip_code = document.getElementById("zip_code").value;
                                     var receiver = document.getElementById("input_receiver").value;
                                     var district = document.getElementById("input_district").value;
                                     var receive_phone = document.getElementById("input_receive_phone").value;
@@ -686,6 +706,7 @@ class Info extends Component {
                                         receiver: receiver === "" ? null : receiver,
                                         district: district === "" ? null : district,
                                         receive_phone: receive_phone === "" ? null : receive_phone,
+                                        zip_code: zip_code === "" ? null : zip_code
                                         
                                     }
                                     console.log(obj);
@@ -693,7 +714,6 @@ class Info extends Component {
                                     getData(getRouter(UPDATE_COMPANY), {
                                         session: sessionStorage.session, company: obj
                                     }, cb, { self: this, data: obj });
-
                                 }}
                             >
                                 {Lang[window.Lang].pages.main.certain_button}
@@ -790,6 +810,7 @@ class Info extends Component {
                                             window.CacheData.base = arg.data;
                                         }
                                         this.fresh();
+                                        this.popUpNotice(NOTICE, 0, message.msg);
                                     }
 
                                     var allname = document.getElementById("input_allname").value;
