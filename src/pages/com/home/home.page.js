@@ -160,7 +160,7 @@ class Home extends Component {
                     <Paper id="companyid" >
 
                         <div className="nyx-head-name">
-                            {this.state.name} <i className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
+                            {"企业报名信息统计"} <i className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         <div className="nyx-arranger-enrolled-title">
                             <span>

@@ -316,7 +316,7 @@ class Info extends Component {
                                 }} />
                             </IconButton>
                             <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                {"修改财务信息"}
+                                {"修改发票信息"}
                             </Typography>
                         </Toolbar>
                     </AppBar>
@@ -341,7 +341,7 @@ class Info extends Component {
                                 }} />
                             </IconButton>
                             <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                {"修改财务信息"}
+                                {"修改发票信息"}
                             </Typography>
                         </Toolbar>
                     </AppBar>
@@ -365,7 +365,7 @@ class Info extends Component {
                                     }} />
                                 </IconButton>
                                 <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                    {"修改邮寄信息"}
+                                    {"修改通讯信息"}
                                 </Typography>
                             </Toolbar>
                         </AppBar>
@@ -434,7 +434,7 @@ class Info extends Component {
                     }} disablePadding>
                         <Paper 
                         className="nyx-form">
-                            <h3>{"企业负责人相关信息"}</h3>
+                            <h3>{"企业培训相关管理人员信息"}</h3>
                             <TextField
                                 className="nyx-form-div"
                                 key={"account"}
@@ -624,7 +624,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"邮寄信息"}</ListSubheader>
+                        <ListSubheader style={{ marginTop: 20 }}>{"通讯信息"}</ListSubheader>
                         <Paper className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"
@@ -699,7 +699,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"财务信息"}</ListSubheader>
+                        <ListSubheader style={{ marginTop: 20 }}>{"发票信息"}</ListSubheader>
                         <Paper style={{ marginBottom: 20 }} className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"
@@ -817,14 +817,14 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20}}>{"修改密码"}</ListSubheader>
+                        {/* <ListSubheader style={{ marginTop: 20}}>{"修改密码"}</ListSubheader>
                         <Paper style={{marginBottom: 80}} >
                             <div className="nyx-info-line-height"
                                 onClick={() => { this.setState({ show: "admin", }) }}>
                                 <div><span className="nyx-info-span">单位全称</span>{this.state.admin.account}</div>
                                 <div><span className="nyx-info-span">密码</span>******</div>
                             </div>
-                        </Paper>
+                        </Paper> */}
                     </List>
                 </div >)
         }

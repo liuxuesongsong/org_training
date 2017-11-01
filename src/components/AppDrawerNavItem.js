@@ -40,7 +40,7 @@ const styleSheet = createStyleSheet('AppDrawerNavItem', theme => ({
     fontSize: 13,
   },
   activeButton: {
-    color: theme.palette.text.primary,
+    
   },
 }));
 
@@ -73,7 +73,7 @@ class AppDrawerNavItem extends Component {
             component={Link}
             to={to}
             className={classNames(classes.button, 'nyx-button')}
-            activeClassName={classes.activeButton}
+            activeClassName={"nyx-button-active"}
             disableRipple
             onClick={this.props.onClick}
           >

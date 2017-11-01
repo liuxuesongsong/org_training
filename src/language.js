@@ -6,7 +6,7 @@ const Language = {
         },
         pages: {
             main: {
-                company_title: "企业信息",
+                company_title: "企业相关信息",
                 student_title: "学员信息",
                 enrolled_title: "报名信息",
                 exam_title: "考试成绩",
@@ -35,14 +35,14 @@ const Language = {
                     passed: "已通过",
                     trained: "已培训",
                     human: "人次",
-                    unarranged_title: "待安排的学员",
-                    arranged_title: "已安排的学员",
+                    unarranged_title: "待安排的培训报名学员",
+                    arranged_title: "已安排的培训报名学员",
                     clazz_title: "企业所属地区正在开设班级的",
                     available: "单位名称可以使用",
                     being_reroll: "正在重新排队"
                 },
                 infos: {
-                    title: "企业信息",
+                    title: "企业相关信息",
                     base: {
                         title: "基本信息",
                         base_info: {
@@ -60,7 +60,7 @@ const Language = {
                         c_level: "企业资质"
                     },
                     finance: {
-                        title: "财务信息",
+                        title: "发票信息",
                         allname: "公司全称",
                         taxpayer_number: "纳税人识别号",
                         opening_bank: "开户银行",
@@ -69,7 +69,7 @@ const Language = {
                         financial_call: "电话"
                     },
                     express: {
-                        title: "邮寄信息",
+                        title: "通讯信息",
                         zip_code: "邮编",
                         receive_address: "省市",
                         district: "详细地址",
@@ -98,7 +98,7 @@ const Language = {
                         "wechat": "微信/QQ",
                         "id_type": "证件类型",
                         "identity_card": "证件编号",
-                        "register": "临时登记编号"
+                        "register": "备注"
                     },
                     select:
                     {
@@ -115,7 +115,7 @@ const Language = {
                     name: "姓名",
                     tel: "电话",
                     major: "考试级别",
-                    register: "临时登记编号",
+                    register: "备注",
                     email: "电子邮件",
                     city: "地区",
                     level: {
@@ -170,10 +170,10 @@ const Language = {
                     unpassed: "未通过考试",
                 },
                 enrolled: {
-                    title: "培训报名",
-                    unenrolled: "未报名列表",
-                    unarrange: "待安排列表",
-                    arranged: "已安排列表",
+                    title: "培训报名管理",
+                    unenrolled: "报名人员信息及管理",
+                    unarrange: "待安排培训报名列表",
+                    arranged: "已安排培训报名列表",
                 },
                 card: {
                     modify: "修改",
@@ -304,7 +304,7 @@ const Language = {
                         qualification: "企业资质"
                     },
                     finance: {
-                        title: "财务信息",
+                        title: "发票信息",
                         name: "公司全称",
                         taxpayer_identify: "纳税人识别号",
                         bank: "开户银行",
@@ -313,7 +313,7 @@ const Language = {
                         tel: "电话"
                     },
                     express: {
-                        title: "邮寄信息",
+                        title: "通讯信息",
                         express_code: "邮编",
                         express_address: "收件地址",
                         address: "详细地址",

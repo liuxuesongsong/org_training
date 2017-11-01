@@ -110,3 +110,7 @@ $btn-size:64px;
     padding:0.5rem 1rem;
     border-bottom:1px $grey50 solid;
 }
+.nyx-sidebar a.nyx-button-active{
+    background: $blue900;
+    color:#ffffff;
+}

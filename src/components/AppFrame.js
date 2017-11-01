@@ -792,7 +792,7 @@ class AppFrame extends Component {
       <div className="nyx">
         {sessionStorage.getItem("logged") === "true" ?
           <div className={classes.appFrame}>
-            <AppBar className={appBarClassName + 'nyx-topbar'}>
+            <AppBar className={appBarClassName + ' nyx-topbar'}>
               <Toolbar>
                 <IconButton
                   color="contrast"
@@ -806,6 +806,7 @@ class AppFrame extends Component {
                     {title}
                   </Typography>}
                 <div className={classes.grow} />
+                <h2 style={{float:"right"}}>{"信息系统集成及服务项目管理人员培训报名系统"}</h2>
                 <IconButton
                   color="contrast"
                   onClick={() => {

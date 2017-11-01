@@ -375,6 +375,11 @@ class Enrolled extends Component {
     render() {
         return (
             <div className={'nyx-page'}>
+                <div className={'nyx-tips'}>{"【已临时登记的项目经理】"+
+                        "第一步：请在报名人员信息及管理列表中确认已有报名信息"+
+                        "第二步：点击[报名]按钮报名"+
+                        "【未临时登记的项目经理】"+
+                        "新增报名人员请点击【添加】，输入完整信息后报名}"}</div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
