@@ -26,9 +26,9 @@ import BackIcon from 'material-ui-icons/ArrowBack';
 
 import StudentCard from '../studentCard.js';
 
-import { initCache, getData, getRouter, getStudent, getCache } from '../../../utils/helpers';
+import { initCache, getData,getCity, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
-    UNROLL_STUDENT, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
+    UNROLL_STUDENT,DATA_TYPE_BASE, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
     CARD_TYPE_ENROLL, CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE, CARD_TYPE_KNOW
 } from '../../../enum';
@@ -44,7 +44,7 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
-        city: "0",
+        c_area_id: "",
         fkenrolled_height: 1,
         unarranged_height: 1,
         arranged_height: 1,
@@ -85,6 +85,14 @@ class Enrolled extends Component {
         window.currentPage.state.areas = getCache("areas");
         window.currentPage.state.students = students === undefined ? [] : students;
         window.currentPage.updateStudents();
+        if (getCache(DATA_TYPE_BASE) !== undefined) {
+            var data = getCache(DATA_TYPE_BASE);
+            var currentCity = getCity(data.c_area_id);
+            window.currentPage.setState({
+                c_area_id: currentCity,
+            });
+            
+        }
     }
 
     updateStudents = () => {
@@ -158,6 +166,7 @@ class Enrolled extends Component {
                 id={"new_" + p}
                 label={newStudentInput[p]}
                 defaultValue={""}
+                helperText={"*必填"}
             />)
         }
         return components
@@ -263,47 +272,149 @@ class Enrolled extends Component {
         return (
             <Dialog open={this.state.openNewStudentDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
+                   
                     添加学员
                 </DialogTitle>
                 <DialogContent>
-                    <div className="nyx-form">
-                        {this.newStudentList()}
+                    <div style={{paddingTop:0}} className="nyx-form">
+                    <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"name"}
+                 id={"new_name"}
+                label={Lang[window.Lang].pages.com.students.input.name}
+                defaultValue={""}
+               
+            />
+            <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"register"}
+                 id={"new_register"}
+                label={Lang[window.Lang].pages.com.students.input.register}
+                defaultValue={""}
+            />
                         <div>
-                            <p
+                            {/* <p
                                 className="nyx-info-select-label"
-                            >培训城市</p>
-                            <p
-                                className="nyx-info-select-label"
-                            >中项或高项</p>
+                            >培训城市</p> */}
+                            
                         </div>
-                        <select
+                        {/* <select
                             className="nyx-info-select"
                             id="new_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
                             {this.newStudentCity()}
-                        </select>
+                        </select> */}
+                        <TextField
+                 className="nyx-form-div"
+                key={"area_id"}
+                 id={"new_area_id"}
+                 value={this.state.c_area_id}
+                 
+                label={Lang[window.Lang].pages.com.students.select.area_id}
+               
+            />
 
+                        <div className="nyx-info-select-div">
+                            <p className="nyx-info-select-label">中项或高项</p>
                         <select
                             className="nyx-info-select"
                             id="new_course_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
-                            defaultValue={""}
                         >
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
                         </select>
+                        </div>
+                        <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"mobile"}
+                 id={"new_mobile"}
+                label={Lang[window.Lang].pages.com.students.input.mobile}
+                defaultValue={""}
+            />
+            <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"mail"}
+                 id={"new_mail"}
+                label={Lang[window.Lang].pages.com.students.input.mail}
+                defaultValue={""}
+              
+            />
+            <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"id_type"}
+                 id={"new_id_type"}
+                label={Lang[window.Lang].pages.com.students.input.id_type}
+                defaultValue={""}
+                
+            />
+            <TextField
+                 className="nyx-form-div nyx-must-content"
+                key={"identity_card"}
+                 id={"new_identity_card"}
+                label={Lang[window.Lang].pages.com.students.input.identity_card}
+                defaultValue={""}
+            />
+            <TextField
+                 className="nyx-form-div"
+                key={"department"}
+                 id={"new_department"}
+                label={Lang[window.Lang].pages.com.students.input.department}
+                defaultValue={""}
+            />
+            <TextField
+                 className="nyx-form-div"
+                key={"duty"}
+                 id={"new_duty"}
+                label={Lang[window.Lang].pages.com.students.input.duty}
+                defaultValue={""}
+            />
+            <TextField
+                 className="nyx-form-div"
+                key={"wechat"}
+                 id={"new_wechat"}
+                label={Lang[window.Lang].pages.com.students.input.wechat}
+                defaultValue={""}
+            />
+            <div className="nyx-remark">
+                <h4>备注栏:</h4>
+                <p>1.临时登记人员填写临时登记证书编号(网站可查);</p>
+                <p>2.原来在项目管理人员登记系统已报名培训考试填写培训考试报名;</p>
+                <p>3.不是上述两种情况,备注栏目为空,不用填写。</p>
+                
+            </div>
                     </div>
+                    
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        <Button
+                        <Button style={{background:"$blue",color:"$white"}}
                             onClick={() => {
+                                 
+                                 if (document.getElementById("new_name").value === "") {
+                                    this.popUpNotice(NOTICE, 0, "您没有输入姓名")
+                                    return
+                                  } else if (document.getElementById("new_mobile").value === "") {
+                                      console.log("您没有输入手机");
+                                    this.popUpNotice(NOTICE, 0, "您没有输入手机")
+                                    return
+                                  }else if (document.getElementById("new_mail").value === "") {
+                                    this.popUpNotice(NOTICE, 0, "您没有输入邮箱")
+                                    return
+                                  } else if (document.getElementById("new_id_type").value === "") {
+                                    this.popUpNotice(NOTICE, 0, "您没有输入证件类型")
+                                    return
+                                  }else if (document.getElementById("new_identity_card").value === "") {
+                                    this.popUpNotice(NOTICE, 0, "您没有输入证件编码")
+                                    return
+                                  }
+
                                 this.newStudent({
 
 
-                                    name: document.getElementById("new_name").value === "" ? "未命名" + new Date().getTime() : document.getElementById("new_name").value,
+                                    name: document.getElementById("new_name").value,
                                     department: document.getElementById("new_department").value,
                                     duty: document.getElementById("new_duty").value,
                                     mobile: document.getElementById("new_mobile").value,
@@ -379,7 +490,7 @@ class Enrolled extends Component {
 
     render() {
         return (
-            <div className={'nyx-page'}>
+            <div style={{width:"800px"}} className={'nyx-page'}>
                 <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】" +
                     "第一步：请在下表中点击【修改】补充完整人员信息。" +
                     "第二步：点击【报名】进行培训报名"}</p></div>

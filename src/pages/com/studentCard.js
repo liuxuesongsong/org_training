@@ -156,7 +156,7 @@ class ComCard extends Component {
     this.state.type = type;
     this.state.status = status;
     this.state.action = action;
-    console.log(institution);
+   // console.log(institution);
     return (
       <div>
         <div className="nyx-card-list" style={{ display: 'flex' }}>

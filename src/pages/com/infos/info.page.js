@@ -432,7 +432,7 @@ class Info extends Component {
                     <List style={{
                         height: "100%"
                     }} disablePadding>
-                    <ListSubheader style={{ marginTop: 20 }}>{"企业培训相关管理人员信息"}</ListSubheader>
+                    <h2 className="myx-info-title" style={{ marginTop: 20 }}>{"基本信息"}</h2>
                         <Paper 
                         className="nyx-form">
                         
@@ -627,7 +627,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"通讯信息"}</ListSubheader>
+                        <h3 className="myx-info-title" style={{ marginTop: 20 }}>{"通讯信息"}</h3>
                         <Paper className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"
@@ -701,7 +701,7 @@ class Info extends Component {
                                     var receiver = document.getElementById("input_receiver").value;
                                     var district = document.getElementById("input_district").value;
                                     var receive_phone = document.getElementById("input_receive_phone").value;
-                                    
+                                    console.log(zip_code);
                                     var obj = {
                                         receiver: receiver === "" ? null : receiver,
                                         district: district === "" ? null : district,
@@ -719,7 +719,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <ListSubheader style={{ marginTop: 20 }}>{"发票信息"}</ListSubheader>
+                        <h3 className="myx-info-title" style={{ marginTop: 20 }}>{"发票信息"}</h3>
                         <Paper style={{ marginBottom: 20 }} className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"

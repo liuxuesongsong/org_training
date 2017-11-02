@@ -37,9 +37,18 @@
 }
 .nyx-tips{
     width: 800px;
-    color: rgba(0, 0, 0, 0.54);
+    color: $red500;
     margin: 2rem 1rem 1rem;
 }
+.nyx-must-content:after{
+    content: "*必填";
+    position: absolute;
+    right: 20px;
+    font-size: 80%;
+    top: 23px;
+    color:$red300;
+}
+
 #companyid{
     height: 150px;
     position: relative;
@@ -220,10 +229,18 @@
         flex:initial;
     }
 }
+.myx-info-title{
+    border-left: 2px solid $blue;
+    color: $blue;
+    font-weight: 600;
+    line-height: 2rem;
+    padding-left: 1rem;
+
+}
 .nyx-form{
     width: 100%;
     padding: 2rem 2rem 5rem;
-    
+    color: rgba(0, 0, 0, 0.54);
     position: relative;
     button {
         border-radius: 50%;
@@ -242,7 +259,9 @@
             background-color: $blue900;
 
         }
+        
     }
+    
     .nyx-form-div{
         width: 50%;
         display: inline-block;
@@ -258,14 +277,23 @@
         width: 95%;
     }
     }
-    .nyx-info-select{
+    .nyx-info-select-div{
         width: 49%;
-        margin-right: 1%;
+        float: right
+    }
+    .nyx-info-select{
+        width: 99%;
+        margin-top: 1.06rem;
         border: none;
         color: rgba(0, 0, 0, 0.54);
         outline: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.54);
     }
+    .nyx-info-select-label{
+        margin: 0;
+        font-size: 12px;
+    }
+    
 
     
     .nyx-info-select-middle{
@@ -276,11 +304,15 @@
         outline: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.54);
     }
-    .nyx-info-select-label{
-        width: 50%;
-        float: left;
-        color: rgba(0, 0, 0, 0.54);
-    }
+   
+}
+
+.nyx-remark{
+    color: rgba(0, 0, 0, 0.8);
+    p{
+        margin-top: -0.5rem;
+        font-size: 14px;
+       }
 }
 .nyx-card-class{
     margin: 2rem 3rem 0rem 3rem;
@@ -335,7 +367,7 @@
             width: 98%;
         }
         }
-        .nyx-info-select-label{
+       .nyx-info-select,.nyx-info-select-label{
             width: 100%;
         }
     } 
