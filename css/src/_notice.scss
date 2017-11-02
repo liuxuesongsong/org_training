@@ -1,0 +1,35 @@
+.nyx-notice-button{
+    position: absolute;
+    left: 180px;
+    bottom: 2rem;
+}
+
+
+.nyx-notice-button{
+    position: absolute;
+    left: 180px;
+    bottom: 2rem;
+}
+
+.nyx-notice-box{
+    position: absolute;
+    overflow: hidden;
+    bottom:1.5rem;
+    width: 48px;
+    height:48px;
+    background: $blue;
+    border-top:1rem solid $blue900;
+    transition:width 0.3s ease-in,height 0.3s ease-out;
+    background: url(img/process.png) no-repeat;
+    &:hover{
+        width: 663px;
+        height:390px;
+    }
+}
+.nyx-notice-title{
+    color:$blue900;
+    font-weight: bold;
+}
+.nyx-notice-login{
+    
+}
