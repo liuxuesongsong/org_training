@@ -64,9 +64,9 @@ var AppRouter = {
       <Route
         title={titleize(Lang[window.Lang].pages.com.instructions.title)}
         path={'/com/instructions'}
-        content={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Instructions : AppFrame}
-        nav={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? true : false}
-        component={sessionStorage.getItem("apptype") == APP_TYPE_COMPANY ? Instructions : AppFrame}
+        content={Instructions}
+        nav
+        component={Instructions}
       />
     </Route>
     
