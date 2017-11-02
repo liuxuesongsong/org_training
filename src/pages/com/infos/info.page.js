@@ -627,7 +627,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <h3 className="myx-info-title" style={{ marginTop: 20 }}>{"通讯信息"}</h3>
+                        <h2 className="myx-info-title" style={{ marginTop: 20 }}>{"通讯信息"}</h2>
                         <Paper className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"
@@ -673,7 +673,7 @@ class Info extends Component {
                                 key={"zip_code"}
                                 id={"zip_code"}
                                 label={Lang[window.Lang].pages.com.infos.express.zip_code}
-                                value={this.state.express["zip_code"] === null ? "" : this.state.express["zip_code"]}
+                                value={this.state.express["zip_code"] === null ? "" : this.state.express["zip_code"].toString()}
                                 onChange={(event) => {
                                     this.state.express["zip_code"] = event.target.value
                                     this.setState({
@@ -719,7 +719,7 @@ class Info extends Component {
                                 {Lang[window.Lang].pages.main.certain_button}
                             </Button>
                         </Paper>
-                        <h3 className="myx-info-title" style={{ marginTop: 20 }}>{"发票信息"}</h3>
+                        <h2 className="myx-info-title" style={{ marginTop: 20 }}>{"发票信息"}</h2>
                         <Paper style={{ marginBottom: 20 }} className="nyx-form nyx-info-listitem">
                         <TextField
                                 className="nyx-form-div"

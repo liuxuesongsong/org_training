@@ -1631,6 +1631,7 @@
 
 .nyx-form .nyx-form-div {
   width: 50%;
+  margin: 0.5rem 0rem;
   display: inline-block;
 }
 
@@ -1648,22 +1649,30 @@
 }
 
 .nyx-form .nyx-info-select-div {
-  width: 49%;
+  width: 50%;
+  margin: 0.5rem 0rem;
   float: right;
 }
 
-.nyx-form .nyx-info-select {
-  width: 99%;
-  margin-top: 1.06rem;
+.nyx-form .nyx-info-select, .nyx-form .nyx-info-select-lg {
+  width: 49%;
+  margin-right: 1%;
+  margin-top: 0.75rem;
   border: none;
   color: rgba(0, 0, 0, 0.54);
   outline: none;
   border-bottom: 1px solid rgba(0, 0, 0, 0.54);
 }
 
+.nyx-form .nyx-info-select-lg {
+  width: 98%;
+}
+
 .nyx-form .nyx-info-select-label {
   margin: 0;
   font-size: 12px;
+  width: 50%;
+  display: inline-block;
 }
 
 .nyx-form .nyx-info-select-middle {
@@ -1748,6 +1757,9 @@
   .nyx-form .nyx-info-select, .nyx-form .nyx-info-select-label {
     width: 100%;
   }
+  .nyx-form .nyx-info-select-div {
+    width: 100%;
+  }
 }
 
 .nyx-company-paper {
@@ -1783,6 +1795,25 @@
 
 .nyx-card-enrroll-button:hover {
   background-color: #0D47A1;
+}
+
+.nyx-card-enrroll-select-label-lg {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 12px;
+}
+
+.nyx-enrolled-change-title {
+  color: #2196F3;
+  font-size: 18px;
+}
+
+.nyx-card-enrroll-select-lg {
+  width: 100%;
+  margin: 0 0 0.8rem 0;
+  border: none;
+  color: rgba(0, 0, 0, 0.54);
+  outline: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.54);
 }
 
 .nyx-card-enrroll-button-sm {

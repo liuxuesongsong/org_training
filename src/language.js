@@ -136,7 +136,7 @@ const Language = {
                         },
                         "department": "部门",
                         "duty": "职务",
-                        "wechat": "微信",
+                        "wechat": "微信/QQ",
                         "edu": "学历",
                         "working_time": "从业时间",
                         "total_amount": "累计项目总金额",
