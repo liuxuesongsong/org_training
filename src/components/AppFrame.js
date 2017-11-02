@@ -760,7 +760,11 @@ class AppFrame extends Component {
                 </TabContainer>
               </SwipeableViews>
               <div className="nyx-notice-login">
+<<<<<<< HEAD
               <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
+=======
+              <h3 style={{ color: "#FFFFFF" }}>说明</h3>
+>>>>>>> f8cf56a9a6aafc68c96b8aefb9809780e372d785
               <div className="nyx-login-window-acctention">
                 已经做过临时登记的企业用户以单位全称和初始密码进行登陆
               </div>
