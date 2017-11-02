@@ -51,6 +51,9 @@ class Clazz extends Component {
         selected: {},
         search_input: "",
 
+        // 下载相关
+        filename: "",
+
         // 提示状态
         alertOpen: false,
         alertType: "notice",
@@ -284,11 +287,11 @@ class Clazz extends Component {
                                 var train_endtime = Number(document.getElementById("train_endtime").value);
                                 var class_code = document.getElementById("class_code").value;
                                 this.modifyClazz(this.state.selected.id, {
-                                    class_head:class_head,
-                                    teacher:teacher,
-                                    address:address,
+                                    class_head: class_head,
+                                    teacher: teacher,
+                                    address: address,
                                     train_starttime: train_starttime,
-                                    train_endtime:train_endtime,
+                                    train_endtime: train_endtime,
                                     class_code: class_code
                                 })
                                 this.handleRequestClose()
@@ -445,11 +448,11 @@ class Clazz extends Component {
         downloadData.push(tableContent.join('\n'));
         this.setState({
             // download_num: message.count,
-            // filename: Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count,
+            filename: Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + result.length,
             // showRechargeInfo: "download"
         })
-        // this.state.filename = Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count;
-        // this.state.download_data = downloadData;
+        this.state.download_data = downloadData;
+        this.state.filename = Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count;
         this.handleDownloadFile();
 
     }
