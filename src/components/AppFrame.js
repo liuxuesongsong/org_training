@@ -759,7 +759,8 @@ class AppFrame extends Component {
                   {this.RegisterView()}
                 </TabContainer>
               </SwipeableViews>
-              <h3 style={{ color: "#FFFFFF" }}>说明</h3>
+              <div className="nyx-notice-login">
+              <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
               <div className="nyx-login-window-acctention">
                 已经做过临时登记的企业用户以单位全称和初始密码进行登陆
               </div>
@@ -768,6 +769,7 @@ class AppFrame extends Component {
               </div>
               <div className="nyx-login-window-acctention">
                 系统维护电话：010-51527580
+              </div>
               </div>
             </div> : this.LoginView()}
         </div>
