@@ -131,6 +131,8 @@ export function getData(router, json, callback = null, args = {}) {
       }
     }
   }
+  let e = new Event("loading");
+  dispatchEvent(e);
   fetch(router.url, {
     method: 'POST',
     mode: 'cors',
@@ -141,6 +143,8 @@ export function getData(router, json, callback = null, args = {}) {
     },
     body: JSON.stringify(json)
   }).then(function status(response) {
+    let e = new Event("dataOnload");
+    dispatchEvent(e);
     if (response.status >= 200 && response.status < 300) {
       return Promise.resolve(response);
     }
@@ -154,7 +158,6 @@ export function getData(router, json, callback = null, args = {}) {
       if (data.code === 10099) {
         logout();
       }
-      // sessionStorage.logged = false;
       callback(router, data, args);
     }
     return data;

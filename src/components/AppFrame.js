@@ -49,6 +49,7 @@ import Finance from '../pages/com/infos/finance.paper'
 import Admin from '../pages/com/infos/admin.paper'
 
 import CommonAlert from './CommonAlert';
+import BeingLoading from './BeingLoading';
 
 function getTitle(routes) {
   for (let i = routes.length - 1; i >= 0; i -= 1) {
@@ -166,6 +167,8 @@ class AppFrame extends Component {
     findPassword: false,
     phone_code: "",
 
+    beingLoading: false,
+
     // 提示状态
     alertOpen: false,
     alertType: NOTICE,
@@ -197,6 +200,16 @@ class AppFrame extends Component {
       }
 
     }
+    addEventListener("loading", (e) => {
+      this.setState({
+        beingLoading: true
+      })
+    })
+    addEventListener("dataOnload", () => {
+      this.setState({
+        beingLoading: false
+      })
+    })
     addEventListener("session_invalid", (e) => {
       console.log("123")
       // sessionStorage.logged = false;
@@ -839,6 +852,9 @@ class AppFrame extends Component {
           content={this.state.alertContent}
           action={this.state.alertAction}>
         </CommonAlert>
+        {this.state.beingLoading ?
+          <BeingLoading /> : ''
+        }
       </div>
     );
   }

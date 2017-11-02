@@ -509,7 +509,6 @@ class Clazz extends Component {
         }
     }
 
-
     onRowsDeselected = (rowArray) => {
         var tranform = new Set(this.state.selectedStudentID);
         this.state.selectedStudentID = [...tranform];
