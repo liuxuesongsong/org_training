@@ -51,10 +51,10 @@
         if (true) {
           // TODO 如果IE版本大于 X
           var bundle = document.createElement("script");
-          bundle.src = "/build/dll.bundle.js";
+          bundle.src = "/build/bundle.js";
           document.getElementById("app").appendChild(bundle);
           var dll = document.createElement("script");
-          dll.src = "/build/bundle.js";
+          dll.src = "/build/dll.bundle.js";
           document.getElementById("app").appendChild(dll);
         } else {
           // TODO 调用你们低版本的js
