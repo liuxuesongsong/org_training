@@ -208,6 +208,13 @@ class AppFrame extends Component {
     })
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.findPassword === false && nextState.findPassword === true) {
+      document.getElementById("login_password" + this.state.index).value = "";
+      document.getElementById("check_code" + this.state.index).value = "";
+    }
+  }
+
   getRoutes = () => {
     var cb = (route, message, arg) => {
       try {
