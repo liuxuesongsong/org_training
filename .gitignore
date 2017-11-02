@@ -7,3 +7,6 @@
 /css/.sass-cache
 /.sass-cache
 src/config.js
+src/config.js
+css/style.css
+css/style.css.map

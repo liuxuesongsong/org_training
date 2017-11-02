@@ -1202,11 +1202,13 @@
 .nyx {
   font-size: 12px;
   line-height: 1.5;
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+ "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
 }
 
 .nyx a, .nyx h1, .nyx h2, .nyx h3, .nyx h4, .nyx h5, .nyx h6, .nyx p, .nyx div, .nyx span, .nyx input, .nyx label {
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+ "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
 }
 
 .react-grid-HeaderCell {
