@@ -26,7 +26,7 @@ import BackIcon from 'material-ui-icons/ArrowBack';
 
 import StudentCard from '../studentCard.js';
 
-import { initCache, getData,getCity, getRouter, getStudent, getCache } from '../../../utils/helpers';
+import { initCache, getData,getCity,getCourse, getRouter, getStudent, getCache } from '../../../utils/helpers';
 import {
     UNROLL_STUDENT,DATA_TYPE_BASE, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
@@ -44,6 +44,8 @@ const Style = {
 class Enrolled extends Component {
     state = {
         course: "0",
+        course_id:"",
+        a_id:"",
         c_area_id: "",
         fkenrolled_height: 1,
         unarranged_height: 1,
@@ -87,9 +89,10 @@ class Enrolled extends Component {
         window.currentPage.updateStudents();
         if (getCache(DATA_TYPE_BASE) !== undefined) {
             var data = getCache(DATA_TYPE_BASE);
-            var currentCity = getCity(data.c_area_id);
+           // var currentCity = getCity(data.c_area_id);
+           // console.log(data.c_area_id)
             window.currentPage.setState({
-                c_area_id: currentCity,
+                c_area_id: data.c_area_id,
             });
             
         }
@@ -99,9 +102,11 @@ class Enrolled extends Component {
         let fkStudents = [], newStudents = [], unarragedStudents = [], arrangedStudents = [];
         for (var i = 0; i < this.state.students.length; i++) {
             if (this.state.students[i].is_inlist == STATUS_FK_UNDO) {
+                
                 fkStudents.push(this.state.students[i]);
             }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_UNDO) {
+                console.log(this.state.students[i]);
                 newStudents.push(this.state.students[i]);
             }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID) {
@@ -165,8 +170,6 @@ class Enrolled extends Component {
                 key={p}
                 id={"new_" + p}
                 label={newStudentInput[p]}
-                defaultValue={""}
-                helperText={"*必填"}
             />)
         }
         return components
@@ -225,7 +228,8 @@ class Enrolled extends Component {
         var obj = {
             name: document.getElementById("student_name").value,
             identity_card: document.getElementById("licence.code").value,
-            course_id: Number(this.state.course),
+            course_id:document.getElementById("student_course_id").value,
+            area_id:document.getElementById("new_area_id").value,
             register: document.getElementById("register").value,
             department: document.getElementById("department").value,
             duty: document.getElementById("duty").value,
@@ -276,21 +280,21 @@ class Enrolled extends Component {
                     添加学员
                 </DialogTitle>
                 <DialogContent>
-                    <div style={{paddingTop:0}} className="nyx-form">
+                    <div style={{paddingTop:20}} className="nyx-form">
                     <TextField
                  className="nyx-form-div nyx-must-content"
                 key={"name"}
                  id={"new_name"}
                 label={Lang[window.Lang].pages.com.students.input.name}
-                defaultValue={""}
+                
                
             />
             <TextField
-                 className="nyx-form-div nyx-must-content"
+                 className="nyx-form-div"
                 key={"register"}
                  id={"new_register"}
                 label={Lang[window.Lang].pages.com.students.input.register}
-                defaultValue={""}
+                
             />
                         <div>
                             {/* <p
@@ -306,25 +310,44 @@ class Enrolled extends Component {
                         >
                             {this.newStudentCity()}
                         </select> */}
-                        <TextField
+                        {/* <TextField
                  className="nyx-form-div"
                 key={"area_id"}
                  id={"new_area_id"}
                  value={this.state.c_area_id}
-                 
+                 disabled
                 label={Lang[window.Lang].pages.com.students.select.area_id}
                
-            />
+            /> */}
+            
 
                         <div className="nyx-info-select-div">
                             <p className="nyx-info-select-label">中项或高项</p>
                         <select
-                            className="nyx-info-select"
+                            className="nyx-info-select-lg"
                             id="new_course_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                         >
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
+                        </select>
+                        </div>
+                        <div className="nyx-info-select-div">
+                            <p className="nyx-info-select-label">培训城市</p>
+                        <select
+                            className="nyx-info-select-lg"
+                            id="new_area_id"
+                            disabled
+                            value={this.state.c_area_id === null ? "" : this.state.c_area_id}
+                                onChange={(e) => {
+                                    this.state.c_area_id = Number(e.target.value);
+                                    this.setState({
+                                        c_area_id: this.state.c_area_id
+                                    });
+                                }}
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                        >
+                        {this.newStudentCity()}
                         </select>
                         </div>
                         <TextField
@@ -334,6 +357,7 @@ class Enrolled extends Component {
                 label={Lang[window.Lang].pages.com.students.input.mobile}
                 defaultValue={""}
             />
+            
             <TextField
                  className="nyx-form-div nyx-must-content"
                 key={"mail"}
@@ -342,41 +366,52 @@ class Enrolled extends Component {
                 defaultValue={""}
               
             />
-            <TextField
+            <div style={{float:"left"}} className="nyx-info-select-div">
+                            <p className="nyx-info-select-label">证件类型</p>
+                        <select
+                            className="nyx-info-select-lg"
+                            id="new_id_type"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                        >
+                            <option value={"身份证"}>{"身份证"}</option>
+                            <option value={"护照"}>{"护照"}</option>
+                        </select>
+                        </div>
+            {/* <TextField
                  className="nyx-form-div nyx-must-content"
                 key={"id_type"}
                  id={"new_id_type"}
                 label={Lang[window.Lang].pages.com.students.input.id_type}
                 defaultValue={""}
                 
-            />
+            /> */}
             <TextField
                  className="nyx-form-div nyx-must-content"
                 key={"identity_card"}
                  id={"new_identity_card"}
                 label={Lang[window.Lang].pages.com.students.input.identity_card}
-                defaultValue={""}
+                
             />
             <TextField
                  className="nyx-form-div"
                 key={"department"}
                  id={"new_department"}
                 label={Lang[window.Lang].pages.com.students.input.department}
-                defaultValue={""}
+               
             />
             <TextField
                  className="nyx-form-div"
                 key={"duty"}
                  id={"new_duty"}
                 label={Lang[window.Lang].pages.com.students.input.duty}
-                defaultValue={""}
+                
             />
             <TextField
                  className="nyx-form-div"
                 key={"wechat"}
                  id={"new_wechat"}
                 label={Lang[window.Lang].pages.com.students.input.wechat}
-                defaultValue={""}
+                
             />
             <div className="nyx-remark">
                 <h4>备注栏:</h4>
@@ -390,7 +425,7 @@ class Enrolled extends Component {
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        <Button style={{background:"$blue",color:"$white"}}
+                        <Button style={{backgroundColor:"#2196F3",color:"#FFF",marginRight:"1rem"}}
                             onClick={() => {
                                  
                                  if (document.getElementById("new_name").value === "") {
@@ -430,7 +465,7 @@ class Enrolled extends Component {
                         >
                             {Lang[window.Lang].pages.main.certain_button}
                         </Button>
-                        <Button
+                        <Button style={{backgroundColor:"rgba(0, 0, 0, 0.12)"}}
                             onClick={() => {
                                 this.handleRequestClose()
                             }}
@@ -482,8 +517,9 @@ class Enrolled extends Component {
 
 
     handleChangeCourse = (event, value) => {
-        this.setState({ course: value });
+        this.setState({ course_id: value });
     };
+    
     handleChangeCity = (event, value) => {
         this.setState({ course: value });
     };
@@ -496,7 +532,7 @@ class Enrolled extends Component {
                     "第二步：点击【报名】进行培训报名"}</p></div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
-                        <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
+                        <div style={{  color:"#2196F3", marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
                             {"已临时登记的报名人员信息及管理"} <i
                                 onClick={() => {
                                     if (this.state.fkenrolled_height == 0) {
@@ -514,6 +550,7 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_FK}
                                     key={student.id}
+                                    
                                     name={student.name === null ? "" : student.name.toString()}
                                     mobile={student.mobile === null ? "" : student.mobile.toString()}
                                     email={student.mail === null ? "" : student.mail.toString()}
@@ -525,7 +562,7 @@ class Enrolled extends Component {
                                         this.toggleDrawer(true)()
                                     }, () => {
                                         this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
+                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
                                             () => {
                                                 this.erollStudent(student.id);
                                                 this.closeNotice();
@@ -554,7 +591,7 @@ class Enrolled extends Component {
                     }</div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
-                        <div style={{ marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
+                        <div style={{ color:"#2196F3", marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
                             {Lang[window.Lang].pages.com.enrolled.unenrolled} <i
                                 onClick={() => {
                                     if (this.state.unenrolled_height == 0) {
@@ -585,6 +622,7 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_ENROLL}
                                     key={student.id}
+                                   
                                     name={student.name === null ? "" : student.name.toString()}
                                     mobile={student.mobile === null ? "" : student.mobile.toString()}
                                     email={student.mail === null ? "" : student.mail.toString()}
@@ -596,7 +634,7 @@ class Enrolled extends Component {
                                         this.toggleDrawer(true)()
                                     }, () => {
                                         this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名", [
+                                        this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
                                             () => {
                                                 this.erollStudent(student.id);
                                                 this.closeNotice();
@@ -620,7 +658,7 @@ class Enrolled extends Component {
                 </Paper>
                 <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
-                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                        <div style={{ color:"#2196F3", marginBottom: "1rem" }} className="nyx-head-name">
                             {Lang[window.Lang].pages.com.enrolled.unarrange} <i
                                 onClick={() => {
                                     if (this.state.unarranged_height == 0) {
@@ -637,6 +675,7 @@ class Enrolled extends Component {
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
+                                   
                                     name={student.name === null ? "" : student.name.toString()}
                                     mobile={student.mobile === null ? "" : student.mobile.toString()}
                                     email={student.mail === null ? "" : student.mail.toString()}
@@ -661,7 +700,7 @@ class Enrolled extends Component {
                 </Paper>
                 <Paper style={{ padding: 0 }} className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
-                        <div style={{ marginBottom: "1rem" }} className="nyx-head-name">
+                        <div style={{ color:"#2196F3", marginBottom: "1rem" }} className="nyx-head-name">
                             {Lang[window.Lang].pages.com.enrolled.arranged} <i
                                 onClick={() => {
                                     if (this.state.arranged_height == 0) {
@@ -682,6 +721,7 @@ class Enrolled extends Component {
                                             <StudentCard
                                                 type={CARD_TYPE_ARRANGE}
                                                 key={student.id}
+                                                
                                                 name={student.name === null ? "" : student.name.toString()}
                                                 mobile={student.mobile === null ? "" : student.mobile.toString()}
                                                 email={student.mail === null ? "" : student.mail.toString()}
@@ -717,6 +757,7 @@ class Enrolled extends Component {
                                                 <StudentCard
                                                     type={CARD_TYPE_KNOW}
                                                     key={student.id}
+                                                   
                                                     name={student.name === null ? "" : student.name.toString()}
                                                     mobile={student.mobile === null ? "" : student.mobile.toString()}
                                                     email={student.mail === null ? "" : student.mail.toString()}
@@ -765,22 +806,60 @@ class Enrolled extends Component {
                     // onKeyDown={this.toggleDrawer(false)}
                     >
                         <Paper style={{ margin: 10, width: 800, float: "left", boxShadow: "none", fontSize: "12px" }} elevation={4}>
-                            <Typography type="headline" component="h3">
+                            <h2 className="nyx-enrolled-change-title">
                                 {Lang[window.Lang].pages.com.students.base_info}
-                            </Typography>
+                            </h2>
                             <TextField
                                 id="student_name"
                                 label={Lang[window.Lang].pages.com.students.name}
                                 defaultValue={this.state.selected.name ? this.state.selected.name : ""}
                                 fullWidth
+                                disabled={this.state.selected.a_id === -1 ? true : false}
                             />
+                            {console.log("identity_card")}
+                            {console.log(this.state.selected.identity_card)}
                             <TextField
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
+                                
                                 defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card : ""}
+                                disabled={this.state.selected.a_id === -1 ? true : false}
                                 fullWidth>
                             </TextField>
-                            <FormControl required>
+                           <p className="nyx-card-enrroll-select-label-lg">
+                               中项或高项
+                           </p>
+                            <select
+                                className="nyx-card-enrroll-select-lg"
+                                id={"student_course_id"}
+                                value={this.state.selected.course_id === null ? "" : this.state.selected.course_id}
+                                onChange={(e, value) => {
+                                    course_id = Number(e.target.value);                                    
+                                    }}
+                                    disabled={this.state.selected.a_id === -1 ? true : false}
+                            >
+                                <option value={1}>{"项目经理"}</option>
+                                <option value={2}>{"高级项目经理"}</option>
+                                
+                            </select>
+                            {console.log(this.state.selected.course_id)}
+                            {console.log(this.state.selected.c_area_id)}
+                            <p className="nyx-card-enrroll-select-label-lg">培训城市</p>
+                        <select
+                            className="nyx-card-enrroll-select-lg"
+                            id="new_area_id"
+                            disabled
+                            value={this.state.selected.area_id === null ? "" : this.state.selected.area_id}
+                            onChange={(e, value) => {
+                                    area_id = Number(e.target.value);                                    
+                                    }}
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                        >
+                        {this.newStudentCity()}
+                        </select>
+                       
+
+                            {/* <FormControl required>
                                 <FormLabel>{"等级"}</FormLabel>
                                 <RadioGroup
                                     style={{ display: "block" }}
@@ -794,17 +873,18 @@ class Enrolled extends Component {
                                     <LabelRadio value={"1"} label="项目经理" />
                                     <LabelRadio value={"2"} label="高级项目经理" />
                                 </RadioGroup>
-                            </FormControl>
+                            </FormControl> */}
                             <TextField
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
                                 defaultValue={this.state.selected.register ? this.state.selected.register : ""}
+                                disabled={this.state.selected.a_id === -1 ? true : false}
                                 fullWidth>
                             </TextField>
 
-                            <Typography type="headline" component="h3">
+                            <h2 className="nyx-enrolled-change-title" style={{marginTop:20}}>
                                 {Lang[window.Lang].pages.com.students.personal_info.title}
-                            </Typography>
+                            </h2>
                             <TextField
                                 id="department"
                                 label={Lang[window.Lang].pages.com.students.personal_info.department}
@@ -836,8 +916,8 @@ class Enrolled extends Component {
                                 fullWidth
                             />
                             <Button
-                                color="primary"
-                                style={{ margin: 10, float: "right" }}
+                                
+                                style={{backgroundColor:"#2196f3", color:"#FFF",margin: 10, float: "right" }}
                                 onClick={(e) => {
                                     this.modifyStudent(e)
                                 }}>

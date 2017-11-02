@@ -264,6 +264,7 @@
     
     .nyx-form-div{
         width: 50%;
+        margin: 0.5rem 0rem;
         display: inline-block;
     div{
         width: 98%;
@@ -278,20 +279,28 @@
     }
     }
     .nyx-info-select-div{
-        width: 49%;
+        width: 50%;
+        margin: 0.5rem 0rem;
         float: right
     }
-    .nyx-info-select{
-        width: 99%;
-        margin-top: 1.06rem;
+    .nyx-info-select,.nyx-info-select-lg{
+        width: 49%;
+        margin-right: 1%;
+        margin-top: 0.75rem;
         border: none;
         color: rgba(0, 0, 0, 0.54);
         outline: none;
         border-bottom: 1px solid rgba(0, 0, 0, 0.54);
     }
+    .nyx-info-select-lg{
+        width: 98%;
+    }
     .nyx-info-select-label{
         margin: 0;
         font-size: 12px;
+        width: 50%;
+        display: inline-block;
+    
     }
     
 
@@ -368,6 +377,9 @@
         }
         }
        .nyx-info-select,.nyx-info-select-label{
+            width: 100%;
+        }
+        .nyx-info-select-div{
             width: 100%;
         }
     } 

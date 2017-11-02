@@ -320,6 +320,12 @@ class Home extends Component {
                         </div>
                     </List>
                 </Paper>
+                
+                <div className="nyx-notice-button">
+                    <div  className="nyx-notice-title">报名流程</div>
+                    <div className="nyx-notice-box">
+                    </div>
+                </div>
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

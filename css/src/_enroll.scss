@@ -19,7 +19,22 @@
         background-color: $blue900;
     }
 }
-
+.nyx-card-enrroll-select-label-lg{
+    color: rgba(0, 0, 0, 0.54);
+    font-size: 12px;
+}
+.nyx-enrolled-change-title{
+    color: $blue;
+    font-size: 18px;
+}
+.nyx-card-enrroll-select-lg{
+    width: 100%;
+    margin: 0 0 0.8rem 0;
+    border: none;
+    color: rgba(0, 0, 0, 0.54);
+    outline: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+}
 .nyx-card-enrroll-button-sm{
     color: #2196F3;
     display: inline-block;
@@ -47,6 +62,3 @@
     } 
 }
 
-.nyx-notice:last-child{
-    
-}
