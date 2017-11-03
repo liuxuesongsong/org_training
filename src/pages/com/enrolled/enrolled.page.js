@@ -529,7 +529,9 @@ class Enrolled extends Component {
             <div style={{width:"800px"}} className={'nyx-page'}>
                 <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】" +
                     "第一步：请在下表中点击【修改】补充完整人员信息。" +
-                    "第二步：点击【报名】进行培训报名"}</p></div>
+                    "第二步：点击【报名】进行培训报名"}</p>
+                    <p style={{marginLeft:"0.4rem"}}>{"特别提醒:在“报名”提交前必须填完“企业相关信息”。"}</p>
+                    </div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{  color:"#2196F3", marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -562,6 +564,18 @@ class Enrolled extends Component {
                                         this.toggleDrawer(true)()
                                     }, () => {
                                         this.state.selectedStudentId = student.id;
+                                        if (getCache("base").c_area_id === 0) {
+                                            this.popUpNotice("alert", 0, "请先补全企业信息");
+                                            return
+                                        }else if(getCache("base").name === ""){
+                                            this.popUpNotice("alert", 0, "请先补全企业信息");
+                                            return
+                                        }else if(getCache("base").mobile === ""){
+                                            this.popUpNotice("alert", 0, "请先补全企业信息");
+                                            return
+                                        }
+
+
                                         this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
                                             () => {
                                                 this.erollStudent(student.id);
@@ -588,7 +602,9 @@ class Enrolled extends Component {
                     {"【未临时登记的项目经理】" +
                         "第一步：请在下表中点击【添加】新增人员，输入完整信息。" +
                         "第二步：点击【报名】进行报名"
-                    }</div>
+                    }
+                    <p style={{marginLeft:"0.4rem"}}>{"特别提醒:在“报名”提交前必须填完“企业相关信息”。"}</p>
+                    </div>
                 <Paper className={'nyx-paper nyx-enroller-paper'}>
                     <List style={{ padding: 0 }}>
                         <div style={{ color:"#2196F3", marginBottom: "1rem", position: "relative" }} className="nyx-head-name">
@@ -604,7 +620,11 @@ class Enrolled extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                             <Button style={{ position: "absolute", right: "28px", top: "0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                                 onClick={() => {
+                                    console.log("哈哈哈哈");
                                     if (getCache("base").c_area_id === 0) {
+                                        this.popUpNotice("alert", 0, "请先补全企业信息");
+                                        return
+                                    }else if(getCache("base").name === ""){
                                         this.popUpNotice("alert", 0, "请先补全企业信息");
                                         return
                                     }
