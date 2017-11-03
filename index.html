@@ -12,7 +12,7 @@
   <link href="/css/main.css" rel="stylesheet" />
 </head>
 
-<body><!--[if IE]-->请误使用IE浏览器访问本网站<!--[endif]-->
+<body>
   <div id="load">
     <div class="mask">
       <div class="spinner">
@@ -48,17 +48,6 @@
       window.onload = function () {
         var loading = document.getElementById("load");
         loading.parentNode.removeChild(loading);
-        if (true) {
-          // TODO 如果IE版本大于 X
-          var bundle = document.createElement("script");
-          bundle.src = "/build/bundle.js";
-          document.getElementById("app").appendChild(bundle);
-          var dll = document.createElement("script");
-          dll.src = "/build/dll.bundle.js";
-          document.getElementById("app").appendChild(dll);
-        } else {
-          // TODO 调用你们低版本的js
-        }
       }
     </script>
   </div>
