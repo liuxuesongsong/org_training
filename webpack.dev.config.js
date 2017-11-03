@@ -11,7 +11,11 @@ module.exports = Object.assign({}, webpackBaseConfig, {
   cache: true,
   devtool: 'inline-source-map',
   entry: {
+    polyfill: [
+      "es5-shim", "es5-shim/es5-sham", 'babel-polyfill',
+    ],
     main: [
+      
       'react-hot-loader/index',
       'eventsource-polyfill', // hot reloading in IE
       'react-hot-loader/patch',
