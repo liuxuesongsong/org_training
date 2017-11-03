@@ -525,7 +525,7 @@ class Enrolled extends Component {
     render() {
         return (
             <div style={{width:"800px"}} className={'nyx-page'}>
-                <div className={'nyx-tips'}><p>{"【已临时登记的项目经理】" +
+                <div className={'nyx-tips nyx-display-none'}><p>{"【已临时登记的项目经理】" +
                     "第一步：请在下表中点击【修改】补充完整人员信息。" +
                     "第二步：点击【报名】进行培训报名"}</p>
                     <p style={{marginLeft:"0.4rem"}}>{"特别提醒:在“报名”提交前必须填完“企业相关信息”。"}</p>
@@ -596,7 +596,7 @@ class Enrolled extends Component {
                         </div>
                     </List>
                 </Paper>
-                <div className={'nyx-tips'}>
+                <div className={'nyx-tips nyx-display-none'}>
                     {"【未临时登记的项目经理】" +
                         "第一步：请在下表中点击【添加】新增人员，输入完整信息。" +
                         "第二步：点击【报名】进行报名"

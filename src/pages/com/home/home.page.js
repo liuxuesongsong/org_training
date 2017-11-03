@@ -321,7 +321,7 @@ class Home extends Component {
                     </List>
                 </Paper>
                 
-                <div className="nyx-notice-button">
+                <div className="nyx-notice-button nyx-display-none">
                     <div  className="nyx-notice-title">报名流程</div>
                     <div className="nyx-notice-box">
                     </div>

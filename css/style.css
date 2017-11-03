@@ -1330,6 +1330,31 @@
   color: #ffffff;
 }
 
+@media only screen and (max-width: 960px) {
+  .nyx-login-window:before {
+    position: absolute;
+    font-size: 2.5rem;
+    margin-top: -2.5em;
+    margin-left: -6em;
+    color: #fff;
+    content: " ";
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+  }
+  .nyx-login-window:after {
+    position: absolute;
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    margin-left: 8em;
+    bottom: 0;
+    color: #fff;
+    content: " ";
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.3);
+  }
+  .nyx-display-none {
+    display: none;
+  }
+}
+
 .nyx-topbar {
   height: 64px;
 }

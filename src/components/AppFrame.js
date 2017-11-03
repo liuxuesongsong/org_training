@@ -585,7 +585,7 @@ class AppFrame extends Component {
               // console.log(account)
               // var code = document.getElementById("phone_code").value;
               var apptype = APP_TYPE_COMPANY;
-              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.code, }, cb, {});
+              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, {});
             }}
           >
             {"登录"}
@@ -769,7 +769,7 @@ class AppFrame extends Component {
                   {this.RegisterView()}
                 </TabContainer>
               </SwipeableViews>
-              <div className="nyx-notice-login">
+              <div className="nyx-notice-login nyx-display-none">
               <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
               <div className="nyx-login-window-acctention">
                 已经做过临时登记的企业用户以单位全称和初始密码进行登陆
@@ -831,8 +831,17 @@ class AppFrame extends Component {
                   onClick={() => {
                     window.currentPage.fresh();
                   }}>
-                  <Refresh />
+                  <i className="glyphicon glyphicon-refresh"></i>
+                </IconButton><IconButton
+                color="contrast"
+                  onClick={() => {
+                    
+                    this.logout()
+                  }}>
+                  <i className="glyphicon glyphicon-log-out"></i>
                 </IconButton>
+
+               
               </Toolbar>
             </AppBar>
             <AppDrawer
