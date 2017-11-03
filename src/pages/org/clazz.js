@@ -156,7 +156,7 @@ class Clazz extends Component {
     }
 
     modifyClazz = (id, clazz) => {
-        console.log(this.state.selected)
+       
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.fresh();

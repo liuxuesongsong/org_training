@@ -211,7 +211,7 @@ class AppFrame extends Component {
       })
     })
     addEventListener("session_invalid", (e) => {
-      console.log("123")
+     
       // sessionStorage.logged = false;
       // sessionStorage.apptype = APP_TYPE_UNLOGIN;
       // sessionStorage.session = "";
@@ -297,7 +297,6 @@ class AppFrame extends Component {
       this.popUpNotice(NOTICE, 0, message.msg);
     }
 
-    console.log({ account: account, password: password, type: APP_TYPE_COMPANY });
     getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, { account: account, password: password });
   }
 
@@ -323,7 +322,6 @@ class AppFrame extends Component {
         }
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
-        console.log(message.msg)
         this.popUpNotice(NOTICE, 0, message.msg);
       }
     }
@@ -581,7 +579,6 @@ class AppFrame extends Component {
                   this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
                   // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
                 } else {
-                  console.log(message.msg)
                   this.popUpNotice(NOTICE, 0, message.msg);
                 }
               }

@@ -367,7 +367,7 @@
     float: right;
     line-height: 1.5rem;
 }
-@media screen and (min-width: 320px) and (max-width: 1280px){
+@media only screen and (max-width:960px ){
     .nyx-form{
         .nyx-form-div{
            width: 100%;

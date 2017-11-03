@@ -540,14 +540,13 @@ class Info extends Component {
                                     });
                                 }}>
                             </TextField>
+                            <div style={{float:"none",display:"inline-block"}} className="nyx-info-select-div">
                             <p
                             className="nyx-info-select-label"
                             >所在地区</p>
-                            <p
-                            className="nyx-info-select-label"
-                            >企业资质等级</p>
+                            
                             <select
-                                className="nyx-info-select"
+                                className="nyx-info-select-lg"
                                 id="input_c_area_id"
                                 label={Lang[window.Lang].pages.org.clazz.info.area}
                                 value={this.state.base.c_area_id === null ? "" : this.state.base.c_area_id}
@@ -562,8 +561,13 @@ class Info extends Component {
                                     return <option key={area.id} value={area.id}>{area.area_name}</option>
                                 })}
                             </select>
+                            </div>
+                            <div style={{float:"none",display:"inline-block"}} className="nyx-info-select-div">
+                            <p
+                            className="nyx-info-select-label"
+                            >企业资质等级</p>
                             <select
-                                className="nyx-info-select"
+                                className="nyx-info-select-lg"
                                 id="input_c_level"
                                 label={"企业资质等级"}
                                 value={this.state.base.c_level === null ? "" : this.state.base.c_level}
@@ -580,6 +584,7 @@ class Info extends Component {
                                 <option value={4}>{"4级"}</option>
                                 <option value={5}>{"无等级"}</option>
                             </select>
+                            </div>
                             <Button
                                 raised
                                 style={{position:"relative",
@@ -616,8 +621,6 @@ class Info extends Component {
                                         "c_area_id": c_area_id === "" ? null : Number(c_area_id),
                                         "c_level": c_level === "" ? null : Number(c_level),
                                     }
-                                    console.log(obj);
-
                                     getData(getRouter(UPDATE_COMPANY), {
                                         session: sessionStorage.session, company: obj
                                     }, cb, { self: this, data: obj });
@@ -701,7 +704,6 @@ class Info extends Component {
                                     var receiver = document.getElementById("input_receiver").value;
                                     var district = document.getElementById("input_district").value;
                                     var receive_phone = document.getElementById("input_receive_phone").value;
-                                    console.log(zip_code);
                                     var obj = {
                                         receiver: receiver === "" ? null : receiver,
                                         district: district === "" ? null : district,
@@ -709,8 +711,7 @@ class Info extends Component {
                                         zip_code: zip_code === "" ? null : zip_code
                                         
                                     }
-                                    console.log(obj);
-
+                                  
                                     getData(getRouter(UPDATE_COMPANY), {
                                         session: sessionStorage.session, company: obj
                                     }, cb, { self: this, data: obj });
@@ -827,8 +828,7 @@ class Info extends Component {
                                         c_address: c_address === "" ? null : c_address,
                                         financial_call: financial_call === "" ? null : financial_call,
                                     }
-                                    console.log(obj);
-
+                                   
                                     getData(getRouter(UPDATE_COMPANY), {
                                         session: sessionStorage.session, company: obj
                                     }, cb, { self: this, data: obj });

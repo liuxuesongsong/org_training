@@ -106,7 +106,6 @@ class Enrolled extends Component {
                 fkStudents.push(this.state.students[i]);
             }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_UNDO) {
-                console.log(this.state.students[i]);
                 newStudents.push(this.state.students[i]);
             }
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID) {
@@ -432,7 +431,6 @@ class Enrolled extends Component {
                                     this.popUpNotice(NOTICE, 0, "您没有输入姓名")
                                     return
                                   } else if (document.getElementById("new_mobile").value === "") {
-                                      console.log("您没有输入手机");
                                     this.popUpNotice(NOTICE, 0, "您没有输入手机")
                                     return
                                   }else if (document.getElementById("new_mail").value === "") {
@@ -620,7 +618,6 @@ class Enrolled extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                             <Button style={{ position: "absolute", right: "28px", top: "0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                                 onClick={() => {
-                                    console.log("哈哈哈哈");
                                     if (getCache("base").c_area_id === 0) {
                                         this.popUpNotice("alert", 0, "请先补全企业信息");
                                         return
@@ -836,8 +833,6 @@ class Enrolled extends Component {
                                 fullWidth
                                 disabled={this.state.selected.a_id === -1 ? true : false}
                             />
-                            {console.log("identity_card")}
-                            {console.log(this.state.selected.identity_card)}
                             <TextField
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
@@ -852,18 +847,13 @@ class Enrolled extends Component {
                             <select
                                 className="nyx-card-enrroll-select-lg"
                                 id={"student_course_id"}
-                                value={this.state.selected.course_id === null ? "" : this.state.selected.course_id}
-                                onChange={(e, value) => {
-                                    course_id = Number(e.target.value);                                    
-                                    }}
+                                defaultValue={this.state.selected.course_id ? this.state.selected.course_id : ""}
                                     disabled={this.state.selected.a_id === -1 ? true : false}
                             >
                                 <option value={1}>{"项目经理"}</option>
                                 <option value={2}>{"高级项目经理"}</option>
                                 
                             </select>
-                            {console.log(this.state.selected.course_id)}
-                            {console.log(this.state.selected.c_area_id)}
                             <p className="nyx-card-enrroll-select-label-lg">培训城市</p>
                         <select
                             className="nyx-card-enrroll-select-lg"
