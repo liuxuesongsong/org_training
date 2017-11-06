@@ -24,7 +24,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO } from '../../enum';
+import { DEL_TRAIN, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -50,6 +50,9 @@ class Clazz extends Component {
         onloading: false,
         selected: {},
         search_input: "",
+        search_area_id: null,
+        search_course_id: null,
+
 
         // 下载相关
         filename: "",
@@ -115,7 +118,7 @@ class Clazz extends Component {
     queryClazzStudents = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({ clazzStudents: message.data.students });
+                this.setState({ clazzStudents: message.data });
                 // this.handleMakeDownloadData(message.data.students)
             }
         }
@@ -156,7 +159,7 @@ class Clazz extends Component {
     }
 
     modifyClazz = (id, clazz) => {
-       
+
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.fresh();
@@ -587,21 +590,30 @@ class Clazz extends Component {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"地区" + ":" + getCity(this.state.queryCondition[k])}
-                        onRequestDelete={() => { this.state.queryCondition.delete(k) }}
+                        onRequestDelete={() => {
+                            delete(this.state.queryCondition[k]);
+                            this.setState({ queryCondition: this.state.queryCondition })
+                        }}
                     />
                 )
             } else if (k === "course_id") {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}
-                        onRequestDelete={() => { this.state.queryCondition.delete(k) }}
+                        onRequestDelete={() => {
+                            delete(this.state.queryCondition[k]);
+                            this.setState({ queryCondition: this.state.queryCondition })
+                        }}
                     />
                 )
             } else if (k === "company_name") {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"公司" + ":" + this.state.queryCondition[k]}
-                        onRequestDelete={() => { this.state.queryCondition.delete(k) }}
+                        onRequestDelete={() => {
+                            delete(this.state.queryCondition[k]);
+                            this.setState({ queryCondition: this.state.queryCondition })
+                        }}
                     />
                 )
             }
@@ -626,68 +638,40 @@ class Clazz extends Component {
                                 {Lang[window.Lang].pages.org.clazz.new}
                             </Button>
                         </ListSubheader>
-                        {this.state.clazzes.map(clazz =>
-                            <div key={clazz.id} className="nyx-clazz-card">
-                                <div className="nyx-card-body">
-                                    {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)}
-                                </div>
-                                {
-                                    this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
-                                        <CardActions className="nyx-card-action">
-                                            <Button
-                                                className="nyx-clazz-card-button"
-                                                dense
-                                                onClick={() => {
-                                                    this.setState({
-                                                        queryCondition: {},
-                                                        selected: {},
-                                                        stateSelected: false
-                                                    })
-                                                    this.createTrain(clazz.id);
-                                                }}>
-                                                {"确定"}
-                                            </Button>
-                                            <Button
-                                                className="nyx-clazz-card-button"
-                                                dense
-                                                onClick={() => {
-                                                    this.setState({
-                                                        queryCondition: {},
-                                                        selected: {},
-                                                        stateSelected: false
-                                                    })
-                                                    return
-                                                    this.state.selected = clazz;
-                                                    this.deleteClazz(clazz.id);
-                                                    this.popUpNotice(ALERT, 0, "删除该班级", [
-                                                        () => {
-                                                            this.removeStudent(clazz.id);
-                                                            this.closeNotice();
-                                                        }, () => {
-                                                            this.closeNotice();
-                                                        }]);
-                                                }}>
-                                                {"取消"}
-                                            </Button>
-                                        </CardActions>
-                                    </div> :
-                                        <div>
+                        {this.state.clazzes.map(
+                            clazz =>
+                                <div key={clazz.id} className="nyx-clazz-card">
+                                    <div className="nyx-card-body">
+                                        {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)}
+                                    </div>
+                                    {
+                                        this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
                                             <CardActions className="nyx-card-action">
-                                                <i
-                                                    className="glyphicon glyphicon-pencil"
+                                                <Button
+                                                    className="nyx-clazz-card-button"
+                                                    dense
                                                     onClick={() => {
-                                                        this.state.selected = clazz;
-                                                        // this.state.showInfo = true;
-                                                        this.setState({ openEditClazzDialog: true });
-                                                        {/* this.toggleDrawer(true)() */ }
+                                                        this.setState({
+                                                            queryCondition: {},
+                                                            selected: {},
+                                                            stateSelected: false
+                                                        })
+                                                        this.createTrain(clazz.id);
                                                     }}>
-                                                </i>
-                                                <i
-                                                    className="glyphicon glyphicon-trash"
+                                                    {"确定"}
+                                                </Button>
+                                                <Button
+                                                    className="nyx-clazz-card-button"
+                                                    dense
                                                     onClick={() => {
+                                                        this.setState({
+                                                            queryCondition: {},
+                                                            selected: {},
+                                                            stateSelected: false
+                                                        })
+                                                        return
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
-                                                        return
                                                         this.popUpNotice(ALERT, 0, "删除该班级", [
                                                             () => {
                                                                 this.removeStudent(clazz.id);
@@ -696,84 +680,77 @@ class Clazz extends Component {
                                                                 this.closeNotice();
                                                             }]);
                                                     }}>
-                                                </i>
-                                                <i
-                                                    className="glyphicon glyphicon-search"
-                                                    onClick={() => {
-                                                        this.queryClazzStudents(clazz.id);
-                                                        // this.state.selected = clazz;
-                                                        // this.state.showInfo = true;
-                                                        {/* this.toggleDrawer(true)() */ }
-                                                    }}>
-                                                </i>
-                                                <Button
-                                                    className="nyx-clazz-card-button"
-                                                    onClick={() => {
-
-                                                        this.state.selected = clazz;
-                                                        this.state.showStudents = true;
-                                                        this.state.queryCondition = {}
-                                                        this.state.queryCondition.course_id = clazz.course_id;
-                                                        this.state.queryCondition.area_id = clazz.area_id;
-                                                        this.setState({
-                                                            stateSelected: true
-                                                        })
-                                                        this.queryStudents(1, true);
-                                                    }}>
-                                                    {"添加学生"}
+                                                    {"取消"}
                                                 </Button>
                                             </CardActions>
-                                        </div>
-                                }
-                            </div>
-                        )}
-                        {this.state.clazzStudents.map(student => {
-                            <Card
-                                key={clazz.id}
-                                style={{ display: 'flex', }}>
-                                <div style={{
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                }}>
-                                    <CardContent>
-                                        <Typography>
-                                            {student.id}
-                                        </Typography>
-                                        <Typography component="h2">
-                                            {student.name}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.company_name}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.company_admin}
-                                        </Typography>
-                                        <Typography type="body1">
-                                            {student.mobile}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.mail}
-                                        </Typography>
-                                        <Typography component="p">
-                                            {student.time}
-                                        </Typography>
-                                    </CardContent>
-                                </div>
-                                <div>
-                                    <CardActions>
-                                        <Button
-                                            dense
-                                            onClick={() => {
+                                        </div> :
+                                            <div>
+                                                <CardActions className="nyx-card-action">
+                                                    <i
+                                                        className="glyphicon glyphicon-pencil"
+                                                        onClick={() => {
+                                                            this.state.selected = clazz;
+                                                            // this.state.showInfo = true;
+                                                            this.setState({ openEditClazzDialog: true });
+                                                            {/* this.toggleDrawer(true)() */ }
+                                                        }}>
+                                                    </i>
+                                                    <i
+                                                        className="glyphicon glyphicon-trash"
+                                                        onClick={() => {
+                                                            this.state.selected = clazz;
+                                                            this.deleteClazz(clazz.id);
+                                                            return
+                                                            this.popUpNotice(ALERT, 0, "删除该班级", [
+                                                                () => {
+                                                                    this.removeStudent(clazz.id);
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                        }}>
+                                                    </i>
+                                                    <i
+                                                        className="glyphicon glyphicon-search"
+                                                        onClick={() => {
+                                                            this.queryClazzStudents(clazz.id);
+                                                            // this.state.selected = clazz;
+                                                            // this.state.showInfo = true;
+                                                            {/* this.toggleDrawer(true)() */ }
+                                                        }}>
+                                                    </i>
+                                                    <Button
+                                                        className="nyx-clazz-card-button"
+                                                        onClick={() => {
 
-                                            }}>
-                                            {"删除"}
-                                        </Button>
-                                    </CardActions>
+                                                            this.state.selected = clazz;
+                                                            this.state.showStudents = true;
+                                                            this.state.queryCondition = {}
+                                                            this.state.queryCondition.course_id = clazz.course_id;
+                                                            this.state.queryCondition.area_id = clazz.area_id;
+                                                            this.setState({
+                                                                stateSelected: true
+                                                            })
+                                                            this.queryStudents(1, true);
+                                                        }}>
+                                                        {"添加学生"}
+                                                    </Button>
+                                                </CardActions>
+                                            </div>
+                                    }
                                 </div>
-                            </Card>
-                        })}
+                        )}
                     </List>
-                    <div className="nyx-left-bottom-paper">
+                    <div className="nyx-left-bottom-paper" style={{ position: "absolute", bottom: "0" }}>
+                        {this.state.clazzStudents.map(
+                            student => {
+                                return <div key={student.id}
+                                    onClick={() => {
+                                        console.log("123")
+                                        this.removeClassStudent(student.id)
+                                    }}
+                                >{student.student_name}</div>
+                            })}
 
                     </div>
                 </div>
@@ -801,6 +778,34 @@ class Clazz extends Component {
                                 });
                             }}
                         />
+                        <select
+                            className="nyx-info-select-lg"
+                            id="search_area_id"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                            defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
+                            onChange={(e) => {
+                                console.log(e.target.value)
+                                this.state.search_area_id = e.target.value
+                            }}
+                        >
+                            {getAreas().map(area => {
+                                return <option key={area.id} value={area.id}>{area.area_name}</option>
+                            })}
+                        </select>
+                        <select
+                            className="nyx-card-enrroll-select-lg"
+                            id={"search_course_id"}
+                            defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
+                            disabled={this.state.search_course_id == -1 ? true : false}
+                            onChange={(e) => {
+                                this.state.search_course_id = e.target.value
+                            }}
+                        >
+                            <option value={1}>{"项目经理"}</option>
+                            <option value={2}>{"高级项目经理"}</option>
+
+                        </select>
+
                         {this.getCondition()}
                     </div>
                     <div className="nyx-right-bottom-table" >
@@ -960,6 +965,17 @@ class Clazz extends Component {
                 </div>
             </div>
         )
+    }
+
+    removeClassStudent(id) {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.fresh();
+                // this.setState({ clazzes: message.clazz })
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id }, cb, {});
     }
 
 }
