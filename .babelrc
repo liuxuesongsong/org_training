@@ -1,28 +1,7 @@
 {
-  "presets": [
-    "./scripts/material-ui-babel-preset-es2015",
-    "stage-1",
-    "react"
-  ],
+  "presets": ["./scripts/material-ui-babel-preset-es2015", "stage-1", "react"],
   "plugins": [
-    "transform-runtime",
-    {
-      "helpers": true,
-      "polyfill": true,
-      "regenerator": true,
-      "moduleName": "babel-runtime"
-    },
-    "transform-es2015-modules-umd",
-    {
-      "globals": {
-        "es6-promise": "Promise"
-      }
-    },
-    "transform-object-assign",
-    "transform-es3-member-expression-literals",
-    "transform-es3-property-literals",
-    "transform-es5-property-mutators",
-    "transform-jscript"
+    "transform-object-assign"
   ],
   "env": {
     "coverage": {
@@ -51,24 +30,14 @@
         "transform-react-constant-elements",
         "transform-dev-warning",
         "transform-runtime",
-        [
-          "react-remove-properties",
-          {
-            "properties": [
-              "data-mui-test"
-            ]
-          }
-        ],
-        [
-          "transform-react-remove-prop-types",
-          {
-            "mode": "wrap",
-            "plugins": [
-              "babel-plugin-flow-react-proptypes",
-              "babel-plugin-transform-flow-strip-types"
-            ]
-          }
-        ]
+        ["react-remove-properties", {"properties": ["data-mui-test"]}],
+        ["transform-react-remove-prop-types", {
+          "mode": "wrap",
+          "plugins": [
+            "babel-plugin-flow-react-proptypes",
+            "babel-plugin-transform-flow-strip-types"
+          ]
+        }]
       ]
     }
   }
