@@ -576,7 +576,7 @@ class AppFrame extends Component {
                   sessionStorage.apptype = arg["type"];
 
 
-                  this.login_success(Number(arg["type"]));
+                  this.login_success(APP_TYPE_COMPANY);
                   // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
                 } else {
                   this.popUpNotice(NOTICE, 0, message.msg);
