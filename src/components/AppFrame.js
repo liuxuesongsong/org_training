@@ -544,6 +544,7 @@ class AppFrame extends Component {
                 // Code.LOGIC_SUCCESS
                 this.popUpNotice(NOTICE, 0, message.msg);
               }
+
               getData(getRouter("forget_code"), { account: this.state.name, tel: this.state.phone_number, }, cb, {});
 
             }}
@@ -573,7 +574,7 @@ class AppFrame extends Component {
                   sessionStorage.logged = true;
                   sessionStorage.account = arg["account"];
                   sessionStorage.session = message.data.session;
-                  sessionStorage.apptype = arg["type"];
+                  sessionStorage.apptype = APP_TYPE_COMPANY;
 
 
                   this.login_success(APP_TYPE_COMPANY);
@@ -584,8 +585,8 @@ class AppFrame extends Component {
               }
               // console.log(account)
               // var code = document.getElementById("phone_code").value;
-              var apptype = APP_TYPE_COMPANY;
-              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, {});
+              var name = this.state.name;
+              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
             }}
           >
             {"登录"}
