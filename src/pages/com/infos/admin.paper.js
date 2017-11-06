@@ -10,10 +10,10 @@ import TextField from 'material-ui/TextField';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
 
 import { initCache, getData, getCache, getRouter } from '../../../utils/helpers';
-import { DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN, UPDATE_ADMIN } from '../../../enum';
+import { NOTICE,DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN, UPDATE_ADMIN } from '../../../enum';
 import Code from '../../../code';
 import Lang from '../../../language';
-
+import CommonAlert from '../../../components/CommonAlert';
 class Admin extends Component {
     state = {
         gotData: false,
@@ -21,7 +21,12 @@ class Admin extends Component {
         admin: {
             account: "",
             password: ""
-        }
+        },
+        alertOpen: false,
+        alertType: "notice",
+        alertCode: Code.LOGIC_SUCCESS,
+        alertContent: "",
+        alertAction: []
     }
     componentDidMount() {
         window.currentPage = this;
@@ -42,6 +47,24 @@ class Admin extends Component {
             });
         }
     }
+    popUpNotice(type, code, content, action = [() => {
+        this.setState({
+            alertOpen: false,
+        })
+    }, () => {
+        this.setState({
+            alertOpen: false,
+        })
+    }]) {
+        this.setState({
+            alertType: type,
+            alertCode: code,
+            alertContent: content,
+            alertOpen: true,
+            alertAction: action
+        });
+    }
+
 
     subShow = () => {
         switch (this.state.show) {
@@ -72,9 +95,9 @@ class Admin extends Component {
                                 <TextField
                                     className="nyx-form-div"
                                     key={"password"}
-                                    id="password"
+                                    
                                     type="password"
-                                    label={Lang[window.Lang].pages.com.infos.admin.password}
+                                    label={Lang[window.Lang].pages.com.infos.admin.old_password}
                                     value={this.state.admin["password"] === null ? "" : this.state.admin["password"]}
                                     onChange={event => {
                                         this.state.admin["password"] = event.target.value;
@@ -85,6 +108,24 @@ class Admin extends Component {
                                     }}
                                     fullWidth>
                                 </TextField>
+                                <TextField
+                                    className="nyx-form-div"
+                                    key={"newpassword"}
+                                    id="new_password"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.com.infos.admin.new_password}
+                                    
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    className="nyx-form-div"
+                                    key={"checkpassword"}
+                                    id="check_password"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.com.infos.admin.check_password}
+                                    
+                                    fullWidth>
+                                </TextField>
                                 <Button
                                     style={{
                                         position: "relative",
@@ -93,6 +134,10 @@ class Admin extends Component {
                                     raised
                                     color="accent"
                                     onClick={() => {
+                                        if(document.getElementById("new_password").value!=document.getElementById("check_password").value){
+                                            this.popUpNotice(NOTICE, 0, "两次密码不一致");
+                                            return
+                                        }
                                         this.submit();
                                     }}
                                     className=""
@@ -109,6 +154,7 @@ class Admin extends Component {
     submit = (sendObj) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
+                this.popUpNotice(NOTICE, 0, message.msg);
                 window.CacheData.admin = arg.data;
                 // for (var key in this.state.temObj) {
                 //     console.log(temObj);
@@ -117,7 +163,7 @@ class Admin extends Component {
             }
         }
         var obj = {
-            password: this.state.admin["password"],
+            password: document.getElementById("check_password").value,
         }
 
         getData(getRouter(UPDATE_ADMIN), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
@@ -131,6 +177,14 @@ class Admin extends Component {
                         {this.subShow()}
                     </div>
                 </div>
+                <CommonAlert
+                    show={this.state.alertOpen}
+                    type={this.state.alertType}
+                    code={this.state.alertCode}
+                    content={this.state.alertContent}
+                    action={this.state.alertAction}
+                >
+                </CommonAlert>
             </div>
         );
     }

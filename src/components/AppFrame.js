@@ -827,12 +827,14 @@ class AppFrame extends Component {
                 <div className={classes.grow} />
                 <h2 style={{ float: "right" }}>{"信息系统集成及服务项目管理人员培训报名系统"}</h2>
                 <IconButton
+                title="刷新数据"
                   color="contrast"
                   onClick={() => {
                     window.currentPage.fresh();
                   }}>
                   <i className="glyphicon glyphicon-refresh"></i>
                 </IconButton><IconButton
+                title="退出登录"
                   color="contrast"
                   onClick={() => {
 
