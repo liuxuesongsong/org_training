@@ -34,6 +34,25 @@ function formatTimeNumber(n) {
   return n[1] ? n : '0' + n
 }
 
+export function downloadTimeString(timeStamp) {
+  var date;
+  var ts = parseInt(timeStamp);
+  if (ts > 1000000000000) {
+    date = new Date(ts);
+  } else {
+    date = new Date(ts * 1000);
+  }
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  var hour = date.getHours();
+  var minute = date.getMinutes();
+  var second = date.getSeconds();
+
+  return [year, month, day].map(formatTimeNumber).join('') + '_' + [hour, minute, second].map(formatTimeNumber).join('')
+}
+
 export function getTimeString(timeStamp) {
   let date;
   let ts = parseInt(timeStamp);

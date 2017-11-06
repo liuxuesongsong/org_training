@@ -18,7 +18,7 @@ import Drawer from 'material-ui/Drawer';
 import { LabelRadio, RadioGroup } from 'material-ui/Radio';
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 
-import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas, getTimeString, downloadTimeString } from '../../utils/helpers';
 
 import ReactDataGrid from 'angon_react_data_grid';
 
@@ -117,12 +117,14 @@ class Clazz extends Component {
     // 查询一个班级的学生
     queryClazzStudents = (id) => {
         var cb = (route, message, arg) => {
+
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({ clazzStudents: message.data });
-                // this.handleMakeDownloadData(message.data.students)
+                console.log(message.data)
+                arg.self.setState({ clazzStudents: message.data });
+                arg.self.handleMakeDownloadData(message.data)
             }
         }
-        getData(getRouter(SELECT_CLAZZ_STUDENTS), { session: sessionStorage.session, clazz_id: id }, cb, {});
+        getData(getRouter(SELECT_CLAZZ_STUDENTS), { session: sessionStorage.session, clazz_id: id }, cb, { self: this });
     }
 
     newClazz = (clazz) => {
@@ -423,25 +425,29 @@ class Clazz extends Component {
         });
     }
 
+
+
     /**
      * 按班级建造下载数据
      */
     handleMakeDownloadData = (result) => {
         var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
-        var tableHeadKey = ['id', 'name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
+        var tableHeadKey = ['id', 'student_name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
         var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
         var tableContent = [];
         var item = [];
+        console.log(result)
         tableContent.push(tableHeadTitle.join(','));
         for (var j = 0; j < result.length; j++) {
             item = [];
-            for (let key in tableHeadKey) {
-                switch (key) {
+            for (var key = 0; key <= tableHeadKey.length; key++) {
+                switch (tableHeadKey[key]) {
                     case 'time':
-                        item.push(getTimeString(result[j][key]));
+                        item.push(getTimeString(result[j][tableHeadKey[key]]));
                         break;
                     default:
-                        item.push(result[j][key]);
+                        console.log(result[j][tableHeadKey[key]]);
+                        item.push(result[j][tableHeadKey[key]]);
                         break;
                 }
             }
@@ -451,11 +457,11 @@ class Clazz extends Component {
         downloadData.push(tableContent.join('\n'));
         this.setState({
             // download_num: message.count,
-            filename: Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + result.length,
+            filename: downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length,
             // showRechargeInfo: "download"
         })
         this.state.download_data = downloadData;
-        this.state.filename = Util.time.downloadTimeString(Util.time.getTimeStamp()) + "_" + message.count;
+        this.state.filename = downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length;
         this.handleDownloadFile();
 
     }
@@ -624,7 +630,48 @@ class Clazz extends Component {
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
+
                 <div className="nyx-left-list" >
+                    {this.state.clazzStudents.map(student => {
+                        console.log(student);
+                        <Card
+                            key={student.id}
+                        >
+
+                            <CardContent>
+                                <Typography>
+                                    {student.id}
+                                </Typography>
+                                <Typography component="h2">
+                                    {student.student_name}
+                                </Typography>
+                                <Typography component="p">
+                                    {student.company_name}
+                                </Typography>
+                                <Typography component="p">
+                                    {student.company_admin}
+                                </Typography>
+                                <Typography type="body1">
+                                    {student.mobile}
+                                </Typography>
+                                <Typography component="p">
+                                    {student.mail}
+                                </Typography>
+                                <Typography component="p">
+                                    {student.time}
+                                </Typography>
+                            </CardContent>
+                            <CardActions>
+                                <Button
+                                    dense
+                                    onClick={() => {
+
+                                    }}>
+                                    {"删除"}
+                                </Button>
+                            </CardActions>
+                        </Card>
+                    })}
                     <List className="nyx-clazz-list" subheader={<ListSubheader className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
                         <ListSubheader>
                             <Button className="nyx-btn-circle"
@@ -752,7 +799,6 @@ class Clazz extends Component {
                                 >{student.student_name}</div>
                             })}
 
-                    </div>
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
@@ -942,6 +988,18 @@ class Clazz extends Component {
                     >
                         {"下页"}
                     </Button>
+                    <Button
+                        color="primary"
+                        id='downloadData'
+                        href="#"
+                        download
+                        onClick={() => {
+
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"下载"}
+                    </Button>
 
                     {this.state.selectedStudentID.length + "/" + this.state.count}
 
@@ -965,6 +1023,7 @@ class Clazz extends Component {
                     </CommonAlert>
 
                 </div>
+
             </div>
         )
     }
