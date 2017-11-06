@@ -14,20 +14,19 @@
         "moduleName": "babel-runtime"
       }
     ],
+    [
+      "transform-es2015-modules-umd",
+      {
+        "globals": {
+          "es6-promise": "Promise"
+        }
+      }
+    ],
     "transform-object-assign",
-    "transform-es2015-modules-commonjs",
     "transform-es3-member-expression-literals",
     "transform-es3-property-literals",
     "transform-es5-property-mutators",
     "transform-jscript"
-    // [
-    //   "transform-es2015-modules-umd",
-    //   {
-    //     "globals": {
-    //       "es6-promise": "Promise"
-    //     }
-    //   }
-    // ]
   ],
   "env": {
     "coverage": {
