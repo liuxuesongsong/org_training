@@ -831,14 +831,15 @@ class Enrolled extends Component {
                                 label={Lang[window.Lang].pages.com.students.name}
                                 defaultValue={this.state.selected.name ? this.state.selected.name : ""}
                                 fullWidth
-                                disabled={this.state.selected.a_id === -1 ? true : false}
+                                disabled={this.state.selected.a_id == -1 ? true : false}
                             />
+                            {console.log(this.state.selected.a_id)}
                             <TextField
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
                                 
                                 defaultValue={this.state.selected.identity_card ? this.state.selected.identity_card : ""}
-                                disabled={this.state.selected.a_id === -1 ? true : false}
+                                disabled={this.state.selected.a_id == -1 ? true : false}
                                 fullWidth>
                             </TextField>
                            <p className="nyx-card-enrroll-select-label-lg">
@@ -848,7 +849,7 @@ class Enrolled extends Component {
                                 className="nyx-card-enrroll-select-lg"
                                 id={"student_course_id"}
                                 defaultValue={this.state.selected.course_id ? this.state.selected.course_id : ""}
-                                    disabled={this.state.selected.a_id === -1 ? true : false}
+                                    disabled={this.state.selected.a_id == -1 ? true : false}
                             >
                                 <option value={1}>{"项目经理"}</option>
                                 <option value={2}>{"高级项目经理"}</option>
@@ -888,7 +889,7 @@ class Enrolled extends Component {
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
                                 defaultValue={this.state.selected.register ? this.state.selected.register : ""}
-                                disabled={this.state.selected.a_id === -1 ? true : false}
+                                disabled={this.state.selected.a_id == -1 ? true : false}
                                 fullWidth>
                             </TextField>
 

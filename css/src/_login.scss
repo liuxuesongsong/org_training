@@ -141,4 +141,23 @@ $btn-size:64px;
     .nyx-display-none{
         display: none;
     }
+    .nyx-login-body{
+        height: $body-height;
+        padding: 2rem;
+        position: relative;
+        
+        .nyx-btn-circle{
+        border-radius:0; 
+        height: 24px;
+        width: 64px;
+        position: inherit;
+        /* position: absolute; */
+        right: 0;
+        bottom: 0;
+        margin-bottom: 32px;
+        margin-right: 32px;
+        padding: 0;
+        min-width: initial;
+}
+}
 }

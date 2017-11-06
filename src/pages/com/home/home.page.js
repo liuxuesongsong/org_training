@@ -210,8 +210,8 @@ class Home extends Component {
                                     name={student.name === null ? "" : student.name.toString()}
                                     mobile={student.mobile === null ? "" : student.mobile.toString()}
                                     email={student.mail === null ? "" : student.mail.toString()}
-                                    level={student.course_id === null ? 0 : student.course_id}
-                                    city={student.area_id === null ? 0 : student.area_id}
+                                    level={student.course_id === "" ? 0 : Number(student.course_id)}
+                                    city={student.area_id === "" ? 0 : Number(student.area_id)}
                                     action={[() => {
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
@@ -254,8 +254,8 @@ class Home extends Component {
                                             name={student.name === null ? "" : student.name}
                                             mobile={student.mobile === null ? "" : student.mobile}
                                             email={student.mail === null ? "" : student.mail}
-                                            level={student.course_id === null ? 0 : student.course_id}
-                                            city={student.area_id === null ? 0 : student.area_id}
+                                            level={student.course_id === "" ? 0 : Number(student.course_id)}
+                                            city={student.area_id === "" ? 0 : Number(student.area_id)}
                                             action={[
                                                 () => {
                                                     this.state.selectedStudentId = student.id;
@@ -286,8 +286,8 @@ class Home extends Component {
                                             name={student.name === null ? "" : student.name.toString()}
                                             mobile={student.mobile === null ? "" : student.mobile.toString()}
                                             email={student.mail === null ? "" : student.mail.toString()}
-                                            level={student.course_id === null ? 0 : student.course_id}
-                                            city={student.area_id === null ? 0 : student.area_id}
+                                            level={student.course_id === "" ? 0 : Number(student.course_id)}
+                                            city={student.area_id === "" ? 0 : Number(student.area_id)}
                                             status={"已通过"}
                                         >
                                         </StudentCard>)
@@ -298,8 +298,8 @@ class Home extends Component {
                                             name={student.name === null ? "" : student.name.toString()}
                                             mobile={student.mobile === null ? "" : student.mobile.toString()}
                                             email={student.mail === null ? "" : student.mail.toString()}
-                                            level={student.course_id === null ? 0 : student.course_id}
-                                            city={student.area_id === null ? 0 : student.area_id}
+                                            level={student.course_id === "" ? 0 : Number(student.course_id)}
+                                            city={student.area_id === "" ? 0 : Number(student.area_id)}
                                             status={"已拒绝"}
                                         >
                                         </StudentCard>)
@@ -310,8 +310,8 @@ class Home extends Component {
                                             name={student.name === null ? "" : student.name.toString()}
                                             mobile={student.mobile === null ? "" : student.mobile.toString()}
                                             email={student.mail === null ? "" : student.mail.toString()}
-                                            level={student.course_id === null ? 0 : student.course_id}
-                                            city={student.area_id === null ? 0 : student.area_id}
+                                            level={student.course_id === "" ? 0 : Number(student.course_id)}
+                                            city={student.area_id === "" ? 0 : Number(student.area_id)}
                                             status={"已通知"}
                                         >
                                         </StudentCard>)
