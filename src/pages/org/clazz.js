@@ -471,7 +471,7 @@ class Clazz extends Component {
         this.state.currentPage = page;
         if (this.state.allData.length <= this.state.rowsPerPage * (page - 1) && this.state.allData.length < this.state.count) {
             // this.handleQueryRechargeCode(false, false);
-            this.queryStudents((Math.floor((this.state.currentPage - 1) / 20) + 1));
+            this.queryStudents((Math.floor((this.state.currentPage - 1) / 4) + 1));
         } else {
             var data = this.state.allData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
             this.state.onloading = false;
