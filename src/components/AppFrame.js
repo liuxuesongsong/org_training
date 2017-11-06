@@ -205,13 +205,13 @@ class AppFrame extends Component {
         beingLoading: true
       })
     })
-    addEventListener("dataOnload", () => {
+    addEventListener("dataOnload", (e) => {
       this.setState({
         beingLoading: false
       })
     })
     addEventListener("session_invalid", (e) => {
-     
+
       // sessionStorage.logged = false;
       // sessionStorage.apptype = APP_TYPE_UNLOGIN;
       // sessionStorage.session = "";
@@ -300,6 +300,18 @@ class AppFrame extends Component {
     getData(getRouter(REGISTER_COMPANY), { account: account, password: password, type: APP_TYPE_COMPANY }, cb, { account: account, password: password });
   }
 
+  login_success = (type) => {
+    this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
+    switch (type) {
+      case APP_TYPE_COMPANY:
+        this.context.router.push("/com/home");
+        break;
+      case APP_TYPE_ORANIZATION:
+        this.context.router.push("/org/home");
+        break;
+    }
+  }
+
   login = (account, password, check_code) => {
     var cb = (route, message, arg) => {
       // Code.LOGIC_SUCCESS
@@ -308,18 +320,7 @@ class AppFrame extends Component {
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.data.session;
         sessionStorage.apptype = arg["type"];
-
-        // let e = new Event("login_success");
-        // dispatchEvent(e);
-        this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
-        switch (Number(arg["type"])) {
-          case APP_TYPE_COMPANY:
-            this.context.router.push("/com/home");
-            break;
-          case APP_TYPE_ORANIZATION:
-            this.context.router.push("/org/home");
-            break;
-        }
+        this.login_success(Number(arg["type"]));
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
         this.popUpNotice(NOTICE, 0, message.msg);
@@ -574,9 +575,8 @@ class AppFrame extends Component {
                   sessionStorage.session = message.data.session;
                   sessionStorage.apptype = arg["type"];
 
-                  let e = new Event("login_success");
-                  dispatchEvent(e);
-                  this.popUpNotice(NOTICE, 0, Lang[window.Lang].pages.main.login_success);
+
+                  this.login_success(Number(arg["type"]));
                   // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
                 } else {
                   this.popUpNotice(NOTICE, 0, message.msg);
@@ -770,15 +770,15 @@ class AppFrame extends Component {
                 </TabContainer>
               </SwipeableViews>
               <div className="nyx-notice-login nyx-display-none">
-              <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
-              <div className="nyx-login-window-acctention">
-                已经做过临时登记的企业用户以单位全称和初始密码进行登陆
+                <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
+                <div className="nyx-login-window-acctention">
+                  已经做过临时登记的企业用户以单位全称和初始密码进行登陆
               </div>
-              <div className="nyx-login-window-acctention">
-                未做过临时登记的企业用户以单位全称进行注册
+                <div className="nyx-login-window-acctention">
+                  未做过临时登记的企业用户以单位全称进行注册
               </div>
-              <div className="nyx-login-window-acctention">
-                系统维护电话：010-51527580
+                <div className="nyx-login-window-acctention">
+                  系统维护电话：010-51527580
               </div>
               </div>
             </div> : this.LoginView()}
@@ -833,15 +833,15 @@ class AppFrame extends Component {
                   }}>
                   <i className="glyphicon glyphicon-refresh"></i>
                 </IconButton><IconButton
-                color="contrast"
+                  color="contrast"
                   onClick={() => {
-                    
+
                     this.logout()
                   }}>
                   <i className="glyphicon glyphicon-log-out"></i>
                 </IconButton>
 
-               
+
               </Toolbar>
             </AppBar>
             <AppDrawer
