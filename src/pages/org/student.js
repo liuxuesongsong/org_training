@@ -4,7 +4,7 @@ import Button from 'material-ui/Button';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 
 import ReactDataGrid from 'angon_react_data_grid';
@@ -68,7 +68,7 @@ class Student extends Component {
                 count: 0
             })
         }
-        getData(getRouter(SELECT_STUDNETS), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
+        getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: { page: query_page, page_size: 100 } }, cb, {});
     }
 
 
@@ -111,7 +111,7 @@ class Student extends Component {
     }
     render() {
         return (
-            <div>
+            <div style={{ marginTop: 80, width: "100%" }}>
                 <ReactDataGrid
                     rowKey="id"
                     columns={
@@ -163,6 +163,12 @@ class Student extends Component {
                                 name: "课程",
                                 width: 100,
                                 resizable: true
+                            },
+                            {
+                                key: "is_inlist",
+                                name: "报名状态",
+                                width: 100,
+                                resizable: true
                             }
                         ]
                     }
@@ -185,7 +191,12 @@ class Student extends Component {
                             company_mobile: this.state.tableData[i].company_mobile,
                             company_mail: this.state.tableData[i].company_mail,
                             area_name: getCity(this.state.tableData[i].area_id),
-                            course_name: getCourse(this.state.tableData[i].course_id)
+                            course_name: getCourse(this.state.tableData[i].course_id),
+                            is_inlist: this.state.tableData[i].is_inlist === "-1" ? "待报名-导入" :
+                                this.state.tableData[i].is_inlist === "0" ? "待报名" :
+                                    this.state.tableData[i].is_inlist === "1" ? "待安排" :
+                                        this.state.tableData[i].is_inlist === "2" ? "已安排" :
+                                            this.state.tableData[i].is_inlist === "3" ? "已确认" : ""
                         }
                     }}
                     rowsCount={this.state.tableData.length}
