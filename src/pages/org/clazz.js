@@ -39,11 +39,11 @@ class Clazz extends Component {
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         clazzStudents: [],          //班级内的学生
-        currentPage: 1,
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
         openEditClazzDialog: false,
+        currentPage: 1,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
         count: 0,
@@ -573,7 +573,7 @@ class Clazz extends Component {
     }
 
     popUpNotice = (type, code, content) => {
-        this.setState({ type: type, code: code, content: content, alertOpen: true });
+        this.setState({ type: type, code: code, content: content, alertOpen: this.state.alertOpen });
     }
 
 
@@ -591,7 +591,7 @@ class Clazz extends Component {
                     <Chip className="nyx-chip"
                         label={"地区" + ":" + getCity(this.state.queryCondition[k])}
                         onRequestDelete={() => {
-                            delete(this.state.queryCondition[k]);
+                            delete (this.state.queryCondition[k]);
                             this.setState({ queryCondition: this.state.queryCondition })
                         }}
                     />
@@ -601,17 +601,17 @@ class Clazz extends Component {
                     <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}
                         onRequestDelete={() => {
-                            delete(this.state.queryCondition[k]);
+                            delete (this.state.queryCondition[k]);
                             this.setState({ queryCondition: this.state.queryCondition })
                         }}
                     />
                 )
-            } else if (k === "company_name") {
+            } else if (k === "company_name" && this.state.queryCondition[k] !== "") {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"公司" + ":" + this.state.queryCondition[k]}
                         onRequestDelete={() => {
-                            delete(this.state.queryCondition[k]);
+                            delete (this.state.queryCondition[k]);
                             this.setState({ queryCondition: this.state.queryCondition })
                         }}
                     />
@@ -713,8 +713,8 @@ class Clazz extends Component {
                                                     <i
                                                         className="glyphicon glyphicon-search"
                                                         onClick={() => {
+                                                            this.state.selected = clazz;
                                                             this.queryClazzStudents(clazz.id);
-                                                            // this.state.selected = clazz;
                                                             // this.state.showInfo = true;
                                                             {/* this.toggleDrawer(true)() */ }
                                                         }}>
@@ -786,6 +786,7 @@ class Clazz extends Component {
                             onChange={(e) => {
                                 console.log(e.target.value)
                                 this.state.search_area_id = e.target.value
+                                this.state.queryCondition.area_id = e.target.value
                             }}
                         >
                             {getAreas().map(area => {
@@ -799,6 +800,7 @@ class Clazz extends Component {
                             disabled={this.state.search_course_id == -1 ? true : false}
                             onChange={(e) => {
                                 this.state.search_course_id = e.target.value
+                                this.state.queryCondition.course_id = e.target.value
                             }}
                         >
                             <option value={1}>{"项目经理"}</option>
@@ -838,13 +840,13 @@ class Clazz extends Component {
                                         resizable: true
                                     },
                                     {
-                                        key: "mobile",
+                                        key: "company_mobile",
                                         name: "联系电话",
                                         width: 100,
                                         resizable: true
                                     },
                                     {
-                                        key: "mail",
+                                        key: "company_mail",
                                         name: "联系邮箱",
                                         width: 120,
                                         resizable: true
@@ -879,8 +881,8 @@ class Clazz extends Component {
                                     student_name: this.state.tableData[i].student_name,
                                     company_name: this.state.tableData[i].company_name,
                                     company_admin: this.state.tableData[i].company_admin,
-                                    mobile: this.state.tableData[i].mobile,
-                                    mail: this.state.tableData[i].mail,
+                                    company_mobile: this.state.tableData[i].company_mobile,
+                                    company_mail: this.state.tableData[i].company_mail,
                                     area_name: getCity(this.state.tableData[i].area_id),
                                     course_name: getCourse(this.state.tableData[i].course_id)
                                 }
@@ -969,10 +971,11 @@ class Clazz extends Component {
 
     removeClassStudent(id) {
         var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                this.fresh();
-                // this.setState({ clazzes: message.clazz })
-            }
+            // if (message.code === Code.LOGIC_SUCCESS) {
+            //     // this.setState({ clazzes: message.clazz })
+            // }
+            this.queryClazzStudents(this.state.selected.id);
+
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id }, cb, {});

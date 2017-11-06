@@ -179,8 +179,8 @@ const Language = {
                     unarrange: "待安排培训报名列表",
                     arranged: "已安排培训报名列表",
                 },
-                instructions:{
-                    title:"填报说明"
+                instructions: {
+                    title: "填报说明"
                 },
                 card: {
                     modify: "修改",
@@ -210,6 +210,9 @@ const Language = {
                 },
                 enroll: {
                     title: "报名查看"
+                },
+                student: {
+                    title: "学生信息"
                 },
                 clazz: {
                     title: "班级安排",
@@ -252,11 +255,11 @@ const Language = {
         },
         ErrorCode: {
             0: "单位名称可用",
-            10001:"该单位已注册",
+            10001: "该单位已注册",
             1000: "两次密码不相同",
             1001: "密码不能为空",
             1002: "账号不能为空",
-            
+
             10002: "该账号可以使用",
             // 10101:""
 

@@ -23,6 +23,7 @@ import OrganizationHome from '../pages/org/home';
 import Area from '../pages/org/area';
 import Score from '../pages/org/score';
 import Clazz from '../pages/org/clazz';
+import Student from '../pages/org/student';
 
 import Lang from '../language';
 
@@ -46,7 +47,7 @@ var AppRouter = {
         nav
         component={Infos}
       />
-      
+
       <Route
         title={titleize(Lang[window.Lang].pages.com.enrolled.title)}
         path={'/com/enrolled'}
@@ -69,7 +70,7 @@ var AppRouter = {
         component={Instructions}
       />
     </Route>
-    
+
   </Router>),
   2: (<Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
     <Route title="Training" path="/" component={AppFrame}>
@@ -80,6 +81,13 @@ var AppRouter = {
         content={OrganizationHome}
         nav
         component={OrganizationHome}
+      />
+      <Route
+        title={titleize(Lang[window.Lang].pages.org.student.title)}
+        path={'/org/student'}
+        content={Student}
+        nav
+        component={Student}
       />
       <Route
         title={titleize(Lang[window.Lang].pages.org.clazz.title)}
