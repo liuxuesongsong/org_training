@@ -5,23 +5,19 @@
     "react"
   ],
   "plugins": [
-    [
-      "transform-runtime",
-      {
-        "helpers": true,
-        "polyfill": true,
-        "regenerator": true,
-        "moduleName": "babel-runtime"
+    "transform-runtime",
+    {
+      "helpers": true,
+      "polyfill": true,
+      "regenerator": true,
+      "moduleName": "babel-runtime"
+    },
+    "transform-es2015-modules-umd",
+    {
+      "globals": {
+        "es6-promise": "Promise"
       }
-    ],
-    [
-      "transform-es2015-modules-umd",
-      {
-        "globals": {
-          "es6-promise": "Promise"
-        }
-      }
-    ],
+    },
     "transform-object-assign",
     "transform-es3-member-expression-literals",
     "transform-es3-property-literals",
