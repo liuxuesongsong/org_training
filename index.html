@@ -134,12 +134,13 @@
       window.onload = function () {
         var loading = document.getElementById("load");
         loading.parentNode.removeChild(loading);
+        var explorer = navigator.userAgent;
         var change_browser='<div class="nyx_login_bg">'+
           '<div class="nyx_login">'+
           '<h1 class="nyx_login_content">信息系统集成及服务项目管理人员报名系统</h1>'+
           '</div>'+
           '<p class="nyx_login_browser">该浏览器暂不支持</p>'+
-          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser"></span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>'+
+          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser">'+explorer+'</span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>'+
             '</div>'+
 
           '<div class="nyx_browser">'+
@@ -152,8 +153,8 @@
         '</div>'+
       '</div>';
         //ie
-        var explorer = navigator.userAgent;
-        document.getElementById("this_browser").innerHTML=explorer;
+       
+       
     
          if (explorer.indexOf("Firefox") >= 0) {
           var regStr_firefox = /firefox\/[\d.]+/gi ;
