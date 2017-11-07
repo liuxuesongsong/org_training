@@ -798,6 +798,7 @@ class Clazz extends Component {
                                     }}
                                 >{student.student_name}</div>
                             })}
+                    </div>
 
                 </div>
                 <div className="nyx-clazz-form">
