@@ -989,7 +989,7 @@ class Clazz extends Component {
                     >
                         {"下页"}
                     </Button>
-                    <Button
+                    {/* <Button
                         color="primary"
                         id='downloadData'
                         href="#"
@@ -1000,7 +1000,7 @@ class Clazz extends Component {
                         style={{ margin: 10 }}
                     >
                         {"下载"}
-                    </Button>
+                    </Button> */}
 
                     {this.state.selectedStudentID.length + "/" + this.state.count}
 
