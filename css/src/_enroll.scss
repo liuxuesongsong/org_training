@@ -21,19 +21,24 @@
 }
 .nyx-card-enrroll-select-label-lg{
     color: rgba(0, 0, 0, 0.54);
-    font-size: 12px;
+    font-size: 10px;
 }
 .nyx-enrolled-change-title{
     color: $blue;
     font-size: 18px;
 }
-.nyx-card-enrroll-select-lg{
+.nyx-card-enrroll-select-lg,.nyx-card-enrroll-select-lg-dashed{
     width: 100%;
-    margin: 0 0 0.8rem 0;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+   //margin: 0 0 0.8rem 0;
     border: none;
     color: rgba(0, 0, 0, 0.54);
     outline: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.54);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.38);
+}
+.nyx-card-enrroll-select-lg-dashed{
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.38);
 }
 .nyx-card-enrroll-button-sm{
     color: #2196F3;
