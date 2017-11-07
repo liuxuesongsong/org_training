@@ -37,27 +37,31 @@
       width: 100%;
     }
 
-    .nyx_login_content,.nyx_login_browser,.nyx_login_this_browser {
+    .nyx_login_content,
+    .nyx_login_browser,
+    .nyx_login_this_browser {
       text-align: center;
       color: #FFFFFF;
-     margin-top: 100px;
+      margin-top: 100px;
       width: 100%;
       font-size: 40px;
       font-weight: 500;
       z-index: 100;
     }
-    .nyx_login_browser{
+
+    .nyx_login_browser {
       top: 200px;
       width: 100%;
-     margin: auto;
-     
+      margin: auto;
+
     }
-    .nyx_login_this_browser{
-    position: absolute;
+
+    .nyx_login_this_browser {
+      position: absolute;
       line-height: 20px;
       font-size: 12px;
     }
-   
+
     .nyx_attention {
       color: #FFFFFF;
       position: absolute;
@@ -78,35 +82,35 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" async defer />
   <link href="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.css" rel="stylesheet" async defer />
-  <link href="/css/style.css?ver=0.8" rel="stylesheet" />
-  <link href="/css/main.css?ver=0.8" rel="stylesheet" />
+  <link href="/css/style.css?ver=0.95" rel="stylesheet" />
+  <link href="/css/main.css?ver=0.95" rel="stylesheet" />
 </head>
 
 <body>
   <div id="change_browser"></div>
   <div id="load">
-      <div class="mask">
-          <div class="spinner">
-            <div class="spinner-container container1">
-              <div class="circle1"></div>
-              <div class="circle2"></div>
-              <div class="circle3"></div>
-              <div class="circle4"></div>
-            </div>
-            <div class="spinner-container container2">
-              <div class="circle1"></div>
-              <div class="circle2"></div>
-              <div class="circle3"></div>
-              <div class="circle4"></div>
-            </div>
-            <div class="spinner-container container3">
-              <div class="circle1"></div>
-              <div class="circle2"></div>
-              <div class="circle3"></div>
-              <div class="circle4"></div>
-            </div>
-          </div>
+    <div class="mask">
+      <div class="spinner">
+        <div class="spinner-container container1">
+          <div class="circle1"></div>
+          <div class="circle2"></div>
+          <div class="circle3"></div>
+          <div class="circle4"></div>
         </div>
+        <div class="spinner-container container2">
+          <div class="circle1"></div>
+          <div class="circle2"></div>
+          <div class="circle3"></div>
+          <div class="circle4"></div>
+        </div>
+        <div class="spinner-container container3">
+          <div class="circle1"></div>
+          <div class="circle2"></div>
+          <div class="circle3"></div>
+          <div class="circle4"></div>
+        </div>
+      </div>
+    </div>
     <!-- <div class="nyx_login_bg">
       <div class="nyx_login">
         <h1 class="nyx_login_content">信息系统集成及服务项目管理人员</h1>
@@ -135,79 +139,80 @@
         var loading = document.getElementById("load");
         loading.parentNode.removeChild(loading);
         var explorer = navigator.userAgent;
-        var change_browser='<div class="nyx_login_bg">'+
-          '<div class="nyx_login">'+
-          '<h1 class="nyx_login_content">信息系统集成及服务项目管理人员报名系统</h1>'+
-          '</div>'+
-          '<p class="nyx_login_browser">该浏览器暂不支持</p>'+
-          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser">'+explorer+'</span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>'+
-            '</div>'+
+        var change_browser = '<div class="nyx_login_bg">' +
+          '<div class="nyx_login">' +
+          '<h1 class="nyx_login_content">信息系统集成及服务项目管理人员报名系统</h1>' +
+          '</div>' +
+          '<p class="nyx_login_browser">该浏览器暂不支持</p>' +
+          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser">' + explorer + '</span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>' +
+          '</div>' +
 
-          '<div class="nyx_browser">'+
-          '<h2>推荐浏览器(可点击进行下载)</h2>'+
-        '<a href="http://www.google.cn/intl/zh-CN/chrome/browser/desktop/index.html">Google</a>'+
-        '<a href="http://www.firefox.com.cn/">Firefox</a>'+
-        '<a href="https://liulanqi.baidu.com/">百度浏览器</a>'+
-        '<a href="http://se.360.cn/">360浏览器(使用极速模式)</a>'+
-        '<a href="https://www.liebao.cn/">猎豹安全浏览器</a>'+
-        '</div>'+
-      '</div>';
+          '<div class="nyx_browser">' +
+          '<h2>推荐浏览器(可点击进行下载)</h2>' +
+          '<a href="http://www.google.cn/intl/zh-CN/chrome/browser/desktop/index.html">Google</a>' +
+          '<a href="http://www.firefox.com.cn/">Firefox</a>' +
+          '<a href="https://liulanqi.baidu.com/">百度浏览器</a>' +
+          '<a href="http://se.360.cn/">360浏览器(使用极速模式)</a>' +
+          '<a href="https://www.liebao.cn/">猎豹安全浏览器</a>' +
+          '</div>' +
+          '</div>';
         //ie
-       
-       
-    
-         if (explorer.indexOf("Firefox") >= 0) {
-          var regStr_firefox = /firefox\/[\d.]+/gi ;
-          var firefox_browser=explorer.match(regStr_firefox)[0].split("/")[1];
-          if(firefox_browser<"39"){
-            document.getElementById("change_browser").innerHTML=change_browser;
+
+
+
+        if (explorer.indexOf("Firefox") >= 0) {
+          var regStr_firefox = /firefox\/[\d.]+/gi;
+          var firefox_browser = explorer.match(regStr_firefox)[0].split("/")[1];
+          if (firefox_browser < "39") {
+            document.getElementById("change_browser").innerHTML = change_browser;
           }
-        
+
         }
         //Chrome
         else if (explorer.indexOf("Chrome") >= 0) {
           console.log("Chrome");
-          var regStr_chrome = /chrome\/[\d.]+/gi ;
-          var chrome_browser=explorer.match(regStr_chrome)[0].split("/")[1];
-         // console.log(chrome_browser);
-         if(chrome_browser<"42"){
-          // console.log(chrome_browser)
-          document.getElementById("change_browser").innerHTML=change_browser;
-  
+          var regStr_chrome = /chrome\/[\d.]+/gi;
+          var chrome_browser = explorer.match(regStr_chrome)[0].split("/")[1];
+          // console.log(chrome_browser);
+          if (chrome_browser < "42") {
+            // console.log(chrome_browser)
+            document.getElementById("change_browser").innerHTML = change_browser;
+
           }
         }
         //Opera
         else if (explorer.indexOf("Opera") >= 0) {
-          var regStr_opera = /opera\/[\d.]+/gi ;
-          var opera_browser=explorer.match(regStr_opera)[0].split("/")[1];
-         // console.log(chrome_browser);
-         if(opera_browser<"29"){
-          document.getElementById("change_browser").innerHTML=change_browser;
-  
+          var regStr_opera = /opera\/[\d.]+/gi;
+          var opera_browser = explorer.match(regStr_opera)[0].split("/")[1];
+          // console.log(chrome_browser);
+          if (opera_browser < "29") {
+            document.getElementById("change_browser").innerHTML = change_browser;
+
           }
-        } else if (explorer.indexOf("Msie") >= -1){
-          var regStr_ie = /msie [\d.]+/gi ;
-          var ie_browser=explorer.match(regStr_ie)[0].split("/")[1];
-          
-          document.getElementById("change_browser").innerHTML=change_browser;
-          
+        } else if (explorer.indexOf("Msie") >= -1) {
+          var regStr_ie = /msie [\d.]+/gi;
+          var ie_browser = explorer.match(regStr_ie)[0].split("/")[1];
+
+          document.getElementById("change_browser").innerHTML = change_browser;
+
           // var reIE = new RegExp("MSIE (\\d+\\.\\d+);");  
           //  reIE.test(explorer);  
           //  var fIEVersion = parseFloat(RegExp["$1"]);  
           //  document.getElementById("this_browser").innerHTML=fIEVersion;
           //  console.log(fIEVersion);
-        }else{
+        } else {
           console.log("buzhidao")
         }
-      
-       
+
+
 
       }
 
     </script>
   </div>
-  <script src="/build/dll.bundle.js?ver=0.8" defer></script>
-  <script src="/build/bundle.js?ver=0.8" defer></script>
+
+  <script src="/build/dll.bundle.js?ver=0.95"></script>
+  <script src="/build/bundle.js?ver=0.95"></script>
   <script src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js" async defer></script>
 </body>
 

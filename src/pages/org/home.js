@@ -52,9 +52,11 @@ class Home extends Component {
         var cb = (router, message, arg) => {
             window.currentPage.setState({
                 areas: message.data.info.areas,
-                clazzes: message.data.info.clazzes,
-                arranged_nums: message.data.info.sum.all_student_inlist,
-                all_students_nums: message.data.info.sum.all_student_reg,
+                clazzes: window.CacheData.clazzes,
+                arranged_nums: message.data.info.sum.all_arrange_count,
+                all_students_nums: message.data.info.sum.all_count,
+                // arranged_nums: message.data.info.sum.all_student_inlist,
+                // all_students_nums: message.data.info.sum.all_student_reg,
             })
             // all_students
         }
@@ -83,34 +85,55 @@ class Home extends Component {
 
                         </Paper>
                     </div>
-                    <div style={{ margin: 10, width: 800, float: "left" }}>
-                        <Paper elevation={4}>
+                    <div className="nyx-areacount-list">
+                        <div className="nyx-areacount-title">各省市报名情况</div>
+                        {this.state.areas.map(area => {
+                            var all_num = this.state.all_students_nums;
+                            var m_all_count = area.m_count ? area.m_count : 0;
+                            var m_arrange_count = area.m_arrange_count ? area.m_arrange_count : 0;
+                            var h_all_count = area.h_count ? area.h_count : 0;
+                            var h_arrange_count = area.h_arrange_count ? area.h_arrange_count : 0;
+                            var m_pre_all = 100 * m_all_count / all_num;
+                            var m_pre_arr = 100 * m_arrange_count / all_num;
+                            var h_pre_all = 100 * h_all_count / all_num;
+                            var h_pre_arr = 100 * h_arrange_count / all_num;
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.arranged_title}</ListSubheader>}>
-                                {this.state.areas.map(area => {
-                                    return <div key={area.id}>{getCity(area.id) + getCourse(area.course[0].id) + area.course[0].inlist + "/" + area.course[0].reg + "\n" +
-                                        getCourse(area.course[1].id) + area.course[1].inlist + "/" + area.course[1].reg}</div>
-                                }
-
-                                )}
-                            </List>
-
-
-                        </Paper>
+                            return (
+                                <div key={area.area_id} className="nyx-areacount-list-item">
+                                    <div className="nyx-area-name">{area.area_name}</div>
+                                    <div className="nyx-area-bar">
+                                        <span className="nyx-area-bar-left">中级</span>
+                                        <span className="nyx-area-bar-mid">
+                                            <span className="nyx-area-bar-bot" style={{ width: m_pre_all + "%" }}> </span>
+                                            <span className="nyx-area-bar-top" style={{ width: m_pre_arr + "%" }}> </span>
+                                        </span>
+                                        <span className="nyx-area-bar-right">{area.m_arrange_count ? area.m_arrange_count : 0}/{area.m_count ? area.m_count : 0}</span>
+                                    </div>
+                                    <div className="nyx-area-bar">
+                                        <span className="nyx-area-bar-left">高级</span>
+                                        <span className="nyx-area-bar-mid">
+                                            <span className="nyx-area-bar-bot" style={{ width: h_pre_all + "%" }}> </span>
+                                            <span className="nyx-area-bar-top" style={{ width: h_pre_arr + "%" }}> </span>
+                                        </span>
+                                        <span className="nyx-area-bar-right">{area.h_arrange_count ? area.h_arrange_count : 0}/{area.h_count ? area.h_count : 0}</span>
+                                    </div>
+                                </div>
+                            )
+                        }
+                        )}
                     </div>
                     <div style={{ margin: 10, width: 400, float: "left" }}>
                         <Paper elevation={4}>
 
                             <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
-                                {this.state.clazzes.map(value =>
+                                {/* {this.state.clazzes.map(value =>
                                     <ListItem dense button key={value}>
-                                        {/* <Avatar alt="Remy Sharp" src={remyImage} /> */}
                                         <ListItemText primary={`班级 ${value + 1}`} />
                                         <ListItemSecondaryAction>
 
                                         </ListItemSecondaryAction>
                                     </ListItem>,
-                                )}
+                                )} */}
                             </List>
 
 

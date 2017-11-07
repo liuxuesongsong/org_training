@@ -94,3 +94,81 @@ button.nyx-clazz-card-button{
   width:320px;
   min-height:640px;
 }
+.nyx-areacount-list{
+  padding: 1rem;
+  margin:1rem;
+  float: left;
+  background: #fff;
+  @extend .nyx-z2;
+
+  &:before{
+    content: " ";
+    display: table;
+    clear: both;
+  }
+  &:after{
+    content: " ";
+    display: table;
+    clear: both;
+  }
+}
+.nyx-areacount-list-item{
+  float:left;
+  width:320px;
+  margin-bottom: 1rem;
+}
+.nyx-areacount-title{
+  color:$blue;
+  font-size:18px;
+  margin: 0 0 1rem 0;
+  border-left: 5px $blue900 solid;
+  padding-left: 1rem;
+}
+.nyx-area-name{
+  color: $blue900;
+}
+.nyx-area-bar{
+  font-size: 12px;
+  width: 320px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+}
+.nyx-area-bar-left{
+  width: 40px;
+  display: inline-block;
+  text-align: center;
+  line-height: 20px;
+  position: absolute;
+}
+.nyx-area-bar-right{
+  width: 50px;
+  text-align: right;
+  display: inline-block;
+  color: $blue900;
+  position: absolute;
+  right: 50px;
+}
+.nyx-area-bar-mid{
+  position: relative;
+  width: 240px;
+  height: 20px;
+  display: inline-block;
+  right: -40px;
+}
+.nyx-area-bar-bot{
+  position: absolute;
+  min-width: 1px;
+  height: 20px;
+  line-height: 20px;
+  background-color: $grey400;
+  display: inline-block;
+}
+.nyx-area-bar-top{
+  min-width: 0px;
+  position: absolute;
+  height: 20px;
+  background-color: $blue;
+  display: inline-block;
+  line-height: 20px;
+}
