@@ -733,7 +733,7 @@ class Enrolled extends Component {
                             {this.state.arrangedStudents.map(student => {
 
                                 switch (student.is_inlist) {
-                                    case 2:
+                                    case "2":
                                         return (
                                             <StudentCard
                                                 type={CARD_TYPE_ARRANGE}
@@ -768,7 +768,7 @@ class Enrolled extends Component {
                                                             }]);
                                                     }]}>
                                             </StudentCard>)
-                                    case 3:
+                                    case "3":
                                         {
                                             return (
                                                 <StudentCard
