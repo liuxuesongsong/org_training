@@ -833,7 +833,7 @@ class Enrolled extends Component {
                                 fullWidth
                                 disabled={this.state.selected.a_id == -1 ? true : false}
                             />
-                            {console.log(this.state.selected.a_id)}
+                           
                             <TextField
                                 style={{marginTop:"1em"}}
                                 id="licence.code"

@@ -42,6 +42,7 @@ $btn-size:64px;
     @extend .nyx-z2;
 }
 .nyx-findpassword,.nyx-send-checkcode{
+    font-size: 12px;
     position: absolute;
     right: 2rem;
     margin-top: 1rem;

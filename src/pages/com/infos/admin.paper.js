@@ -95,15 +95,15 @@ class Admin extends Component {
                                 <TextField
                                     className="nyx-form-div"
                                     key={"password"}
-                                    
                                     type="password"
                                     label={Lang[window.Lang].pages.com.infos.admin.old_password}
                                     value={this.state.admin["password"] === null ? "" : this.state.admin["password"]}
-                                    onChange={event => {
-                                        this.state.admin["password"] = event.target.value;
+                                    onChange={(event, value) => {
 
                                         this.setState({
+
                                             admin: this.state.admin
+
                                         });
                                     }}
                                     fullWidth>
@@ -153,8 +153,9 @@ class Admin extends Component {
 
     submit = (sendObj) => {
         var cb = (route, message, arg) => {
+            this.popUpNotice(NOTICE, 0, message.msg);
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.popUpNotice(NOTICE, 0, message.msg);
+                
                 window.CacheData.admin = arg.data;
                 // for (var key in this.state.temObj) {
                 //     console.log(temObj);
