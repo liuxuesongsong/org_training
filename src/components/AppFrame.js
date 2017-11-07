@@ -756,7 +756,7 @@ class AppFrame extends Component {
                   textColor="primary"
                   fullWidth
                 >
-                  <Tab label="公司登陆" />
+                  <Tab label="公司登录" />
                   <Tab label="公司注册" />
                   {/* <Tab label="机构登陆" /> */}
                 </Tabs>
@@ -773,7 +773,7 @@ class AppFrame extends Component {
               <div className="nyx-notice-login nyx-display-none">
                 <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
                 <div className="nyx-login-window-acctention">
-                  已经做过临时登记的企业用户以单位全称和初始密码进行登陆
+                  已经做过临时登记的企业用户以单位全称和初始密码进行登录
               </div>
                 <div className="nyx-login-window-acctention">
                   未做过临时登记的企业用户以单位全称进行注册

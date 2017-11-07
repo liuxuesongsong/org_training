@@ -24,7 +24,7 @@ const Language = {
                 cancel_button: "取消",
                 next_step: "跳过",
                 pre_step: "上一步",
-                login_success: "登陆成功",
+                login_success: "登录成功",
                 register_success: "注册成功"
             },
             com: {
