@@ -381,7 +381,7 @@ class AppFrame extends Component {
             onFocus={(e) => {
               this.setState({
                 unavailable: false,
-                available_result: "请输入单位全称"
+                available_result: "请输入公司全称"
               })
             }}
             onBlur={(e) => {
@@ -773,10 +773,10 @@ class AppFrame extends Component {
               <div className="nyx-notice-login nyx-display-none">
                 <h3 style={{ color: "#FFFFFF" }}>特别提醒</h3>
                 <div className="nyx-login-window-acctention">
-                  已经做过临时登记的企业用户以单位全称和初始密码进行登录
+                  已经做过临时登记的企业用户以公司全称和初始密码进行登录
               </div>
                 <div className="nyx-login-window-acctention">
-                  未做过临时登记的企业用户以单位全称进行注册
+                  未做过临时登记的企业用户以公司全称进行注册
               </div>
                 <div className="nyx-login-window-acctention">
                   系统维护电话：010-51527580

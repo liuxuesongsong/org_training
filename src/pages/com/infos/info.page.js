@@ -204,7 +204,7 @@ class Info extends Component {
                                 <BackIcon onClick={() => { this.setState({ show: "all" }) }} />
                             </IconButton>
                             <Typography type="title" color="inherit" style={{ flex: 1 }}>
-                                {"单位全称"}
+                                {"公司全称"}
                             </Typography>
 
                         </Toolbar>
@@ -842,7 +842,7 @@ class Info extends Component {
                         <Paper style={{marginBottom: 80}} >
                             <div className="nyx-info-line-height"
                                 onClick={() => { this.setState({ show: "admin", }) }}>
-                                <div><span className="nyx-info-span">单位全称</span>{this.state.admin.account}</div>
+                                <div><span className="nyx-info-span">公司全称</span>{this.state.admin.account}</div>
                                 <div><span className="nyx-info-span">密码</span>******</div>
                             </div>
                         </Paper> */}

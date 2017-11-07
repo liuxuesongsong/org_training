@@ -90,7 +90,7 @@ function AppDrawer(props) {
       <div className={classes.nav}>
         <Toolbar className={classes.toolbar + ' nyx-logo'}>
           <Typography type="title" gutterBottom color="inherit">
-            {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? "企业登陆" : "机构登陆"}
+            {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? "企业登录" : "机构登录"}
           </Typography>
           <div>{"v." + Config.version}</div>
           {

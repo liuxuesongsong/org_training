@@ -11,7 +11,7 @@ const Language = {
                 enrolled_title: "报名信息",
                 exam_title: "考试成绩",
                 input_your_account: "输入账号",
-                com_account: "单位全称",
+                com_account: "公司全称",
                 org_account: "机构账号",
                 password: "密码",
                 repeat_password: "密码确认",
@@ -39,7 +39,7 @@ const Language = {
                     unarranged_title: "待安排的培训报名学员",
                     arranged_title: "已安排的培训报名学员",
                     clazz_title: "企业所属地区正在开设班级的",
-                    available: "单位名称可以使用",
+                    available: "公司名称可以使用",
                     being_reroll: "正在重新排队"
                 },
                 infos: {
@@ -47,7 +47,7 @@ const Language = {
                     base: {
                         title: "基本信息",
                         base_info: {
-                            account: "单位全称",
+                            account: "公司全称",
                             name: "联系人",
                             mobile: "手机",
                             tel: "电话",
@@ -79,7 +79,7 @@ const Language = {
                     },
                     admin: {
                         title: "联系人信息",
-                        account: "单位全称",
+                        account: "公司全称",
                         password: "修改密码",
                         old_password: "原始密码",
                         new_password: "修改密码",
@@ -254,8 +254,8 @@ const Language = {
             }
         },
         ErrorCode: {
-            0: "单位名称可用",
-            10001: "该单位已注册",
+            0: "公司名称可用",
+            10001: "该公司已注册",
             1000: "两次密码不相同",
             1001: "密码不能为空",
             1002: "账号不能为空",
@@ -300,7 +300,7 @@ const Language = {
                     unarranged_title: "待安排的学员",
                     arranged_title: "已安排的学员",
                     clazz_title: "企业所属地区正在开设班级的",
-                    available: "单位名称可以使用",
+                    available: "公司名称可以使用",
                     being_reroll: "正在重新排队"
                 },
                 infos: {

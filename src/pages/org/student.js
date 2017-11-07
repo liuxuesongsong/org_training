@@ -130,7 +130,7 @@ class Student extends Component {
                             },
                             {
                                 key: "company_name",
-                                name: "单位全称",
+                                name: "公司全称",
                                 width: 200,
                                 resizable: true
                             },

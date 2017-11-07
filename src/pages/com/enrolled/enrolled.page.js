@@ -822,7 +822,7 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <Paper style={{ margin: 10, width: 800, float: "left", boxShadow: "none", fontSize: "12px" }} elevation={4}>
+                        <Paper style={{ margin: 20, width: 800, float: "left", boxShadow: "none", fontSize: "14px" }} elevation={4}>
                             <h2 className="nyx-enrolled-change-title">
                                 {Lang[window.Lang].pages.com.students.base_info}
                             </h2>
@@ -835,6 +835,7 @@ class Enrolled extends Component {
                             />
                             {console.log(this.state.selected.a_id)}
                             <TextField
+                                style={{marginTop:"1em"}}
                                 id="licence.code"
                                 label={Lang[window.Lang].pages.com.students.personal_info.licence_code[1]}
                                 
@@ -846,7 +847,7 @@ class Enrolled extends Component {
                                中项或高项
                            </p>
                             <select
-                                className="nyx-card-enrroll-select-lg"
+                            className={this.state.selected.a_id == -1 ?"nyx-card-enrroll-select-lg-dashed":"nyx-card-enrroll-select-lg"}
                                 id={"student_course_id"}
                                 defaultValue={this.state.selected.course_id ? this.state.selected.course_id : ""}
                                     disabled={this.state.selected.a_id == -1 ? true : false}
@@ -857,7 +858,7 @@ class Enrolled extends Component {
                             </select>
                             <p className="nyx-card-enrroll-select-label-lg">培训城市</p>
                         <select
-                            className="nyx-card-enrroll-select-lg"
+                            className={this.state.selected.a_id == -1 ?"nyx-card-enrroll-select-lg-dashed":"nyx-card-enrroll-select-lg"}
                             id="new_area_id"
                             disabled
                             value={this.state.selected.area_id === null ? "" : this.state.selected.area_id}
@@ -886,6 +887,7 @@ class Enrolled extends Component {
                                 </RadioGroup>
                             </FormControl> */}
                             <TextField
+                                style={{marginTop:"1em"}}
                                 id="register"
                                 label={Lang[window.Lang].pages.com.students.register}
                                 defaultValue={this.state.selected.register ? this.state.selected.register : ""}
@@ -903,12 +905,14 @@ class Enrolled extends Component {
                                 fullWidth>
                             </TextField>
                             <TextField
+                            style={{marginTop:"1em"}}
                                 id="duty"
                                 label={Lang[window.Lang].pages.com.students.personal_info.duty}
                                 defaultValue={this.state.selected.duty ? this.state.selected.duty : ""}
                                 fullWidth>
                             </TextField>
                             <TextField
+                            style={{marginTop:"1em"}}
                                 id="mobile"
                                 label={Lang[window.Lang].pages.com.students.tel}
                                 defaultValue={this.state.selected.mobile ? this.state.selected.mobile : ""}
@@ -916,12 +920,14 @@ class Enrolled extends Component {
                             />
                             <TextField
                                 id="mail"
+                                style={{marginTop:"1em"}}
                                 label={Lang[window.Lang].pages.com.students.email}
                                 defaultValue={this.state.selected.mail ? this.state.selected.mail : ""}
                                 fullWidth
                             />
                             <TextField
                                 id="wechat"
+                                style={{marginTop:"1em"}}
                                 label={Lang[window.Lang].pages.com.students.personal_info.wechat}
                                 defaultValue={this.state.selected.wechat ? this.state.selected.wechat : ""}
                                 fullWidth
