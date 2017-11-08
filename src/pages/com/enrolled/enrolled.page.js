@@ -235,6 +235,7 @@ class Enrolled extends Component {
             mobile: document.getElementById("mobile").value,
             mail: document.getElementById("mail").value,
             wechat: document.getElementById("wechat").value,
+            detail: document.getElementById("detail").value,
         }
         getData(getRouter(UPDATE_STUDENT), { session: sessionStorage.session, id: this.state.selectedStudentId, student: obj }, cb, { self: window.currentPage, data: obj });
     }
@@ -385,30 +386,30 @@ class Enrolled extends Component {
                 
             /> */}
             <TextField
-                 className="nyx-form-div nyx-must-content"
+                className="nyx-form-div nyx-must-content"
                 key={"identity_card"}
-                 id={"new_identity_card"}
+                id={"new_identity_card"}
                 label={Lang[window.Lang].pages.com.students.input.identity_card}
                 
             />
             <TextField
-                 className="nyx-form-div"
+                className="nyx-form-div"
                 key={"department"}
-                 id={"new_department"}
+                id={"new_department"}
                 label={Lang[window.Lang].pages.com.students.input.department}
                
             />
             <TextField
-                 className="nyx-form-div"
+                className="nyx-form-div"
                 key={"duty"}
-                 id={"new_duty"}
+                id={"new_duty"}
                 label={Lang[window.Lang].pages.com.students.input.duty}
                 
             />
             <TextField
-                 className="nyx-form-div"
+                className="nyx-form-div"
                 key={"wechat"}
-                 id={"new_wechat"}
+                id={"new_wechat"}
                 label={Lang[window.Lang].pages.com.students.input.wechat}
                 
             />
@@ -930,6 +931,14 @@ class Enrolled extends Component {
                                 style={{marginTop:"1em"}}
                                 label={Lang[window.Lang].pages.com.students.personal_info.wechat}
                                 defaultValue={this.state.selected.wechat ? this.state.selected.wechat : ""}
+                                fullWidth
+                            />
+                            <TextField
+                                id={"detail"}
+                                style={{marginTop:"1em"}}
+                                label={Lang[window.Lang].pages.com.students.input.detail}
+                                helperText={Lang[window.Lang].pages.com.students.input.detail_helper}
+                                defaultValue={this.state.selected.detail ? this.state.selected.detail : ""}
                                 fullWidth
                             />
                             <Button

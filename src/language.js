@@ -102,7 +102,9 @@ const Language = {
                         "wechat": "微信/QQ",
                         "id_type": "证件类型",
                         "identity_card": "证件编号",
-                        "register": "备注"
+                        "register": "备注",
+                        "detail": "补充说明",
+                        "detail_helper":"异常信息请注明"
                     },
                     select:
                     {

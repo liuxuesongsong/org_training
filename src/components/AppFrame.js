@@ -782,7 +782,10 @@ class AppFrame extends Component {
                   系统维护电话：010-51527580
               </div>
               </div>
-            </div> : this.LoginView()}
+            </div> : 
+                <TabContainer>
+                  {this.LoginView()}
+                </TabContainer>}
         </div>
       </div>
     </div>
