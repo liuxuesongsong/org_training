@@ -68,7 +68,7 @@ class Home extends Component {
                 enrolled++;
                 unarragedStudents.push(students[i]);
             }
-            if (students[i].is_inlist == STATUS_ARRANGED_DID) {
+            if (students[i].is_inlist == STATUS_ARRANGED_DID||students[i].is_inlist == 3) {
                 enrolled++;
                 arranged++;
                 arrangedStudents.push(students[i]);

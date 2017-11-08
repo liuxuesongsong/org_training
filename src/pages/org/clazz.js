@@ -716,6 +716,8 @@ class Clazz extends Component {
                                                             selected: {},
                                                             stateSelected: false
                                                         })
+                                                        this.state.queryCondition = {};
+                                                        this.queryStudents(1, true);
                                                         return
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
@@ -849,6 +851,7 @@ class Clazz extends Component {
                                 this.state.queryCondition.area_id = e.target.value
                             }}
                         >
+                            <option value={null}>{"-省市-"}</option>
                             {getAreas().map(area => {
                                 return <option key={area.id} value={area.id}>{area.area_name}</option>
                             })}

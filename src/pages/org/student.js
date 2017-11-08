@@ -25,6 +25,7 @@ class Student extends Component {
         search_area_id: null,
         search_course_id: null,
         search_is_inlist: null,
+        search_institution: null,
     }
 
     componentDidMount() {
@@ -137,10 +138,11 @@ class Student extends Component {
                         defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                         onChange={(e) => {
                             console.log(e.target.value)
-                            this.state.search_area_id = e.target.value
-                            this.state.queryCondition.area_id = e.target.value
+                            this.state.search_area_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.area_id =  e.target.value == "null"? null:e.target.value;
                         }}
-                    >
+                    >   
+                        <option value={"null"}>{"-省市-"}</option>
                         {getAreas().map(area => {
                             return <option key={area.id} value={area.id}>{area.area_name}</option>
                         })}
@@ -151,10 +153,11 @@ class Student extends Component {
                         defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
                         disabled={this.state.search_course_id == -1 ? true : false}
                         onChange={(e) => {
-                            this.state.search_course_id = e.target.value
-                            this.state.queryCondition.course_id = e.target.value
+                            this.state.search_course_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.course_id =  e.target.value == "null"? null:e.target.value;
                         }}
                     >
+                        <option value={"null"}>{"-中项或高项-"}</option>
                         <option value={1}>{"项目经理"}</option>
                         <option value={2}>{"高级项目经理"}</option>
 
@@ -165,15 +168,32 @@ class Student extends Component {
                         defaultValue={this.state.search_is_inlist ? this.state.is_inlist : ""}
                         disabled={this.state.search_is_inlist == -2 ? true : false}
                         onChange={(e) => {
-                            this.state.search_is_inlist = e.target.value
-                            this.state.queryCondition.is_inlist = e.target.value
+                            this.state.search_is_inlist = e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.is_inlist = e.target.value == "null"? null:e.target.value;
                         }}
                     >
+                        <option value={"null"}>{"-报名状态-"}</option>
                         <option value={-1}>{"待报名-导入"}</option>
                         <option value={0}>{"待报名"}</option>
                         <option value={1}>{"已报名"}</option>
                         <option value={2}>{"已安排"}</option>
                         <option value={3}>{"已通知"}</option>
+
+                    </select>
+                    <select
+                        className="nyx-info-select-lg"
+                        id={"search_institution"}
+                        defaultValue={this.state.search_institution ? this.state.institution : ""}
+                        disabled={this.state.search_institution == -2 ? true : false}
+                        onChange={(e) => {
+                            this.state.search_institution =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-培训机构-"}</option>
+                        <option value={1}>{"中软培训"}</option>
+                        <option value={2}>{"赛迪"}</option>
+                        <option value={3}>{"赛宝"}</option>
 
                     </select>
                     <TextField
@@ -190,7 +210,7 @@ class Student extends Component {
                     <Button
                         color="primary"
                         onClick={() => {
-                            this.queryCondition={}
+                            this.state.queryCondition={}
                             this.queryStudents(1, true);
                         }}
                         style={{ margin: 10 }}
@@ -328,6 +348,27 @@ class Student extends Component {
                     {"下页"}
                 </Button>
                 共{this.state.count}人
+                <Button
+                onClick={() => {
+                   var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session;
+                   if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
+                        href = href+"&area_id=" + this.state.queryCondition.area_id;
+                   }
+                   if(this.state.queryCondition.is_inlist!=undefined && this.state.queryCondition.is_inlist!=null){
+                    href = href+"&is_inlist=" + this.state.queryCondition.is_inlist;
+                   }
+                   if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
+                        href = href+"&institution=" + this.state.queryCondition.institution;
+                   }
+                   if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
+                    href = href+"&course_id=" + this.state.queryCondition.course_id;
+                   } 
+                   var a = document.createElement('a');
+                   a.href = href;
+                //    console.log(href);
+                   a.click();  
+                }}
+                >导出</Button>
             </div>
         )
     }

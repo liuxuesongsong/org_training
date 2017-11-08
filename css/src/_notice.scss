@@ -19,11 +19,17 @@
     height:48px;
     background: $blue;
     border-top:1rem solid $blue900;
-    transition:width 0.3s ease-in,height 0.3s ease-out;
+    transition:width 0.3s ease-in,height 0.3s ease-out,margin-left .3s ease;
     background: url(img/process.png) no-repeat;
+    background-size: 100%;
+    margin-left:0;
+    z-index: 1301;
     &:hover{
-        width: 663px;
-        height:390px;
+        border: none;
+        width: 960px;
+        height:260px;
+        margin-left: -150px;
+        @extend .nyx-z2;
     }
 }
 .nyx-notice-title{
