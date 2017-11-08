@@ -788,7 +788,7 @@ class Clazz extends Component {
                                 </div>
                         )}
                     </List>
-                    <div className="nyx-left-bottom-paper" style={{ position: "absolute", bottom: "0" }}>
+                    <div className="nyx-left-bottom-paper">
                         {this.state.clazzStudents.map(
                             student => {
                                 return <div key={student.id}
@@ -798,6 +798,19 @@ class Clazz extends Component {
                                     }}
                                 >{student.student_name}</div>
                             })}
+                            
+                    <Button
+                        color="primary"
+                        id='downloadData'
+                        href="#"
+                        download
+                        onClick={() => {
+
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"下载"}
+                    </Button>
                     </div>
 
                 </div>
@@ -989,18 +1002,6 @@ class Clazz extends Component {
                     >
                         {"下页"}
                     </Button>
-                    {/* <Button
-                        color="primary"
-                        id='downloadData'
-                        href="#"
-                        download
-                        onClick={() => {
-
-                        }}
-                        style={{ margin: 10 }}
-                    >
-                        {"下载"}
-                    </Button> */}
 
                     {this.state.selectedStudentID.length + "/" + this.state.count}
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 
 import Button from 'material-ui/Button';
+import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
@@ -15,10 +16,15 @@ class Student extends Component {
     state = {
         allData: [],
         tableData: [],
+        queryCondition: {},
         currentPage: 1,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
         count: 0,
+        search_input: "",
+        search_area_id: null,
+        search_course_id: null,
+        search_is_inlist: null,
     }
 
     componentDidMount() {
@@ -68,7 +74,7 @@ class Student extends Component {
                 count: 0
             })
         }
-        getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: { page: query_page, page_size: 100 } }, cb, {});
+        getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
 
@@ -109,9 +115,89 @@ class Student extends Component {
     popUpNotice = (type, code, content) => {
         this.setState({ type: type, code: code, content: content, alertOpen: this.state.alertOpen });
     }
+
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
+                <div>
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                            this.queryStudents(1, true);
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"搜索"}
+                    </Button>
+                    <select
+                        className="nyx-info-select-lg"
+                        id="search_area_id"
+                        label={Lang[window.Lang].pages.org.clazz.info.area}
+                        defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
+                        onChange={(e) => {
+                            console.log(e.target.value)
+                            this.state.search_area_id = e.target.value
+                            this.state.queryCondition.area_id = e.target.value
+                        }}
+                    >
+                        {getAreas().map(area => {
+                            return <option key={area.id} value={area.id}>{area.area_name}</option>
+                        })}
+                    </select>
+                    <select
+                        className="nyx-info-select-lg"
+                        id={"search_course_id"}
+                        defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
+                        disabled={this.state.search_course_id == -1 ? true : false}
+                        onChange={(e) => {
+                            this.state.search_course_id = e.target.value
+                            this.state.queryCondition.course_id = e.target.value
+                        }}
+                    >
+                        <option value={1}>{"项目经理"}</option>
+                        <option value={2}>{"高级项目经理"}</option>
+
+                    </select>
+                    <select
+                        className="nyx-info-select-lg"
+                        id={"search_is_inlist"}
+                        defaultValue={this.state.search_is_inlist ? this.state.is_inlist : ""}
+                        disabled={this.state.search_is_inlist == -2 ? true : false}
+                        onChange={(e) => {
+                            this.state.search_is_inlist = e.target.value
+                            this.state.queryCondition.is_inlist = e.target.value
+                        }}
+                    >
+                        <option value={-1}>{"待报名-导入"}</option>
+                        <option value={0}>{"待报名"}</option>
+                        <option value={1}>{"已报名"}</option>
+                        <option value={2}>{"已安排"}</option>
+                        <option value={3}>{"已通知"}</option>
+
+                    </select>
+                    <TextField
+                        id="search_input"
+                        label={"搜索公司名称"}
+                        value={this.state.search_input}
+                        onChange={event => {
+                            this.setState({
+                                search_input: event.target.value,
+                            });
+                        }}
+                    />
+                    
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            this.queryCondition={}
+                            this.queryStudents(1, true);
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"取消筛选"}
+                    </Button>
+                </div>
                 <ReactDataGrid
                     rowKey="id"
                     columns={
@@ -131,25 +217,7 @@ class Student extends Component {
                             {
                                 key: "company_name",
                                 name: "公司全称",
-                                width: 200,
-                                resizable: true
-                            },
-                            {
-                                key: "company_admin",
-                                name: "联系人",
-                                width: 80,
-                                resizable: true
-                            },
-                            {
-                                key: "company_mobile",
-                                name: "联系电话",
-                                width: 100,
-                                resizable: true
-                            },
-                            {
-                                key: "company_mail",
-                                name: "联系邮箱",
-                                width: 120,
+                                width: 300,
                                 resizable: true
                             },
                             {
@@ -161,7 +229,19 @@ class Student extends Component {
                             {
                                 key: "course_name",
                                 name: "课程",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "register",
+                                name: "备注",
                                 width: 100,
+                                resizable: true
+                            },
+                            {
+                                key: "institution",
+                                name: "培训机构",
+                                width: 80,
                                 resizable: true
                             },
                             {
@@ -190,6 +270,8 @@ class Student extends Component {
                             company_admin: this.state.tableData[i].company_admin,
                             company_mobile: this.state.tableData[i].company_mobile,
                             company_mail: this.state.tableData[i].company_mail,
+                            register: this.state.tableData[i].register,
+                            institution: getInst(this.state.tableData[i].institution),
                             area_name: getCity(this.state.tableData[i].area_id),
                             course_name: getCourse(this.state.tableData[i].course_id),
                             is_inlist: this.state.tableData[i].is_inlist === "-1" ? "待报名-导入" :
@@ -245,6 +327,7 @@ class Student extends Component {
                 >
                     {"下页"}
                 </Button>
+                共{this.state.count}人
             </div>
         )
     }
