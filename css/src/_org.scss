@@ -89,10 +89,10 @@ button.nyx-clazz-card-button{
 }
 .nyx-left-bottom-paper{
   position: absolute;
-  bottom: 0;
+  top:800px;
   background: #fff;
   width:320px;
-  min-height:640px;
+  @extend .nyx-z4;
 }
 .nyx-areacount-list{
   padding: 1rem;
