@@ -247,7 +247,7 @@ class Home extends Component {
 
                             {this.state.arrangedStudents.map(student => {
                                 switch (student.is_inlist) {
-                                    case STATUS_AGREED_UNDO:
+                                    case "0":
                                         return (<StudentCard
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
@@ -279,7 +279,7 @@ class Home extends Component {
                                                 }]}
                                         >
                                         </StudentCard>)
-                                    case STATUS_AGREED_AGREE:
+                                    case "1":
                                         return (<StudentCard
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
@@ -291,7 +291,7 @@ class Home extends Component {
                                             status={"已通过"}
                                         >
                                         </StudentCard>)
-                                    case STATUS_AGREED_REFUSED:
+                                    case "2":
                                         return (<StudentCard
                                             type={CARD_TYPE_ARRANGE}
                                             key={CARD_TYPE_ARRANGE + student.id}
@@ -303,7 +303,7 @@ class Home extends Component {
                                             status={"已拒绝"}
                                         >
                                         </StudentCard>)
-                                    case STATUS_AGREED_KNOW:
+                                    case "3":
                                         return (<StudentCard
                                             type={CARD_TYPE_KNOW}
                                             key={CARD_TYPE_KNOW + student.id}
