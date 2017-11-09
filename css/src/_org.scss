@@ -74,10 +74,11 @@ div.nyx-clazz-list{
 }
 
 .nyx-clazz-card{
-  margin:0.5rem 1rem;
-  padding:0.5rem 1rem;
+  margin:0rem 1rem;
+  padding:0.2rem 1rem;
   border-top:2px $blue200 solid;
 }
+
 button.nyx-clazz-card-button{
   background: $blue;
   color: #fff;
@@ -171,4 +172,19 @@ button.nyx-clazz-card-button{
   background-color: $blue;
   display: inline-block;
   line-height: 20px;
+}
+.nyx-home-button{
+  color: #FFFFFF;
+  font-size: 12px;
+  line-height: 24px;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+  border: none;
+  background-color: #2196F3;
+}
+.nyx-clazz-student-name{
+ // border-bottom: 2px solid $blue;
+  padding: 0.5rem;
+  margin: 0 3rem;
+  font-size: 14px;
 }

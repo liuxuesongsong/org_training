@@ -586,6 +586,7 @@ class Clazz extends Component {
     toggleDrawer = (open) => () => {
         this.setState({
             right: open,
+            showInfo:true
         });
     };
 
@@ -734,7 +735,7 @@ class Clazz extends Component {
                                             </CardActions>
                                         </div> :
                                             <div>
-                                                <CardActions className="nyx-card-action">
+                                                <CardActions style={{height:"45px"}} className="nyx-card-action">
                                                     <i
                                                         className="glyphicon glyphicon-pencil"
                                                         onClick={() => {
@@ -764,8 +765,8 @@ class Clazz extends Component {
                                                         onClick={() => {
                                                             this.state.selected = clazz;
                                                             this.queryClazzStudents(clazz.id);
-                                                            // this.state.showInfo = true;
-                                                            {/* this.toggleDrawer(true)() */ }
+                                                             this.state.showInfo = true;
+                                                             this.toggleDrawer(true)()
                                                         }}>
                                                     </i>
                                                     <Button
@@ -790,15 +791,25 @@ class Clazz extends Component {
                                 </div>
                         )}
                     </List>
-                    <div className="nyx-left-bottom-paper">
+                    <Drawer
+                    
+                    anchor="right"
+                    open={this.state.right}
+                    onRequestClose={this.toggleDrawer(false)}
+                >
+                <div style={{width:"500px"}}>
                         {this.state.clazzStudents.map(
                             student => {
-                                return <div key={student.id}
-                                    onClick={() => {
+                                return <div className="nyx-clazz-student-name"
+                                   
+                                >{student.student_name}
+                                <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
+                                onClick={() => {
                                         console.log("123")
                                         this.removeClassStudent(student.id)
                                     }}
-                                >{student.student_name}</div>
+                                >{"删除"}</button></div>
+                                
                             })}
                             
                     <Button
@@ -814,7 +825,8 @@ class Clazz extends Component {
                         {"下载"}
                     </Button>
                     </div>
-
+                    </Drawer>
+                   
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
@@ -847,25 +859,26 @@ class Clazz extends Component {
                             defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                             onChange={(e) => {
                                 console.log(e.target.value)
-                                this.state.search_area_id = e.target.value
-                                this.state.queryCondition.area_id = e.target.value
+                                this.state.search_area_id = e.target.value == "null"? null:e.target.value;
+                                this.state.queryCondition.area_id = e.target.value == "null"? null:e.target.value;
                             }}
                         >
-                            <option value={null}>{"-省市-"}</option>
+                            <option value={"null"}>{"-省市-"}</option>
                             {getAreas().map(area => {
                                 return <option key={area.id} value={area.id}>{area.area_name}</option>
                             })}
                         </select>
                         <select
-                            className="nyx-card-enrroll-select-lg"
+                            className="nyx-info-select-lg"
                             id={"search_course_id"}
-                            defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
+                            defaultValue={this.state.search_course_id === null  ?"": this.state.search_course_id}
                             disabled={this.state.search_course_id == -1 ? true : false}
                             onChange={(e) => {
-                                this.state.search_course_id = e.target.value
-                                this.state.queryCondition.course_id = e.target.value
+                                this.state.search_course_id =  e.target.value == "null"? null:e.target.value;
+                                this.state.queryCondition.course_id = e.target.value == "null"? null:e.target.value;
                             }}
                         >
+                           <option value={"null"}>{"-中项或高项-"}</option>
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
 

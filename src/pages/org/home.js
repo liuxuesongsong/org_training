@@ -12,7 +12,7 @@ import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-
 
 import { initCache, getData, getRouter, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
-    LAST_COUNT, DATA_TYPE_BASE, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
+    LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT
 } from '../../enum';
 import Lang from '../../language';
@@ -27,6 +27,8 @@ class Home extends Component {
         name: "",
         arranged_nums: 0,
         all_students_nums: 0,
+        registered_nums: 0,
+        all_registered_nums: 0,
         clazzes: [],
         areas: [],
         // 界面状态
@@ -55,6 +57,9 @@ class Home extends Component {
                 clazzes: window.CacheData.clazzes,
                 arranged_nums: message.data.info.sum.all_arrange_count,
                 all_students_nums: message.data.info.sum.all_count,
+                //已临时登记人数
+                registered_nums:  message.data.info.sum.registered_nums,
+                all_registered_nums: message.data.info.sum.all_registered_nums
                 // arranged_nums: message.data.info.sum.all_student_inlist,
                 // all_students_nums: message.data.info.sum.all_student_reg,
             })
@@ -81,6 +86,15 @@ class Home extends Component {
                             <Typography type="body1" component="p">
                                 {Lang[window.Lang].pages.org.home.arranged + "/" + Lang[window.Lang].pages.org.home.all_students + ":"
                                     + this.state.arranged_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_students_nums + Lang[window.Lang].pages.com.home.human}
+                            <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
+                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
+                            <button
+                            className="nyx-home-button"
+                            onClick={()=>{
+                                 getData(getRouter(UPDATE_COUNT));
+                                console.log("刷新数据");
+                            }}
+                            >刷新数据</button>
                             </Typography>
 
                         </Paper>
