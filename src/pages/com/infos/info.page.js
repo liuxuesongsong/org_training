@@ -610,7 +610,7 @@ class Info extends Component {
                                     var c_area_id = document.getElementById("input_c_area_id").value;
                                     var c_level = document.getElementById("input_c_level").value;
                                     var obj = {
-                                        account: account === "" ? null : account,
+                                        c_name: account === "" ? null : account,
                                         name: name === "" ? null : name,
                                         mobile: mobile === "" ? null : mobile,
                                         tel: tel === "" ? null : tel,
@@ -728,6 +728,7 @@ class Info extends Component {
                                 id={"input_allname"}
                                 label={Lang[window.Lang].pages.com.infos.finance.allname}
                                 value={this.state.finance["allname"] === null ? "" : this.state.finance["allname"]}
+                                disabled
                                 onChange={(event) => {
                                     this.state.finance["allname"] = event.target.value
                                     this.setState({
@@ -821,7 +822,7 @@ class Info extends Component {
                                     var c_address = document.getElementById("input_c_address").value;
                                     var financial_call = document.getElementById("input_financial_call").value;
                                     var obj = {
-                                        allname: allname === "" ? null : allname,
+                                        c_name: allname === "" ? null : allname,
                                         taxpayer_number: taxpayer_number === "" ? null : taxpayer_number,
                                         opening_bank: opening_bank === "" ? null : opening_bank,
                                         bank_account: bank_account === "" ? null : bank_account,

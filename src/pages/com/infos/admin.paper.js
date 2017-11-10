@@ -96,6 +96,7 @@ class Admin extends Component {
                                     className="nyx-form-div"
                                     key={"password"}
                                     type="password"
+                                    disabled
                                     label={Lang[window.Lang].pages.com.infos.admin.old_password}
                                     value={this.state.admin["password"] === null ? "" : this.state.admin["password"]}
                                     onChange={(event, value) => {

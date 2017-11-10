@@ -612,6 +612,7 @@ class Clazz extends Component {
                             this.setState({ queryCondition: this.state.queryCondition })
                         }}
                     />
+                    
                 )
             } else if (k === "company_name" && this.state.queryCondition[k] !== "") {
                 chips.push(
@@ -843,6 +844,7 @@ class Clazz extends Component {
                             {"搜索"}
                         </Button>
                         <TextField
+                            style={{top:"-0.5rem"}}
                             id="search_input"
                             label={"搜索公司名称"}
                             value={this.state.search_input}
@@ -853,6 +855,7 @@ class Clazz extends Component {
                             }}
                         />
                         <select
+                            style={{marginLeft:"1rem"}}
                             className="nyx-info-select-lg"
                             id="search_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
@@ -869,6 +872,7 @@ class Clazz extends Component {
                             })}
                         </select>
                         <select
+                            style={{marginLeft:"1rem"}}
                             className="nyx-info-select-lg"
                             id={"search_course_id"}
                             defaultValue={this.state.search_course_id === null  ?"": this.state.search_course_id}

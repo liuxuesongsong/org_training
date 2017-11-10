@@ -62,7 +62,7 @@ const Language = {
                     },
                     finance: {
                         title: "发票信息",
-                        allname: "公司全称",
+                        allname: "公司全称(在基本信息中修改公司全称)",
                         taxpayer_number: "纳税人识别号",
                         opening_bank: "开户银行",
                         bank_account: "开户行账号",

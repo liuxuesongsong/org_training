@@ -47,6 +47,7 @@ class Enrolled extends Component {
         course_id:"",
         a_id:"",
         c_area_id: "",
+        is_register:"",
         fkenrolled_height: 1,
         unarranged_height: 1,
         arranged_height: 1,
@@ -289,13 +290,42 @@ class Enrolled extends Component {
                 
                
             />
-            <TextField
-                 className="nyx-form-div"
+            <div className="nyx-form-div">
+            <div style={{width:"50%",float:"left",marginTop:"1px"}} className="nyx-info-select-div">
+            <p className="nyx-info-select-label">{Lang[window.Lang].pages.com.students.input.register}</p>
+                        <select
+                        style={{margin:0,fontSize:"16px",paddingBottom:"10px"}}
+                            className="nyx-info-select-lg"
+                            id="new_register_select"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                            onChange={(e)=>{
+                                this.setState({is_register:e.target.value})
+                                
+                                if(e.target.value==2){
+                                   document.getElementById("new_register").value="培训考试报名"
+                                }else{
+                                    document.getElementById("new_register").value=""
+                                }
+                               // console.log(e.target.value);
+                            }}
+                        >
+                            <option value={1}>{"临时登记编号"}</option>
+                            <option value={2}>{"培训考试报名"}</option>
+                            <option value={3}>{"空"}</option>
+                        </select>
+                        </div>
+                        <TextField
+                 style={{width:"50%",marginLeft:"-3px",marginTop:"16px"}}
                 key={"register"}
                  id={"new_register"}
-                label={Lang[window.Lang].pages.com.students.input.register}
+                 disabled={this.state.is_register == 3||this.state.is_register == 2 ? true : false}
+                
+              
                 
             />
+
+            </div>
+           
                         <div>
                             {/* <p
                                 className="nyx-info-select-label"
@@ -562,17 +592,15 @@ class Enrolled extends Component {
                                         this.selectedStudent(student);
                                         this.toggleDrawer(true)()
                                     }, () => {
-                                        this.state.selectedStudentId = student.id;
-                                        if (getCache("base").c_area_id === 0) {
-                                            this.popUpNotice("alert", 0, "请先补全企业信息");
-                                            return
-                                        }else if(getCache("base").name === ""){
-                                            this.popUpNotice("alert", 0, "请先补全企业信息");
-                                            return
-                                        }else if(getCache("base").mobile === ""){
-                                            this.popUpNotice("alert", 0, "请先补全企业信息");
+                                        var info_completed=getCache("info_completed");
+                                        var info_completed_per=info_completed/20;
+                                        console.log(info_completed_per);
+                                        if(info_completed_per<1){
+                                            this.popUpNotice("alert", 0, '企业相关信息完成'+info_completed_per*100+'%, 请先补全企业相关信息');
                                             return
                                         }
+                                        this.state.selectedStudentId = student.id;
+                                        
 
 
                                         this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
@@ -620,10 +648,10 @@ class Enrolled extends Component {
                             <Button style={{ position: "absolute", right: "28px", top: "0" }} fab color="primary" aria-label="add" className={'nyx-paper-header-btn'}
                                 onClick={() => {
                                     if (getCache("base").c_area_id === 0) {
-                                        this.popUpNotice("alert", 0, "请先补全企业信息");
+                                        this.popUpNotice("alert", 0, "请先补全企业相关信息");
                                         return
                                     }else if(getCache("base").name === ""){
-                                        this.popUpNotice("alert", 0, "请先补全企业信息");
+                                        this.popUpNotice("alert", 0, "请先补全企业相关信息");
                                         return
                                     }
                                     this.setState({
@@ -651,6 +679,14 @@ class Enrolled extends Component {
                                         this.selectedStudent(student);
                                         this.toggleDrawer(true)()
                                     }, () => {
+                                       // console.log(getCache("info_completed"));
+                                       var info_completed=getCache("info_completed");
+                                       var info_completed_per=info_completed/20;
+                                       console.log(info_completed_per);
+                                       if(info_completed_per<1){
+                                           this.popUpNotice("alert", 0, '企业相关信息完成'+info_completed_per*100+'%, 请先补全企业相关信息');
+                                           return
+                                       }
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
                                             () => {

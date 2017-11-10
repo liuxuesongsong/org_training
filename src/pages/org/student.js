@@ -148,6 +148,7 @@ class Student extends Component {
                         })}
                     </select>
                     <select
+                        style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_course_id"}
                         defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
@@ -163,6 +164,7 @@ class Student extends Component {
 
                     </select>
                     <select
+                        style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_is_inlist"}
                         defaultValue={this.state.search_is_inlist ? this.state.is_inlist : ""}
@@ -181,6 +183,7 @@ class Student extends Component {
 
                     </select>
                     <select
+                        style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_institution"}
                         defaultValue={this.state.search_institution ? this.state.institution : ""}
@@ -197,6 +200,7 @@ class Student extends Component {
 
                     </select>
                     <TextField
+                        style={{top:"-0.5rem",left:"1rem"}}
                         id="search_input"
                         label={"搜索公司名称"}
                         value={this.state.search_input}

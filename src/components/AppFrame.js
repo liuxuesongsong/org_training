@@ -544,8 +544,20 @@ class AppFrame extends Component {
                 // Code.LOGIC_SUCCESS
                 this.popUpNotice(NOTICE, 0, message.msg);
               }
+              var apptype;
+             // var name = this.state.name;
+             // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
+              if (window.type === 1) {
+                console.log("0000");
+                apptype = APP_TYPE_COMPANY;
+                getData(getRouter("forget_code"), { account: this.state.name, type: 0,tel: this.state.phone_number}, cb, {});
+              } else if (window.type === 2) {
+                console.log("11111");
+                apptype = APP_TYPE_ORANIZATION;
+                getData(getRouter("forget_code"), { account: this.state.name, type: 1,tel: this.state.phone_number}, cb, {});
+              }
 
-              getData(getRouter("forget_code"), { account: this.state.name, tel: this.state.phone_number, }, cb, {});
+            //  getData(getRouter("forget_code"), { account: this.state.name, tel: this.state.phone_number, }, cb, {});
 
             }}
           >
@@ -568,25 +580,51 @@ class AppFrame extends Component {
             color="primary"
             className={'nyx-btn-circle'}
             onClick={() => {
-              var cb = (route, message, arg) => {
-                // Code.LOGIC_SUCCESS
-                if (message.code === Code.LOGIC_SUCCESS) {
-                  sessionStorage.logged = true;
-                  sessionStorage.account = arg["account"];
-                  sessionStorage.session = message.data.session;
-                  sessionStorage.apptype = APP_TYPE_COMPANY;
 
-
-                  this.login_success(APP_TYPE_COMPANY);
-                  // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
-                } else {
-                  this.popUpNotice(NOTICE, 0, message.msg);
-                }
+            var cb = (route, message, arg) => {
+              // Code.LOGIC_SUCCESS
+              if (message.code === Code.LOGIC_SUCCESS) {
+                sessionStorage.logged = true;
+                sessionStorage.account = arg["account"];
+                sessionStorage.session = message.data.session;
+                sessionStorage.apptype = arg["type"];
+                this.login_success(Number(arg["type"]));
+                // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
+              } else {
+                this.popUpNotice(NOTICE, 0, message.msg);
               }
+            }
+
+            var apptype;
+            var name = this.state.name;
+           // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
+            if (window.type === 1) {
+              console.log("0000");
+              apptype = APP_TYPE_COMPANY;
+              getData(getRouter("forget_code_login"), { account: this.state.name, type: 0, code: this.state.phone_code }, cb, { account: name, type: apptype });
+            } else if (window.type === 2) {
+              console.log("11111");
+              apptype = APP_TYPE_ORANIZATION;
+              getData(getRouter("forget_code_login"), { account: this.state.name, type: 1,  code: this.state.phone_code}, cb, { account: name, type: apptype });
+            }
+              // var cb = (route, message, arg) => {
+              //   // Code.LOGIC_SUCCESS
+              //   if (message.code === Code.LOGIC_SUCCESS) {
+              //     sessionStorage.logged = true;
+              //     sessionStorage.account = arg["account"];
+              //     sessionStorage.session = message.data.session;
+              //     sessionStorage.apptype = APP_TYPE_COMPANY;
+
+
+              //     this.login_success(APP_TYPE_COMPANY);
+              //     // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
+              //   } else {
+              //     this.popUpNotice(NOTICE, 0, message.msg);
+              //   }
+              // }
               // console.log(account)
               // var code = document.getElementById("phone_code").value;
-              var name = this.state.name;
-              getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
+             
             }}
           >
             {"登录"}
