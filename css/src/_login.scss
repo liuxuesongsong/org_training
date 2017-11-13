@@ -118,7 +118,14 @@ $btn-size:64px;
     background: $blue900;
     color:#ffffff;
 }
+
 @media only screen and (max-width:960px ){
+    .nyx-training_title{
+        font-size: 14px;
+        overflow: hidden;
+        text-overflow:ellipsis;
+        white-space: nowrap;
+    }
     .nyx-login-window:before {
         position: absolute;
         font-size: 2.5rem;

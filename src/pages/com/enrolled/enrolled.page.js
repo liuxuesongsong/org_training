@@ -859,7 +859,7 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <Paper style={{ margin: 20, width: 800, float: "left", boxShadow: "none", fontSize: "14px" }} elevation={4}>
+                        <Paper className="nyx-enrolled-change-drawer"  elevation={4}>
                             <h2 className="nyx-enrolled-change-title">
                                 {Lang[window.Lang].pages.com.students.base_info}
                             </h2>

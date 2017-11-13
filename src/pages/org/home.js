@@ -91,8 +91,22 @@ class Home extends Component {
                             <button
                             className="nyx-home-button"
                             onClick={()=>{
-                                 getData(getRouter(UPDATE_COUNT));
-                                console.log("刷新数据");
+                                var cb = (router, message, arg) => {
+                                    window.currentPage.setState({
+                                        areas: message.data.info.areas,
+                                        clazzes: window.CacheData.clazzes,
+                                        arranged_nums: message.data.info.sum.all_arrange_count,
+                                        all_students_nums: message.data.info.sum.all_count,
+                                        //已临时登记人数
+                                        registered_nums:  message.data.info.sum.registered_nums,
+                                        all_registered_nums: message.data.info.sum.all_registered_nums
+                                        // arranged_nums: message.data.info.sum.all_student_inlist,
+                                        // all_students_nums: message.data.info.sum.all_student_reg,
+                                    })
+                                    // all_students
+                                }
+                                 getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
+                                //console.log("刷新数据");
                             }}
                             >刷新数据</button>
                             </Typography>

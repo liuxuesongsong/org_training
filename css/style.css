@@ -1332,6 +1332,12 @@
 }
 
 @media only screen and (max-width: 960px) {
+  .nyx-training_title {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   .nyx-login-window:before {
     position: absolute;
     font-size: 2.5rem;
@@ -1846,6 +1852,14 @@
   font-size: 10px;
 }
 
+.nyx-enrolled-change-drawer {
+  margin: 20px;
+  width: 800px;
+  float: left;
+  box-shadow: none;
+  font-size: 14px;
+}
+
 .nyx-enrolled-change-title {
   color: #2196F3;
   font-size: 18px;
@@ -1893,6 +1907,11 @@
   }
   .nyx-enroller-list {
     width: 320px;
+  }
+  .nyx-enrolled-change-drawer {
+    width: 100%;
+    margin: 0;
+    padding: 20px;
   }
 }
 

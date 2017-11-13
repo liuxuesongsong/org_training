@@ -593,7 +593,7 @@ class Clazz extends Component {
     getCondition = () => {
         var chips = []
         for (var k in this.state.queryCondition) {
-            if (k === "area_id") {
+            if (k === "area_id"&&this.state.queryCondition.area_id!=null) {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"地区" + ":" + getCity(this.state.queryCondition[k])}
@@ -603,7 +603,7 @@ class Clazz extends Component {
                         }}
                     />
                 )
-            } else if (k === "course_id") {
+            } else if (k === "course_id"&&this.state.queryCondition.course_id!=null) {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}

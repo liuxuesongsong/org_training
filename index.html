@@ -7,74 +7,68 @@
 
   <style type="text/css">
     body {
-      margin: auto;
-      padding: 0;
-    }
-
-    a {
-      font-size: 20px;
-      text-decoration: none;
-      padding-right: 20px;
-      color: #FFFFFF;
-    }
-
-    .nyx_login_bg {
-      background-color: #0D47A1;
-      position: absolute;
-      height: 100%;
-      width: 100%;
-      z-index: -1;
-      display: flex;
-      align-items: center;
-    }
-
-    .nyx_login {
-      text-align: center;
-      top: 130px;
-      bottom: 200px;
-      background-color: #0D47A1;
-      justify-content: center;
-      width: 100%;
-    }
-
-    .nyx_login_content,
-    .nyx_login_browser,
-    .nyx_login_this_browser {
-      text-align: center;
-      color: #FFFFFF;
-      margin-top: 100px;
-      width: 100%;
-      font-size: 40px;
-      font-weight: 500;
-      z-index: 100;
-    }
-
-    .nyx_login_browser {
-      top: 200px;
-      width: 100%;
-      margin: auto;
-
-    }
-
-    .nyx_login_this_browser {
-      position: absolute;
-      line-height: 20px;
-      font-size: 12px;
-    }
-
-    .nyx_attention {
-      color: #FFFFFF;
-      position: absolute;
-      right: 20px;
-      top: 50px;
-    }
-
-    .nyx_browser {
-      position: absolute;
-      bottom: 50px;
-      left: 100px;
-      color: #FFFFFF;
-    }
+			margin: auto;
+			padding: 0;
+		}
+		
+		a {
+			font-size: 20px;
+			text-decoration: none;
+			padding-right: 20px;
+			color: #FFFFFF;
+		}
+		
+		.nyx_login_bg {
+			background-color: #0D47A1;
+			position: absolute;
+			height: 100%;
+			width: 100%;
+			z-index: -1;
+			display: flex;
+			align-items: center;
+		}
+		
+		.nyx_login {
+			text-align: center;
+			position: absolute;
+			top: 0;
+			background-color: #0D47A1;
+			justify-content: center;
+			width: 100%;
+		}
+		
+		.nyx_login_content,
+		.nyx_login_browser,
+		.nyx_login_this_browser {
+			position: absolute;
+			text-align: center;
+			color: #FFFFFF;
+			margin-top: 100px;
+			width: 100%;
+			font-size: 40px;
+			font-weight: 500;
+			z-index: 100;
+		}
+		
+		.nyx_login_browser {
+			top: 200px;
+			width: 100%;
+			margin: auto;
+		}
+		
+		.nyx_login_this_browser {
+			position: absolute;
+			line-height: 20px;
+			font-size: 12px;
+			top: 200px;
+		}
+		
+		.nyx_browser {
+			position: absolute;
+			bottom: 50px;
+			left: 100px;
+			color: #FFFFFF;
+		}
   </style>
 
   <!-- Use minimum-scale=1 to enable GPU rasterization -->
@@ -144,7 +138,7 @@
           '<h1 class="nyx_login_content">信息系统集成及服务项目管理人员报名系统</h1>' +
           '</div>' +
           '<p class="nyx_login_browser">该浏览器暂不支持</p>' +
-          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser">' + explorer + '</span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>' +
+          '<div class="nyx_login_this_browser"><span>您的当前版本号为:</span><br/><span id="this_browser">Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; InfoPath.2; .NET4.0C; .NET4.0E)</span><br/><br/><span>本系统需要:<br/> Chrome 42+ ,Opera 29+ , 和Firefox 39+ 以上内核的浏览器</span>' +
           '</div>' +
 
           '<div class="nyx_browser">' +
@@ -201,7 +195,7 @@
           //  document.getElementById("this_browser").innerHTML=fIEVersion;
           //  console.log(fIEVersion);
         } else {
-          console.log("buzhidao")
+         
         }
 
 
@@ -211,8 +205,8 @@
     </script>
   </div>
 
-  <script src="/build/dll.bundle.js?ver=0.98"></script>
-  <script src="/build/bundle.js?ver=0.98"></script>
+  <script src="/build/dll.bundle.js?ver=0.98" defer></script>
+  <script src="/build/bundle.js?ver=0.98" defer></script>
   <script src="https://cdn.jsdelivr.net/docsearch.js/2/docsearch.min.js" async defer></script>
 </body>
 

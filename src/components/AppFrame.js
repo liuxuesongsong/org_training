@@ -867,7 +867,7 @@ class AppFrame extends Component {
                     {title}
                   </Typography>}
                 <div className={classes.grow} />
-                <h2 style={{ float: "right" }}>{"信息系统集成及服务项目管理人员培训报名系统"}</h2>
+                <h2 className="nyx-training_title" style={{ float: "right" }}>{"信息系统集成及服务项目管理人员培训报名系统"}</h2>
                 <IconButton
                 title="刷新数据"
                   color="contrast"
