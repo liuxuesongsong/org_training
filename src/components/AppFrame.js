@@ -40,7 +40,7 @@ import pink from 'material-ui/colors/pink';
 import Lang from '../language';
 import Code from '../code';
 import config from '../config';
-import { initCache, getData, getRouter, getCache } from '../utils/helpers';
+import { initCache, getData,companyRegex, getRouter, getCache } from '../utils/helpers';
 import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
@@ -384,6 +384,9 @@ class AppFrame extends Component {
                 available_result: "请输入公司全称"
               })
             }}
+            onChange={()=>{
+             companyRegex(register_account);
+            }}
             onBlur={(e) => {
               if (document.getElementById("register_account").value === "") { } else {
                 this.check_available(document.getElementById("register_account").value);
@@ -436,6 +439,7 @@ class AppFrame extends Component {
             label={Lang[window.Lang].pages.main.repeat_password}
             type="password"
             fullWidth={true}
+           
             onBlur={(e) => {
               if (document.getElementById("register_password").value === "" && document.getElementById("repeat_password").value === "") {
                 this.setState({
@@ -472,7 +476,11 @@ class AppFrame extends Component {
             raised
             color="primary"
             onClick={() => {
+              
               let account = document.getElementById("register_account").value;
+              account=account.replace(/（/g,'(');  
+              account=account.replace(/）/g,')');  
+              console.log(account);
               let password = document.getElementById("register_password").value;
               let repeat = document.getElementById("repeat_password").value;
               this.register(account, password, repeat);//TODO
@@ -639,7 +647,14 @@ class AppFrame extends Component {
               marginRight: "auto",//theme.spacing.unit,  
             }}
             fullWidth={true}
-            onChange={event => this.setState({ name: event.target.value })}
+            onChange={event => {this.setState({ name: event.target.value })
+            var company_regex = document.getElementById("login_name" + this.state.index),
+            company_regex_val =company_regex.value;
+            company_regex_val=company_regex_val.replace(/（/g,'(');  
+            company_regex_val=company_regex_val.replace(/）/g,')');
+            
+            company_regex.value=company_regex_val;
+          }}
           />
           <TextField
             label={Lang[window.Lang].pages.main.password}

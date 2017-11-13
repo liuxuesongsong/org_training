@@ -245,6 +245,15 @@ export function getCity(id) {
 export function isJson(obj) {
   return typeof (obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
 }
+export function companyRegex(id){
+  var company_regex = document.getElementById("register_account"),
+  company_regex_val =company_regex.value;
+  company_regex_val=company_regex_val.replace(/（/g,'(');  
+  company_regex_val=company_regex_val.replace(/）/g,')');
+  
+  company_regex.value=company_regex_val;
+
+}
 
 /**
  * 获取路由

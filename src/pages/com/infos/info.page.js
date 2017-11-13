@@ -31,7 +31,7 @@ import Finance from './finance.paper';
 import Express from './express.paper';
 import Admin from './admin.paper';
 
-import { initCache, getCache, getData, getRouter, getCity, getAreas } from '../../../utils/helpers';
+import { initCache, getCache, getData,companyRegex, getRouter, getCity, getAreas } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 
@@ -215,6 +215,7 @@ class Info extends Component {
                             label={LANG_PREFIX.bank_account}
                             value={this.state.base.c_name}
                             onChange={event => {
+
                                 this.state.base.c_name = event.target.value
                                 this.setState({
                                     base: this.state.base,
@@ -443,10 +444,14 @@ class Info extends Component {
                                 label={Lang[window.Lang].pages.com.infos.base.base_info["account"]}
                                 value={this.state.base["account"] === null ? "" : this.state.base["account"]}
                                 onChange={(event) => {
+                                   event.target.value=event.target.value.replace(/（/g,'(');  
+                                   event.target.value=event.target.value.replace(/）/g,')');
+                                   event.target.value=event.target.value;
                                     this.state.base["account"] = event.target.value
                                     this.setState({
                                         base: this.state.base
                                     });
+                                    
                                 }}>
                             </TextField>
                             <TextField
@@ -543,7 +548,7 @@ class Info extends Component {
                             <div style={{float:"none",display:"inline-block"}} className="nyx-info-select-div">
                             <p
                             className="nyx-info-select-label"
-                            >所在地区</p>
+                            >公司注册地</p>
                             
                             <select
                                 className="nyx-info-select-lg"
@@ -730,6 +735,7 @@ class Info extends Component {
                                 value={this.state.finance["allname"] === null ? "" : this.state.finance["allname"]}
                                 disabled
                                 onChange={(event) => {
+                                   
                                     this.state.finance["allname"] = event.target.value
                                     this.setState({
                                         finance: this.state.finance
