@@ -367,7 +367,6 @@ class Enrolled extends Component {
                         <select
                             className="nyx-info-select-lg"
                             id="new_area_id"
-                            disabled
                             value={this.state.c_area_id === null ? "" : this.state.c_area_id}
                                 onChange={(e) => {
                                     this.state.c_area_id = Number(e.target.value);
@@ -859,7 +858,7 @@ class Enrolled extends Component {
                     // onClick={this.toggleDrawer(false)}
                     // onKeyDown={this.toggleDrawer(false)}
                     >
-                        <Paper className="nyx-enrolled-change-drawer"  elevation={4}>
+                        <Paper className="nyx-enrolled-change-drawer" style={{boxShadow:"none"}}  elevation={4}>
                             <h2 className="nyx-enrolled-change-title">
                                 {Lang[window.Lang].pages.com.students.base_info}
                             </h2>
@@ -897,10 +896,10 @@ class Enrolled extends Component {
                         <select
                             className={this.state.selected.a_id == -1 ?"nyx-card-enrroll-select-lg-dashed":"nyx-card-enrroll-select-lg"}
                             id="new_area_id"
-                            disabled
-                            value={this.state.selected.area_id === null ? "" : this.state.selected.area_id}
+                           
+                            defaultValue={this.state.selected.area_id === null ? "" : this.state.selected.area_id}
                             onChange={(e, value) => {
-                                    area_id = Number(e.target.value);                                    
+                                this.state.selected.area_id = Number(e.target.value);                                    
                                     }}
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                         >
