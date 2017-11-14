@@ -898,9 +898,7 @@ class Enrolled extends Component {
                             id="new_area_id"
                            
                             defaultValue={this.state.selected.area_id === null ? "" : this.state.selected.area_id}
-                            onChange={(e, value) => {
-                                this.state.selected.area_id = Number(e.target.value);                                    
-                                    }}
+                           
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                         >
                         {this.newStudentCity()}
