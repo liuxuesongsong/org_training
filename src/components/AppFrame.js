@@ -40,7 +40,7 @@ import pink from 'material-ui/colors/pink';
 import Lang from '../language';
 import Code from '../code';
 import config from '../config';
-import { initCache, getData,companyRegex, getRouter, getCache } from '../utils/helpers';
+import { initCache, getData, getRouter, getCache } from '../utils/helpers';
 import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
@@ -384,9 +384,6 @@ class AppFrame extends Component {
                 available_result: "请输入公司全称"
               })
             }}
-            onChange={()=>{
-             companyRegex(register_account);
-            }}
             onBlur={(e) => {
               if (document.getElementById("register_account").value === "") { } else {
                 this.check_available(document.getElementById("register_account").value);
@@ -605,15 +602,18 @@ class AppFrame extends Component {
 
             var apptype;
             var name = this.state.name;
+            name=name.replace(/（/g,'(');  
+            name=name.replace(/）/g,')');  
+            console.log(name);
            // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
             if (window.type === 1) {
               console.log("0000");
               apptype = APP_TYPE_COMPANY;
-              getData(getRouter("forget_code_login"), { account: this.state.name, type: 0, code: this.state.phone_code }, cb, { account: name, type: apptype });
+              getData(getRouter("forget_code_login"), { account: name, type: 0, code: this.state.phone_code }, cb, { account: name, type: apptype });
             } else if (window.type === 2) {
               console.log("11111");
               apptype = APP_TYPE_ORANIZATION;
-              getData(getRouter("forget_code_login"), { account: this.state.name, type: 1,  code: this.state.phone_code}, cb, { account: name, type: apptype });
+              getData(getRouter("forget_code_login"), { account: name, type: 1,  code: this.state.phone_code}, cb, { account: name, type: apptype });
             }
               // var cb = (route, message, arg) => {
               //   // Code.LOGIC_SUCCESS
@@ -648,12 +648,7 @@ class AppFrame extends Component {
             }}
             fullWidth={true}
             onChange={event => {this.setState({ name: event.target.value })
-            var company_regex = document.getElementById("login_name" + this.state.index),
-            company_regex_val =company_regex.value;
-            company_regex_val=company_regex_val.replace(/（/g,'(');  
-            company_regex_val=company_regex_val.replace(/）/g,')');
-            
-            company_regex.value=company_regex_val;
+           
           }}
           />
           <TextField
@@ -717,6 +712,8 @@ class AppFrame extends Component {
             className={'nyx-btn-circle'}
             onClick={() => {
               var name = this.state.name;
+              name=name.replace(/（/g,'(');  
+              name=name.replace(/）/g,')');  
               var password = this.state.password;
               var check_code = this.state.check_code;
               if (name === "") {

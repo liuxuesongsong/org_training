@@ -444,9 +444,7 @@ class Info extends Component {
                                 label={Lang[window.Lang].pages.com.infos.base.base_info["account"]}
                                 value={this.state.base["account"] === null ? "" : this.state.base["account"]}
                                 onChange={(event) => {
-                                   event.target.value=event.target.value.replace(/（/g,'(');  
-                                   event.target.value=event.target.value.replace(/）/g,')');
-                                   event.target.value=event.target.value;
+                                   
                                     this.state.base["account"] = event.target.value
                                     this.setState({
                                         base: this.state.base
@@ -605,6 +603,8 @@ class Info extends Component {
                                     }
 
                                     var account = document.getElementById("input_account").value;
+                                    account=account.replace(/（/g,'(');  
+                                    account=account.replace(/）/g,')');  
                                     var name = document.getElementById("input_name").value;
                                     var mobile = document.getElementById("input_mobile").value;
                                     var tel = document.getElementById("input_tel").value;
