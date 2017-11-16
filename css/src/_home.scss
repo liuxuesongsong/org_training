@@ -41,14 +41,14 @@
     color: $red500;
     margin: 2rem 1rem 1rem;
 }
-.nyx-must-content:after{
-    content: "*必填";
-    position: absolute;
-    right: 20px;
-    font-size: 80%;
-    top: 23px;
-    color:$red300;
-}
+// .nyx-must-content:after{
+//     content: "*必填";
+//     position: absolute;
+//     right: 20px;
+//     font-size: 80%;
+//     top: 23px;
+//     color:$red300;
+// }
 
 #companyid{
     height: 150px;
@@ -114,7 +114,7 @@
   
    
     .nyx-card-body{
-        width: 70%;
+        width: 65%;
         float: left;
         position: relative;
         //width: 80%;

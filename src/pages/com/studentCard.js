@@ -58,6 +58,9 @@ class ComCard extends Component {
       case CARD_TYPE_FK:
         return (
           <CardActions style={{ height: '1.5rem' }}>
+     
+          {this.props.email==""||this.props.mobile==""||this.props.duty==""||this.props.department==""?<span>信息不完整</span>:""}
+          
             <br />
             <button className="nyx-card-enrroll-button" onClick={this.props.action[1]}>
               <i className="glyphicon glyphicon-ok" /> {Lang[window.Lang].pages.com.card.enroll}
@@ -151,7 +154,7 @@ class ComCard extends Component {
   }
 
   render() {
-    const { type, name, mobile, email, level, city, action, status, institution } = this.props;
+    const { type, name,department,duty, mobile, email, level, city, action, status, institution } = this.props;
 
     this.state.type = type;
     this.state.status = status;

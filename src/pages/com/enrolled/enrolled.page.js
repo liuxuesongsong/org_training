@@ -123,7 +123,7 @@ class Enrolled extends Component {
             arrangedStudents: arrangedStudents
         })
     }
-
+ 
     cancelEnroll(id) {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -272,6 +272,7 @@ class Enrolled extends Component {
         this.state.selected = student;
         this.state.course = student.course_id;
     }
+   
 
     newStudentDialog() {
         return (
@@ -456,24 +457,18 @@ class Enrolled extends Component {
                     <div>
                         <Button style={{backgroundColor:"#2196F3",color:"#FFF",marginRight:"1rem"}}
                             onClick={() => {
-                                 
-                                 if (document.getElementById("new_name").value === "") {
-                                    this.popUpNotice(NOTICE, 0, "您没有输入姓名")
-                                    return
-                                  } else if (document.getElementById("new_mobile").value === "") {
-                                    this.popUpNotice(NOTICE, 0, "您没有输入手机")
-                                    return
-                                  }else if (document.getElementById("new_mail").value === "") {
-                                    this.popUpNotice(NOTICE, 0, "您没有输入邮箱")
-                                    return
-                                  } else if (document.getElementById("new_id_type").value === "") {
-                                    this.popUpNotice(NOTICE, 0, "您没有输入证件类型")
-                                    return
-                                  }else if (document.getElementById("new_identity_card").value === "") {
-                                    this.popUpNotice(NOTICE, 0, "您没有输入证件编码")
-                                    return
-                                  }
-
+                                var new_info_array={new_name:"您没有输入姓名",new_mobile:"您没有输入手机",
+                                new_mail:"您没有输入邮箱",new_id_type:"您没有输入证件类型",
+                                new_department:"您没有输入部门",new_duty:"您没有输入职务"
+                            }
+                                for(var key in new_info_array){
+                                    if (document.getElementById(key).value === "") {
+                                        this.popUpNotice(NOTICE, 0, new_info_array[key])
+                                        return
+                                      }
+                           }
+                              
+                                
                                 this.newStudent({
 
 
@@ -586,6 +581,8 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                    duty={student.duty === null ? "" : student.duty.toString()}
+                                    department={student.department === null ? "" : student.department.toString()}
                                     institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.selectedStudent(student);
@@ -598,6 +595,11 @@ class Enrolled extends Component {
                                             this.popUpNotice("alert", 0, '企业相关信息完成'+info_completed_per*100+'%, 请先补全企业相关信息');
                                             return
                                         }
+                                        if(student.duty===""||student.department===""||student.mobile===""||student.mail===""){
+                                            this.popUpNotice("alert", 0, '请先补全报名人员信息');
+                                            return
+                                        }
+                                        console.log(student);
                                         this.state.selectedStudentId = student.id;
                                         
 
@@ -673,6 +675,8 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                    duty={student.duty === null ? "" : student.duty.toString()}
+                                    department={student.department === null ? "" : student.department.toString()}
                                     institution={student.institution === null ? "" : Number(student.institution)}
                                     action={[() => {
                                         this.selectedStudent(student);
@@ -734,7 +738,9 @@ class Enrolled extends Component {
                                     email={student.mail === null ? "" : student.mail.toString()}
                                     level={Number(student.course_id)}
                                     city={Number(student.area_id)}
+                                    duty={student.duty === null ? "" : student.duty.toString()}
                                     institution={student.institution === null ? "" : Number(student.institution)}
+                                    department={student.department === null ? "" : student.department.toString()}
                                     action={[() => {
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
@@ -780,6 +786,8 @@ class Enrolled extends Component {
                                                 email={student.mail === null ? "" : student.mail.toString()}
                                                 level={Number(student.course_id)}
                                                 city={Number(student.area_id)}
+                                                duty={student.duty === null ? "" : student.duty.toString()}
+                                                department={student.department === null ? "" : student.department.toString()}
                                                 institution={student.institution === null ? "" : Number(student.institution)}
                                                 action={[
                                                     () => {
@@ -816,6 +824,8 @@ class Enrolled extends Component {
                                                     email={student.mail === null ? "" : student.mail.toString()}
                                                     level={Number(student.course_id)}
                                                     city={Number(student.area_id)}
+                                                    duty={student.duty === null ? "" : student.duty.toString()}
+                                                    department={student.department === null ? "" : student.department.toString()}
                                                     institution={student.institution === null ? "" : Number(student.institution)}
                                                     action={[
                                                         () => {

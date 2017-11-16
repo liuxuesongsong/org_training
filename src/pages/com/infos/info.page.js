@@ -604,7 +604,9 @@ class Info extends Component {
 
                                     var account = document.getElementById("input_account").value;
                                     account=account.replace(/（/g,'(');  
+                                    account=account.replace(/ /g,''); 
                                     account=account.replace(/）/g,')');  
+                                    console.log(account);
                                     var name = document.getElementById("input_name").value;
                                     var mobile = document.getElementById("input_mobile").value;
                                     var tel = document.getElementById("input_tel").value;

@@ -475,7 +475,8 @@ class AppFrame extends Component {
             onClick={() => {
               
               let account = document.getElementById("register_account").value;
-              account=account.replace(/（/g,'(');  
+              account=account.replace(/（/g,'('); 
+              account=account.replace(/ /g,''); 
               account=account.replace(/）/g,')');  
               console.log(account);
               let password = document.getElementById("register_password").value;
@@ -604,6 +605,7 @@ class AppFrame extends Component {
             var name = this.state.name;
             name=name.replace(/（/g,'(');  
             name=name.replace(/）/g,')');  
+            name=name.replace(/ /g,''); 
             console.log(name);
            // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
             if (window.type === 1) {
@@ -714,6 +716,7 @@ class AppFrame extends Component {
               var name = this.state.name;
               name=name.replace(/（/g,'(');  
               name=name.replace(/）/g,')');  
+              name=name.replace(/ /g,''); 
               var password = this.state.password;
               var check_code = this.state.check_code;
               if (name === "") {
@@ -831,6 +834,8 @@ class AppFrame extends Component {
                 <div className="nyx-login-window-acctention">
                   系统维护电话：010-51527580
               </div>
+              <a href="http://www.csst.com.cn/uploadfile/doc/csi-Q&A.pdf" target="view_window" className="nyx-instructions">常见问题与回答<i className="glyphicon glyphicon-question-sign nyx-instructions-glyphicon"></i></a>
+              <a href="http://www.csst.com.cn/uploadfile/doc/csi-01.pdf" target="view_window" className="nyx-instructions">填报说明<i className="glyphicon glyphicon-info-sign nyx-instructions-glyphicon"></i></a>
               </div>
             </div> : 
                 <TabContainer>

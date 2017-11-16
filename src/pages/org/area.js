@@ -176,6 +176,9 @@ class Area extends Component {
                             {Lang[window.Lang].pages.org.new_service}
                         </Button>
                     </ListSubheader>
+                  
+                    {this.state.areas="undefined"?this.state.areas=[]:this.state.areas}
+                    {console.log(this.state.areas)}
                     {this.state.areas.map(area =>
                         <Card
                             key={area.id}

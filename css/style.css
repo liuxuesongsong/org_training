@@ -1331,6 +1331,22 @@
   color: #ffffff;
 }
 
+.nyx-instructions {
+  color: #ffffff;
+  position: relative;
+  top: 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border: solid 1px;
+  padding: 0.5rem;
+  margin-right: 1rem;
+}
+
+.nyx-instructions-glyphicon {
+  top: 0.15rem;
+  margin-left: 0.3rem;
+}
+
 @media only screen and (max-width: 960px) {
   .nyx-training_title {
     font-size: 14px;
@@ -1444,15 +1460,6 @@
   margin: 2rem 1rem 1rem;
 }
 
-.nyx-must-content:after {
-  content: "*必填";
-  position: absolute;
-  right: 20px;
-  font-size: 80%;
-  top: 23px;
-  color: #E57373;
-}
-
 #companyid {
   height: 150px;
   position: relative;
@@ -1528,7 +1535,7 @@
 }
 
 .nyx-card .nyx-card-body {
-  width: 70%;
+  width: 65%;
   float: left;
   position: relative;
   margin-left: 0.5rem;
