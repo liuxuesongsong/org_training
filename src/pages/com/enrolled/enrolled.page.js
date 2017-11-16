@@ -690,6 +690,12 @@ class Enrolled extends Component {
                                            this.popUpNotice("alert", 0, '企业相关信息完成'+info_completed_per*100+'%, 请先补全企业相关信息');
                                            return
                                        }
+                                       console.log(student);
+
+                                       if(student.duty===null||student.department===null||student.mobile===null||student.mail===null){
+                                        this.popUpNotice("alert", 0, '请先补全报名人员信息');
+                                        return
+                                    }
                                         this.state.selectedStudentId = student.id;
                                         this.popUpNotice(ALERT, 0, "为" + student.name + "报名"+ getCity(student.area_id) + "的"+getCourse(student.course_id)+ "培训班", [
                                             () => {
