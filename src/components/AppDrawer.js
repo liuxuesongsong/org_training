@@ -102,6 +102,15 @@ function AppDrawer(props) {
         </Toolbar>
         {renderNavItems(props, props.routes[0])}
       </div>
+      
+      <div 
+      style={{position:"fixed",bottom:"0",fontSize:"16px",width:"100%"}}
+      >
+      {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf"  title="填报说明" href="http://www.csst.com.cn/uploadfile/doc/csi-01.pdf" target="view_window"><i className="glyphicon glyphicon-info-sign"></i><p className="nyx_instruction_p">填报说明</p></a> : ""}
+      {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf"  title="常见问题与回答" href="http://www.csst.com.cn/uploadfile/doc/csi-Q&A.pdf" target="view_window"><i className="glyphicon glyphicon-question-sign"></i><p className="nyx_instruction_p">Q&A</p></a> : ""}
+      
+      
+      </div>
     </Drawer>
   );
 }

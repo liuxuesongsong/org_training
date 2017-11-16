@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 
 import ReactDataGrid from 'angon_react_data_grid';
@@ -16,8 +16,11 @@ class Student extends Component {
     state = {
         allData: [],
         tableData: [],
-        queryCondition: {},
+        queryCondition: { is_inlist:1},
+        selectedStudentID: [],      //所有选择的学生ID
+        currentPageSelectedID: [],  //当前页面选择的序列ID
         currentPage: 1,
+       
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
         count: 0,
@@ -40,6 +43,7 @@ class Student extends Component {
     cacheToState() {
         window.currentPage.queryStudents();
         window.currentPage.state.areas = getAreas();
+        console.log(window)
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
@@ -72,7 +76,9 @@ class Student extends Component {
             this.currentPage = 1;
             this.setState({
                 totalPage: 1,
-                count: 0
+                count: 0,
+                is_inlist:1
+                
             })
         }
         getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
@@ -99,6 +105,23 @@ class Student extends Component {
             this.state.onloading = false;
             this.state.tableData = data;
             this.setState({ tableData: data });
+            if (data.length > 0) {
+                var allCheckBox = true;
+                this.state.currentPageSelectedID = [];
+                for (var i = 0; i < data.length; i++) {
+                    if (this.state.selectedStudentID.indexOf(data[i].id) === -1) {
+                        allCheckBox = false;
+                    } else {
+                        this.state.currentPageSelectedID.push((this.state.currentPage - 1) * this.state.rowsPerPage + i + 1)
+                    }
+                }
+
+                if (allCheckBox === true) {
+                    document.getElementById('select-all-checkbox').checked = true;
+                } else {
+                    document.getElementById('select-all-checkbox').checked = false;
+                }
+            }
         }
     }
 
@@ -116,7 +139,64 @@ class Student extends Component {
     popUpNotice = (type, code, content) => {
         this.setState({ type: type, code: code, content: content, alertOpen: this.state.alertOpen });
     }
+    onRowsSelected = (rowArray) => {
+        if (rowArray.length > 1) {
+            for (var i = 0; i < rowArray.length; i++) {
+                this.state.selectedStudentID.push(rowArray[i].row.student_id);
+                this.state.currentPageSelectedID.push(rowArray[i].row.id);
+            }
+        } else {
+            this.state.selectedStudentID.push(rowArray[0].row.student_id);
+            this.state.currentPageSelectedID.push(rowArray[0].row.id)
+        }
+        this.setState({
+            currentPageSelectedID: this.state.currentPageSelectedID,
+            selectedStudentID: this.state.selectedStudentID
+        })
+    }
+    onRowsDeselected = (rowArray) => {
+        var tranform = new Set(this.state.selectedStudentID);
+        this.state.selectedStudentID = [...tranform];
+        if (rowArray.length > 1) {
+            for (var j = 0; j < rowArray.length; j++) {
+                if (this.state.selectedStudentID.indexOf(rowArray[j].row.student_id) === -1) {
+                } else {
+                    this.state.selectedStudentID.splice(this.state.selectedStudentID.indexOf(rowArray[j].row.student_id), 1);
+                }
+                if (this.state.currentPageSelectedID.indexOf(rowArray[j].row.id) === -1) {
 
+                } else {
+                    this.state.currentPageSelectedID.splice(this.state.currentPageSelectedID.indexOf(rowArray[j].row.id), 1);
+                }
+            }
+        } else {
+            var index = this.state.selectedStudentID.indexOf(rowArray[0].row.student_id);
+            this.state.selectedStudentID.splice(index, 1);
+            var currentPageIndex = this.state.currentPageSelectedID.indexOf(rowArray[0].row.id);
+            this.state.currentPageSelectedID.splice(currentPageIndex, 1);
+        }
+        this.setState({
+            currentPageSelectedID: this.state.currentPageSelectedID,
+            selectedStudentID: this.state.selectedStudentID
+        })
+    }  
+    checkTrain = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedStudentID = [];
+                this.state.currentPageSelectedID = [];
+                this.queryStudents(1, true)
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+           // clazz_id: id,
+            student_ids: this.state.selectedStudentID
+        }
+        console.log(sessionStorage);
+        getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
+    }     
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -125,6 +205,8 @@ class Student extends Component {
                         color="primary"
                         onClick={() => {
                             this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                            this.state.selectedStudentID = [];
+                            this.state.currentPageSelectedID = [];
                             this.queryStudents(1, true);
                         }}
                         style={{ margin: 10 }}
@@ -317,7 +399,15 @@ class Student extends Component {
                     minHeight={500}
                     rowHeight={20}
                     rowSelection={{
-                        showCheckbox: false,
+                        showCheckbox: true,
+                        onRowsSelected: this.onRowsSelected,
+                        onRowsDeselected: this.onRowsDeselected,
+                        selectBy: {
+                            keys: {
+                                rowKey: 'id',
+                                values: this.state.currentPageSelectedID
+                            }
+                        }
                     }}
                     onGridKeyDown={(e) => {
                         if (e.ctrlKey && e.keyCode === 65) {
@@ -351,6 +441,8 @@ class Student extends Component {
                 >
                     {"下页"}
                 </Button>
+                {/* {this.state.selectedStudentID.length + "/" + this.state.count} */}
+
                 共{this.state.count}人
                 <Button
                 onClick={() => {
@@ -373,6 +465,11 @@ class Student extends Component {
                    a.click();  
                 }}
                 >导出</Button>
+                <Button
+                onClick={()=>{
+                    this.checkTrain();
+                }}
+                >添加为该机构学员</Button>
             </div>
         )
     }

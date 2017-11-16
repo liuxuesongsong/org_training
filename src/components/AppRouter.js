@@ -12,7 +12,7 @@ import Home from 'training/src/pages/Home';
 
 import Enrolled from '../pages/com/enrolled/enrolled.page.js';
 
-import Instructions from '../pages/com/instructions/instructions.page.js';
+//import Instructions from '../pages/com/instructions/instructions.page.js';
 import Password from '../pages/com/infos/admin.paper.js';
 import CompanyHome from '../pages/com/home/home.page.js';
 import Students from '../pages/com/students/students.page.js';
@@ -62,13 +62,13 @@ var AppRouter = {
         nav
         component={Password}
       />
-      <Route
+      {/* <Route
         title={titleize(Lang[window.Lang].pages.com.instructions.title)}
         path={'/com/instructions'}
         content={Instructions}
         nav
         component={Instructions}
-      />
+      /> */}
     </Route>
 
   </Router>),

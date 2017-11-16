@@ -24,7 +24,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,UNCHOOSE_STUDENT, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -135,6 +135,7 @@ class Clazz extends Component {
                 this.setState({ clazzes: this.state.clazzes })
                 this.fresh();
             }
+            //console.log(message.msg)
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
@@ -628,6 +629,24 @@ class Clazz extends Component {
         }
         return chips
     }
+    cancelTrain = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedStudentID = [];
+                this.state.currentPageSelectedID = [];
+                this.queryStudents(1, true)
+            }
+            console.log(message.msg);
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+           // clazz_id: id,
+            student_ids: this.state.selectedStudentID
+        }
+       
+        getData(getRouter(UNCHOOSE_STUDENT), obj, cb, {});
+    } 
 
     render() {
         return (
@@ -1024,7 +1043,11 @@ class Clazz extends Component {
                     </Button>
 
                     {this.state.selectedStudentID.length + "/" + this.state.count}
-
+                    <Button
+                        onClick={()=>{
+                            this.cancelTrain();
+                        }}
+                        >退回学生</Button>
                     {this.state.showStudents === true ?
                         <Drawer
                             anchor="right"
@@ -1032,9 +1055,12 @@ class Clazz extends Component {
                             onRequestClose={this.toggleDrawer(false)}
                         >
                         </Drawer> : <div />}
+                       
                     {this.newClazzDialog()}
 
                     {this.editClazzDialog()}
+
+                   
                     <CommonAlert
                         show={this.state.alertOpen}
                         type={this.state.alertType}
