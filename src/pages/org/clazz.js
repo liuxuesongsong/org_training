@@ -24,7 +24,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN,UNCHOOSE_STUDENT, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -52,15 +52,19 @@ class Clazz extends Component {
         search_input: "",
         search_area_id: null,
         search_course_id: null,
-
+        my_id:0,
 
         // 下载相关
         filename: "",
 
         // 提示状态
         alertOpen: false,
-        alertType: "notice",
+        alertType: ALERT,
         alertCode: Code.LOGIC_SUCCESS,
+        alertContent: "",
+        alertAction: [],
+        openNewStudentDialog: false,
+        alertType: "notice",
         alertContent: "登录成功"
     }
 
@@ -76,9 +80,20 @@ class Clazz extends Component {
     cacheToState() {
         window.currentPage.queryStudents();
         window.currentPage.state.areas = getAreas();
+        var cb = (router, message, arg) => {
+            window.currentPage.setState({
+                my_id: message.data.myinfo.my_id 
+                
+            })
+           
+            // all_students
+        }
+        getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
+
+        
     }
 
     /**
@@ -102,6 +117,7 @@ class Clazz extends Component {
 
             }
         }
+        //console.log(this.state.count)
         if (reload) {
             this.state.allData = [];
             this.state.tableData = [];
@@ -578,11 +594,29 @@ class Clazz extends Component {
             selectedStudentID: this.state.selectedStudentID
         })
     }
-
-    popUpNotice = (type, code, content) => {
-        this.setState({ type: type, code: code, content: content, alertOpen: this.state.alertOpen });
+    closeNotice = () => {
+        this.setState({
+            alertOpen: false,
+        })
     }
 
+    popUpNotice(type, code, content, action = [() => {
+        this.setState({
+            alertOpen: false,
+        })
+    }, () => {
+        this.setState({
+            alertOpen: false,
+        })
+    }]) {
+        this.setState({
+            alertType: type,
+            alertCode: code,
+            alertContent: content,
+            alertOpen: true,
+            alertAction: action
+        });
+    }
 
     toggleDrawer = (open) => () => {
         this.setState({
@@ -636,7 +670,6 @@ class Clazz extends Component {
                 this.state.currentPageSelectedID = [];
                 this.queryStudents(1, true)
             }
-            console.log(message.msg);
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
@@ -850,20 +883,9 @@ class Clazz extends Component {
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
-                        <Button
-                            color="primary"
-                            onClick={() => {
-                                this.state.queryCondition.company_name = document.getElementById("search_input").value;
-                                this.state.selectedStudentID = [];
-                                this.state.currentPageSelectedID = [];
-                                this.queryStudents(1, true);
-                            }}
-                            style={{ margin: 10 }}
-                        >
-                            {"搜索"}
-                        </Button>
+                        
                         <TextField
-                            style={{top:"-0.5rem"}}
+                            style={{top:"-0.5rem",marginLeft:30}}
                             id="search_input"
                             label={"搜索公司名称"}
                             value={this.state.search_input}
@@ -906,6 +928,18 @@ class Clazz extends Component {
                             <option value={2}>{"高级项目经理"}</option>
 
                         </select>
+                        <Button
+                            color="primary"
+                            onClick={() => {
+                                this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                                this.state.selectedStudentID = [];
+                                this.state.currentPageSelectedID = [];
+                                this.queryStudents(1, true);
+                            }}
+                            style={{ margin: 10 }}
+                        >
+                            {"搜索"}
+                        </Button>
 
                         {this.getCondition()}
                     </div>
@@ -1042,7 +1076,46 @@ class Clazz extends Component {
                         {"下页"}
                     </Button>
 
-                    {this.state.selectedStudentID.length + "/" + this.state.count}
+                    {"已选择"+this.state.selectedStudentID.length + "人/共" + this.state.count+"人"}
+                    <Button
+                onClick={() => {
+                    
+                    var cb = (route, message, arg) => {
+                        window.currentPage.setState({
+                             my_id: message.data.myinfo.my_id 
+                            })
+                    }
+                    getData(getRouter(INST_QUERY), { session: sessionStorage.session, }, cb, {});
+
+                    var all_area;
+                    var  all_course;
+                    {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
+                    {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
+                    this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
+                        () => {
+                           // console.log(this.state.my_id);
+
+
+                            var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session+"&is_inlist=1&institution="+this.state.my_id;
+                            if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
+                                 href = href+"&area_id=" + this.state.queryCondition.area_id;
+                            }
+                            if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
+                             href = href+"&course_id=" + this.state.queryCondition.course_id;
+                            } 
+                            var a = document.createElement('a');
+                            a.href = href;
+                             console.log(href);
+                            a.click();  
+                            this.closeNotice();
+                        }, () => {
+                            this.closeNotice();
+                        }]);
+
+
+                  
+                }}
+                >导出</Button>
                     <Button
                         onClick={()=>{
                             this.cancelTrain();

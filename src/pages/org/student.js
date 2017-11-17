@@ -11,12 +11,12 @@ import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_ST
 import ReactDataGrid from 'angon_react_data_grid';
 import Code from '../../code';
 import Lang from '../../language';
-
+import CommonAlert from '../../components/CommonAlert';
 class Student extends Component {
     state = {
         allData: [],
         tableData: [],
-        queryCondition: { is_inlist:1},
+        queryCondition: { is_inlist:1,institution:0},
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         currentPage: 1,
@@ -29,13 +29,24 @@ class Student extends Component {
         search_course_id: null,
         search_is_inlist: null,
         search_institution: null,
+         // 提示状态
+         alertOpen: false,
+         alertType: ALERT,
+         alertCode: Code.LOGIC_SUCCESS,
+         alertContent: "",
+         alertAction: [],
+         openNewStudentDialog: false
     }
 
     componentDidMount() {
         window.currentPage = this;
         this.fresh();
     }
-
+    closeNotice = () => {
+        this.setState({
+            alertOpen: false,
+        })
+    }
     fresh = () => {
         initCache(this.cacheToState);
     }
@@ -136,8 +147,22 @@ class Student extends Component {
             this.handleUpdateData(this.state.currentPage + 1);
         }
     }
-    popUpNotice = (type, code, content) => {
-        this.setState({ type: type, code: code, content: content, alertOpen: this.state.alertOpen });
+    popUpNotice(type, code, content, action = [() => {
+        this.setState({
+            alertOpen: false,
+        })
+    }, () => {
+        this.setState({
+            alertOpen: false,
+        })
+    }]) {
+        this.setState({
+            alertType: type,
+            alertCode: code,
+            alertContent: content,
+            alertOpen: true,
+            alertAction: action
+        });
     }
     onRowsSelected = (rowArray) => {
         if (rowArray.length > 1) {
@@ -201,19 +226,9 @@ class Student extends Component {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
                 <div>
-                    <Button
-                        color="primary"
-                        onClick={() => {
-                            this.state.queryCondition.company_name = document.getElementById("search_input").value;
-                            this.state.selectedStudentID = [];
-                            this.state.currentPageSelectedID = [];
-                            this.queryStudents(1, true);
-                        }}
-                        style={{ margin: 10 }}
-                    >
-                        {"搜索"}
-                    </Button>
+                    
                     <select
+                    style={{marginLeft:20}}
                         className="nyx-info-select-lg"
                         id="search_area_id"
                         label={Lang[window.Lang].pages.org.clazz.info.area}
@@ -275,7 +290,7 @@ class Student extends Component {
                             this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
                         }}
                     >
-                        <option value={"null"}>{"-培训机构-"}</option>
+                        <option value={0}>{"-培训机构-"}</option>
                         <option value={1}>{"中软培训"}</option>
                         <option value={2}>{"赛迪"}</option>
                         <option value={3}>{"赛宝"}</option>
@@ -292,11 +307,22 @@ class Student extends Component {
                             });
                         }}
                     />
-                    
                     <Button
                         color="primary"
                         onClick={() => {
-                            this.state.queryCondition={}
+                            this.state.queryCondition.company_name = document.getElementById("search_input").value;
+                            this.state.selectedStudentID = [];
+                            this.state.currentPageSelectedID = [];
+                            this.queryStudents(1, true);
+                        }}
+                        style={{ margin: 10 }}
+                    >
+                        {"搜索"}
+                    </Button>
+                    <Button
+                        color="primary"
+                        onClick={() => {
+                            this.state.queryCondition={ is_inlist:1,institution:0},
                             this.queryStudents(1, true);
                         }}
                         style={{ margin: 10 }}
@@ -441,28 +467,53 @@ class Student extends Component {
                 >
                     {"下页"}
                 </Button>
-                {/* {this.state.selectedStudentID.length + "/" + this.state.count} */}
+                {"已选择"+this.state.selectedStudentID.length + "人/"}
 
                 共{this.state.count}人
                 <Button
                 onClick={() => {
-                   var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session;
-                   if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
-                        href = href+"&area_id=" + this.state.queryCondition.area_id;
-                   }
-                   if(this.state.queryCondition.is_inlist!=undefined && this.state.queryCondition.is_inlist!=null){
-                    href = href+"&is_inlist=" + this.state.queryCondition.is_inlist;
-                   }
-                   if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
-                        href = href+"&institution=" + this.state.queryCondition.institution;
-                   }
-                   if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
-                    href = href+"&course_id=" + this.state.queryCondition.course_id;
-                   } 
-                   var a = document.createElement('a');
-                   a.href = href;
-                //    console.log(href);
-                   a.click();  
+                    var all_area;
+                    var  all_course;
+                    var all_is_inlist;
+                    var all_institution;
+                    {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
+                    {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
+                    var my_select_is_inlist=document.getElementById('search_is_inlist');
+                    var is_inlist_index=my_select_is_inlist.selectedIndex;
+                    var my_select_institution=document.getElementById('search_institution');
+                    var institution_index=my_select_institution.selectedIndex;
+                    //console.log(document.getElementById('search_is_inlist').value)
+                   {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
+                   {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
+                   
+                    
+                    
+                    this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_institution+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
+                        () => {
+                            var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session;
+                            if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
+                                 href = href+"&area_id=" + this.state.queryCondition.area_id;
+                            }
+                            if(this.state.queryCondition.is_inlist!=undefined && this.state.queryCondition.is_inlist!=null){
+                             href = href+"&is_inlist=" + this.state.queryCondition.is_inlist;
+                            }
+                            if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
+                                 href = href+"&institution=" + this.state.queryCondition.institution;
+                            }
+                            if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
+                             href = href+"&course_id=" + this.state.queryCondition.course_id;
+                            } 
+                            var a = document.createElement('a');
+                            a.href = href;
+                         //    console.log(href);
+                            a.click();  
+                            this.closeNotice();
+                        }, () => {
+                            this.closeNotice();
+                        }]);
+
+
+                  
                 }}
                 >导出</Button>
                 <Button
@@ -470,7 +521,15 @@ class Student extends Component {
                     this.checkTrain();
                 }}
                 >添加为该机构学员</Button>
+                <CommonAlert
+                    show={this.state.alertOpen}
+                    type={this.state.alertType}
+                    code={this.state.alertCode}
+                    content={this.state.alertContent}
+                    action={this.state.alertAction}>
+                </CommonAlert>
             </div>
+            
         )
     }
 }

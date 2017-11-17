@@ -15,7 +15,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
 
-import { initCache, getData, getRouter, getCache, getStudent } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent,getAreas } from '../../utils/helpers';
 
 
 import { ALERT, NOTICE, NEW_AREA, DEL_AREA, AREA_INFOS, QUERY, } from '../../enum';
@@ -40,11 +40,17 @@ class Area extends Component {
 
     componentDidMount() {
         window.currentPage = this;
+        
         this.queryArea();
         //this.fresh()
     }
 
     fresh = () => {
+        initCache(this.cacheToState);
+    }
+    cacheToState() {
+        window.currentPage.state.areas = getAreas();
+        
     }
 
     queryArea = () => {
@@ -68,11 +74,22 @@ class Area extends Component {
                             {Lang[window.Lang].pages.org.new_service}
                         </Typography>
                         <TextField
-                            id="area_name"
-                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                            id="account_area"
+                            label={Lang[window.Lang].pages.org.clazz.info.account}
                             defaultValue={""}
                             fullWidth
                         />
+                        <TextField
+                            id="area_name"
+                            type="password"
+                            label={Lang[window.Lang].pages.org.clazz.info.password}
+                            defaultValue={""}
+                            fullWidth
+                        />
+                        
+                        {/* {getAreas().map(area => {
+                                return <label key={area.id} value={area.id}>{area.area_name}</label>
+                            })} */}
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -178,7 +195,7 @@ class Area extends Component {
                     </ListSubheader>
                   
                     {this.state.areas="undefined"?this.state.areas=[]:this.state.areas}
-                    {console.log(this.state.areas)}
+                    
                     {this.state.areas.map(area =>
                         <Card
                             key={area.id}

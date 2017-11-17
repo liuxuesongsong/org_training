@@ -227,7 +227,9 @@ const Language = {
                         class_name: "级别",
                         train_starttime: "开班时间",
                         class_head: "班主任",
-                        address: "开班地址"
+                        address: "开班地址",
+                        account:"用户名",
+                        password:"密码",
                     }
                 },
                 score: {
