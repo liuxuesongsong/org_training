@@ -743,7 +743,7 @@ class Clazz extends Component {
                             clazz =>
                                 <div key={clazz.id} className="nyx-clazz-card">
                                     <div className="nyx-card-body">
-                                        {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)}
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"("+(clazz.num?clazz.num:0)+")"}
                                     </div>
                                     {
                                         this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
@@ -855,7 +855,7 @@ class Clazz extends Component {
                             student => {
                                 return <div className="nyx-clazz-student-name"
                                    
-                                >{student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
+                                >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
                                 <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
                                 onClick={() => {
                                         console.log("123")

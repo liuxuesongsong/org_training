@@ -11,3 +11,8 @@
 .react-grid-HeaderCell{
     padding: 0 !important;
 }
+.react-grid-Cell__value{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;    
+}
