@@ -473,7 +473,7 @@ class Student extends Component {
                 <Button
                 onClick={() => {
                     var all_area;
-                    var  all_course;
+                    var all_course;
                     var all_is_inlist;
                     var all_institution;
                     {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
@@ -483,11 +483,8 @@ class Student extends Component {
                     var my_select_institution=document.getElementById('search_institution');
                     var institution_index=my_select_institution.selectedIndex;
                     //console.log(document.getElementById('search_is_inlist').value)
-                   {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
-                   {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
-                   
-                    
-                    
+                    {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
+                    {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
                     this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_institution+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
                         () => {
                             var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session;

@@ -119,8 +119,13 @@ class Home extends Component {
                         </Paper>
                     </div>
                     <div className="nyx-areacount-list">
-                        <div className="nyx-areacount-title">各省市报名情况</div>
-                        {this.state.areas.map(area => {
+                        <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)</div>
+                        {console.log(this.state.areas.sort(function(b,a){
+                            return ((a.m_count?a.m_count:0)-(a.m_arrange_count?a.m_arrange_count:0))-((b.m_count?b.m_count:0)-(b.m_arrange_count?b.m_arrange_count:0))
+                            }))
+                        }
+                        {
+                            this.state.areas.map(area => {
                             var all_num = this.state.all_students_nums;
                             var m_max =this.state.m_max;
                             var h_max = this.state.h_max;
@@ -138,7 +143,6 @@ class Home extends Component {
                             var m_pre_arr = 100 * m_arrange_count / z_max;
                             var h_pre_all = 100 * h_all_count / z_max;
                             var h_pre_arr = 100 * h_arrange_count / z_max;
-
                             return (
                                 <div key={area.area_id} className="nyx-areacount-list-item">
                                     <div className="nyx-area-name">{area.area_name}</div>
@@ -148,7 +152,7 @@ class Home extends Component {
                                             <span className="nyx-area-bar-bot" style={{ width: m_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: m_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{area.m_arrange_count ? area.m_arrange_count : 0}/{area.m_count ? area.m_count : 0}</span>
+                                        <span className="nyx-area-bar-right">{"未"+((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}/{"已"+(area.m_arrange_count ? area.m_arrange_count : 0)}/{"共"+(area.m_count ? area.m_count : 0)}</span>
                                     </div>
                                     <div className="nyx-area-bar">
                                         <span className="nyx-area-bar-left">高级</span>
@@ -156,7 +160,7 @@ class Home extends Component {
                                             <span className="nyx-area-bar-bot" style={{ width: h_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: h_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{area.h_arrange_count ? area.h_arrange_count : 0}/{area.h_count ? area.h_count : 0}</span>
+                                        <span className="nyx-area-bar-right">{"未"+((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}/{"已"+(area.h_arrange_count ? area.h_arrange_count : 0)}/{"共"+(area.h_count ? area.h_count : 0)}</span>
                                     </div>
                                 </div>
                             )

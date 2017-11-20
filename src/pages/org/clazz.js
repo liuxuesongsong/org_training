@@ -135,7 +135,7 @@ class Clazz extends Component {
         var cb = (route, message, arg) => {
 
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(message.data)
+                // console.log(message.data)
                 arg.self.setState({ clazzStudents: message.data });
                 arg.self.handleMakeDownloadData(message.data)
             }
@@ -453,7 +453,7 @@ class Clazz extends Component {
         var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
         var tableContent = [];
         var item = [];
-        console.log(result)
+        // console.log(result)
         tableContent.push(tableHeadTitle.join(','));
         for (var j = 0; j < result.length; j++) {
             item = [];
@@ -463,7 +463,7 @@ class Clazz extends Component {
                         item.push(getTimeString(result[j][tableHeadKey[key]]));
                         break;
                     default:
-                        console.log(result[j][tableHeadKey[key]]);
+                        // console.log(result[j][tableHeadKey[key]]);
                         item.push(result[j][tableHeadKey[key]]);
                         break;
                 }
@@ -687,7 +687,7 @@ class Clazz extends Component {
 
                 <div className="nyx-left-list" >
                     {this.state.clazzStudents.map(student => {
-                        console.log(student);
+                        // console.log(student);
                         <Card
                             key={student.id}
                         >
@@ -851,20 +851,6 @@ class Clazz extends Component {
                     onRequestClose={this.toggleDrawer(false)}
                 >
                 <div style={{width:"500px"}}>
-                        {this.state.clazzStudents.map(
-                            student => {
-                                return <div className="nyx-clazz-student-name"
-                                   
-                                >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
-                                <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
-                                onClick={() => {
-                                        console.log("123")
-                                        this.removeClassStudent(student.id)
-                                    }}
-                                >{"删除"}</button></div>
-                                
-                            })}
-                            
                     <Button
                         color="primary"
                         id='downloadData'
@@ -877,8 +863,43 @@ class Clazz extends Component {
                     >
                         {"下载"}
                     </Button>
-                    </div>
-                    </Drawer>
+                    <Button
+                        color="primary"
+                        onClick={
+                            () =>{
+                                this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
+                                    () => {
+                                    // console.log(this.state.my_id);
+                                        var href =  getRouter("export_csv_classid").url+"&session=" + sessionStorage.session+"&clazz_id="+this.state.selected.id;
+                                        var a = document.createElement('a');
+                                        a.href = href;
+                                        console.log(href);
+                                        a.click();
+                                        this.closeNotice();
+                                    }, () => {
+                                        this.closeNotice();
+                                    }]);
+                            }
+                        }
+                    >
+                    {"导出详细信息"}
+                    </Button>
+                    
+                    {this.state.clazzStudents.map(
+                        student => {
+                            return <div className="nyx-clazz-student-name"
+                                
+                            >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
+                            <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
+                            onClick={() => {
+                                    console.log("123")
+                                    this.removeClassStudent(student.id)
+                                }}
+                            >{"删除"}</button></div>
+                            
+                        })}
+                </div>
+                </Drawer>
                    
                 </div>
                 <div className="nyx-clazz-form">
@@ -1078,44 +1099,31 @@ class Clazz extends Component {
 
                     {"已选择"+this.state.selectedStudentID.length + "人/共" + this.state.count+"人"}
                     <Button
-                onClick={() => {
-                    
-                    var cb = (route, message, arg) => {
-                        window.currentPage.setState({
-                             my_id: message.data.myinfo.my_id 
-                            })
-                    }
-                    getData(getRouter(INST_QUERY), { session: sessionStorage.session, }, cb, {});
-
-                    var all_area;
-                    var  all_course;
-                    {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
-                    {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
-                    this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
-                        () => {
-                           // console.log(this.state.my_id);
-
-
-                            var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session+"&is_inlist=1&institution="+this.state.my_id;
-                            if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
-                                 href = href+"&area_id=" + this.state.queryCondition.area_id;
-                            }
-                            if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
-                             href = href+"&course_id=" + this.state.queryCondition.course_id;
-                            } 
-                            var a = document.createElement('a');
-                            a.href = href;
-                             console.log(href);
-                            a.click();  
-                            this.closeNotice();
-                        }, () => {
-                            this.closeNotice();
-                        }]);
-
-
-                  
-                }}
-                >导出</Button>
+                    onClick={() => {
+                        var all_area;
+                        var all_course;
+                        {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
+                        {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
+                        this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
+                            () => {
+                            // console.log(this.state.my_id);
+                                var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session+"&is_inlist=1&institution="+this.state.my_id;
+                                if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
+                                    href = href+"&area_id=" + this.state.queryCondition.area_id;
+                                }
+                                if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
+                                href = href+"&course_id=" + this.state.queryCondition.course_id;
+                                } 
+                                var a = document.createElement('a');
+                                a.href = href;
+                                console.log(href);
+                                a.click();  
+                                this.closeNotice();
+                            }, () => {
+                                this.closeNotice();
+                            }]);
+                        }}
+                    >导出</Button>
                     <Button
                         onClick={()=>{
                             this.cancelTrain();
