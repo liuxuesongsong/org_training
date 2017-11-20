@@ -855,7 +855,7 @@ class Clazz extends Component {
                             student => {
                                 return <div className="nyx-clazz-student-name"
                                    
-                                >{student.student_name}
+                                >{student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
                                 <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
                                 onClick={() => {
                                         console.log("123")
@@ -1065,7 +1065,7 @@ class Clazz extends Component {
                     >
                         {"上页"}
                     </Button>
-                    {this.state.currentPage + "/" + this.state.totalPage}
+                    {"第"+this.state.currentPage+"页"+ "/" + "共"+this.state.totalPage+"页"}
                     <Button
                         color="primary"
                         onClick={() => {

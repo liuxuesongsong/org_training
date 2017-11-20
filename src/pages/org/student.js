@@ -264,17 +264,17 @@ class Student extends Component {
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_is_inlist"}
-                        defaultValue={this.state.search_is_inlist ? this.state.is_inlist : ""}
+                        defaultValue={this.state.search_is_inlist ? this.state.is_inlist : "1"}
                         disabled={this.state.search_is_inlist == -2 ? true : false}
                         onChange={(e) => {
                             this.state.search_is_inlist = e.target.value == "null"? null:e.target.value;
                             this.state.queryCondition.is_inlist = e.target.value == "null"? null:e.target.value;
                         }}
                     >
-                        <option value={"null"}>{"-报名状态-"}</option>
+                        <option value={"null"}>{"-所有状态-"}</option>
                         <option value={-1}>{"待报名-导入"}</option>
                         <option value={0}>{"待报名"}</option>
-                        <option value={1}>{"已报名"}</option>
+                        <option selected value={1}>{"待安排"}</option>
                         <option value={2}>{"已安排"}</option>
                         <option value={3}>{"已通知"}</option>
 
@@ -367,13 +367,13 @@ class Student extends Component {
                             {
                                 key: "register",
                                 name: "备注",
-                                width: 100,
+                                width: 120,
                                 resizable: true
                             },
                             {
                                 key: "institution",
                                 name: "培训机构",
-                                width: 80,
+                                width: 100,
                                 resizable: true
                             },
                             {
@@ -420,9 +420,9 @@ class Student extends Component {
                         }
                     }}
                     renderColor={(idx) => { return "black" }}
-                    maxHeight={800}
+                    maxHeight={900}
                     enableRowSelect={true}
-                    minHeight={500}
+                    minHeight={535}
                     rowHeight={20}
                     rowSelection={{
                         showCheckbox: true,
@@ -457,7 +457,7 @@ class Student extends Component {
                 >
                     {"上页"}
                 </Button>
-                {this.state.currentPage + "/" + this.state.totalPage}
+                {"第"+this.state.currentPage+"页"+ "/" + "共"+this.state.totalPage+"页"}
                 <Button
                     color="primary"
                     onClick={() => {
