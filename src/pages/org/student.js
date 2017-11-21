@@ -514,8 +514,9 @@ class Student extends Component {
                 }}
                 >导出</Button>
                 <Button
+                disabled={this.state.search_is_inlist == 1 ? false : true }
                 onClick={()=>{
-                    this.checkTrain();
+                    this.state.search_is_inlist == 1? this.checkTrain():"";
                 }}
                 >添加为该机构学员</Button>
                 <CommonAlert

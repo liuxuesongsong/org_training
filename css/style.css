@@ -923,6 +923,9 @@
   text-overflow: ellipsis;
   white-space: nowrap; }
 
+label.react-grid-checkbox-label {
+  margin: 0; }
+
 .nyx-login-bg {
   background-color: #2196F3;
   position: absolute;
