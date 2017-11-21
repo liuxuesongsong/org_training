@@ -25,7 +25,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY,STATUS_ARRANGED_DID, AGREE_ARRANGE,ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY,STATUS_AGREE_CLAZZ,STATUS_ARRANGED_DID, AGREE_ARRANGE,ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -216,6 +216,27 @@ class Clazz extends Component {
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
 
+agreeAllStudent=(id)=>{
+    var cb = (route, message, arg) => {
+        if (message.code === Code.LOGIC_SUCCESS) {
+            for (var i = 0; i < this.state.clazzes.length; i++) {
+                if (this.state.clazzes[i].id === arg.id) {
+                    this.state.clazzes.splice(i, 1);
+                    this.setState({
+                        clazzes: this.state.clazzes
+                    })
+                    break;
+                }
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+            this.fresh();
+            // this.setState({ clazzes: this.state.clazzes })
+        }
+    }
+    console.log(sessionStorage.session);
+    console.log(id);
+    getData(getRouter(STATUS_AGREE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
+}
 
     editClazzDialog = () => {
         return (
@@ -829,8 +850,9 @@ class Clazz extends Component {
                                                              this.toggleDrawer(true)()
                                                         }}>
                                                     </i>
-                                                    <Button
-                                                        className="nyx-clazz-card-button"
+                                                    <button
+                                                    style={{margin:0,marginLeft:'5px'}}
+                                                        className="nyx-home-button"
                                                         onClick={() => {
 
                                                             this.state.selected = clazz;
@@ -844,7 +866,29 @@ class Clazz extends Component {
                                                             this.queryStudents(1, true);
                                                         }}>
                                                         {"添加学生"}
-                                                    </Button>
+                                                    </button>
+                                                    <button
+                                                    style={{margin:"0",position:"relative",left:"5px"}}
+                                                       className="nyx-home-button"
+                                                        onClick={() => {
+                                                            this.popUpNotice(ALERT, 0, "全部同意考试", [
+                                                                () => {
+                                                                    this.state.selected = clazz;
+                                                                    this.agreeAllStudent(clazz.id);
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+
+
+                                                         
+                                                           
+                                                         // this.agreeAllStudent(); 
+
+                                                          
+                                                        }}>
+                                                        {"同意"}
+                                                    </button>
                                                 </CardActions>
                                             </div>
                                     }
@@ -882,7 +926,7 @@ class Clazz extends Component {
                                         var href =  getRouter("export_csv_classid").url+"&session=" + sessionStorage.session+"&clazz_id="+this.state.selected.id;
                                         var a = document.createElement('a');
                                         a.href = href;
-                                        console.log(href);
+                                       // console.log(href);
                                         a.click();
                                         this.closeNotice();
                                     }, () => {
@@ -898,29 +942,35 @@ class Clazz extends Component {
                             return <div className="nyx-clazz-student-name"
                             
                             >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
-                            <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
+                            {/* {console.log(student.reg_status)} */}
+                            <Button 
+                            disabled={student.reg_status==2?true:false}
+                            style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
                             onClick={() => {
                                 // console.log("123")
                                     this.removeClassStudent(student.id)
                                 }}
-                            >{"删除"}</button>
-                            <button style={{marginLeft:"2rem"}} className="nyx-home-button"
+                            >{"删除"}</Button>
+                            <Button
+                            disabled={student.reg_status==2?true:false}
+                            style={{marginLeft:"2rem"}} className="nyx-home-button"
                             onClick={() => {
                                 var id = student.id;
-                                console.log(student);
+                               
                                 console.log(id);
                                 var cb = (router, message, arg) => {
-                                    if (message.code === Code.LOGIC_SUCCESS) {
-                                        getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
-                                        this.fresh();
-                                    }
+                                    console.log(message.msg)
+                                    // if (message.code === Code.LOGIC_SUCCESS) {
+                                    //     getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
+                                    //     this.fresh();
+                                    // }
                                     this.popUpNotice(NOTICE, 0, message.msg);
                                 }
 
                                 getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
                                     //this.removeClassStudent(student.id)
                                 }}
-                            >{"同意"}</button>
+                            >{"同意"}</Button>
                             
                             </div>
                             

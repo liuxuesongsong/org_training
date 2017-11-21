@@ -10,7 +10,7 @@ import List, {
 import Typography from 'material-ui/Typography';
 import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-ui/Card';
 
-import { initCache, getData, getRouter, getCache, getCity, getCourse } from '../../utils/helpers';
+import { initCache, getData, getRouter,getInst, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
     LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT
@@ -34,6 +34,7 @@ class Home extends Component {
         clazzes: [],
         areas: [],
         clazz_count:[],
+        train_count:[],
         // 界面状态
 
         // 提示状态
@@ -74,12 +75,19 @@ class Home extends Component {
 
         var cb = (router, message, arg) => {
             window.currentPage.setState({
-                clazz_count: message.data.clazz_count 
+                clazz_count: message.data.clazz_count,
+                train_count: message.data.train_count,
+                
                 
             })
         }
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
-
+        window.currentPage.state.clazz_count = getCache("clazz_count").sort((a, b) => {
+            return b.id - a.id
+        });
+        window.currentPage.state.train_count = getCache("train_count").sort((a, b) => {
+            return b.id - a.id
+        });
     }
 
     popUpNotice = (type, code, content) => {
@@ -100,18 +108,8 @@ class Home extends Component {
                             <Typography type="body1" component="p">
                                 {Lang[window.Lang].pages.org.home.arranged + "/" + Lang[window.Lang].pages.org.home.all_students + ":"
                                     + this.state.arranged_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_students_nums + Lang[window.Lang].pages.com.home.human}
-                          {this.state.clazz_count[0]}
-                           {/* {console.log(this.state.clazz_count[0][ti_id])}
-                           {
-                                for(var ti_id in this.state.clazz_count){  
-                                    console.log
-                                      
-                                    }  
-                                  } 
-                           } */}
-                            {/* <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
-                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human} */}
-                            <button
+                           {/* {console.log(this.state.clazz_count[0])} */}
+                           <button
                             className="nyx-home-button"
                             onClick={()=>{
                                 var cb = (router, message, arg) => {
@@ -133,6 +131,21 @@ class Home extends Component {
                                 //console.log("刷新数据");
                             }}
                             >刷新数据</button>
+                            <div  style={{width:"45%",float:"left"}}>
+                            {this.state.clazz_count.map(
+                                clazz_count =>
+                            <div key={clazz_count.ti_id}><span style={{display:"block",float:"left",width:"100px"}}>{getInst(clazz_count.ti_id)}</span><span>{"已建立:"+clazz_count.num+"班"}</span></div>
+                                )}
+                            </div>
+                            <div style={{width:"45%",float:"left"}}>
+                            {this.state.train_count.map(
+                                train_count =>
+                            <div key={train_count.ti_id}><span>{"已安排:"+train_count.num+"人"}</span></div>)}
+
+                            </div>
+                            {/* <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
+                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human} */}
+                            
                             </Typography>
 
                         </Paper>
@@ -164,14 +177,15 @@ class Home extends Component {
                             var h_pre_arr = 100 * h_arrange_count / z_max;
                             return (
                                 <div key={area.area_id} className="nyx-areacount-list-item">
-                                    <div className="nyx-area-name">{area.area_name}</div>
+                                    <div className="nyx-area-name">{area.area_name}<span style={{float:"right",marginRight:"50px"}}>{"未/已/共"}</span>
+                                    </div>
                                     <div className="nyx-area-bar">
                                         <span className="nyx-area-bar-left">中级</span>
                                         <span className="nyx-area-bar-mid">
                                             <span className="nyx-area-bar-bot" style={{ width: m_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: m_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{"未"+((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}/{"已"+(area.m_arrange_count ? area.m_arrange_count : 0)}/{"共"+(area.m_count ? area.m_count : 0)}</span>
+                                        <span className="nyx-area-bar-right">{((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}/{(area.m_arrange_count ? area.m_arrange_count : 0)}/{(area.m_count ? area.m_count : 0)}</span>
                                     </div>
                                     <div className="nyx-area-bar">
                                         <span className="nyx-area-bar-left">高级</span>
@@ -179,7 +193,7 @@ class Home extends Component {
                                             <span className="nyx-area-bar-bot" style={{ width: h_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: h_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{"未"+((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}/{"已"+(area.h_arrange_count ? area.h_arrange_count : 0)}/{"共"+(area.h_count ? area.h_count : 0)}</span>
+                                        <span className="nyx-area-bar-right">{((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}/{(area.h_arrange_count ? area.h_arrange_count : 0)}/{(area.h_count ? area.h_count : 0)}</span>
                                     </div>
                                 </div>
                             )
