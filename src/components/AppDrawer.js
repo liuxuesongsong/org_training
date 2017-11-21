@@ -106,6 +106,7 @@ function AppDrawer(props) {
       <div 
       style={{position:"fixed",bottom:"0",fontSize:"16px",width:"100%"}}
       >
+      {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf nyx_instruction_pdf_big"  title="自学资料" href="http://www.csst.com.cn/uploadfile/doc/details.rar" target="view_window"><i className="glyphicon glyphicon-list-alt"></i><p className="nyx_instruction_p">自学资料</p></a> : ""}
       {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf"  title="填报说明" href="http://www.csst.com.cn/uploadfile/doc/csi-01.pdf" target="view_window"><i className="glyphicon glyphicon-info-sign"></i><p className="nyx_instruction_p">填报说明</p></a> : ""}
       {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf"  title="常见问题与回答" href="http://www.csst.com.cn/uploadfile/doc/csi-Q&A.pdf" target="view_window"><i className="glyphicon glyphicon-question-sign"></i><p className="nyx_instruction_p">Q&A</p></a> : ""}
       

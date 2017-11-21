@@ -70,11 +70,15 @@ class Clazz extends Component {
         alertAction: [],
         openNewStudentDialog: false,
         alertType: "notice",
-        alertContent: "登录成功"
+        alertContent: "登录成功",
     }
 
-
+    componentWillUnmount() {
+        this._isMounted = false
+    }
+    
     componentDidMount() {
+        this._isMounted = true;
         window.currentPage = this;
         this.fresh();
     }
@@ -901,7 +905,7 @@ agreeAllStudent=(id)=>{
                     open={this.state.right}
                     onRequestClose={this.toggleDrawer(false)}
                 >
-                <div style={{width:"500px"}}>
+                <div key="draw-class" style={{width:"500px"}}>
                         
                             
                     <Button
