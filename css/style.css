@@ -1098,9 +1098,10 @@ label.react-grid-checkbox-label {
     border-right-color: #0D47A1;
     background-color: #2196F3;
     color: #fff; }
+.nyx-sidebar .nyx_instruction_pdf_big {
+  width: 148px; }
 .nyx-sidebar .nyx_instruction_pdf {
   color: #ffffff;
-  border: none;
   padding: 0;
   width: 74px;
   float: left;
@@ -1108,14 +1109,7 @@ label.react-grid-checkbox-label {
   text-align: center;
   background-color: #BDBDBD; }
   .nyx-sidebar .nyx_instruction_pdf:hover {
-    color: #ffffff;
-    border: none;
-    padding: 0;
-    width: 74px;
-    float: left;
-    border: 1px solid #ffffff;
-    text-align: center;
-    background-color: #BDBDBD; }
+    background-color: #afafae; }
 .nyx-sidebar .nyx_instruction_p {
   font-size: 10px;
   margin: 0;
