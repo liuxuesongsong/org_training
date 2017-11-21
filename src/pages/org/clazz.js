@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import List, {
     ListItem, ListItemSecondaryAction, ListItemText,
     ListSubheader,
@@ -24,11 +25,14 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY,STATUS_ARRANGED_DID, AGREE_ARRANGE,ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
 class Clazz extends Component {
+    static propTypes = {
+        type: PropTypes.string.isRequired,
+      };
     state = {
         clazzes: [],
         students: [],
@@ -53,7 +57,8 @@ class Clazz extends Component {
         search_area_id: null,
         search_course_id: null,
         my_id:0,
-
+        type: '',
+        selectedStudentId: undefined,
         // 下载相关
         filename: "",
 
@@ -67,6 +72,7 @@ class Clazz extends Component {
         alertType: "notice",
         alertContent: "登录成功"
     }
+
 
     componentDidMount() {
         window.currentPage = this;
@@ -209,6 +215,7 @@ class Clazz extends Component {
         }
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
+
 
     editClazzDialog = () => {
         return (
@@ -851,6 +858,8 @@ class Clazz extends Component {
                     onRequestClose={this.toggleDrawer(false)}
                 >
                 <div style={{width:"500px"}}>
+                        
+                            
                     <Button
                         color="primary"
                         id='downloadData'
@@ -884,18 +893,36 @@ class Clazz extends Component {
                     >
                     {"导出详细信息"}
                     </Button>
-                    
                     {this.state.clazzStudents.map(
                         student => {
                             return <div className="nyx-clazz-student-name"
-                                
+                            
                             >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
                             <button style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
                             onClick={() => {
-                                    console.log("123")
+                                // console.log("123")
                                     this.removeClassStudent(student.id)
                                 }}
-                            >{"删除"}</button></div>
+                            >{"删除"}</button>
+                            <button style={{marginLeft:"2rem"}} className="nyx-home-button"
+                            onClick={() => {
+                                var id = student.id;
+                                console.log(student);
+                                console.log(id);
+                                var cb = (router, message, arg) => {
+                                    if (message.code === Code.LOGIC_SUCCESS) {
+                                        getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
+                                        this.fresh();
+                                    }
+                                    this.popUpNotice(NOTICE, 0, message.msg);
+                                }
+
+                                getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
+                                    //this.removeClassStudent(student.id)
+                                }}
+                            >{"同意"}</button>
+                            
+                            </div>
                             
                         })}
                 </div>

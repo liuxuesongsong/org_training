@@ -795,28 +795,29 @@ class Enrolled extends Component {
                                                 duty={student.duty === null ? "" : student.duty.toString()}
                                                 department={student.department === null ? "" : student.department.toString()}
                                                 institution={student.institution === null ? "" : Number(student.institution)}
-                                                action={[
-                                                    () => {
-                                                        this.state.selectedStudentId = student.id;
-                                                        this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
-                                                            () => {
-                                                                this.agreeArrange();
-                                                                this.closeNotice();
-                                                            }, () => {
-                                                                this.closeNotice();
-                                                            }]);
-                                                    },
-                                                    () => {
-                                                        this.state.selectedStudentId = student.id;
+                                                // action={[
+                                                //     () => {
+                                                //         this.state.selectedStudentId = student.id;
+                                                //         this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
+                                                //             () => {
+                                                //                 this.agreeArrange();
+                                                //                 this.closeNotice();
+                                                //             }, () => {
+                                                //                 this.closeNotice();
+                                                //             }]);
+                                                //     },
+                                                //     () => {
+                                                //         this.state.selectedStudentId = student.id;
 
-                                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                            () => {
-                                                                this.refuseArrange();
-                                                                this.closeNotice();
-                                                            }, () => {
-                                                                this.closeNotice();
-                                                            }]);
-                                                    }]}>
+                                                //         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                //             () => {
+                                                //                 this.refuseArrange();
+                                                //                 this.closeNotice();
+                                                //             }, () => {
+                                                //                 this.closeNotice();
+                                                //             }]);
+                                                //     }]}
+                                                >
                                             </StudentCard>)
                                     case "3":
                                         {

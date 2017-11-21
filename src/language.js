@@ -210,7 +210,8 @@ const Language = {
                     arranged: "已安排学员",
                     all_students: "总学员",
                     registered:"临时登记已报名学员",
-                    all_registered:"临时登记总学员"
+                    all_registered:"临时登记总学员",
+                    
                 },
                 enroll: {
                     title: "报名查看"

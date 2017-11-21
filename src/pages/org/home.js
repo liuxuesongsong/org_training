@@ -12,7 +12,7 @@ import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-
 
 import { initCache, getData, getRouter, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
-    LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
+    LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
     STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT
 } from '../../enum';
 import Lang from '../../language';
@@ -33,6 +33,7 @@ class Home extends Component {
         all_registered_nums: 0,
         clazzes: [],
         areas: [],
+        clazz_count:[],
         // 界面状态
 
         // 提示状态
@@ -70,6 +71,15 @@ class Home extends Component {
             // all_students
         }
         getData(getRouter(LAST_COUNT), { session: sessionStorage.session }, cb, {});
+
+        var cb = (router, message, arg) => {
+            window.currentPage.setState({
+                clazz_count: message.data.clazz_count 
+                
+            })
+        }
+        getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
+
     }
 
     popUpNotice = (type, code, content) => {
@@ -90,8 +100,17 @@ class Home extends Component {
                             <Typography type="body1" component="p">
                                 {Lang[window.Lang].pages.org.home.arranged + "/" + Lang[window.Lang].pages.org.home.all_students + ":"
                                     + this.state.arranged_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_students_nums + Lang[window.Lang].pages.com.home.human}
-                            <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
-                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
+                          {this.state.clazz_count[0]}
+                           {/* {console.log(this.state.clazz_count[0][ti_id])}
+                           {
+                                for(var ti_id in this.state.clazz_count){  
+                                    console.log
+                                      
+                                    }  
+                                  } 
+                           } */}
+                            {/* <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
+                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human} */}
                             <button
                             className="nyx-home-button"
                             onClick={()=>{
