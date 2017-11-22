@@ -25,14 +25,14 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN,UNCHOOSE_STUDENT,INST_QUERY,STATUS_AGREE_CLAZZ,STATUS_ARRANGED_DID, AGREE_ARRANGE,ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_AGREE_CLAZZ, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
 class Clazz extends Component {
     static propTypes = {
         type: PropTypes.string.isRequired,
-      };
+    };
     state = {
         clazzes: [],
         students: [],
@@ -56,7 +56,7 @@ class Clazz extends Component {
         search_input: "",
         search_area_id: null,
         search_course_id: null,
-        my_id:0,
+        my_id: 0,
         type: '',
         selectedStudentId: undefined,
         // 下载相关
@@ -76,7 +76,7 @@ class Clazz extends Component {
     componentWillUnmount() {
         this._isMounted = false
     }
-    
+
     componentDidMount() {
         this._isMounted = true;
         window.currentPage = this;
@@ -92,10 +92,10 @@ class Clazz extends Component {
         window.currentPage.state.areas = getAreas();
         var cb = (router, message, arg) => {
             window.currentPage.setState({
-                my_id: message.data.myinfo.my_id 
-                
+                my_id: message.data.myinfo.my_id
+
             })
-           
+
             // all_students
         }
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
@@ -103,7 +103,7 @@ class Clazz extends Component {
             return b.id - a.id
         });
 
-        
+
     }
 
     /**
@@ -220,27 +220,27 @@ class Clazz extends Component {
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
 
-agreeAllStudent=(id)=>{
-    var cb = (route, message, arg) => {
-        if (message.code === Code.LOGIC_SUCCESS) {
-            for (var i = 0; i < this.state.clazzes.length; i++) {
-                if (this.state.clazzes[i].id === arg.id) {
-                    this.state.clazzes.splice(i, 1);
-                    this.setState({
-                        clazzes: this.state.clazzes
-                    })
-                    break;
+    agreeAllStudent = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                for (var i = 0; i < this.state.clazzes.length; i++) {
+                    if (this.state.clazzes[i].id === arg.id) {
+                        this.state.clazzes.splice(i, 1);
+                        this.setState({
+                            clazzes: this.state.clazzes
+                        })
+                        break;
+                    }
                 }
+                this.popUpNotice(NOTICE, 0, message.msg);
+                this.fresh();
+                // this.setState({ clazzes: this.state.clazzes })
             }
-            this.popUpNotice(NOTICE, 0, message.msg);
-            this.fresh();
-            // this.setState({ clazzes: this.state.clazzes })
         }
+        console.log(sessionStorage.session);
+        console.log(id);
+        getData(getRouter(STATUS_AGREE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
-    console.log(sessionStorage.session);
-    console.log(id);
-    getData(getRouter(STATUS_AGREE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
-}
 
     editClazzDialog = () => {
         return (
@@ -653,14 +653,14 @@ agreeAllStudent=(id)=>{
     toggleDrawer = (open) => () => {
         this.setState({
             right: open,
-            showInfo:true
+            showInfo: true
         });
     };
 
     getCondition = () => {
         var chips = []
         for (var k in this.state.queryCondition) {
-            if (k === "area_id"&&this.state.queryCondition.area_id!=null) {
+            if (k === "area_id" && this.state.queryCondition.area_id != null) {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"地区" + ":" + getCity(this.state.queryCondition[k])}
@@ -670,7 +670,7 @@ agreeAllStudent=(id)=>{
                         }}
                     />
                 )
-            } else if (k === "course_id"&&this.state.queryCondition.course_id!=null) {
+            } else if (k === "course_id" && this.state.queryCondition.course_id != null) {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}
@@ -679,7 +679,7 @@ agreeAllStudent=(id)=>{
                             this.setState({ queryCondition: this.state.queryCondition })
                         }}
                     />
-                    
+
                 )
             } else if (k === "company_name" && this.state.queryCondition[k] !== "") {
                 chips.push(
@@ -706,12 +706,12 @@ agreeAllStudent=(id)=>{
         }
         var obj = {
             session: sessionStorage.session,
-           // clazz_id: id,
+            // clazz_id: id,
             student_ids: this.state.selectedStudentID
         }
-       
+
         getData(getRouter(UNCHOOSE_STUDENT), obj, cb, {});
-    } 
+    }
 
     render() {
         return (
@@ -775,7 +775,7 @@ agreeAllStudent=(id)=>{
                             clazz =>
                                 <div key={clazz.id} className="nyx-clazz-card">
                                     <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"("+(clazz.num?clazz.num:0)+")"}
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.num ? clazz.num : 0) + ")"}
                                     </div>
                                     {
                                         this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
@@ -820,7 +820,7 @@ agreeAllStudent=(id)=>{
                                             </CardActions>
                                         </div> :
                                             <div>
-                                                <CardActions style={{height:"45px"}} className="nyx-card-action">
+                                                <CardActions style={{ height: "45px" }} className="nyx-card-action">
                                                     <i
                                                         className="glyphicon glyphicon-pencil"
                                                         onClick={() => {
@@ -833,13 +833,13 @@ agreeAllStudent=(id)=>{
                                                     <i
                                                         className="glyphicon glyphicon-trash"
                                                         onClick={() => {
-                                                          //  return
+                                                            //  return
                                                             this.popUpNotice(ALERT, 0, "删除该班级", [
                                                                 () => {
-                                                                   // this.removeStudent(clazz.id);
-                                                                   this.state.selected = clazz;
-                                                                   this.deleteClazz(clazz.id); 
-                                                                   this.closeNotice();
+                                                                    // this.removeStudent(clazz.id);
+                                                                    this.state.selected = clazz;
+                                                                    this.deleteClazz(clazz.id);
+                                                                    this.closeNotice();
                                                                 }, () => {
                                                                     this.closeNotice();
                                                                 }]);
@@ -849,13 +849,14 @@ agreeAllStudent=(id)=>{
                                                         className="glyphicon glyphicon-search"
                                                         onClick={() => {
                                                             this.state.selected = clazz;
+                                                            this.state.stateSelected = false;
+                                                            this.state.showStudents = false;
                                                             this.queryClazzStudents(clazz.id);
-                                                             this.state.showInfo = true;
-                                                             this.toggleDrawer(true)()
+                                                            this.toggleDrawer(true)()
                                                         }}>
                                                     </i>
                                                     <button
-                                                    style={{margin:0,marginLeft:'5px'}}
+                                                        style={{ margin: 0, marginLeft: '5px' }}
                                                         className="nyx-home-button"
                                                         onClick={() => {
 
@@ -872,8 +873,8 @@ agreeAllStudent=(id)=>{
                                                         {"添加学生"}
                                                     </button>
                                                     <button
-                                                    style={{margin:"0",position:"relative",left:"5px"}}
-                                                       className="nyx-home-button"
+                                                        style={{ margin: "0", position: "relative", left: "5px" }}
+                                                        className="nyx-home-button"
                                                         onClick={() => {
                                                             this.popUpNotice(ALERT, 0, "全部同意考试", [
                                                                 () => {
@@ -885,11 +886,11 @@ agreeAllStudent=(id)=>{
                                                                 }]);
 
 
-                                                         
-                                                           
-                                                         // this.agreeAllStudent(); 
 
-                                                          
+
+                                                            // this.agreeAllStudent(); 
+
+
                                                         }}>
                                                         {"同意"}
                                                     </button>
@@ -900,96 +901,96 @@ agreeAllStudent=(id)=>{
                         )}
                     </List>
                     <Drawer
-                    
-                    anchor="right"
-                    open={this.state.right}
-                    onRequestClose={this.toggleDrawer(false)}
-                >
-                <div key="draw-class" style={{width:"500px"}}>
-                        
-                            
-                    <Button
-                        color="primary"
-                        id='downloadData'
-                        href="#"
-                        download
-                        onClick={() => {
 
-                        }}
-                        style={{ margin: 10 }}
+                        anchor="right"
+                        open={this.state.right}
+                        onRequestClose={this.toggleDrawer(false)}
                     >
-                        {"下载"}
-                    </Button>
-                    <Button
-                        color="primary"
-                        onClick={
-                            () =>{
-                                this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
-                                    () => {
-                                    // console.log(this.state.my_id);
-                                        var href =  getRouter("export_csv_classid").url+"&session=" + sessionStorage.session+"&clazz_id="+this.state.selected.id;
-                                        var a = document.createElement('a');
-                                        a.href = href;
-                                       // console.log(href);
-                                        a.click();
-                                        this.closeNotice();
-                                    }, () => {
-                                        this.closeNotice();
-                                    }]);
-                            }
-                        }
-                    >
-                    {"导出详细信息"}
-                    </Button>
-                    {this.state.clazzStudents.map(
-                        student => {
-                            return <div className="nyx-clazz-student-name"
-                            
-                            >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
-                            {/* {console.log(student.reg_status)} */}
-                            <Button 
-                             color="primary"
-                            disabled={student.reg_status==2?true:false}
-                            style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
-                            onClick={() => {
-                                // console.log("123")
-                                    this.removeClassStudent(student.id)
-                                }}
-                            >{"删除"}</Button>
+                        <div key="draw-class" style={{ width: "500px" }}>
+
+
                             <Button
-                             color="primary"
-                            disabled={student.reg_status==2?true:false}
-                            style={{marginLeft:"2rem"}} className="nyx-home-button"
-                            onClick={() => {
-                                var id = student.id;
-                               
-                                console.log(id);
-                                var cb = (router, message, arg) => {
-                                    console.log(message.msg)
-                                    // if (message.code === Code.LOGIC_SUCCESS) {
-                                    //     getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
-                                    //     this.fresh();
-                                    // }
-                                    this.popUpNotice(NOTICE, 0, message.msg);
-                                }
+                                color="primary"
+                                id='downloadData'
+                                href="#"
+                                download
+                                onClick={() => {
 
-                                getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
-                                    //this.removeClassStudent(student.id)
                                 }}
-                            >{"同意"}</Button>
-                            
-                            </div>
-                            
-                        })}
-                </div>
-                </Drawer>
-                   
+                                style={{ margin: 10 }}
+                            >
+                                {"下载"}
+                            </Button>
+                            <Button
+                                color="primary"
+                                onClick={
+                                    () => {
+                                        this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
+                                            () => {
+                                                // console.log(this.state.my_id);
+                                                var href = getRouter("export_csv_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
+                                                var a = document.createElement('a');
+                                                a.href = href;
+                                                // console.log(href);
+                                                a.click();
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]);
+                                    }
+                                }
+                            >
+                                {"导出详细信息"}
+                            </Button>
+                            {this.state.clazzStudents.map(
+                                student => {
+                                    return <div className="nyx-clazz-student-name"
+
+                                    >{student.id} - {student.student_name} - {student.company_name} - {"联系人" + student.company_admin} - {student.mobile}
+                                        {/* {console.log(student.reg_status)} */}
+                                        <Button
+                                            color="primary"
+                                            disabled={student.reg_status == 2 ? true : false}
+                                            style={{ marginLeft: "2rem" }} className="nyx-home-button" key={student.id}
+                                            onClick={() => {
+                                                // console.log("123")
+                                                this.removeClassStudent(student.id)
+                                            }}
+                                        >{"删除"}</Button>
+                                        <Button
+                                            color="primary"
+                                            disabled={student.reg_status == 2 ? true : false}
+                                            style={{ marginLeft: "2rem" }} className="nyx-home-button"
+                                            onClick={() => {
+                                                var id = student.id;
+
+                                                console.log(id);
+                                                var cb = (router, message, arg) => {
+                                                    console.log(message.msg)
+                                                    // if (message.code === Code.LOGIC_SUCCESS) {
+                                                    //     getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
+                                                    //     this.fresh();
+                                                    // }
+                                                    this.popUpNotice(NOTICE, 0, message.msg);
+                                                }
+
+                                                getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
+                                                //this.removeClassStudent(student.id)
+                                            }}
+                                        >{"同意"}</Button>
+
+                                    </div>
+
+                                })}
+                        </div>
+                    </Drawer>
+
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
-                        
+
                         <TextField
-                            style={{top:"-0.5rem",marginLeft:30}}
+                            style={{ top: "-0.5rem", marginLeft: 30 }}
                             id="search_input"
                             label={"搜索公司名称"}
                             value={this.state.search_input}
@@ -1000,15 +1001,15 @@ agreeAllStudent=(id)=>{
                             }}
                         />
                         <select
-                            style={{marginLeft:"1rem"}}
+                            style={{ marginLeft: "1rem" }}
                             className="nyx-info-select-lg"
                             id="search_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                             onChange={(e) => {
                                 console.log(e.target.value)
-                                this.state.search_area_id = e.target.value == "null"? null:e.target.value;
-                                this.state.queryCondition.area_id = e.target.value == "null"? null:e.target.value;
+                                this.state.search_area_id = e.target.value == "null" ? null : e.target.value;
+                                this.state.queryCondition.area_id = e.target.value == "null" ? null : e.target.value;
                             }}
                         >
                             <option value={"null"}>{"-省市-"}</option>
@@ -1017,17 +1018,17 @@ agreeAllStudent=(id)=>{
                             })}
                         </select>
                         <select
-                            style={{marginLeft:"1rem"}}
+                            style={{ marginLeft: "1rem" }}
                             className="nyx-info-select-lg"
                             id={"search_course_id"}
-                            defaultValue={this.state.search_course_id === null  ?"": this.state.search_course_id}
+                            defaultValue={this.state.search_course_id === null ? "" : this.state.search_course_id}
                             disabled={this.state.search_course_id == -1 ? true : false}
                             onChange={(e) => {
-                                this.state.search_course_id =  e.target.value == "null"? null:e.target.value;
-                                this.state.queryCondition.course_id = e.target.value == "null"? null:e.target.value;
+                                this.state.search_course_id = e.target.value == "null" ? null : e.target.value;
+                                this.state.queryCondition.course_id = e.target.value == "null" ? null : e.target.value;
                             }}
                         >
-                           <option value={"null"}>{"-中项或高项-"}</option>
+                            <option value={"null"}>{"-中项或高项-"}</option>
                             <option value={1}>{"项目经理"}</option>
                             <option value={2}>{"高级项目经理"}</option>
 
@@ -1169,7 +1170,7 @@ agreeAllStudent=(id)=>{
                     >
                         {"上页"}
                     </Button>
-                    {"第"+this.state.currentPage+"页"+ "/" + "共"+this.state.totalPage+"页"}
+                    {"第" + this.state.currentPage + "页" + "/" + "共" + this.state.totalPage + "页"}
                     <Button
                         color="primary"
                         onClick={() => {
@@ -1180,38 +1181,38 @@ agreeAllStudent=(id)=>{
                         {"下页"}
                     </Button>
 
-                    {"已选择"+this.state.selectedStudentID.length + "人/共" + this.state.count+"人"}
+                    {"已选择" + this.state.selectedStudentID.length + "人/共" + this.state.count + "人"}
                     <Button
-                    onClick={() => {
-                        var all_area;
-                        var all_course;
-                        {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
-                        {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
-                        this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
-                            () => {
-                            // console.log(this.state.my_id);
-                                var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session+"&is_inlist=1&institution="+this.state.my_id;
-                                if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
-                                    href = href+"&area_id=" + this.state.queryCondition.area_id;
-                                }
-                                if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
-                                href = href+"&course_id=" + this.state.queryCondition.course_id;
-                                } 
-                                var a = document.createElement('a');
-                                a.href = href;
-                                console.log(href);
-                                a.click();  
-                                this.closeNotice();
-                            }, () => {
-                                this.closeNotice();
-                            }]);
+                        onClick={() => {
+                            var all_area;
+                            var all_course;
+                            { this.state.search_area_id === null ? all_area = "所有地区" : all_area = getCity(this.state.search_area_id) }
+                            { this.state.search_course_id === null ? all_course = "所有级别" : all_course = getCourse(this.state.search_course_id) }
+                            this.popUpNotice(ALERT, 0, "导出的学生信息:【" + all_area + "】【 " + all_course + "】的人员", [
+                                () => {
+                                    // console.log(this.state.my_id);
+                                    var href = getRouter("export_csv").url + "&session=" + sessionStorage.session + "&is_inlist=1&institution=" + this.state.my_id;
+                                    if (this.state.queryCondition.area_id != undefined && this.state.queryCondition.area_id != null) {
+                                        href = href + "&area_id=" + this.state.queryCondition.area_id;
+                                    }
+                                    if (this.state.queryCondition.course_id != undefined && this.state.queryCondition.course_id != null) {
+                                        href = href + "&course_id=" + this.state.queryCondition.course_id;
+                                    }
+                                    var a = document.createElement('a');
+                                    a.href = href;
+                                    console.log(href);
+                                    a.click();
+                                    this.closeNotice();
+                                }, () => {
+                                    this.closeNotice();
+                                }]);
                         }}
                     >导出</Button>
                     <Button
-                        onClick={()=>{
+                        onClick={() => {
                             this.cancelTrain();
                         }}
-                        >退回学生</Button>
+                    >退回学生</Button>
                     {this.state.showStudents === true ?
                         <Drawer
                             anchor="right"
@@ -1219,12 +1220,12 @@ agreeAllStudent=(id)=>{
                             onRequestClose={this.toggleDrawer(false)}
                         >
                         </Drawer> : <div />}
-                       
+
                     {this.newClazzDialog()}
 
                     {this.editClazzDialog()}
 
-                   
+
                     <CommonAlert
                         show={this.state.alertOpen}
                         type={this.state.alertType}
