@@ -833,13 +833,13 @@ agreeAllStudent=(id)=>{
                                                     <i
                                                         className="glyphicon glyphicon-trash"
                                                         onClick={() => {
-                                                            this.state.selected = clazz;
-                                                            this.deleteClazz(clazz.id);
-                                                            return
+                                                          //  return
                                                             this.popUpNotice(ALERT, 0, "删除该班级", [
                                                                 () => {
-                                                                    this.removeStudent(clazz.id);
-                                                                    this.closeNotice();
+                                                                   // this.removeStudent(clazz.id);
+                                                                   this.state.selected = clazz;
+                                                                   this.deleteClazz(clazz.id); 
+                                                                   this.closeNotice();
                                                                 }, () => {
                                                                     this.closeNotice();
                                                                 }]);
@@ -948,6 +948,7 @@ agreeAllStudent=(id)=>{
                             >{student.id} - {student.student_name} - {student.company_name} - {"联系人"+student.company_admin} - {student.mobile}
                             {/* {console.log(student.reg_status)} */}
                             <Button 
+                             color="primary"
                             disabled={student.reg_status==2?true:false}
                             style={{marginLeft:"2rem"}} className="nyx-home-button" key={student.id}
                             onClick={() => {
@@ -956,6 +957,7 @@ agreeAllStudent=(id)=>{
                                 }}
                             >{"删除"}</Button>
                             <Button
+                             color="primary"
                             disabled={student.reg_status==2?true:false}
                             style={{marginLeft:"2rem"}} className="nyx-home-button"
                             onClick={() => {

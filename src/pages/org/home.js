@@ -131,6 +131,8 @@ class Home extends Component {
                                 //console.log("刷新数据");
                             }}
                             >刷新数据</button>
+                            <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
+                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
                             <div  style={{width:"45%",float:"left"}}>
                             {this.state.clazz_count.map(
                                 clazz_count =>
@@ -143,8 +145,7 @@ class Home extends Component {
                             <div key={train_count.ti_id}><span>{"已安排:"+train_count.num+"人"}</span></div>)}
 
                             </div>
-                            {/* <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
-                                    + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human} */}
+                            
                             
                             </Typography>
 

@@ -203,7 +203,7 @@ const Language = {
                 arrange_rate: "待安排/已安排",
                 classed: "已开班",
                 new_class: "添加班级",
-                new_service: "添加服务区",
+                new_service: "添加管理员",
 
                 home: {
                     title: "首页",
@@ -231,6 +231,7 @@ const Language = {
                         address: "开班地址",
                         account:"用户名",
                         password:"密码",
+                        check_password:"确认密码"
                     }
                 },
                 score: {
@@ -240,7 +241,7 @@ const Language = {
 
                 },
                 area: {
-                    title: "服务区域",
+                    title: "管理员区域",
                 }
             },
         },
@@ -432,7 +433,7 @@ const Language = {
                 exam_score: "考试成绩",
 
             },
-            new_service: "添加服务区"
+            new_service: "添加管理员"
         },
         components: {
             AppFrame: {
