@@ -18,7 +18,7 @@ import Drawer from 'material-ui/Drawer';
 import { initCache, getData, getRouter, getCache, getStudent,getAreas } from '../../utils/helpers';
 
 
-import { ALERT, NOTICE, ADMIN_ADD,INST_QUERY,ADMIN_DEL, AREA_INFOS, QUERY, } from '../../enum';
+import { ALERT, NOTICE, ADMIN_ADD,INST_QUERY,ADMIN_DEL,ADMIN_EDIT, AREA_INFOS, QUERY, } from '../../enum';
 
 import Code from '../../code';
 import Lang from '../../language';
@@ -29,6 +29,7 @@ class Area extends Component {
     state = {
         areas: [],
         clazz: [],
+        clazzes:[],
         check_area_val: [],//选中area的id
         check_list_val:[],//选中nav的id
         account_info:[],
@@ -66,6 +67,10 @@ class Area extends Component {
         window.currentPage.state.account_info = getCache("account_info").sort((a, b) => {
             return b.id - a.id
         });
+        window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
+            return b.id - a.id
+        });
+
     }
 
     queryArea = () => {
@@ -76,35 +81,58 @@ class Area extends Component {
         }
         getData(getRouter(AREA_INFOS), { session: sessionStorage.session }, cb, {});
     }
-    select_area = () =>{
-       var obj =  document.getElementsByName("checkbox_area");
+    select_area = (name) =>{
+       var obj =  document.getElementsByName(name);
        this.state.check_area_val = [];
         for(var k in obj){
             if(obj[k].checked)
             this.state.check_area_val.push(obj[k].value);
         }
-       
+        
     }
-        nav_list =() =>{
+        nav_list = (name) => {
+           // console.log(this.state.check_list);
+           
             var components = []
             var list = {1:"首页",2:"学生信息",3:"班级安排",4:"服务区域"}
             for(var id in list){
                 components.push(
-                    <label style={{width:"33%",float:"left",display:"block"}} key={id} value={id}><input name={"checkbox_list"} key={id} value={id} type="checkbox"></input>{list[id]}</label>
+                    <label style={{width:"33%",float:"left",display:"block"}} key={id} value={id}><input name={name} key={id} value={id} type="checkbox"></input>{list[id]}</label>
                 )
-            //    console.log(id);
-            //   console.log(list[id]);
             }
             return components
         }
-     select_list = () =>{
-        var obj =  document.getElementsByName("checkbox_list");
+     select_list = (name) => {
+        var obj =  document.getElementsByName(name);
         this.state.check_list_val = [];
          for(var k in obj){
              if(obj[k].checked)
              this.state.check_list_val.push(obj[k].value);
          }
      }
+    //  check_area_id =(id,modules_arr)=>{
+    //     for(var i in modules_arr){
+    //         if(modules_arr[i]==id){
+    //             return true           
+    //         }
+    //     }
+    //     return false
+    //  }
+     selected_list = () => {
+        
+        var components = []
+        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"服务区域"}
+        var modules_arr = this.state.selected.modules_id;
+        for(var id in list){
+            components.push(
+                <label style={{width:"33%",float:"left",display:"block"}}  key={id}  value={id}><input name={"change_checkbox_list"} key={id} defaultChecked={modules_arr.indexOf(id)!=-1?true:false} value={id} type="checkbox"></input>{list[id]}</label>
+            )
+        }
+        return components
+       
+     }
+   
+
      editAreaDialog = () => {
         return (
             <Dialog open={this.state.openEditAreaDialog} onRequestClose={this.handleRequestClose} >
@@ -114,20 +142,23 @@ class Area extends Component {
                 <DialogContent>
                     <div>
                     <TextField
+                            style={{width:"100%"}}
                             className="nyx-form-div"
                             key={"account"}
                             id={"change_area_account"}
                             label={"用户名"}
-                             value={this.state.selected["account"] === null ? "" : this.state.selected["class_head"]}
-                            // onChange={(event) => {
-                            //     this.state.selected["account"] = event.target.value
-                            //     this.setState({
-                            //         selected: this.state.selected
-                            //     });
-                            // }}
+                            defaultValue={this.state.selected.account === null ? "" : this.state.selected.account}
+                         
                             >
                         </TextField>
-                    
+                        <div>
+                        <p>可显示区域</p>
+                       {/* {this.nav_list("change_checkbox_list")} */}
+                      { this.state.selected.modules_id?this.selected_list():""}
+                      <p style={{marginTop:"4.5rem"}}>选择所属服务区</p>
+                        {this.state.selected.areas_id?getAreas().map(area => {
+                  return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
+                        </div>
                        
                         
                         
@@ -138,21 +169,17 @@ class Area extends Component {
                     <div>
                         <Button
                             onClick={() => {
-                                var class_head = (document.getElementById("class_head").value);
-                                var teacher = (document.getElementById("teacher").value);
-                                var address = (document.getElementById("address").value);
-                                var train_starttime = Number(document.getElementById("train_starttime").value);
-                                var train_endtime = Number(document.getElementById("train_endtime").value);
-                                var class_code = document.getElementById("class_code").value;
-                                this.modifyClazz(this.state.selected.id, {
-                                    class_head: class_head,
-                                    teacher: teacher,
-                                    address: address,
-                                    train_starttime: train_starttime,
-                                    train_endtime: train_endtime,
-                                    class_code: class_code
-                                })
-                                this.handleRequestClose()
+                               this.select_list("change_checkbox_list");
+                               this.select_area("change_checkbox_area");
+                               this.changeArea({
+                                id:this.state.selected.id,
+                                account: document.getElementById("change_area_account").value,
+                               // password: document.getElementById("area_name_password").value,
+                                modules_id:this.state.check_list_val,
+                                areas_id:this.state.check_area_val
+                            })
+                                
+                               this.handleRequestClose()
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
@@ -211,7 +238,7 @@ class Area extends Component {
                         />
                         <p>可显示区域</p>
                         {
-                           this.nav_list() 
+                           this.nav_list("checkbox_list") 
                         }
                         
                         
@@ -219,6 +246,10 @@ class Area extends Component {
                         {getAreas().map(area => {
                                 return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"checkbox_area"} key={area.id} value={area.id} type="checkbox"></input>{area.area_name}</label>
                             })}
+                            {/* {console.log(this.state.clazzes.area_id)} */}
+                            {/* {this.state.clazzes.map(
+                                console.log(this.state.clazzes.area_id)
+                            )} */}
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -226,12 +257,11 @@ class Area extends Component {
                         <Button
                             onClick={() => {
                                 if(document.getElementById("area_name_password").value!=document.getElementById("area_name_check_password").value){
-                                    console.log("两次密码不一致")
                                     this.popUpNotice(NOTICE, 0, "两次密码不一致");
                                     return
                                 }
-                                this.select_area();
-                                this.select_list();
+                                this.select_area("checkbox_area");
+                                this.select_list("checkbox_list");
                                 // console.log(this.state.check_area_val);
                                // console.log(this.state.check_list_val);
                                 
@@ -270,6 +300,7 @@ class Area extends Component {
                 this.setState({ account_info: this.state.account_info })
                 this.fresh();
             }
+            this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
             session: sessionStorage.session,
@@ -301,6 +332,27 @@ class Area extends Component {
         
      // console.log(id);
         getData(getRouter(ADMIN_DEL), { session: sessionStorage.session, id: id }, cb, { id: id });
+    }
+    changeArea = (area) => {
+        var cb = (router, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                Object.assign(arg.area, { id: message.id })
+                this.state.account_info.push(arg.area)
+                this.setState({ account_info: this.state.account_info })
+                this.fresh();
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+            id:this.state.selected.id,
+            account: document.getElementById("change_area_account").value,
+             modules_id:this.state.check_list_val,
+             areas_id:this.state.check_area_val
+        }
+       // console.log(obj);
+        getData(getRouter(ADMIN_EDIT), obj, cb, { area: area });
+
     }
 
 
@@ -378,7 +430,7 @@ class Area extends Component {
                                     {/* <Typography type="body1">
                                         {account_info.id}
                                     </Typography> */}
-                                    <Typography type="body1" component="h2">
+                                    <Typography style={{width:"150px"}} type="body1" component="h2">
                                         {account_info.account}
                                     </Typography>
 
@@ -405,15 +457,16 @@ class Area extends Component {
                                         {Lang[window.Lang].pages.com.card.remove}
                                     </Button>
                                     {/* 修改按钮 */}
-                                    {/* <Button
+                                    <Button
                                         dense
                                         onClick={() => {
                                             this.state.selected = account_info;
+                                            
                                             // this.state.showInfo = true;
                                             this.setState({ openEditAreaDialog: true });
                                         }}>
                                         {Lang[window.Lang].pages.com.card.modify}
-                                    </Button> */}
+                                    </Button>
                                 </CardActions>
                             </div>
                         </Card>
@@ -425,7 +478,8 @@ class Area extends Component {
 
 
             {this.newAreaDialog()}
-            {/* {this.editAreaDialog()} */}
+            {this.editAreaDialog()}
+           
             <CommonAlert
                 show={this.state.alertOpen}
                 type={this.state.alertType}

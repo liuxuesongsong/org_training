@@ -241,7 +241,6 @@ export function getAreas() {
 export function getCity(id) {
   return window.CacheData.areas[id];
 }
-
 export function isJson(obj) {
   return typeof (obj) == "object" && Object.prototype.toString.call(obj).toLowerCase() == "[object object]" && !obj.length;
 }
