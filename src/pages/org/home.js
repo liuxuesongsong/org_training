@@ -126,7 +126,7 @@ class Home extends Component {
                                     })
                                     // all_students
                                 }
-                                console.log(this.state.all_registered_nums)
+                                // console.log(this.state.all_registered_nums)
                                  getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
                                 //console.log("刷新数据");
                             }}

@@ -18,7 +18,7 @@ import App from 'training/src/components/App';
 const training = (state = { dark: false }, action) => {
   if (action.type === 'TOGGLE_THEME_SHADE') {
     return {
-      ...state,
+      state,
       dark: !state.dark,
     };
   }

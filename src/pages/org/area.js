@@ -15,7 +15,7 @@ import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Drawer from 'material-ui/Drawer';
 
-import { initCache, getData, getRouter, getCache, getStudent,getAreas } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent,getAreas, getCity, getCourse } from '../../utils/helpers';
 
 
 import { ALERT, NOTICE, ADMIN_ADD,INST_QUERY,ADMIN_DEL,ADMIN_EDIT, AREA_INFOS, QUERY, } from '../../enum';
@@ -90,9 +90,17 @@ class Area extends Component {
         }
         
     }
+    select_clazz = (name) =>{
+        var obj =  document.getElementsByName(name);
+        this.state.check_clazz_val = [];
+         for(var k in obj){
+             if(obj[k].checked)
+             this.state.check_clazz_val.push(obj[k].value);
+         }
+         
+     }
+    
         nav_list = (name) => {
-           // console.log(this.state.check_list);
-           
             var components = []
             var list = {1:"首页",2:"学生信息",3:"班级安排",4:"服务区域"}
             for(var id in list){
@@ -158,6 +166,15 @@ class Area extends Component {
                       <p style={{marginTop:"4.5rem"}}>选择所属服务区</p>
                         {this.state.selected.areas_id?getAreas().map(area => {
                   return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
+                        
+                        <p>可显示班级</p>
+                        {this.state.selected.clazz_id?this.state.clazzes.map(
+                                clazz =>
+                               {
+                                   return <label style={{display:"block"}} key={clazz.id} value={clazz.id}><input name={"change_checkbox_clazz"} key={clazz.id} value={clazz.id} defaultChecked={this.state.selected.clazz_id.indexOf(clazz.id)!=-1?true:false} type="checkbox"></input>{clazz.class_code}{"-"}{getCity(clazz.area_id)}{"-"}{getCourse(clazz.course_id)}</label>
+                               }
+                            ):""}
+                        
                         </div>
                        
                         
@@ -171,12 +188,14 @@ class Area extends Component {
                             onClick={() => {
                                this.select_list("change_checkbox_list");
                                this.select_area("change_checkbox_area");
+                               this.select_clazz("change_checkbox_clazz");
                                this.changeArea({
                                 id:this.state.selected.id,
                                 account: document.getElementById("change_area_account").value,
                                // password: document.getElementById("area_name_password").value,
                                 modules_id:this.state.check_list_val,
-                                areas_id:this.state.check_area_val
+                                areas_id:this.state.check_area_val,
+                                clazz_id:this.state.check_clazz_val,
                             })
                                 
                                this.handleRequestClose()
@@ -243,13 +262,18 @@ class Area extends Component {
                         
                         
                       <p style={{marginTop:"4.5rem"}}>选择所属服务区</p>
+                        <div style={{minHeight:"270px"}}>
                         {getAreas().map(area => {
                                 return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"checkbox_area"} key={area.id} value={area.id} type="checkbox"></input>{area.area_name}</label>
                             })}
-                            {/* {console.log(this.state.clazzes.area_id)} */}
-                            {/* {this.state.clazzes.map(
-                                console.log(this.state.clazzes.area_id)
-                            )} */}
+                        </div>
+                             <p>可显示班级</p>
+                            {this.state.clazzes.map(
+                                clazz =>
+                               {
+                                   return <label style={{display:"block"}} key={clazz.id} value={clazz.id}><input name={"checkbox_clazz"} key={clazz.id} value={clazz.id} type="checkbox"></input>{clazz.class_code}{"-"}{getCity(clazz.area_id)}{"-"}{getCourse(clazz.course_id)}</label>
+                               }
+                            )}
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -262,6 +286,7 @@ class Area extends Component {
                                 }
                                 this.select_area("checkbox_area");
                                 this.select_list("checkbox_list");
+                                this.select_clazz("checkbox_clazz");
                                 // console.log(this.state.check_area_val);
                                // console.log(this.state.check_list_val);
                                 
@@ -269,7 +294,9 @@ class Area extends Component {
                                     account: document.getElementById("account_area").value,
                                     password: document.getElementById("area_name_password").value,
                                     modules_id:this.state.check_list_val,
-                                    areas_id:this.state.check_area_val
+                                    areas_id:this.state.check_area_val,
+                                    clazz_id:this.state.check_clazz_val
+
                                 })
                                  this.handleRequestClose()
                             }}
@@ -307,9 +334,10 @@ class Area extends Component {
             account: document.getElementById("account_area").value,
             password: document.getElementById("area_name_password").value,
             modules_id:this.state.check_list_val,
-            areas_id:this.state.check_area_val
+            areas_id:this.state.check_area_val,
+            clazz_id:this.state.check_clazz_val
         }
-       // console.log(obj);
+        console.log(obj);
         getData(getRouter(ADMIN_ADD), obj, cb, { area: area });
 
     }
@@ -348,7 +376,8 @@ class Area extends Component {
             id:this.state.selected.id,
             account: document.getElementById("change_area_account").value,
              modules_id:this.state.check_list_val,
-             areas_id:this.state.check_area_val
+             areas_id:this.state.check_area_val,
+             clazz_id:this.state.check_clazz_val,
         }
        // console.log(obj);
         getData(getRouter(ADMIN_EDIT), obj, cb, { area: area });
