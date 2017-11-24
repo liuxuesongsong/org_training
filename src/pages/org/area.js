@@ -164,10 +164,11 @@ class Area extends Component {
                        {/* {this.nav_list("change_checkbox_list")} */}
                       { this.state.selected.modules_id?this.selected_list():""}
                       <p style={{marginTop:"4.5rem"}}>选择所属服务区</p>
+                      <div style={{minHeight:"270px"}}>
                         {this.state.selected.areas_id?getAreas().map(area => {
                   return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
-                        
-                        <p>可显示班级</p>
+                        </div>
+                        <p>班主任分配</p>
                         {this.state.selected.clazz_id?this.state.clazzes.map(
                                 clazz =>
                                {
@@ -267,7 +268,7 @@ class Area extends Component {
                                 return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"checkbox_area"} key={area.id} value={area.id} type="checkbox"></input>{area.area_name}</label>
                             })}
                         </div>
-                             <p>可显示班级</p>
+                             <p>班主任分配</p>
                             {this.state.clazzes.map(
                                 clazz =>
                                {
