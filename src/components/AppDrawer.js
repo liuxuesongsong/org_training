@@ -41,6 +41,11 @@ function renderNavItems(props, navRoot) {
   if (navRoot.childRoutes && navRoot.childRoutes.length) {
     // eslint-disable-next-line no-use-before-define
     navItems = navRoot.childRoutes.reduce(reduceChildRoutes.bind(null, props), []);
+    if(window.type==2){
+      for (var i in navRoot.childRoutes){
+       sessionStorage.modules_id.indexOf(++i)!=-1? "":delete(navItems[--i])
+      }
+    }
   }
 
   return (

@@ -365,7 +365,6 @@ class Area extends Component {
         var cb = (router, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 Object.assign(arg.area, { id: message.id })
-                this.state.account_info.push(arg.area)
                 this.setState({ account_info: this.state.account_info })
                 this.fresh();
             }

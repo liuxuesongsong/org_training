@@ -314,9 +314,12 @@ class AppFrame extends Component {
 
   login = (account, password, check_code) => {
     var cb = (route, message, arg) => {
+      
       // Code.LOGIC_SUCCESS
       if (message.code === Code.LOGIC_SUCCESS) {
+        console.log(message.data.session);
         sessionStorage.logged = true;
+        sessionStorage.modules_id = message.data.modules_id;
         sessionStorage.account = arg["account"];
         sessionStorage.session = message.data.session;
         sessionStorage.apptype = arg["type"];
