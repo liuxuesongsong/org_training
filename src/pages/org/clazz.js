@@ -196,6 +196,7 @@ class Clazz extends Component {
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+      //  console.log(clazz)
         getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
 
     }
@@ -328,6 +329,19 @@ class Clazz extends Component {
                                 });
                             }}>
                         </TextField>
+                        <TextField
+                            className="nyx-form-div"
+                            key={"mobile"}
+                            id={"mobile"}
+                            label={"班主任电话"}
+                            value={this.state.selected["mobile"] === null ? "" : this.state.selected["mobile"]}
+                            onChange={(event) => {
+                                this.state.selected["mobile"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -340,13 +354,15 @@ class Clazz extends Component {
                                 var train_starttime = Number(document.getElementById("train_starttime").value);
                                 var train_endtime = Number(document.getElementById("train_endtime").value);
                                 var class_code = document.getElementById("class_code").value;
+                                var mobile = (document.getElementById("mobile").value);
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head: class_head,
                                     teacher: teacher,
                                     address: address,
                                     train_starttime: train_starttime,
                                     train_endtime: train_endtime,
-                                    class_code: class_code
+                                    class_code: class_code,
+                                    mobile:mobile
                                 })
                                 this.handleRequestClose()
                             }}
@@ -761,6 +777,7 @@ class Clazz extends Component {
                     <List className="nyx-clazz-list" subheader={<ListSubheader className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
                         <ListSubheader>
                             <Button className="nyx-btn-circle"
+                            style={{marginTop:"40px"}}
                                 color="primary"
                                 onClick={() => {
                                     this.setState({
@@ -775,7 +792,7 @@ class Clazz extends Component {
                             clazz =>
                                 <div key={clazz.id} className="nyx-clazz-card">
                                     <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.num ? clazz.num : 0) + ")"}
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.num ? clazz.num : 0)+"/"+ (clazz.agree_num ? clazz.agree_num : 0) + ")"}
                                     </div>
                                     {
                                         this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
@@ -855,9 +872,10 @@ class Clazz extends Component {
                                                             this.toggleDrawer(true)()
                                                         }}>
                                                     </i>
-                                                    <button
-                                                        style={{ margin: 0, marginLeft: '5px' }}
-                                                        className="nyx-home-button"
+                                                    <Button
+                                                        raised
+                                                        color="primary"
+                                                        style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                                         onClick={() => {
 
                                                             this.state.selected = clazz;
@@ -871,11 +889,17 @@ class Clazz extends Component {
                                                             this.queryStudents(1, true);
                                                         }}>
                                                         {"添加学生"}
-                                                    </button>
-                                                    <button
-                                                        style={{ margin: "0", position: "relative", left: "5px" }}
+                                                    </Button>
+                                                   
+                                                    <Button
+                                                   // data_id={clazz.num}
+                                                   disabled={clazz.num-clazz.agree_num == 0 ? true : false}
+                                                        raised
+                                                        color="primary"
+                                                        style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                                         className="nyx-home-button"
                                                         onClick={() => {
+                                                            
                                                             this.popUpNotice(ALERT, 0, "全部同意考试", [
                                                                 () => {
                                                                     this.state.selected = clazz;
@@ -884,16 +908,10 @@ class Clazz extends Component {
                                                                 }, () => {
                                                                     this.closeNotice();
                                                                 }]);
-
-
-
-
                                                             // this.agreeAllStudent(); 
-
-
                                                         }}>
                                                         {"同意"}
-                                                    </button>
+                                                    </Button>
                                                 </CardActions>
                                             </div>
                                     }
@@ -948,23 +966,16 @@ class Clazz extends Component {
 
                                     >{student.id} - {student.student_name} - {student.company_name} - {"联系人" + student.company_admin} - {student.mobile}
                                         {/* {console.log(student.reg_status)} */}
+                                       
                                         <Button
                                             color="primary"
+                                           // key={class.id}
+                                            raised
                                             disabled={student.reg_status == 2 ? true : false}
-                                            style={{ marginLeft: "2rem" }} className="nyx-home-button" key={student.id}
-                                            onClick={() => {
-                                                // console.log("123")
-                                                this.removeClassStudent(student.id)
-                                            }}
-                                        >{"删除"}</Button>
-                                        <Button
-                                            color="primary"
-                                            disabled={student.reg_status == 2 ? true : false}
-                                            style={{ marginLeft: "2rem" }} className="nyx-home-button"
+                                            style={{ float:"right",right:"1rem",minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                             onClick={() => {
                                                 var id = student.id;
-
-                                                console.log(id);
+                                               
                                                 var cb = (router, message, arg) => {
                                                     console.log(message.msg)
                                                     // if (message.code === Code.LOGIC_SUCCESS) {
@@ -978,6 +989,16 @@ class Clazz extends Component {
                                                 //this.removeClassStudent(student.id)
                                             }}
                                         >{"同意"}</Button>
+                                         <Button
+                                            color="primary"
+                                            raised
+                                           // disabled={student.reg_status == 2 ? true : false}
+                                           style={{ float:"right",right:"1rem",minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                                            onClick={() => {
+                                                // console.log("123")
+                                                this.removeClassStudent(student.id)
+                                            }}
+                                        >{"删除"}</Button>
 
                                     </div>
 
@@ -990,7 +1011,7 @@ class Clazz extends Component {
                     <div className="nyx-right-top-search">
 
                         <TextField
-                            style={{ top: "-0.5rem", marginLeft: 30 }}
+                            style={{ top: "0rem", marginLeft: 30 }}
                             id="search_input"
                             label={"搜索公司名称"}
                             value={this.state.search_input}
@@ -1001,7 +1022,7 @@ class Clazz extends Component {
                             }}
                         />
                         <select
-                            style={{ marginLeft: "1rem" }}
+                            style={{ marginLeft: "1rem",position:"relative",top:"0.5rem" }}
                             className="nyx-info-select-lg"
                             id="search_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
@@ -1018,7 +1039,7 @@ class Clazz extends Component {
                             })}
                         </select>
                         <select
-                            style={{ marginLeft: "1rem" }}
+                            style={{ marginLeft: "1rem",position:"relative",top:"0.5rem" }}
                             className="nyx-info-select-lg"
                             id={"search_course_id"}
                             defaultValue={this.state.search_course_id === null ? "" : this.state.search_course_id}
@@ -1035,13 +1056,14 @@ class Clazz extends Component {
                         </select>
                         <Button
                             color="primary"
+                            raised 
                             onClick={() => {
                                 this.state.queryCondition.company_name = document.getElementById("search_input").value;
                                 this.state.selectedStudentID = [];
                                 this.state.currentPageSelectedID = [];
                                 this.queryStudents(1, true);
                             }}
-                            style={{ margin: 10 }}
+                            style={{ minWidth:"50px",minHeight:"30px",margin: 15,marginLeft:30,position:"relative",top:"5px",padding:"0.5rem" }}
                         >
                             {"搜索"}
                         </Button>
@@ -1183,6 +1205,9 @@ class Clazz extends Component {
 
                     {"已选择" + this.state.selectedStudentID.length + "人/共" + this.state.count + "人"}
                     <Button
+                    raised
+                    color="primary"
+                    style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                         onClick={() => {
                             var all_area;
                             var all_course;
@@ -1209,6 +1234,9 @@ class Clazz extends Component {
                         }}
                     >导出</Button>
                     <Button
+                    raised
+                    color="primary"
+                    style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
                         onClick={() => {
                             this.cancelTrain();
                         }}
@@ -1247,7 +1275,7 @@ class Clazz extends Component {
             //     // this.setState({ clazzes: message.clazz })
             // }
             this.queryClazzStudents(this.state.selected.id);
-
+            this.fresh();
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id }, cb, {});

@@ -30,7 +30,7 @@ import { initCache, getData,getCity,getCourse, getRouter, getStudent, getCache }
 import {
     UNROLL_STUDENT,DATA_TYPE_BASE, REMOVE_STUDENT, UPDATE_STUDENT, INSERT_STUDENT, QUERY, ENROLL_STUDENT, EXIT_CLASS, STATUS_ENROLLED, AGREE_ARRANGE, REFUSE_ARRANGE, DATA_TYPE_STUDENT, STATUS_ARRANGED_DOING,
     STATUS_ENROLLED_UNDO, STATUS_FK_UNDO, STATUS_ARRANGED_UNDO, STATUS_AGREED_AGREE, STATUS_ENROLLED_DID, STATUS_ARRANGED, STATUS_AGREED,
-    CARD_TYPE_ENROLL, CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE, CARD_TYPE_KNOW
+    CARD_TYPE_ENROLL, CARD_TYPE_FK, CARD_TYPE_ARRANGE, CARD_TYPE_UNARRANGE, STATUS_ARRANGED_DID, ALERT, STATUS_AGREED_KNOW, STATUS_AGREED_REFUSED, NOTICE, CARD_TYPE_KNOW,CLASS_INFO
 } from '../../../enum';
 import Lang from '../../../language';
 import Code from '../../../code';
@@ -795,28 +795,43 @@ class Enrolled extends Component {
                                                 duty={student.duty === null ? "" : student.duty.toString()}
                                                 department={student.department === null ? "" : student.department.toString()}
                                                 institution={student.institution === null ? "" : Number(student.institution)}
-                                                // action={[
-                                                //     () => {
-                                                //         this.state.selectedStudentId = student.id;
-                                                //         this.popUpNotice(ALERT, 0, "请等待培训机构告知具体培训时间和地点", [
-                                                //             () => {
-                                                //                 this.agreeArrange();
-                                                //                 this.closeNotice();
-                                                //             }, () => {
-                                                //                 this.closeNotice();
-                                                //             }]);
-                                                //     },
-                                                //     () => {
-                                                //         this.state.selectedStudentId = student.id;
+                                                action={[
+                                                    () => {
+                                                        this.state.selectedStudentId = student.id;
+                                                        console.log(student.id);
+                                                        var id = student.id;
+                                                        var cb = (router, message, arg) => {
+                                                            if (message.code === Code.LOGIC_SUCCESS) {
+                                                               
+                                                            }
+                                                           // this.popUpNotice(NOTICE, 0, message.msg);
+                                                        //   var class_code = message.data.classinfo.class_code!=null?"班级编号"+message.data.classinfo.class_code:"";
+                                                          // var address = message.data.classinfo.address!=null?"地址"+message.data.classinfo.address:"";
+                                                           var class_head = message.data.classinfo.class_head!=null?"班主任"+message.data.classinfo.class_head:"";
+                                                           var mobile = message.data.classinfo.mobile!=null?"-班主任电话"+message.data.classinfo.mobile:"";
+                                                           var message_data= class_head!=""?class_head+mobile:"暂无班级安排"
+                                                           this.popUpNotice(ALERT, 0, message_data, [
+                                                            () => {
+                                                                //this.agreeArrange();
+                                                                this.closeNotice();
+                                                            }, () => {
+                                                                this.closeNotice();
+                                                            }]);
+                                                        }
+                                                        getData(getRouter(CLASS_INFO), { session: sessionStorage.session, id: student.id }, cb, { id: id });
+                                                        
+                                                    },
+                                                    () => {
+                                                        this.state.selectedStudentId = student.id;
 
-                                                //         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                //             () => {
-                                                //                 this.refuseArrange();
-                                                //                 this.closeNotice();
-                                                //             }, () => {
-                                                //                 this.closeNotice();
-                                                //             }]);
-                                                //     }]}
+                                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                            () => {
+                                                                this.refuseArrange();
+                                                                this.closeNotice();
+                                                            }, () => {
+                                                                this.closeNotice();
+                                                            }]);
+                                                    }]}
                                                 >
                                             </StudentCard>)
                                     case "3":
@@ -834,28 +849,29 @@ class Enrolled extends Component {
                                                     duty={student.duty === null ? "" : student.duty.toString()}
                                                     department={student.department === null ? "" : student.department.toString()}
                                                     institution={student.institution === null ? "" : Number(student.institution)}
-                                                    action={[
-                                                        () => {
-                                                            this.state.selectedStudentId = student.id;
-                                                            this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
-                                                                () => {
-                                                                    this.agreeArrange();
-                                                                    this.closeNotice();
-                                                                }, () => {
-                                                                    this.closeNotice();
-                                                                }]);
-                                                        },
-                                                        () => {
-                                                            this.state.selectedStudentId = student.id;
+                                                    // action={[
+                                                    //     () => {
+                                                    //         this.state.selectedStudentId = student.id;
+                                                    //         this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
+                                                    //             () => {
+                                                    //                 this.agreeArrange();
+                                                    //                 this.closeNotice();
+                                                    //             }, () => {
+                                                    //                 this.closeNotice();
+                                                    //             }]);
+                                                    //     },
+                                                    //     () => {
+                                                    //         this.state.selectedStudentId = student.id;
 
-                                                            this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                                () => {
-                                                                    this.refuseArrange();
-                                                                    this.closeNotice();
-                                                                }, () => {
-                                                                    this.closeNotice();
-                                                                }]);
-                                                        }]}>
+                                                    //         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
+                                                    //             () => {
+                                                    //                 this.refuseArrange();
+                                                    //                 this.closeNotice();
+                                                    //             }, () => {
+                                                    //                 this.closeNotice();
+                                                    //             }]);
+                                                    //     }]}
+                                                        >
                                                 </StudentCard>)
                                         }
                                 }

@@ -93,14 +93,14 @@ class ComCard extends Component {
       case CARD_TYPE_ARRANGE:
         return (
           <CardActions style={{ height: '1.5rem' }}>
-            {/* {this.state.status === '' ?
+            {this.state.status === '' ?
               (
                 <button className="nyx-card-button" onClick={this.props.action[0]}>
-                  已收到
+                  查看班级安排
                     </button>
               ) :
               (Lang[window.Lang].pages.com.card.status[1])
-            } */}
+            }
           </CardActions>
         );
       case CARD_TYPE_KNOW:

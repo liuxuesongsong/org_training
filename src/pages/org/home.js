@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withStyles, createStyleSheet } from 'material-ui/styles';
 import Paper from 'material-ui/Paper';
 import GridList from 'material-ui/Grid';
+import Button from 'material-ui/Button';
 import List, {
     ListItem, ListItemSecondaryAction, ListItemText,
     ListSubheader,
@@ -109,8 +110,11 @@ class Home extends Component {
                                 {Lang[window.Lang].pages.org.home.arranged + "/" + Lang[window.Lang].pages.org.home.all_students + ":"
                                     + this.state.arranged_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_students_nums + Lang[window.Lang].pages.com.home.human}
                            {/* {console.log(this.state.clazz_count[0])} */}
-                           <button
-                            className="nyx-home-button"
+                           <Button
+                           raised
+                           color="primary"
+                           style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
+                           // className="nyx-home-button"
                             onClick={()=>{
                                 var cb = (router, message, arg) => {
                                     window.currentPage.setState({
@@ -130,7 +134,7 @@ class Home extends Component {
                                  getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
                                 //console.log("刷新数据");
                             }}
-                            >刷新数据</button>
+                            >刷新数据</Button>
                             <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
                                     + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
                             <div  style={{width:"45%",float:"left"}}>

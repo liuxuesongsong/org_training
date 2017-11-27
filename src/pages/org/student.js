@@ -308,6 +308,7 @@ class Student extends Component {
                         }}
                     />
                     <Button
+                        raised 
                         color="primary"
                         onClick={() => {
                             this.state.queryCondition.company_name = document.getElementById("search_input").value;
@@ -315,17 +316,18 @@ class Student extends Component {
                             this.state.currentPageSelectedID = [];
                             this.queryStudents(1, true);
                         }}
-                        style={{ margin: 10 }}
+                        style={{ minWidth:"30px",minHeight:"30px",margin: 15,marginLeft:30,position:"relative",top:"-5px",padding:"0.5rem" }}
                     >
                         {"搜索"}
                     </Button>
                     <Button
+                        raised 
                         color="primary"
                         onClick={() => {
                             this.state.queryCondition={ is_inlist:1,institution:0},
                             this.queryStudents(1, true);
                         }}
-                        style={{ margin: 10 }}
+                        style={{ minWidth:"30px",minHeight:"30px",margin: 15,marginLeft:0,position:"relative",top:"-5px",padding:"0.5rem" }}
                     >
                         {"取消筛选"}
                     </Button>
@@ -471,6 +473,9 @@ class Student extends Component {
 
                 共{this.state.count}人
                 <Button
+                 raised
+                 color="primary"
+                 style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                 onClick={() => {
                     var all_area;
                     var all_course;
@@ -514,6 +519,9 @@ class Student extends Component {
                 }}
                 >导出</Button>
                 <Button
+                raised
+                color="primary"
+                style={{ minWidth:"130px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                 disabled={this.state.search_is_inlist == 1 ? false : true }
                 onClick={()=>{
                     this.state.search_is_inlist == 1? this.checkTrain():"";

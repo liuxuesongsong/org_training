@@ -469,7 +469,9 @@ class Area extends Component {
                                 <CardActions>
 
                                     <Button
+                                        color="primary"
                                         dense
+                                        raised
                                         onClick={() => {
                                            
                                         //   return
@@ -487,7 +489,9 @@ class Area extends Component {
                                     </Button>
                                     {/* 修改按钮 */}
                                     <Button
+                                        color="primary"
                                         dense
+                                        raised
                                         onClick={() => {
                                             this.state.selected = account_info;
                                             
