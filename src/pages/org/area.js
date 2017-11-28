@@ -30,6 +30,7 @@ class Area extends Component {
         areas: [],
         clazz: [],
         clazzes:[],
+        role_model:[],
         check_area_val: [],//选中area的id
         check_list_val:[],//选中nav的id
         account_info:[],
@@ -59,8 +60,8 @@ class Area extends Component {
         window.currentPage.state.areas = getAreas();
         var cb = (router, message, arg) => {
             window.currentPage.setState({
-                my_id: message.data.myinfo.my_id 
-                
+                my_id: message.data.myinfo.my_id, 
+                role_model:message.data.role_model
             })
         }
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
@@ -70,6 +71,10 @@ class Area extends Component {
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
+        // window.currentPage.state.role_model = getCache("role_model").sort((a, b) => {
+        //     return b.id - a.id
+        // });
+        
 
     }
 
@@ -169,6 +174,7 @@ class Area extends Component {
                   return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
                         </div>
                         <p>班主任分配</p>
+                        
                         {this.state.selected.clazz_id?this.state.clazzes.map(
                                 clazz =>
                                {
@@ -257,6 +263,7 @@ class Area extends Component {
                             fullWidth
                         />
                         <p>可显示区域</p>
+                       
                         {
                            this.nav_list("checkbox_list") 
                         }
@@ -269,6 +276,7 @@ class Area extends Component {
                             })}
                         </div>
                              <p>班主任分配</p>
+                            { console.log(this.state.clazzes)}
                             {this.state.clazzes.map(
                                 clazz =>
                                {

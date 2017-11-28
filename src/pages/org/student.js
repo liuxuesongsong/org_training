@@ -310,24 +310,26 @@ class Student extends Component {
                     <Button
                         raised 
                         color="primary"
+                        className="nyx-org-btn-sm"
                         onClick={() => {
                             this.state.queryCondition.company_name = document.getElementById("search_input").value;
                             this.state.selectedStudentID = [];
                             this.state.currentPageSelectedID = [];
                             this.queryStudents(1, true);
                         }}
-                        style={{ minWidth:"30px",minHeight:"30px",margin: 15,marginLeft:30,position:"relative",top:"-5px",padding:"0.5rem" }}
+                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
                     >
                         {"搜索"}
                     </Button>
                     <Button
                         raised 
                         color="primary"
+                        className="nyx-org-btn-md"
                         onClick={() => {
                             this.state.queryCondition={ is_inlist:1,institution:0},
                             this.queryStudents(1, true);
                         }}
-                        style={{ minWidth:"30px",minHeight:"30px",margin: 15,marginLeft:0,position:"relative",top:"-5px",padding:"0.5rem" }}
+                        style={{margin: 15,marginLeft:0,position:"relative",top:"-5px"}}
                     >
                         {"取消筛选"}
                     </Button>
@@ -475,7 +477,8 @@ class Student extends Component {
                 <Button
                  raised
                  color="primary"
-                 style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                 className="nyx-org-btn-sm"
+                // style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                 onClick={() => {
                     var all_area;
                     var all_course;
@@ -521,7 +524,7 @@ class Student extends Component {
                 <Button
                 raised
                 color="primary"
-                style={{ minWidth:"130px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+               className="nyx-org-btn-lg"
                 disabled={this.state.search_is_inlist == 1 ? false : true }
                 onClick={()=>{
                     this.state.search_is_inlist == 1? this.checkTrain():"";

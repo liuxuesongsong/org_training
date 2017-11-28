@@ -875,7 +875,8 @@ class Clazz extends Component {
                                                     <Button
                                                         raised
                                                         color="primary"
-                                                        style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                                                        className="nyx-org-btn-md"
+                                                      //  style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                                         onClick={() => {
 
                                                             this.state.selected = clazz;
@@ -896,8 +897,8 @@ class Clazz extends Component {
                                                    disabled={clazz.num-clazz.agree_num == 0 ? true : false}
                                                         raised
                                                         color="primary"
-                                                        style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
-                                                        className="nyx-home-button"
+                                                        className="nyx-org-btn-sm"
+                                                        style={{margin: 0,marginLeft:5,padding:"0" }}
                                                         onClick={() => {
                                                             
                                                             this.popUpNotice(ALERT, 0, "全部同意考试", [
@@ -924,10 +925,11 @@ class Clazz extends Component {
                         open={this.state.right}
                         onRequestClose={this.toggleDrawer(false)}
                     >
-                        <div key="draw-class" style={{ width: "500px" }}>
+                        <div key="draw-class"  style={{ width: "500px" }}>
 
-
+                        <div className="nyx-clazz-list" style={{boxShadow:"none",width:"100%"}}>
                             <Button
+                            raised
                                 color="primary"
                                 id='downloadData'
                                 href="#"
@@ -935,11 +937,12 @@ class Clazz extends Component {
                                 onClick={() => {
 
                                 }}
-                                style={{ margin: 10 }}
+                                style={{ margin: 10}}
                             >
                                 {"下载"}
                             </Button>
                             <Button
+                            raised
                                 color="primary"
                                 onClick={
                                     () => {
@@ -960,52 +963,42 @@ class Clazz extends Component {
                             >
                                 {"导出详细信息"}
                             </Button>
+                            {console.log(this.state.clazzStudents.sort(function(a,b){
+                         return a.student_id-b.student_id;}))}
                             {this.state.clazzStudents.map(
                                 student => {
                                     return <div className="nyx-clazz-student-name"
 
-                                    >{student.id} - {student.student_name} - {student.company_name} - {"联系人" + student.company_admin} - {student.mobile}
-                                        {/* {console.log(student.reg_status)} */}
-                                       
-                                        <Button
-                                            color="primary"
-                                           // key={class.id}
-                                            raised
-                                            disabled={student.reg_status == 2 ? true : false}
-                                            style={{ float:"right",right:"1rem",minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                                    ><div style={{width:"3rem"}} className="nyx-clazz-student-message">{student.student_id}</div> - <div style={{width:"3rem"}} className="nyx-clazz-student-message">{student.student_name}</div> - <div style={{width:"200px"}} className="nyx-clazz-student-message">{student.company_name}</div>
+                                        <i
+                                           className="glyphicon glyphicon-ok"
+                                            style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
                                             onClick={() => {
+                                                if(student.reg_status == 2){
+                                                    return;
+                                                }
                                                 var id = student.id;
-                                               
                                                 var cb = (router, message, arg) => {
-                                                    console.log(message.msg)
-                                                    // if (message.code === Code.LOGIC_SUCCESS) {
-                                                    //     getStudent(arg.id).is_inlist = STATUS_ARRANGED_DID;
-                                                    //     this.fresh();
-                                                    // }
                                                     this.popUpNotice(NOTICE, 0, message.msg);
                                                 }
-
                                                 getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
-                                                //this.removeClassStudent(student.id)
                                             }}
-                                        >{"同意"}</Button>
-                                         <Button
-                                            color="primary"
-                                            raised
-                                           // disabled={student.reg_status == 2 ? true : false}
-                                           style={{ float:"right",right:"1rem",minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                                        ></i>
+                                         <i
+                                             className="glyphicon glyphicon-trash"                               
+                                           style={{ float:"right",right:"1rem",top:"-0.5rem"}}
                                             onClick={() => {
-                                                // console.log("123")
                                                 this.removeClassStudent(student.id)
                                             }}
-                                        >{"删除"}</Button>
-
+                                        ></i>
                                     </div>
+                                    
 
                                 })}
                         </div>
+                        </div>
                     </Drawer>
-
+                 
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
@@ -1063,7 +1056,8 @@ class Clazz extends Component {
                                 this.state.currentPageSelectedID = [];
                                 this.queryStudents(1, true);
                             }}
-                            style={{ minWidth:"50px",minHeight:"30px",margin: 15,marginLeft:30,position:"relative",top:"5px",padding:"0.5rem" }}
+                            className="nyx-org-btn-sm"                                            
+                            style={{ margin: 15,marginLeft:30,position:"relative",top:"5px"}}
                         >
                             {"搜索"}
                         </Button>
@@ -1207,7 +1201,8 @@ class Clazz extends Component {
                     <Button
                     raised
                     color="primary"
-                    style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                    className="nyx-org-btn-sm"
+                  //  style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                         onClick={() => {
                             var all_area;
                             var all_course;
@@ -1236,7 +1231,8 @@ class Clazz extends Component {
                     <Button
                     raised
                     color="primary"
-                    style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
+                    className="nyx-org-btn-md"
+                    //style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
                         onClick={() => {
                             this.cancelTrain();
                         }}

@@ -113,7 +113,7 @@ class Home extends Component {
                            <Button
                            raised
                            color="primary"
-                           style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
+                           className="nyx-org-btn-md"
                            // className="nyx-home-button"
                             onClick={()=>{
                                 var cb = (router, message, arg) => {

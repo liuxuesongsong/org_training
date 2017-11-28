@@ -109,7 +109,7 @@ function AppDrawer(props) {
       </div>
       
       <div 
-      style={{position:"fixed",bottom:"0",fontSize:"16px",width:"100%"}}
+      style={{position:"fixed",bottom:"0",fontSize:"16px",width:"150px"}}
       >
       {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf nyx_instruction_pdf_big" style={{width:"100%"}} title="自学资料" href="http://www.csst.com.cn/uploadfile/doc/details.rar" target="view_window"><i className="glyphicon glyphicon-list-alt"></i><p className="nyx_instruction_p">自学资料</p></a> : ""}
       {sessionStorage.getItem("apptype") === APP_TYPE_COMPANY.toString() ? <a className="nyx_instruction_pdf"  title="填报说明" href="http://www.csst.com.cn/uploadfile/doc/csi-01.pdf" target="view_window"><i className="glyphicon glyphicon-info-sign"></i><p className="nyx_instruction_p">填报说明</p></a> : ""}

@@ -2009,6 +2009,10 @@ div.nyx-clazz-list i:active {
   border: 1px #90CAF9 solid;
 }
 
+div.nyx-clazz-list .disabled {
+  color: #9E9E9E;
+}
+
 div.nyx-clazz-list button.nyx-btn-circle {
   background: #2196F3;
   color: #fff;
@@ -2160,9 +2164,17 @@ button.nyx-clazz-card-button:hover {
 }
 
 .nyx-clazz-student-name {
-  padding: 0.5rem;
-  margin: 0.5rem 3rem;
+  padding: 0.15rem;
+  margin: 0.5rem 1rem;
   font-size: 14px;
+}
+
+.nyx-clazz-student-message {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  -o-text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .nyx-notice-button {
@@ -2208,4 +2220,25 @@ button.nyx-clazz-card-button:hover {
   position: relative;
   top: -240px;
   right: -520px;
+}
+
+button.nyx-org-btn-lg {
+  min-width: 130px;
+  min-height: 30px;
+  margin: 0.2rem;
+  padding: 0;
+}
+
+button.nyx-org-btn-md {
+  min-width: 70px;
+  min-height: 30px;
+  margin: 0.2rem;
+  padding: 0;
+}
+
+button.nyx-org-btn-sm {
+  min-width: 50px;
+  min-height: 30px;
+  margin: 0.2rem;
+  padding: 0;
 }
