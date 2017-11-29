@@ -1136,7 +1136,7 @@ class Clazz extends Component {
                                     },
                                     {
                                         key: "detail",
-                                        name: "备注",
+                                        name: "分班记录",
                                         width: 100,
                                         resizable: true
                                     },

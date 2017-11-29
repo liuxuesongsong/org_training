@@ -36,6 +36,7 @@ class Home extends Component {
         areas: [],
         clazz_count:[],
         train_count:[],
+        unarrange_count:[],
         // 界面状态
 
         // 提示状态
@@ -78,7 +79,7 @@ class Home extends Component {
             window.currentPage.setState({
                 clazz_count: message.data.clazz_count,
                 train_count: message.data.train_count,
-                
+                unarrange_count: message.data.unarrange_count,
                 
             })
         }
@@ -87,6 +88,9 @@ class Home extends Component {
             return b.id - a.id
         });
         window.currentPage.state.train_count = getCache("train_count").sort((a, b) => {
+            return b.id - a.id
+        });
+        window.currentPage.state.unarrange_count = getCache("unarrange_count").sort((a, b) => {
             return b.id - a.id
         });
     }
@@ -101,55 +105,62 @@ class Home extends Component {
                 <div
                     style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
                 >
-                    <div style={{ margin: 10, width: 400, float: "left" }}>
-                        <Paper id="companyid" width="500px">
+                    <div style={{ margin: 10,float: "left" }}>
+                        <Paper id="companyid" width="500px" style={{ padding: 10 }}>
                             <Typography type="headline" component="h5">
                                 {this.state.name}
                             </Typography>
-                            <Typography type="body1" component="p">
+                            <Typography type="body1" component="div">
+                            <div>
                                 {Lang[window.Lang].pages.org.home.arranged + "/" + Lang[window.Lang].pages.org.home.all_students + ":"
                                     + this.state.arranged_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_students_nums + Lang[window.Lang].pages.com.home.human}
-                           {/* {console.log(this.state.clazz_count[0])} */}
-                           <Button
-                           raised
-                           color="primary"
-                           className="nyx-org-btn-md"
-                           // className="nyx-home-button"
-                            onClick={()=>{
-                                var cb = (router, message, arg) => {
-                                    window.currentPage.setState({
-                                        areas: message.data.info.areas,
-                                        clazzes: window.CacheData.clazzes,
-                                        arranged_nums: message.data.info.sum.all_arrange_count,
-                                        all_students_nums: message.data.info.sum.all_count,
-                                        //已临时登记人数
-                                        registered_nums:  message.data.info.sum.registered_nums,
-                                        all_registered_nums: message.data.info.sum.all_registered_nums
-                                        // arranged_nums: message.data.info.sum.all_student_inlist,
-                                        // all_students_nums: message.data.info.sum.all_student_reg,
-                                    })
-                                    // all_students
-                                }
-                                // console.log(this.state.all_registered_nums)
-                                 getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
-                                //console.log("刷新数据");
-                            }}
-                            >刷新数据</Button>
-                            <br/>{Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
+                                <Button
+                                raised
+                                color="primary"
+                                className="nyx-org-btn-md"
+                                // className="nyx-home-button"
+                                    onClick={()=>{
+                                        var cb = (router, message, arg) => {
+                                            window.currentPage.setState({
+                                                areas: message.data.info.areas,
+                                                clazzes: window.CacheData.clazzes,
+                                                arranged_nums: message.data.info.sum.all_arrange_count,
+                                                all_students_nums: message.data.info.sum.all_count,
+                                                //已临时登记人数
+                                                registered_nums:  message.data.info.sum.registered_nums,
+                                                all_registered_nums: message.data.info.sum.all_registered_nums
+                                                // arranged_nums: message.data.info.sum.all_student_inlist,
+                                                // all_students_nums: message.data.info.sum.all_student_reg,
+                                            })
+                                            // all_students
+                                        }
+                                        // console.log(this.state.all_registered_nums)
+                                        getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
+                                        //console.log("刷新数据");
+                                    }}
+                                    >刷新数据</Button>
+                            </div>
+                            <div>
+                            {Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
                                     + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
-                            <div  style={{width:"45%",float:"left"}}>
+                            </div>
+                            <div  style={{width:200,float:"left"}}>
                             {this.state.clazz_count.map(
                                 clazz_count =>
                             <div key={clazz_count.ti_id}><span style={{display:"block",float:"left",width:"100px"}}>{getInst(clazz_count.ti_id)}</span><span>{"已建立:"+clazz_count.num+"班"}</span></div>
                                 )}
                             </div>
-                            <div style={{width:"45%",float:"left"}}>
+                            <div style={{width:100,float:"left"}}>
                             {this.state.train_count.map(
                                 train_count =>
                             <div key={train_count.ti_id}><span>{"已安排:"+train_count.num+"人"}</span></div>)}
-
                             </div>
-                            
+
+                            <div style={{width:100,float:"left"}}>
+                            {this.state.unarrange_count.map(
+                                unarrange_count =>
+                            <div key={unarrange_count.ti_id}><span>{"未安排:"+unarrange_count.num+"人"}</span></div>)}
+                            </div>                            
                             
                             </Typography>
 
