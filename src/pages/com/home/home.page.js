@@ -64,11 +64,11 @@ class Home extends Component {
         let enrolled = 0, arranged = 0, passed = 0, examing = 0,
             unarragedStudents = [], arrangedStudents = [];
         for (var i = 0; i < students.length; i++) {
-            if (students[i].is_inlist == STATUS_ENROLLED_DID) {
+            if (students[i].is_inlist == STATUS_ENROLLED_DID||students[i].is_inlist == STATUS_ARRANGED_DID) {
                 enrolled++;
                 unarragedStudents.push(students[i]);
             }
-            if (students[i].is_inlist == STATUS_ARRANGED_DID||students[i].is_inlist == 3) {
+            if (students[i].is_inlist == 3) {
                 enrolled++;
                 arranged++;
                 arrangedStudents.push(students[i]);
@@ -202,29 +202,66 @@ class Home extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         <div className={this.state.unarranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-                            {this.state.unarragedStudents.map(student =>
-                                <StudentCard
-
-                                    type={CARD_TYPE_UNARRANGE}
-                                    key={CARD_TYPE_UNARRANGE + student.id}
-                                    name={student.name === null ? "" : student.name.toString()}
-                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
-                                    email={student.mail === null ? "" : student.mail.toString()}
-                                    level={student.course_id === "" ? 0 : Number(student.course_id)}
-                                    city={student.area_id === "" ? 0 : Number(student.area_id)}
-                                    action={[() => {
-                                        this.state.selectedStudentId = student.id;
-                                        this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                            () => {
-                                                this.cancelEnroll(student.id);
-                                                this.closeNotice();
-                                            }, () => {
-                                                this.closeNotice();
-                                            }]);
-                                    }]}
-                                >
-                                </StudentCard>
-                            )}
+                        {this.state.unarragedStudents.map(student => {
+                            
+                                                            switch (student.is_inlist) {
+                                                                case "1":
+                                                                    return (
+                                                                        <StudentCard
+                                                                            type={CARD_TYPE_UNARRANGE}
+                                                                            key={student.id}
+                                                                            
+                                                                            name={student.name === null ? "" : student.name.toString()}
+                                                                            mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                                            email={student.mail === null ? "" : student.mail.toString()}
+                                                                            level={Number(student.course_id)}
+                                                                            city={Number(student.area_id)}
+                                                                            duty={student.duty === null ? "" : student.duty.toString()}
+                                                                            department={student.department === null ? "" : student.department.toString()}
+                                                                            institution={student.institution === null ? "" : Number(student.institution)}
+                                                                            action={[() => {
+                                                                                this.state.selectedStudentId = student.id;
+                                                                                this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
+                                                                                    () => {
+                                                                                        this.cancelEnroll(student.id);
+                                                                                        this.closeNotice();
+                                                                                    }, () => {
+                                                                                        this.closeNotice();
+                                                                                    }]);
+                                                                            }]}
+                                                                            >
+                                                                        </StudentCard>)
+                                                                case "2":
+                                                                    {
+                                                                        return (
+                                                                            <StudentCard
+                                                                                type={CARD_TYPE_UNARRANGE}
+                                                                                key={student.id}
+                                                                               
+                                                                                name={student.name === null ? "" : student.name.toString()}
+                                                                                mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                                                email={student.mail === null ? "" : student.mail.toString()}
+                                                                                level={Number(student.course_id)}
+                                                                                city={Number(student.area_id)}
+                                                                                duty={student.duty === null ? "" : student.duty.toString()}
+                                                                                department={student.department === null ? "" : student.department.toString()}
+                                                                                institution={student.institution === null ? "" : Number(student.institution)}
+                                                                                action={[() => {
+                                                                                    this.state.selectedStudentId = student.id;
+                                                                                    this.popUpNotice(ALERT, 0, "正在安排中,不可取消" + student.name + "报名,请等待通知", [
+                                                                                        () => {
+                                                                                            //this.cancelEnroll(student.id);
+                                                                                            this.closeNotice();
+                                                                                        }, () => {
+                                                                                            this.closeNotice();
+                                                                                        }]);
+                                                                                }]}
+                                                                                    >
+                                                                            </StudentCard>)
+                                                                    }
+                                                            }
+                                                        })
+                                                        }
                         </div>
                     </List>
                 </Paper>

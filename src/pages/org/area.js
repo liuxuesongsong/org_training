@@ -31,6 +31,7 @@ class Area extends Component {
         clazz: [],
         clazzes:[],
         role_model:[],
+        selected_role_model:[],
         check_area_val: [],//选中area的id
         check_list_val:[],//选中nav的id
         account_info:[],
@@ -61,7 +62,8 @@ class Area extends Component {
         var cb = (router, message, arg) => {
             window.currentPage.setState({
                 my_id: message.data.myinfo.my_id, 
-                role_model:message.data.role_model
+                role_model:message.data.role_model,
+                selected_role_model:message.data.role_model[0].roles
             })
         }
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
@@ -71,9 +73,7 @@ class Area extends Component {
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
-        // window.currentPage.state.role_model = getCache("role_model").sort((a, b) => {
-        //     return b.id - a.id
-        // });
+        
         
 
     }
@@ -105,16 +105,17 @@ class Area extends Component {
          
      }
     
-        nav_list = (name) => {
-            var components = []
-            var list = {1:"首页",2:"学生信息",3:"班级安排",4:"服务区域"}
-            for(var id in list){
-                components.push(
-                    <label style={{width:"33%",float:"left",display:"block"}} key={id} value={id}><input name={name} key={id} value={id} type="checkbox"></input>{list[id]}</label>
-                )
-            }
-            return components
-        }
+        // nav_list = (name) => {
+        //     //console.log(document.getElementById("select_role").value)
+        //     var components = []
+        //     var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
+        //     for(var id in list){
+        //         components.push(
+        //             <label style={{width:"33%",float:"left",display:"block"}} key={id} value={id}><input name={name} key={id} value={id} type="checkbox"></input>{list[id]}</label>
+        //         )
+        //     }
+        //     return components
+        // }
      select_list = (name) => {
         var obj =  document.getElementsByName(name);
         this.state.check_list_val = [];
@@ -123,18 +124,35 @@ class Area extends Component {
              this.state.check_list_val.push(obj[k].value);
          }
      }
-    //  check_area_id =(id,modules_arr)=>{
+    //  change_check_role =(id,modules_arr)=>{
     //     for(var i in modules_arr){
+    //      //   console.log(i)
     //         if(modules_arr[i]==id){
+    //             console.log("id是"+id)
+    //             console.log(modules_arr[i])
     //             return true           
     //         }
     //     }
     //     return false
     //  }
+    selected_roles = () => {
+        
+        var components = []
+        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
+        var modules_arr = this.state.selected_role_model;
+        console.log(this.state.selected_role_model)
+        for(var id in list){
+            components.push(
+                <label style={{width:"33%",float:"left",display:"block"}}  key={id}  value={id}><input name={"checkbox_list"} key={id} checked={this.state.selected_role_model.indexOf(id)!=-1?true:false} value={id} type="checkbox"></input>{list[id]}</label>
+            )
+        }
+        return components
+       
+     }
      selected_list = () => {
         
         var components = []
-        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"服务区域"}
+        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
         var modules_arr = this.state.selected.modules_id;
         for(var id in list){
             components.push(
@@ -171,7 +189,7 @@ class Area extends Component {
                       <p style={{marginTop:"4.5rem"}}>选择所属服务区</p>
                       <div style={{minHeight:"270px"}}>
                         {this.state.selected.areas_id?getAreas().map(area => {
-                  return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
+                          return <label style={{width:"33%",float:"left",display:"block"}} key={area.id} value={area.id}><input name={"change_checkbox_area"} key={area.id} defaultChecked={this.state.selected.areas_id.indexOf(area.id.toString())!=-1?true:false} value={area.id} type="checkbox"></input>{area.area_name}</label>}):""}
                         </div>
                         <p>班主任分配</p>
                         
@@ -262,10 +280,28 @@ class Area extends Component {
                             defaultValue={""}
                             fullWidth
                         />
-                        <p>可显示区域</p>
-                       
+                        <p><select
+                            id="select_role"
+                            defaultValue={""}
+                            onChange={(e)=>{
+                                var obj = document.getElementsByName("checkbox_list");
+                                this.state.selected_role_model=e.target.value.split(",");
+                                for(var id=0;id<obj.length;id++){
+                                  obj[id].checked=this.state.selected_role_model.indexOf(obj[id].value)!=-1?true:false
+                                  //  obj[id].checked=this.change_check_role(id,this.state.selected_role_model);
+                                }
+                         
+                            }}
+                            >
+                            {this.state.role_model.map((role) => {
+                          return <option key={role.roles} value={role.roles}>{role.name}</option>
+                            })}
+                            </select></p>
+                        
+                          
                         {
-                           this.nav_list("checkbox_list") 
+                            this.selected_roles()
+                          // this.nav_list("checkbox_list") 
                         }
                         
                         
@@ -302,7 +338,7 @@ class Area extends Component {
                                 this.newArea({
                                     account: document.getElementById("account_area").value,
                                     password: document.getElementById("area_name_password").value,
-                                    modules_id:this.state.check_list_val,
+                                    modules_id:this.state.selected_role_model,
                                     areas_id:this.state.check_area_val,
                                     clazz_id:this.state.check_clazz_val
 
@@ -342,11 +378,14 @@ class Area extends Component {
             session: sessionStorage.session,
             account: document.getElementById("account_area").value,
             password: document.getElementById("area_name_password").value,
-            modules_id:this.state.check_list_val,
+            modules_id:this.state.selected_role_model,
             areas_id:this.state.check_area_val,
             clazz_id:this.state.check_clazz_val
         }
-        console.log(obj);
+        // var select_role=document.getElementById('select_role');
+        // var select_role_index=select_role.selectedIndex;
+        // console.log(select_role.options[select_role_index].text)
+        // console.log(obj);
         getData(getRouter(ADMIN_ADD), obj, cb, { area: area });
 
     }

@@ -12,6 +12,10 @@ import Dialog, {
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
+import classnames from 'classnames';
+import IconButton from 'material-ui/IconButton';
+import Collapse from 'material-ui/transitions/Collapse';
+import ExpandMoreIcon from 'material-ui-icons/ExpandMore';
 import TextField from 'material-ui/TextField';
 import Button from 'material-ui/Button';
 import Chip from 'material-ui/Chip';
@@ -61,7 +65,7 @@ class Clazz extends Component {
         selectedStudentId: undefined,
         // 下载相关
         filename: "",
-
+        expanded: false,
         // 提示状态
         alertOpen: false,
         alertType: ALERT,
@@ -72,7 +76,9 @@ class Clazz extends Component {
         alertType: "notice",
         alertContent: "登录成功",
     }
-
+    handleExpandClick = () => {
+        this.setState({ expanded: !this.state.expanded });
+      };
     componentWillUnmount() {
         this._isMounted = false
     }
@@ -497,7 +503,7 @@ class Clazz extends Component {
      */
     handleMakeDownloadData = (result) => {
         var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
-        var tableHeadKey = ['id', 'student_name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
+        var tableHeadKey = ['student_id', 'student_name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
         var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
         var tableContent = [];
         var item = [];
@@ -730,6 +736,7 @@ class Clazz extends Component {
     }
 
     render() {
+        const { classes } = this.props;
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
 
@@ -791,9 +798,31 @@ class Clazz extends Component {
                         {this.state.clazzes.map(
                             clazz =>
                                 <div key={clazz.id} className="nyx-clazz-card">
-                                    <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.num ? clazz.num : 0)+"/"+ (clazz.agree_num ? clazz.agree_num : 0) + ")"}
+                                {/* <Card style={{boxShadow:"none"}}>
+                                <div className="nyx-card-body">
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}
+                                <IconButton
+                                style={{width:24,height:24,float:"right"}}
+                                className={this.state.expanded?"expand":"expandOpen"}
+                                    onClick={() => 
+                                    {this.handleExpandClick()
+                                        console.log(this)
+                                    }}
+                                    >
+                                    <ExpandMoreIcon />
+                                    </IconButton>
                                     </div>
+                                <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
+                                    <CardContent>
+                                       班主任                                    
+                                    </CardContent>
+                                </Collapse>
+
+                                </Card> */}
+                                <div className="nyx-card-body">
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}
+                                        </div>
+                                   
                                     {
                                         this.state.stateSelected && this.state.selected.id === clazz.id ? <div>
                                             <CardActions className="nyx-card-action">
@@ -969,7 +998,7 @@ class Clazz extends Component {
                                 student => {
                                     return <div className="nyx-clazz-student-name"
 
-                                    ><div style={{width:"3rem"}} className="nyx-clazz-student-message">{student.student_id}</div> - <div style={{width:"3rem"}} className="nyx-clazz-student-message">{student.student_name}</div> - <div style={{width:"200px"}} className="nyx-clazz-student-message">{student.company_name}</div>
+                                    ><div style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
                                         <i
                                            className="glyphicon glyphicon-ok"
                                             style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
@@ -988,7 +1017,7 @@ class Clazz extends Component {
                                              className="glyphicon glyphicon-trash"                               
                                            style={{ float:"right",right:"1rem",top:"-0.5rem"}}
                                             onClick={() => {
-                                                this.removeClassStudent(student.id)
+                                                this.removeClassStudent(student.id);
                                             }}
                                         ></i>
                                     </div>
@@ -1106,6 +1135,12 @@ class Clazz extends Component {
                                         resizable: true
                                     },
                                     {
+                                        key: "detail",
+                                        name: "备注",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
                                         key: "area_name",
                                         name: "培训城市",
                                         width: 100,
@@ -1137,6 +1172,7 @@ class Clazz extends Component {
                                     company_admin: this.state.tableData[i].company_admin,
                                     company_mobile: this.state.tableData[i].company_mobile,
                                     company_mail: this.state.tableData[i].company_mail,
+                                    detail: this.state.tableData[i].detail,
                                     area_name: getCity(this.state.tableData[i].area_id),
                                     course_name: getCourse(this.state.tableData[i].course_id)
                                 }

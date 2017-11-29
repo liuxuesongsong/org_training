@@ -109,10 +109,10 @@ class Enrolled extends Component {
             if (this.state.students[i].is_inlist == STATUS_ENROLLED_UNDO) {
                 newStudents.push(this.state.students[i]);
             }
-            if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID) {
+            if (this.state.students[i].is_inlist == STATUS_ENROLLED_DID||this.state.students[i].is_inlist == STATUS_ARRANGED_DID) {
                 unarragedStudents.push(this.state.students[i]);
             }
-            if (this.state.students[i].is_inlist == STATUS_ARRANGED_DID || this.state.students[i].is_inlist == 3) {
+            if (this.state.students[i].is_inlist == 3) {
                 arrangedStudents.push(this.state.students[i]);
             }
         }
@@ -143,7 +143,7 @@ class Enrolled extends Component {
                 student.is_inlist = STATUS_ENROLLED_DID;
                 this.updateStudents();
                 this.popUpNotice(NOTICE, 0, message.msg);
-                // this.fresh();
+                 this.fresh();
             }
         }
         getData(getRouter(ENROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
@@ -734,7 +734,72 @@ class Enrolled extends Component {
                                 className="glyphicon glyphicon-menu-down nyx-flexible" aria-hidden="true"></i>
                         </div>
                         <div className={this.state.unarranged_height ? "nyx-list-paper" : "nyx-list-paper-change"}>
-                            {this.state.unarragedStudents.map(student =>
+                        {this.state.unarragedStudents.map(student => {
+
+                                switch (student.is_inlist) {
+                                    case "1":
+                                        return (
+                                            <StudentCard
+                                                type={CARD_TYPE_UNARRANGE}
+                                                key={student.id}
+                                                
+                                                name={student.name === null ? "" : student.name.toString()}
+                                                mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                email={student.mail === null ? "" : student.mail.toString()}
+                                                level={Number(student.course_id)}
+                                                city={Number(student.area_id)}
+                                                duty={student.duty === null ? "" : student.duty.toString()}
+                                                department={student.department === null ? "" : student.department.toString()}
+                                                institution={student.institution === null ? "" : Number(student.institution)}
+                                                action={[() => {
+                                                    this.state.selectedStudentId = student.id;
+                                                    this.popUpNotice(ALERT, 0, "取消" + student.name + "报名", [
+                                                        () => {
+                                                            this.cancelEnroll(student.id);
+                                                            this.closeNotice();
+                                                        }, () => {
+                                                            this.closeNotice();
+                                                        }]);
+                                                }]}
+                                                >
+                                            </StudentCard>)
+                                    case "2":
+                                        {
+                                            return (
+                                                <StudentCard
+                                                    type={CARD_TYPE_UNARRANGE}
+                                                    key={student.id}
+                                                   
+                                                    name={student.name === null ? "" : student.name.toString()}
+                                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
+                                                    email={student.mail === null ? "" : student.mail.toString()}
+                                                    level={Number(student.course_id)}
+                                                    city={Number(student.area_id)}
+                                                    duty={student.duty === null ? "" : student.duty.toString()}
+                                                    department={student.department === null ? "" : student.department.toString()}
+                                                    institution={student.institution === null ? "" : Number(student.institution)}
+                                                    action={[() => {
+                                                        this.state.selectedStudentId = student.id;
+                                                        this.popUpNotice(ALERT, 0, "正在安排中,不可取消" + student.name + "报名,请等待通知", [
+                                                            () => {
+                                                                //this.cancelEnroll(student.id);
+                                                                this.closeNotice();
+                                                            }, () => {
+                                                                this.closeNotice();
+                                                            }]);
+                                                    }]}
+                                                        >
+                                                </StudentCard>)
+                                        }
+                                }
+                            })
+                            }
+                            
+                            
+                            {/* {this.state.unarragedStudents.map(student =>
+
+
+
                                 <StudentCard
                                     type={CARD_TYPE_UNARRANGE}
                                     key={student.id}
@@ -759,7 +824,7 @@ class Enrolled extends Component {
                                     }]}
                                 >
                                 </StudentCard>
-                            )}
+                            )} */}
                         </div>
                     </List>
                 </Paper>
@@ -781,7 +846,7 @@ class Enrolled extends Component {
                             {this.state.arrangedStudents.map(student => {
 
                                 switch (student.is_inlist) {
-                                    case "2":
+                                    case "3":
                                         return (
                                             <StudentCard
                                                 type={CARD_TYPE_ARRANGE}
@@ -809,7 +874,9 @@ class Enrolled extends Component {
                                                           // var address = message.data.classinfo.address!=null?"地址"+message.data.classinfo.address:"";
                                                            var class_head = message.data.classinfo.class_head!=null?"班主任"+message.data.classinfo.class_head:"";
                                                            var mobile = message.data.classinfo.mobile!=null?"-班主任电话"+message.data.classinfo.mobile:"";
-                                                           var message_data= class_head!=""?class_head+mobile:"暂无班级安排"
+                                                           var address = message.data.classinfo.address!=null?"-地址"+message.data.classinfo.address:"";
+                                                           var train_starttime = message.data.classinfo.train_starttime!=null?"-开班时间"+message.data.classinfo.train_starttime:"";
+                                                           var message_data= class_head!=""?class_head+mobile+address+train_starttime:"暂无班级安排"
                                                            this.popUpNotice(ALERT, 0, message_data, [
                                                             () => {
                                                                 //this.agreeArrange();
@@ -834,46 +901,7 @@ class Enrolled extends Component {
                                                     }]}
                                                 >
                                             </StudentCard>)
-                                    case "3":
-                                        {
-                                            return (
-                                                <StudentCard
-                                                    type={CARD_TYPE_KNOW}
-                                                    key={student.id}
-                                                   
-                                                    name={student.name === null ? "" : student.name.toString()}
-                                                    mobile={student.mobile === null ? "" : student.mobile.toString()}
-                                                    email={student.mail === null ? "" : student.mail.toString()}
-                                                    level={Number(student.course_id)}
-                                                    city={Number(student.area_id)}
-                                                    duty={student.duty === null ? "" : student.duty.toString()}
-                                                    department={student.department === null ? "" : student.department.toString()}
-                                                    institution={student.institution === null ? "" : Number(student.institution)}
-                                                    // action={[
-                                                    //     () => {
-                                                    //         this.state.selectedStudentId = student.id;
-                                                    //         this.popUpNotice(ALERT, 0, "请通知 " + student.name + " 参加培训", [
-                                                    //             () => {
-                                                    //                 this.agreeArrange();
-                                                    //                 this.closeNotice();
-                                                    //             }, () => {
-                                                    //                 this.closeNotice();
-                                                    //             }]);
-                                                    //     },
-                                                    //     () => {
-                                                    //         this.state.selectedStudentId = student.id;
-
-                                                    //         this.popUpNotice(ALERT, 0, "通过" + student.name + "课程安排？", [
-                                                    //             () => {
-                                                    //                 this.refuseArrange();
-                                                    //                 this.closeNotice();
-                                                    //             }, () => {
-                                                    //                 this.closeNotice();
-                                                    //             }]);
-                                                    //     }]}
-                                                        >
-                                                </StudentCard>)
-                                        }
+                                  
                                 }
                             })
                             }
