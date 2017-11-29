@@ -99,6 +99,10 @@ class Home extends Component {
         this.setState({ type: type, code: code, content: content, alertOpen: true });
     }
 
+    init_num(num){
+        return num?num:0
+    }
+
     render() {
         return (
             <div>
@@ -193,7 +197,11 @@ class Home extends Component {
                             var h_pre_arr = 100 * h_arrange_count / z_max;
                             return (
                                 <div key={area.area_id} className="nyx-areacount-list-item">
-                                    <div className="nyx-area-name">{area.area_name}<span style={{float:"right",marginRight:"50px"}}>{"未/已/共"}</span>
+                                    <div className="nyx-area-name">{area.area_name}
+                                    <span style={{float:"right",marginRight:"50px"}}>
+                                        <span style={{width:70,display:"inline-block",textAlign:"right"}}>{"无"}/{"未"}</span>
+                                        <span style={{width:70,display:"inline-block",textAlign:"right"}}>{"已"}/{"总"}</span>
+                                    </span>
                                     </div>
                                     <div className="nyx-area-bar">
                                         <span className="nyx-area-bar-left">中级</span>
@@ -201,7 +209,10 @@ class Home extends Component {
                                             <span className="nyx-area-bar-bot" style={{ width: m_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: m_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}/{(area.m_arrange_count ? area.m_arrange_count : 0)}/{(area.m_count ? area.m_count : 0)}</span>
+                                        <span className="nyx-area-bar-right">
+                                            <span style={{width:70,display:"inline-block"}}>{this.init_num(area.m_uninst_count)}/{((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}</span>
+                                            <span style={{width:70,display:"inline-block"}}>{(area.m_arrange_count ? area.m_arrange_count : 0)}/{(area.m_count ? area.m_count : 0)}</span>
+                                        </span>
                                     </div>
                                     <div className="nyx-area-bar">
                                         <span className="nyx-area-bar-left">高级</span>
@@ -209,7 +220,10 @@ class Home extends Component {
                                             <span className="nyx-area-bar-bot" style={{ width: h_pre_all + "%" }}> </span>
                                             <span className="nyx-area-bar-top" style={{ width: h_pre_arr + "%" }}> </span>
                                         </span>
-                                        <span className="nyx-area-bar-right">{((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}/{(area.h_arrange_count ? area.h_arrange_count : 0)}/{(area.h_count ? area.h_count : 0)}</span>
+                                        <span className="nyx-area-bar-right">
+                                            <span style={{width:70,display:"inline-block"}}>{this.init_num(area.h_uninst_count)}/{((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}</span>
+                                            <span style={{width:70,display:"inline-block"}}>{(area.h_arrange_count ? area.h_arrange_count : 0)}/{(area.h_count ? area.h_count : 0)}</span>
+                                        </span>
                                     </div>
                                 </div>
                             )
