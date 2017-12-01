@@ -244,8 +244,8 @@ class Clazz extends Component {
                 // this.setState({ clazzes: this.state.clazzes })
             }
         }
-        console.log(sessionStorage.session);
-        console.log(id);
+        // console.log(sessionStorage.session);
+        // console.log(id);
         getData(getRouter(STATUS_AGREE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
 
@@ -820,7 +820,7 @@ class Clazz extends Component {
 
                                 </Card> */}
                                 <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}{clazz.class_head?"-"+clazz.class_head:""}{clazz.mobile?"-"+clazz.mobile:""}
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}{clazz.class_head?"-"+clazz.class_head:""}{clazz.train_starttime?"-"+clazz.train_starttime:""}
                                         </div>
                                    
                                     {
@@ -921,27 +921,7 @@ class Clazz extends Component {
                                                         {"添加学生"}
                                                     </Button>
                                                    
-                                                    <Button
-                                                   // data_id={clazz.num}
-                                                   disabled={clazz.num-clazz.agree_num == 0 ? true : false}
-                                                        raised
-                                                        color="primary"
-                                                        className="nyx-org-btn-sm"
-                                                        style={{margin: 0,marginLeft:5,padding:"0" }}
-                                                        onClick={() => {
-                                                            
-                                                            this.popUpNotice(ALERT, 0, "全部同意考试", [
-                                                                () => {
-                                                                    this.state.selected = clazz;
-                                                                    this.agreeAllStudent(clazz.id);
-                                                                    this.closeNotice();
-                                                                }, () => {
-                                                                    this.closeNotice();
-                                                                }]);
-                                                            // this.agreeAllStudent(); 
-                                                        }}>
-                                                        {"同意"}
-                                                    </Button>
+                                                   
                                                 </CardActions>
                                             </div>
                                     }
@@ -956,7 +936,7 @@ class Clazz extends Component {
                     >
                         <div key="draw-class"  style={{ width: "500px" }}>
 
-                        <div className="nyx-clazz-list" style={{boxShadow:"none",width:"100%"}}>
+                        <div className="nyx-clazz-list" style={{boxShadow:"none",width:"100%",paddingTop:10}}>
                             <Button
                             raised
                                 color="primary"
@@ -966,13 +946,17 @@ class Clazz extends Component {
                                 onClick={() => {
 
                                 }}
-                                style={{ margin: 10}}
+                               // className="nyx-org-btn-sm"            
+                              // className="nyx-org-btn-sm"
+                               style={{margin: 0,marginLeft:15,padding:"0",minHeight:30,minWidth:50 }}
                             >
                                 {"下载"}
                             </Button>
                             <Button
                             raised
                                 color="primary"
+                                className="nyx-org-btn-lg"
+                                style={{margin: 0,marginLeft:5,padding:"0" }}
                                 onClick={
                                     () => {
                                         this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
@@ -992,6 +976,27 @@ class Clazz extends Component {
                             >
                                 {"导出详细信息"}
                             </Button>
+                            <Button
+                                                   // data_id={clazz.num}
+                                                 //  disabled={clazz.num-clazz.agree_num == 0 ? true : false}
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-md"
+                                                        style={{margin: 0,marginLeft:5,padding:"0" }}
+                                                        onClick={() => {
+                                                           // console.log(this.state.selected.id);
+                                                            this.popUpNotice(ALERT, 0, "全部同意考试", [
+                                                                () => {
+                                                                  //  this.state.selected = clazz;
+                                                                    this.agreeAllStudent(this.state.selected.id);
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                            // this.agreeAllStudent(); 
+                                                        }}>
+                                                        {"全部同意"}
+                                                    </Button>
                             {console.log(this.state.clazzStudents.sort(function(a,b){
                          return a.student_id-b.student_id;}))}
                             {this.state.clazzStudents.map(
