@@ -978,7 +978,7 @@ class Clazz extends Component {
                             </Button>
                             <Button
                                                    // data_id={clazz.num}
-                                                 //  disabled={clazz.num-clazz.agree_num == 0 ? true : false}
+                                                   disabled={this.state.selected.num-this.state.selected.agree_num == 0 ? true : false}
                                                         raised
                                                         color="primary"
                                                         className="nyx-org-btn-md"
