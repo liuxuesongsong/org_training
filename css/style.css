@@ -2110,6 +2110,18 @@ button.nyx-clazz-card-button:hover {
   position: relative;
 }
 
+.nyx-area-bar :hover > .canvas {
+  display: block;
+}
+
+.nyx-area-bar {
+  font-size: 12px;
+  width: 320px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+}
+
 .nyx-area-bar-left {
   width: 40px;
   display: inline-block;

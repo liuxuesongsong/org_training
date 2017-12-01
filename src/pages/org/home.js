@@ -14,7 +14,7 @@ import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-
 import { initCache, getData, getRouter,getInst, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
     LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
-    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT
+    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT
 } from '../../enum';
 import Lang from '../../language';
 import Code from '../../code';
@@ -40,17 +40,23 @@ class Home extends Component {
         // 界面状态
 
         // 提示状态
-        alertOpen: false,
-        alertType: "alert",
-        alertCode: Code.LOGIC_SUCCESS,
-        alertContent: "登录成功"
+         alertOpen: false,
+         alertType: ALERT,
+         alertCode: Code.LOGIC_SUCCESS,
+         alertContent: "",
+         alertAction: [],
+         openNewStudentDialog: false,
+         alertType: "notice",
+         alertContent: "登录成功",
     };
 
     componentWillMount() {
         window.currentPage = this;
         this.fresh()
     }
-
+//    componentDidMount(){
+//        this.canvas_content()
+//    }
     fresh = () => {
         initCache(this.cacheToState);
     }
@@ -94,15 +100,46 @@ class Home extends Component {
             return b.id - a.id
         });
     }
-
-    popUpNotice = (type, code, content) => {
-        this.setState({ type: type, code: code, content: content, alertOpen: true });
+    closeNotice = () => {
+        this.setState({
+            alertOpen: false,
+        })
     }
+    popUpNotice(type, code, content, action = [() => {
+        this.setState({
+            alertOpen: false,
+        })
+    }, () => {
+        this.setState({
+            alertOpen: false,
+        })
+    }]) {
+        this.setState({
+            alertType: type,
+            alertCode: code,
+            alertContent: content,
+            alertOpen: true,
+            alertAction: action
+        });
+    }
+
 
     init_num(num){
         return num?num:0
     }
-
+    
+    // canvas(area){
+    //     var components=<canvas ref={this.canvas_content} className="canvas"  id={"canvas"+area.area_id} style={{width:300,height:150,position:"absolute",top:"3rem",backgroundColor:"#fff"
+    //     ,zIndex:"1000"}}></canvas>
+    //     // console.log("render")
+    //     return components
+    // }
+    // refCb(instance){
+    //   console.log(instance.id)
+    // }
+    canvas_content(area){
+       
+    }
     render() {
         return (
             <div>
@@ -171,7 +208,36 @@ class Home extends Component {
                         </Paper>
                     </div>
                     <div className="nyx-areacount-list">
-                        <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)</div>
+                        <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)
+                        <Button
+                        style={{
+                            float:"right",
+                            right:"8rem"
+                        }}
+                         raised
+                         color="primary"
+                         className="nyx-org-btn-md"
+                         onClick={() => {
+                          
+                            this.popUpNotice(ALERT, 0, "导出各地区开班情况", [
+                                () => {
+                                    var href =  getRouter("export_csv_count").url+"&session=" + sessionStorage.session;
+                                    console.log(href);
+                                    var a = document.createElement('a');
+                                    a.href = href;
+                                 //    console.log(href);
+                                    a.click();  
+                                    this.closeNotice();
+                                }, () => {
+                                    this.closeNotice();
+                                }]);
+        
+        
+                          
+                        }}
+                        >{"导出"}</Button>
+                        </div>
+                        
                         {console.log(this.state.areas.sort(function(b,a){
                             return ((a.m_count?a.m_count:0)-(a.m_arrange_count?a.m_arrange_count:0))-((b.m_count?b.m_count:0)-(b.m_arrange_count?b.m_arrange_count:0))
                             }))
@@ -196,14 +262,98 @@ class Home extends Component {
                             var h_pre_all = 100 * h_all_count / z_max;
                             var h_pre_arr = 100 * h_arrange_count / z_max;
                             return (
-                                <div key={area.area_id} className="nyx-areacount-list-item">
+                                <div style={{position:"relative"}} key={area.area_id} className="nyx-areacount-list-item">
                                     <div className="nyx-area-name">{area.area_name}
                                     <span style={{float:"right",marginRight:"50px"}}>
                                         <span style={{width:70,display:"inline-block",textAlign:"right"}}>{"无"}/{"未"}</span>
                                         <span style={{width:70,display:"inline-block",textAlign:"right"}}>{"已"}/{"总"}</span>
                                     </span>
                                     </div>
-                                    <div className="nyx-area-bar">
+                                    <div className="nyx-area-bar"
+                                    onMouseOver={(event)=>{
+                                        var canvas=document.getElementById("z_canvas"+area.area_id);
+                                        var m_canvas=document.getElementById("m_canvas"+area.area_id);
+                                        
+                                        // console.log("ref_render")
+                                        m_canvas.style.display="block"
+                                         canvas.width="300";
+                                         canvas.height="200";
+                                         var context=canvas.getContext("2d");
+                                          var data = [{
+                                            "value": area.m_unarrange_zr/area.m_count,
+                                            "color": "#F44336",
+                                            "title": "中软未排"+area.m_unarrange_zr
+                                        },{
+                                          "value":area.m_inclass_zr/area.m_count,
+                                          "color": "#B71C1C",
+                                          "title": "中软已排"+area.m_inclass_zr
+                                         }
+                                      ,{
+                                            "value":  area.m_unarrange_sb/area.m_count,
+                                            "color": "#4CAF50",
+                                            "title": "赛宝未排"+area.m_unarrange_sb
+                                        },{
+                                              "value":  area.m_inclass_sb/area.m_count,
+                                              "color": "#1B5E20",
+                                              "title": "赛宝已排"+area.m_inclass_sb
+                                          },{
+                                            "value": area.m_unarrange_sd/area.m_count,
+                                            "color": "#2196F3",
+                                            "title": "赛迪未排"+area.m_unarrange_sd
+                                        },{
+                                            "value": area.m_inclass_sd/area.m_count,
+                                            "color": "#0D47A1",
+                                            "title": "赛迪已排"+area.m_inclass_sd
+                                        },{
+                                              "value": area.m_uninst_count/area.m_count,
+                                              "color": "#BDBDBD",
+                                              "title": "未安排机构"+area.m_uninst_count
+                                          }
+                                     ];
+                                          var tempAngle=-90; 
+                                          var x0=100,y0=100,r=70;
+                                          for(var i=0;i<data.length;i++){
+                                              
+                                              if(data[i].value!=0){
+                                                 // console.log(data[i].value)
+                                                  var obj=data[i];
+                                                  context.beginPath();
+                                                  context.moveTo(150,100);
+                                                  context.fillStyle=obj.color;
+                                                  context.strokeStyle="#FFFFFF";
+                                                  var currentAngle=obj.value*360; 
+                                                  var startAngle=tempAngle*Math.PI/180;
+                                                  var endAngle=(currentAngle+tempAngle)*Math.PI/180;
+                                                  context.arc(150,100,r,startAngle,endAngle);
+                                                  context.fill();
+                                                  context.stroke();
+                                                  context.beginPath();
+                                                  var text=obj.title;
+                                                  var textAngle=tempAngle+1/2*currentAngle;
+                                                  var x=150+Math.cos(textAngle*Math.PI/180)*(r+5);
+                                                  var y=100+Math.sin(textAngle*Math.PI/180)*(r+10);
+                                                 //  console.log(x)
+                                                  context.font="bold 12px '微软雅黑'";
+                                                  if(textAngle>90&&tempAngle<270){
+                                                      context.textAlign="end"
+                                                  }
+                                                  context.fillText(text,x,y);
+                                                 //  console.log(text);
+                                                  context.fill();
+                                                  tempAngle+=currentAngle;
+                                                 //  console.log(tempAngle)
+                                              }
+                                          }
+                                          
+                                    }}
+                                    onMouseOut={()=>{
+                                        var m_canvas=document.getElementById("m_canvas"+area.area_id);
+                                        // console.log("ref_render")
+                                        m_canvas.style.display="none"
+                                    }}
+                                  
+                                    >
+                                   
                                         <span className="nyx-area-bar-left">中级</span>
                                         <span className="nyx-area-bar-mid">
                                             <span className="nyx-area-bar-bot" style={{ width: m_pre_all + "%" }}> </span>
@@ -213,8 +363,99 @@ class Home extends Component {
                                             <span style={{width:70,display:"inline-block"}}>{this.init_num(area.m_uninst_count)}/{((area.m_count ? area.m_count : 0)-(area.m_arrange_count ? area.m_arrange_count : 0))}</span>
                                             <span style={{width:70,display:"inline-block"}}>{(area.m_arrange_count ? area.m_arrange_count : 0)}/{(area.m_count ? area.m_count : 0)}</span>
                                         </span>
+                                       <div id={"m_canvas"+area.area_id} 
+                                       className="nyx-z3"
+                                       style={{display:"none",position:"absolute",top:"3rem",width:300,height:240,backgroundColor:"#ffffff",zIndex:"1000"}} >
+                                       <p style={{margin:0,textAlign:"center",fontSize:"16px",color:"#2196f3"}}>{area.area_name}-中级</p>
+                                       <canvas  id={"z_canvas"+area.area_id} style={{width:300,height:200,}}>
+                                    
+                                    </canvas>
+                                       </div>
+                                   
                                     </div>
-                                    <div className="nyx-area-bar">
+                                    <div className="nyx-area-bar"
+                                    onMouseOver={(event)=>{
+                                        var canvas=document.getElementById("g_canvas"+area.area_id);
+                                        var h_canvas=document.getElementById("h_canvas"+area.area_id);
+                                        
+                                        // console.log("ref_render")
+                                        h_canvas.style.display="block"
+                                         canvas.width="300";
+                                         canvas.height="200";
+                                         var context=canvas.getContext("2d");
+                                          var data = [{
+                                            "value": area.h_unarrange_zr/area.h_count,
+                                            "color": "#F44336",
+                                            "title": "中软未排"+area.h_unarrange_zr
+                                        },{
+                                          "value":area.h_inclass_zr/area.h_count,
+                                          "color": "#B71C1C",
+                                          "title": "中软已排"+area.h_inclass_zr
+                                         }
+                                      ,{
+                                            "value":  area.h_unarrange_sb/area.h_count,
+                                            "color": "#4CAF50",
+                                            "title": "赛宝未排"+area.h_unarrange_sb
+                                        },{
+                                              "value":  area.h_inclass_sb/area.h_count,
+                                              "color": "#1B5E20",
+                                              "title": "赛宝已排"+area.h_inclass_sb
+                                          },{
+                                            "value": area.h_unarrange_sd/area.h_count,
+                                            "color": "#2196F3",
+                                            "title": "赛迪未排"+area.h_unarrange_sd
+                                        },{
+                                            "value": area.h_inclass_sd/area.h_count,
+                                            "color": "#0D47A1",
+                                            "title": "赛迪已排"+area.h_inclass_sd
+                                        },{
+                                              "value": area.h_uninst_count/area.h_count,
+                                              "color": "#BDBDBD",
+                                              "title": "未安排机构"+area.h_uninst_count
+                                          }
+                                     ];
+                                          var tempAngle=-90; 
+                                          var x0=100,y0=100,r=70;
+                                          for(var i=0;i<data.length;i++){
+                                              
+                                              if(data[i].value!=0){
+                                                 // console.log(data[i].value)
+                                                  var obj=data[i];
+                                                  context.beginPath();
+                                                  context.moveTo(150,100);
+                                                  context.fillStyle=obj.color;
+                                                  context.strokeStyle="#FFFFFF";
+                                                  var currentAngle=obj.value*360; 
+                                                  var startAngle=tempAngle*Math.PI/180;
+                                                  var endAngle=(currentAngle+tempAngle)*Math.PI/180;
+                                                  context.arc(150,100,r,startAngle,endAngle);
+                                                  context.fill();
+                                                  context.stroke();
+                                                  context.beginPath();
+                                                  var text=obj.title;
+                                                  var textAngle=tempAngle+1/2*currentAngle;
+                                                  var x=150+Math.cos(textAngle*Math.PI/180)*(r+5);
+                                                  var y=100+Math.sin(textAngle*Math.PI/180)*(r+10);
+                                                 //  console.log(x)
+                                                  context.font="bold 12px '微软雅黑'";
+                                                  if(textAngle>90&&tempAngle<270){
+                                                      context.textAlign="end"
+                                                  }
+                                                  context.fillText(text,x,y);
+                                                 //  console.log(text);
+                                                  context.fill();
+                                                  tempAngle+=currentAngle;
+                                                 //  console.log(tempAngle)
+                                              }
+                                          }
+                                          
+                                    }}
+                                    onMouseOut={()=>{
+                                        var h_canvas=document.getElementById("h_canvas"+area.area_id);
+                                        // console.log("ref_render")
+                                        h_canvas.style.display="none"
+                                    }}
+                                    >
                                         <span className="nyx-area-bar-left">高级</span>
                                         <span className="nyx-area-bar-mid">
                                             <span className="nyx-area-bar-bot" style={{ width: h_pre_all + "%" }}> </span>
@@ -224,16 +465,26 @@ class Home extends Component {
                                             <span style={{width:70,display:"inline-block"}}>{this.init_num(area.h_uninst_count)}/{((area.h_count ? area.h_count : 0)-(area.h_arrange_count ? area.h_arrange_count : 0))}</span>
                                             <span style={{width:70,display:"inline-block"}}>{(area.h_arrange_count ? area.h_arrange_count : 0)}/{(area.h_count ? area.h_count : 0)}</span>
                                         </span>
+                                        <div id={"h_canvas"+area.area_id}
+                                        className="nyx-z3"
+                                        style={{display:"none",position:"absolute",top:"1.7rem",width:300,height:240,backgroundColor:"#ffffff",zIndex:"1000"}} >
+                                       <p style={{margin:0,textAlign:"center",fontSize:"16px",color:"#2196f3"}}>{area.area_name}-高级</p>
+                                       <canvas  id={"g_canvas"+area.area_id} style={{width:300,height:200,}}>
+                                    
+                                    </canvas>
+                                       </div>
+                                       
                                     </div>
+                                    
                                 </div>
                             )
                         }
                         )}
                     </div>
-                    <div style={{ margin: 10, width: 400, float: "left" }}>
+                    <div style={{ margin: 10, width: 300,height:150, float: "left" }}>
                         <Paper elevation={4}>
 
-                            <List subheader={<ListSubheader>{Lang[window.Lang].pages.com.home.clazz_title}</ListSubheader>}>
+                            <List  subheader={<ListSubheader>{"班级列表"}</ListSubheader>}>
                                 {/* {this.state.clazzes.map(value =>
                                     <ListItem dense button key={value}>
                                         <ListItemText primary={`班级 ${value + 1}`} />
@@ -254,13 +505,10 @@ class Home extends Component {
                     type={this.state.alertType}
                     code={this.state.alertCode}
                     content={this.state.alertContent}
-                    handleCertainClose={() => {
-                        this.setState({ alertOpen: false });
-                    }}
-                    handleCancelClose={() => {
-                        this.setState({ alertOpen: false })
-                    }}>
+                    action={this.state.alertAction}
+                    >
                 </CommonAlert>
+                
             </div>
         )
     }

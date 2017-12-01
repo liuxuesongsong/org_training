@@ -138,7 +138,7 @@ class Area extends Component {
     selected_roles = () => {
         
         var components = []
-        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
+        var list = {1:"首页",2:"学生信息",3:"班级安排"}
         var modules_arr = this.state.selected_role_model;
         console.log(this.state.selected_role_model)
         for(var id in list){
@@ -152,7 +152,7 @@ class Area extends Component {
      selected_list = () => {
         
         var components = []
-        var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
+        var list = {1:"首页",2:"学生信息",3:"班级安排"}
         var modules_arr = this.state.selected.modules_id;
         for(var id in list){
             components.push(

@@ -54,7 +54,6 @@ class Student extends Component {
     cacheToState() {
         window.currentPage.queryStudents();
         window.currentPage.state.areas = getAreas();
-        console.log(window)
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
@@ -375,6 +374,12 @@ class Student extends Component {
                                 resizable: true
                             },
                             {
+                                key: "detail",
+                                name: "分配记录",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
                                 key: "institution",
                                 name: "培训机构",
                                 width: 100,
@@ -407,6 +412,7 @@ class Student extends Component {
                             company_mobile: this.state.tableData[i].company_mobile,
                             company_mail: this.state.tableData[i].company_mail,
                             register: this.state.tableData[i].register,
+                            detail: this.state.tableData[i].detail,
                             institution: getInst(this.state.tableData[i].institution),
                             area_name: getCity(this.state.tableData[i].area_id),
                             course_name: getCourse(this.state.tableData[i].course_id),

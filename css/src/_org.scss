@@ -137,7 +137,20 @@ button.nyx-clazz-card-button{
   height: 20px;
   padding: 0;
   position: relative;
+  :hover >.canvas{
+   // background-color: red;
+    display: block;
+  }
 }
+.nyx-area-bar{
+  font-size: 12px;
+  width: 320px;
+  height: 20px;
+  padding: 0;
+  position: relative;
+  
+}
+
 .nyx-area-bar-left{
   width: 40px;
   display: inline-block;

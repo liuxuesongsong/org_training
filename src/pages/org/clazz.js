@@ -820,7 +820,7 @@ class Clazz extends Component {
 
                                 </Card> */}
                                 <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}
+                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}{clazz.class_head?"-"+clazz.class_head:""}{clazz.mobile?"-"+clazz.mobile:""}
                                         </div>
                                    
                                     {
