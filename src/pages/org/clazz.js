@@ -55,6 +55,7 @@ class Clazz extends Component {
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
         count: 0,
+        btns:0,
         onloading: false,
         selected: {},
         search_input: "",
@@ -182,6 +183,7 @@ class Clazz extends Component {
                 this.state.selectedStudentID = [];
                 this.state.currentPageSelectedID = [];
                 this.queryStudents(1, true)
+                this.fresh();
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
@@ -219,6 +221,7 @@ class Clazz extends Component {
                         break;
                     }
                 }
+               
                 this.popUpNotice(NOTICE, 0, message.msg);
                 this.fresh();
                 // this.setState({ clazzes: this.state.clazzes })
@@ -253,7 +256,10 @@ class Clazz extends Component {
         return (
             <Dialog open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
-                    修改班级
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    修改班级-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
+                    -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
+                    -{this.state.selected["course_id"]?getCourse(this.state.selected["course_id"]):""}
             </DialogTitle>
                 <DialogContent>
                     <div>
@@ -371,6 +377,8 @@ class Clazz extends Component {
                                     mobile:mobile
                                 })
                                 this.handleRequestClose()
+                                this.state.btns=0;
+                                
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
@@ -378,6 +386,8 @@ class Clazz extends Component {
                         <Button
                             onClick={() => {
                                 this.handleRequestClose()
+                            this.state.btns=0;
+
                             }}
                         >
                             {Lang[window.Lang].pages.main.cancel_button}
@@ -673,6 +683,9 @@ class Clazz extends Component {
     }
 
     toggleDrawer = (open) => () => {
+       if(open==false){
+           this.state.btns=0;
+       }
         this.setState({
             right: open,
             showInfo: true
@@ -784,7 +797,7 @@ class Clazz extends Component {
                     <List className="nyx-clazz-list" subheader={<ListSubheader className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
                         <ListSubheader>
                             <Button className="nyx-btn-circle"
-                            style={{marginTop:"40px"}}
+                            style={{marginTop:"19px"}}
                                 color="primary"
                                 onClick={() => {
                                     this.setState({
@@ -797,7 +810,9 @@ class Clazz extends Component {
                         </ListSubheader>
                         {this.state.clazzes.map(
                             clazz =>
-                                <div key={clazz.id} className="nyx-clazz-card">
+                                <div key={clazz.id}
+                                className={this.state.btns==clazz.id?"nyx-clazz-card-block":"nyx-clazz-card"}
+                               >
                                 {/* <Card style={{boxShadow:"none"}}>
                                 <div className="nyx-card-body">
                                         {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}
@@ -819,8 +834,16 @@ class Clazz extends Component {
                                 </Collapse>
 
                                 </Card> */}
-                                <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}{clazz.class_head?"-"+clazz.class_head:""}{clazz.train_starttime?"-"+clazz.train_starttime:""}
+                                <div className="nyx-card-body" style={{minHeight:"40px"}}>
+                                <span title={clazz.id} className="nyx-clazz-id">{clazz.id}</span>
+                                <span title={getCity(clazz.area_id)} className="nyx-clazz-area-id">{getCity(clazz.area_id)}</span>
+                                <span title={clazz.address?clazz.address:""} className="nyx-clazz-address">{clazz.address?clazz.address:""}</span>
+                                <span title={getCourse(clazz.course_id)} className="nyx-clazz-course-id">{getCourse(clazz.course_id)}</span>
+                                <span title={getInst(clazz.ti_id)} className="nyx-clazz-ti-id">{getInst(clazz.ti_id)}</span>
+                                <span title={clazz.class_head?clazz.class_head:""} className="nyx-clazz-head">{clazz.class_head?clazz.class_head:""}</span>
+                                <span title={clazz.train_starttime?clazz.train_starttime:""} className="nyx-clazz-start-time">{clazz.train_starttime?clazz.train_starttime:""}</span>
+                                
+                          <span className="nyx-clazz-num">{clazz.agree_num ? "("+clazz.agree_num :"(0"}<span className="nyx-clazz-nums">/{clazz.num ? clazz.num + ")": "0)"}</span></span>
                                         </div>
                                    
                                     {
@@ -865,11 +888,19 @@ class Clazz extends Component {
                                                 </Button>
                                             </CardActions>
                                         </div> :
-                                            <div>
-                                                <CardActions style={{ height: "45px" }} className="nyx-card-action">
+                                            <div 
+                                          
+                                            >
+                                                <CardActions style={{ height: "45px",marginLeft:"1.5rem" }}  className="nyx-card-action">
                                                     <i
                                                         className="glyphicon glyphicon-pencil"
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                            this.state.btns=clazz.id;
+                                                           // var event_parent=e.target.parentNode.parentNode;
+                                                            //event_parent.style.display="block"
+                                                           // console.log(e.target.parentNode.parentNode)
+                                                          // this.state.btns=true
+                                                       //   this.state.selected.btns=true;
                                                             this.state.selected = clazz;
                                                             // this.state.showInfo = true;
                                                             this.setState({ openEditClazzDialog: true });
@@ -880,13 +911,16 @@ class Clazz extends Component {
                                                         className="glyphicon glyphicon-trash"
                                                         onClick={() => {
                                                             //  return
+                                                            this.state.btns=clazz.id;
                                                             this.popUpNotice(ALERT, 0, "删除该班级", [
                                                                 () => {
                                                                     // this.removeStudent(clazz.id);
+                                                                    this.state.btns=0;
                                                                     this.state.selected = clazz;
                                                                     this.deleteClazz(clazz.id);
                                                                     this.closeNotice();
                                                                 }, () => {
+                                                                    this.state.btns=0;
                                                                     this.closeNotice();
                                                                 }]);
                                                         }}>
@@ -894,6 +928,7 @@ class Clazz extends Component {
                                                     <i
                                                         className="glyphicon glyphicon-search"
                                                         onClick={() => {
+                                                            this.state.btns=clazz.id;
                                                             this.state.selected = clazz;
                                                             this.state.stateSelected = false;
                                                             this.state.showStudents = false;
@@ -1007,14 +1042,17 @@ class Clazz extends Component {
                                         <i
                                            className="glyphicon glyphicon-ok"
                                             style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
-                                            onClick={() => {
+                                            onClick={(e) => {
                                                 if(student.reg_status == 2){
                                                     return;
                                                 }
                                                 var id = student.id;
                                                 var cb = (router, message, arg) => {
                                                     this.popUpNotice(NOTICE, 0, message.msg);
+                                                   
                                                 }
+                                                var event=e.target;
+                                                event.style.color="#9E9E9E"
                                                 getData(getRouter(AGREE_ARRANGE), { session: sessionStorage.session, id: id }, cb, { id: id });
                                             }}
                                         ></i>

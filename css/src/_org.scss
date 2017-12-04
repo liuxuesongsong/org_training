@@ -77,11 +77,81 @@ div.nyx-clazz-list{
 }
 
 .nyx-clazz-card{
+  height: 45px;
+  overflow: hidden;
+  transition: height .3s;
+  transition-delay: 1.5s;
   margin:0rem 1rem;
-  padding:0.2rem 1rem;
+  padding:0rem;
   border-top:2px $blue200 solid;
+  
 }
+.nyx-clazz-card:hover{
+  height: 90px;
+  transition-delay: .3s;
 
+}
+.nyx-clazz-card-block{
+  margin:0rem 1rem;
+  padding:0rem;
+  border-top:2px $blue200 solid;
+  height: 90px;
+}
+ 
+
+.nyx-clazz-id,
+.nyx-clazz-ti-id,
+.nyx-clazz-area-id,
+.nyx-clazz-address,
+.nyx-clazz-course-id,
+.nyx-clazz-head,
+.nyx-clazz-start-time,
+.nyx-clazz-num{
+  display: block;
+  float: left;
+  height: 20px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+  margin-left: 4px;
+}
+.nyx-clazz-id{
+  background-color: $blue900;
+  color: white;
+  width: 26px;
+  margin-left: 0;
+  text-align: center;
+}
+.nyx-clazz-area-id{
+  color:  $blue900;
+  width: 56px;
+}
+.nyx-clazz-ti-id{
+  width: 56px;
+  margin-left: 30px;
+  color: $grey;
+}
+.nyx-clazz-address{
+  width: 100px;
+}
+.nyx-clazz-course-id{
+width: 55px;
+text-align: right;
+}
+.nyx-clazz-head{
+  width: 45px;
+}
+.nyx-clazz-start-time{
+  width: 64px;
+  color: $grey;
+}
+.nyx-clazz-num{
+width: 45px;
+text-align: right;
+}
+.nyx-clazz-nums{
+  color: $grey;
+}
 button.nyx-clazz-card-button{
   background: $blue;
   color: #fff;
