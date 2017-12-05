@@ -114,6 +114,7 @@ div.nyx-clazz-list{
   text-overflow:ellipsis;
   white-space: nowrap;
   margin-left: 4px;
+  font-size: 12px;
 }
 .nyx-clazz-id{
   background-color: $blue900;
@@ -139,14 +140,16 @@ width: 55px;
 text-align: right;
 }
 .nyx-clazz-head{
-  width: 45px;
+  width: 44px;
 }
 .nyx-clazz-start-time{
   width: 64px;
+  margin: 0;
   color: $grey;
 }
 .nyx-clazz-num{
-width: 45px;
+width: 53px;
+margin: 0;
 text-align: right;
 }
 .nyx-clazz-nums{
