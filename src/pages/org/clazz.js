@@ -192,6 +192,7 @@ class Clazz extends Component {
             clazz_id: id,
             student_ids: this.state.selectedStudentID
         }
+        this.state.btns=0;
         getData(getRouter(CREATE_TRAIN), obj, cb, {});
     }
 
@@ -873,6 +874,7 @@ class Clazz extends Component {
                                                         })
                                                         this.state.queryCondition = {};
                                                         this.queryStudents(1, true);
+                                                        this.state.btns=0;
                                                         return
                                                         this.state.selected = clazz;
                                                         this.deleteClazz(clazz.id);
@@ -942,7 +944,7 @@ class Clazz extends Component {
                                                         className="nyx-org-btn-md"
                                                       //  style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                                         onClick={() => {
-
+                                                            this.state.btns=clazz.id;
                                                             this.state.selected = clazz;
                                                             this.state.showStudents = true;
                                                             this.state.queryCondition = {}
@@ -1079,13 +1081,19 @@ class Clazz extends Component {
                             style={{ top: "0rem", marginLeft: 30 }}
                             id="search_input"
                             label={"搜索公司名称"}
-                            value={this.state.search_input}
+                          //  value={this.state.search_input}
                             onChange={event => {
                                 this.setState({
                                     search_input: event.target.value,
                                 });
                             }}
                         />
+                        <i className="glyphicon glyphicon-remove nyx-company-empty"
+                        onClick={()=>{
+                            document.getElementById("search_input").value="";
+                        }}
+                        ></i>
+                        {/* <button>X</button> */}
                         <select
                             style={{ marginLeft: "1rem",position:"relative",top:"0.5rem" }}
                             className="nyx-info-select-lg"
