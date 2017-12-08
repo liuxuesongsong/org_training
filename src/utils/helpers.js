@@ -235,7 +235,7 @@ export function getAreas() {
     area.area_name = areaData[area.id];
     areas.push(area)
   }
-  console.log(areas);
+  // console.log(areas);
   return areas;
 }
 

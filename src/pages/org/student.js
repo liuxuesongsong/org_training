@@ -27,8 +27,8 @@ class Student extends Component {
         search_input: "",
         search_area_id: null,
         search_course_id: null,
-        search_is_inlist: null,
-        search_institution: null,
+        search_is_inlist: 1,
+        search_institution: 0,
          // 提示状态
          alertOpen: false,
          alertType: ALERT,
@@ -263,8 +263,8 @@ class Student extends Component {
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_is_inlist"}
-                        defaultValue={this.state.search_is_inlist ? this.state.is_inlist : "1"}
-                        disabled={this.state.search_is_inlist == -2 ? true : false}
+                        defaultValue={1}
+                        Value={this.state.search_is_inlist ? this.state.search_is_inlist : 0}
                         onChange={(e) => {
                             this.state.search_is_inlist = e.target.value == "null"? null:e.target.value;
                             this.state.queryCondition.is_inlist = e.target.value == "null"? null:e.target.value;
@@ -282,14 +282,15 @@ class Student extends Component {
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_institution"}
-                        defaultValue={this.state.search_institution ? this.state.institution : ""}
-                        disabled={this.state.search_institution == -2 ? true : false}
+                        defaultValue={0}
+                        Value={this.state.search_institution ? this.state.institution : 0}
                         onChange={(e) => {
                             this.state.search_institution =  e.target.value == "null"? null:e.target.value;
                             this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
                         }}
                     >
-                        <option value={0}>{"-培训机构-"}</option>
+                        <option value={"null"}>{"-培训机构-"}</option>
+                        <option value={0}>{"无培训机构"}</option>
                         <option value={1}>{"中软培训"}</option>
                         <option value={2}>{"赛迪"}</option>
                         <option value={3}>{"赛宝"}</option>
@@ -327,6 +328,11 @@ class Student extends Component {
                         onClick={() => {
                             this.state.queryCondition={ is_inlist:1,institution:0},
                             this.queryStudents(1, true);
+                            this.setState(
+                                {search_is_inlist:1,search_institution:0},
+                                ()=>{
+                                    console.log(this.state.is_inlist)}
+                            );
                         }}
                         style={{margin: 15,marginLeft:0,position:"relative",top:"-5px"}}
                     >
@@ -530,7 +536,7 @@ class Student extends Component {
                 <Button
                 raised
                 color="primary"
-               className="nyx-org-btn-lg"
+                className="nyx-org-btn-lg"
                 disabled={this.state.search_is_inlist == 1 ? false : true }
                 onClick={()=>{
                     this.state.search_is_inlist == 1? this.checkTrain():"";
