@@ -61,7 +61,7 @@ class Clazz extends Component {
         search_input: "",
         search_area_id: null,
         search_course_id: null,
-        my_id: 0,
+        my_institution: 0,
         type: '',
         selectedStudentId: undefined,
         // 下载相关
@@ -99,7 +99,7 @@ class Clazz extends Component {
         window.currentPage.state.areas = getAreas();
         var cb = (router, message, arg) => {
             window.currentPage.setState({
-                my_id: message.data.myinfo.my_id
+                my_institution: message.data.myinfo.my_institution
 
             })
 
@@ -998,7 +998,7 @@ class Clazz extends Component {
                                     () => {
                                         this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
                                             () => {
-                                                // console.log(this.state.my_id);
+                                                // console.log(this.state.my_institution);
                                                 var href = getRouter("export_csv_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
                                                 var a = document.createElement('a');
                                                 a.href = href;
@@ -1297,8 +1297,8 @@ class Clazz extends Component {
                             { this.state.search_course_id === null ? all_course = "所有级别" : all_course = getCourse(this.state.search_course_id) }
                             this.popUpNotice(ALERT, 0, "导出的学生信息:【" + all_area + "】【 " + all_course + "】的人员", [
                                 () => {
-                                    // console.log(this.state.my_id);
-                                    var href = getRouter("export_csv").url + "&session=" + sessionStorage.session + "&is_inlist=1&institution=" + this.state.my_id;
+                                    // console.log(this.state.my_institution);
+                                    var href = getRouter("export_csv").url + "&session=" + sessionStorage.session + "&is_inlist=1&institution=" + this.state.my_institution;
                                     if (this.state.queryCondition.area_id != undefined && this.state.queryCondition.area_id != null) {
                                         href = href + "&area_id=" + this.state.queryCondition.area_id;
                                     }
