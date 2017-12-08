@@ -221,20 +221,21 @@ export function getCourse(id) {
  * areaData 中序列从1开始
  */
 export function getAreas() {
-  var areas = [], areaData = getCache(DATA_TYPE_AREA);
+  var areas = [], areaData = getCache(DATA_TYPE_AREA),area,areaKeys=[];
   if (areaData === undefined) {
     return [];
   }
-  var area;
-  for (var i = 1; i <= areaData.length; i++) {
-    if (areaData[i] === undefined) {
+  areaKeys = Object.keys(areaData);
+  for (var i = 0; i < areaData.length; i++) {
+    area = new Object();
+    area.id = areaKeys[i];
+    if (areaData[area.id] === undefined) {
       continue;
     }
-    area = new Object();
-    area.id = i;
-    area.area_name = areaData[i];
+    area.area_name = areaData[area.id];
     areas.push(area)
   }
+  console.log(areas);
   return areas;
 }
 
