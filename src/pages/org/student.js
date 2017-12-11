@@ -275,7 +275,7 @@ class Student extends Component {
                         <option value={0}>{"待报名"}</option>
                         <option value={1}>{"待安排"}</option>
                         <option value={2}>{"已安排"}</option>
-                        <option value={3}>{"已同意"}</option>
+                        <option value={3}>{"已确认"}</option>
 
                     </select>
                     <select
