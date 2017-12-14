@@ -242,7 +242,17 @@ const Language = {
                 },
                 area: {
                     title: "管理员区域",
+                },
+                password:{
+                    title:"修改密码",
+                    info:{
+                        account:"用户名",
+                        old_password:"原始密码",
+                        new_password:"修改密码",
+                        check_password:"确认修改密码"
+                    }
                 }
+
             },
         },
 
