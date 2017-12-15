@@ -39,6 +39,7 @@ class Clazz extends Component {
     };
     state = {
         clazzes: [],
+        search_clazzes:[],
         students: [],
         areas: [],
         allData: [],                //表格中所有数据
@@ -50,6 +51,7 @@ class Clazz extends Component {
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
+        searchClazzDialog: false,
         openEditClazzDialog: false,
         currentPage: 1,
         totalPage: 1,
@@ -59,8 +61,14 @@ class Clazz extends Component {
         onloading: false,
         selected: {},
         search_input: "",
+        search_company: "",
+        search_account: "",
+        
         search_area_id: null,
+        search_clazz_course_id: null,
+        search_clazz_area_id: null,
         search_course_id: null,
+      
         my_institution: 0,
         type: '',
         selectedStudentId: undefined,
@@ -464,10 +472,63 @@ class Clazz extends Component {
             </Dialog >
         )
     }
+    searchClazzDialog = () => {
+        return (
+            <Dialog open={this.state.searchClazzDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    查询
+                </DialogTitle>
+                <DialogContent>
+                <TextField
+                style={{ top: "0rem", marginLeft: 30 }}
+                id="search_company"
+                label={"搜索公司名称"}
+                onChange={event => {
+                    this.setState({
+                        search_company: event.target.value,
+                    });
+                }}
+            />
+             <TextField
+                style={{ top: "0rem", marginLeft: 30 }}
+                id="search_account"
+                label={"学员"}
+                onChange={event => {
+                    this.setState({
+                        search_account: event.target.value,
+                    });
+                }}
+            />
+            <div id="search_list"></div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                               // document.getElementById("search_list").appendChild
+                            //    console.log(this.state.search_account)
+                                //this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+    }
 
     handleRequestClose = () => {
         this.setState({
             openNewClazzDialog: false,
+            searchClazzDialog: false,
             openEditClazzDialog: false
         })
     }
@@ -795,11 +856,25 @@ class Clazz extends Component {
                             </CardActions>
                         </Card>
                     })}
-                    <List className="nyx-clazz-list" subheader={<ListSubheader className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
-                        <ListSubheader>
-                            <Button className="nyx-btn-circle"
-                            style={{marginTop:"19px"}}
+                    <List className="nyx-clazz-list" subheader={<ListSubheader
+                    style={{margin:0,float:"left",width:"50%"}}
+                    className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
+                         {/* <Button className="nyx-org-btn-sm"
+                            style={{marginTop:"19px",top:"-0.5rem"}}
                                 color="primary"
+                                raised 
+                                onClick={() => {
+                                    this.setState({
+                                        searchClazzDialog: true
+                                    });
+                                }}
+                            >
+                                {Lang[window.Lang].pages.org.clazz.search}
+                            </Button> */}
+                            <Button className="nyx-org-btn-sm"
+                           style={{marginTop:"19px",top:"-0.5rem"}}
+                                color="primary"
+                                raised 
                                 onClick={() => {
                                     this.setState({
                                         openNewClazzDialog: true
@@ -808,33 +883,52 @@ class Clazz extends Component {
                             >
                                 {Lang[window.Lang].pages.org.clazz.new}
                             </Button>
-                        </ListSubheader>
-                        {this.state.clazzes.map(
-                            clazz =>
-                                <div key={clazz.id}
+                       <select
+                            style={{ marginLeft: "1rem",position:"relative",marginBottom:"1rem" }}
+                            className="nyx-info-select-lg"
+                            id="search_clazz_area_id"
+                            label={Lang[window.Lang].pages.org.clazz.info.area}
+                            defaultValue={this.state.search_clazz_area_id === null ? "" : this.state.search_clazz_area_id}
+                            onChange={(e) => {
+                                this.state.search_clazz_area_id = e.target.value == "null" ? null : e.target.value;
+                                this.state.search_clazzes=[];
+                                //console.log(this.state.clazzes)
+                                {this.state.clazzes.map(
+                                    clazz =>{
+                                       
+                                        if(clazz.area_id==this.state.search_clazz_area_id){
+                                            this.state.search_clazzes.push(clazz)
+                                        }
+                                    })}
+                                    {this.fresh()}
+                            }}
+                        >
+                            <option value={"null"}>{"-省市-"}</option>
+                            {getAreas().map(area => {
+                                return <option key={area.id} value={area.id}>{area.area_name}</option>
+                            })}
+                        </select>
+                        {/* <select
+                            style={{ marginLeft: "0.5rem",position:"relative",marginBottom:"1rem"}}
+                            className="nyx-info-select-lg"
+                            id={"search_clazz_course_id"}
+                            defaultValue={this.state.search_clazz_course_id === null ? "" : this.state.search_clazz_course_id}
+                            onChange={(e) => {
+                                this.state.search_clazz_course_id = e.target.value == "null" ? null : e.target.value;
+                            }}
+                        >
+                            <option value={"null"}>{"-中项或高项-"}</option>
+                            <option value={1}>{"项目经理"}</option>
+                            <option value={2}>{"高级项目经理"}</option>
+
+                        </select> */}
+                      
+                      {this.state.search_clazzes.length==0?this.state.search_clazzes=this.state.clazzes:""}
+                        {this.state.search_clazzes.map(
+                            clazz =>{
+                               return <div key={clazz.id}
                                 className={this.state.btns==clazz.id?"nyx-clazz-card-block":"nyx-clazz-card"}
                                >
-                                {/* <Card style={{boxShadow:"none"}}>
-                                <div className="nyx-card-body">
-                                        {clazz.id} - {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} - {"(" + (clazz.agree_num ? clazz.agree_num : 0)+"/"+ (clazz.num ? clazz.num : 0) + ")"}
-                                <IconButton
-                                style={{width:24,height:24,float:"right"}}
-                                className={this.state.expanded?"expand":"expandOpen"}
-                                    onClick={() => 
-                                    {this.handleExpandClick()
-                                        console.log(this)
-                                    }}
-                                    >
-                                    <ExpandMoreIcon />
-                                    </IconButton>
-                                    </div>
-                                <Collapse in={this.state.expanded} timeout="auto" unmountOnExit>
-                                    <CardContent>
-                                       班主任                                    
-                                    </CardContent>
-                                </Collapse>
-
-                                </Card> */}
                                 <div className="nyx-card-body" style={{minHeight:"40px"}}>
                                 <span title={clazz.id} className="nyx-clazz-id">{clazz.id}</span>
                                 <span title={getCity(clazz.area_id)} className="nyx-clazz-area-id">{getCity(clazz.area_id)}</span>
@@ -963,7 +1057,7 @@ class Clazz extends Component {
                                             </div>
                                     }
                                 </div>
-                        )}
+                         } )}
                     </List>
                     <Drawer
 
@@ -1076,7 +1170,6 @@ class Clazz extends Component {
                 </div>
                 <div className="nyx-clazz-form">
                     <div className="nyx-right-top-search">
-
                         <TextField
                             style={{ top: "0rem", marginLeft: 30 }}
                             id="search_input"
@@ -1333,7 +1426,7 @@ class Clazz extends Component {
                         </Drawer> : <div />}
 
                     {this.newClazzDialog()}
-
+                    {/* {this.searchClazzDialog()} */}
                     {this.editClazzDialog()}
 
 

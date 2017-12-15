@@ -222,6 +222,7 @@ const Language = {
                 clazz: {
                     title: "班级安排",
                     new: "新建",
+                    search: "搜索",
                     clazz_list: "班级列表",
                     info: {
                         area: "地区",
