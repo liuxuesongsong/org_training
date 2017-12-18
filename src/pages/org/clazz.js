@@ -29,7 +29,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_AGREE_CLAZZ, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_AGREE_CLAZZ, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 
@@ -44,6 +44,7 @@ class Clazz extends Component {
         areas: [],
         allData: [],                //表格中所有数据
         tableData: [],              //表格内当前显示数据
+        tableSearchData:[],
         queryCondition: {},         //搜索条件
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
@@ -63,6 +64,7 @@ class Clazz extends Component {
         search_input: "",
         search_company: "",
         search_account: "",
+        search_id:"",
         
         search_area_id: null,
         search_clazz_course_id: null,
@@ -238,7 +240,23 @@ class Clazz extends Component {
         }
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
-
+    search_message = () => {
+        
+                var cb = (route, message, arg) => {
+                    if (message.code === Code.LOGIC_SUCCESS) {
+                        this.setState({
+                            tableSearchData:message.data
+                        })
+                    
+                    }
+                   
+                    this.popUpNotice(NOTICE, 0, message.msg);
+                }
+               
+                getData(getRouter(SELECT_STUDNETS_BY), { session: sessionStorage.session, company_name:this.state.search_company,student_name:this.state.search_account,student_id:this.state.search_id }, cb, {});
+        
+            }
+        
     agreeAllStudent = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -474,13 +492,33 @@ class Clazz extends Component {
     }
     searchClazzDialog = () => {
         return (
-            <Dialog open={this.state.searchClazzDialog} onRequestClose={this.handleRequestClose} >
+            <Dialog
+           
+            open={this.state.searchClazzDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                     查询
+                    <Button className="nyx-org-btn-sm"
+                           style={{marginRight:"0.5rem",marginTop:"-0.5rem",float:"right"}}
+                                color="primary"
+                                raised 
+                                onClick={() => {
+                                    if(this.state.search_company==""&&this.state.search_account==""&&this.state.search_id==""){
+                                        this.popUpNotice(NOTICE, 0, "请输入查询信息");
+                                        return
+                                    }
+                                this.search_message()
+                               // console.log( this.state.tableSearchData);
+                                }}
+                            >
+                             {Lang[window.Lang].pages.org.clazz.search}
+                        </Button>
                 </DialogTitle>
-                <DialogContent>
+               
+                <DialogContent
+                style={{padding:0,fontSize:"12px"}}
+                >
                 <TextField
-                style={{ top: "0rem", marginLeft: 30 }}
+                style={{ top: "0rem", marginLeft: 10,width:"200px" }}
                 id="search_company"
                 label={"搜索公司名称"}
                 onChange={event => {
@@ -490,7 +528,7 @@ class Clazz extends Component {
                 }}
             />
              <TextField
-                style={{ top: "0rem", marginLeft: 30 }}
+                style={{ top: "0rem", marginLeft: 10,width:"180px" }}
                 id="search_account"
                 label={"学员"}
                 onChange={event => {
@@ -499,19 +537,40 @@ class Clazz extends Component {
                     });
                 }}
             />
-            <div id="search_list"></div>
+             <TextField
+                style={{ top: "0rem", marginLeft: 10,width:"180px" }}
+                id="search_id"
+                label={"学员编号"}
+                onChange={event => {
+                    this.setState({
+                        search_id: event.target.value,
+                    });
+                }}
+            />
+
+
+
+
+            <div id="search_list">
+            <table 
+            className="nyx-search-table"
+            style={{padding:10,textAlign:"center"}}
+            border={1}
+            >
+                <tr>
+                    <td width={70}>学员编号</td><td width={60}>班级号</td><td width={80}>姓名</td><td width={120}>公司全称</td>
+                </tr>
+{this.state.tableSearchData.map(student => {
+    return <tr>
+    <td title={student.student_id} width={50}>{student.student_id}</td><td width={50} title={student.class_id}>{student.class_id}</td><td width={80} title={student.student_name}>{student.student_name}</td><td width={120} title={student.company_name}>{student.company_name}</td>
+</tr>
+})}
+            </table>
+            </div>
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        <Button
-                            onClick={() => {
-                               // document.getElementById("search_list").appendChild
-                            //    console.log(this.state.search_account)
-                                //this.handleRequestClose()
-                            }}
-                        >
-                            {Lang[window.Lang].pages.main.certain_button}
-                        </Button>
+                       
                         <Button
                             onClick={() => {
                                 this.handleRequestClose()
@@ -859,18 +918,19 @@ class Clazz extends Component {
                     <List className="nyx-clazz-list" subheader={<ListSubheader
                     style={{margin:0,float:"left",width:"50%"}}
                     className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
-                         {/* <Button className="nyx-org-btn-sm"
+                         <Button className="nyx-org-btn-sm"
                             style={{marginTop:"19px",top:"-0.5rem"}}
                                 color="primary"
                                 raised 
                                 onClick={() => {
+                                    this.state.tableSearchData=[],
                                     this.setState({
                                         searchClazzDialog: true
                                     });
                                 }}
                             >
                                 {Lang[window.Lang].pages.org.clazz.search}
-                            </Button> */}
+                            </Button>
                             <Button className="nyx-org-btn-sm"
                            style={{marginTop:"19px",top:"-0.5rem"}}
                                 color="primary"
@@ -888,6 +948,7 @@ class Clazz extends Component {
                             className="nyx-info-select-lg"
                             id="search_clazz_area_id"
                             label={Lang[window.Lang].pages.org.clazz.info.area}
+                           
                             defaultValue={this.state.search_clazz_area_id === null ? "" : this.state.search_clazz_area_id}
                             onChange={(e) => {
                                 this.state.search_clazz_area_id = e.target.value == "null" ? null : e.target.value;
@@ -923,8 +984,13 @@ class Clazz extends Component {
 
                         </select> */}
                       
-                      {this.state.search_clazzes.length==0?this.state.search_clazzes=this.state.clazzes:""}
-                        {this.state.search_clazzes.map(
+                      {this.state.search_clazzes.length==0? this.state.clazzes.map(
+                                    clazz =>{
+                                            this.state.search_clazzes.push(clazz)
+                                    }):""}
+                       {/* {console.log(this.state.search_clazzes)}
+                       {console.log(this.state.clazzes)} */}
+                       {this.state.search_clazzes.map(
                             clazz =>{
                                return <div key={clazz.id}
                                 className={this.state.btns==clazz.id?"nyx-clazz-card-block":"nyx-clazz-card"}
@@ -1198,6 +1264,8 @@ class Clazz extends Component {
                                 this.state.search_area_id = e.target.value == "null" ? null : e.target.value;
                                 this.state.queryCondition.area_id = e.target.value == "null" ? null : e.target.value;
                             }}
+                            disabled={this.state.stateSelected==true?true:false}
+                            // disabled={this.state.stateSelected && this.state.selected.id === clazz.id?true:false}
                         >
                             <option value={"null"}>{"-省市-"}</option>
                             {getAreas().map(area => {
@@ -1209,7 +1277,7 @@ class Clazz extends Component {
                             className="nyx-info-select-lg"
                             id={"search_course_id"}
                             defaultValue={this.state.search_course_id === null ? "" : this.state.search_course_id}
-                            disabled={this.state.search_course_id == -1 ? true : false}
+                            disabled={this.state.stateSelected==true?true:false}
                             onChange={(e) => {
                                 this.state.search_course_id = e.target.value == "null" ? null : e.target.value;
                                 this.state.queryCondition.course_id = e.target.value == "null" ? null : e.target.value;
@@ -1234,6 +1302,7 @@ class Clazz extends Component {
                         >
                             {"搜索"}
                         </Button>
+                        <br/>
 
                         {this.getCondition()}
                     </div>
@@ -1426,7 +1495,7 @@ class Clazz extends Component {
                         </Drawer> : <div />}
 
                     {this.newClazzDialog()}
-                    {/* {this.searchClazzDialog()} */}
+                    {this.searchClazzDialog()}
                     {this.editClazzDialog()}
 
 

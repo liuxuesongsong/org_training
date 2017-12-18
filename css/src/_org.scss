@@ -320,3 +320,17 @@ button.nyx-clazz-card-button{
   cursor: pointer;
   left: 0.2rem;
 }
+.nyx-search-table{
+  margin: 10px;
+  margin-top: 1rem;
+  font-size: 12px;
+  width: 97%;
+  table-layout:fixed;
+  border-collapse: collapse;  
+  td{
+    border:1px solid;   
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+}
