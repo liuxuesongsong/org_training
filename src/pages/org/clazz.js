@@ -32,6 +32,7 @@ import Lang from '../../language';
 import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_AGREE_CLAZZ, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
+import BeingLoading from '../../components/BeingLoading';
 
 class Clazz extends Component {
     static propTypes = {
@@ -60,6 +61,7 @@ class Clazz extends Component {
         count: 0,
         btns:0,
         onloading: false,
+        loading:false,
         selected: {},
         search_input: "",
         search_company: "",
@@ -247,7 +249,7 @@ class Clazz extends Component {
                         this.setState({
                             tableSearchData:message.data
                         })
-                    
+                        this.state.loading=false;
                     }
                    
                     this.popUpNotice(NOTICE, 0, message.msg);
@@ -502,7 +504,9 @@ class Clazz extends Component {
                                 color="primary"
                                 raised 
                                 onClick={() => {
+                                    this.state.loading=true;
                                     if(this.state.search_company==""&&this.state.search_account==""&&this.state.search_id==""){
+                                        this.state.loading=false;
                                         this.popUpNotice(NOTICE, 0, "请输入查询信息");
                                         return
                                     }
@@ -528,7 +532,7 @@ class Clazz extends Component {
                 }}
             />
              <TextField
-                style={{ top: "0rem", marginLeft: 10,width:"180px" }}
+                style={{ top: "0rem", marginLeft: 10,width:"175px" }}
                 id="search_account"
                 label={"学员"}
                 onChange={event => {
@@ -538,7 +542,7 @@ class Clazz extends Component {
                 }}
             />
              <TextField
-                style={{ top: "0rem", marginLeft: 10,width:"180px" }}
+                style={{ top: "0rem", marginLeft: 10,width:"175px" }}
                 id="search_id"
                 label={"学员编号"}
                 onChange={event => {
@@ -552,19 +556,18 @@ class Clazz extends Component {
 
 
             <div id="search_list">
+            {this.state.loading==true?<BeingLoading /> : ''}
             <table 
             className="nyx-search-table"
-            style={{padding:10,textAlign:"center"}}
-            border={1}
             >
                 <tr>
-                    <td width={70}>学员编号</td><td width={60}>班级号</td><td width={80}>姓名</td><td width={120}>公司全称</td>
+                    <td>学员编号</td><td>班级号</td><td>姓名</td><td>公司全称</td>
                 </tr>
-{this.state.tableSearchData.map(student => {
-    return <tr>
-    <td title={student.student_id} width={50}>{student.student_id}</td><td width={50} title={student.class_id}>{student.class_id}</td><td width={80} title={student.student_name}>{student.student_name}</td><td width={120} title={student.company_name}>{student.company_name}</td>
-</tr>
-})}
+                    {this.state.tableSearchData.map(student => {
+                        return <tr>
+                        <td title={student.student_id}>{student.student_id}</td><td title={student.class_id}>{student.class_id}</td><td title={student.student_name}>{student.student_name}</td><td title={student.company_name}>{student.company_name}</td>
+                    </tr>
+                    })}
             </table>
             </div>
                 </DialogContent>
