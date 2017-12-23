@@ -47,7 +47,7 @@ const Language = {
                     base: {
                         title: "基本信息",
                         base_info: {
-                            account: "公司全称",
+                            account: "公司全称(在账户信息修改公司全称)",
                             name: "联系人",
                             mobile: "手机",
                             tel: "电话",
@@ -62,7 +62,7 @@ const Language = {
                     },
                     finance: {
                         title: "发票信息",
-                        allname: "公司全称(在基本信息中修改公司全称)",
+                        allname: "公司全称(在账户信息修改公司全称)",
                         taxpayer_number: "纳税人识别号",
                         opening_bank: "开户银行",
                         bank_account: "开户行账号",
@@ -79,9 +79,11 @@ const Language = {
                     },
                     admin: {
                         title: "联系人信息",
-                        account: "公司全称",
+                        account: "公司全称-用户名",
+                        account_info:"账户信息",
                         password: "修改密码",
-                        old_password: "原始密码",
+                        old_password: "密码",
+                        change_company:"修改公司全称",
                         new_password: "修改密码",
                         check_password: "确认修改密码",
                         name: "管理员姓名",
@@ -211,6 +213,8 @@ const Language = {
                     all_students: "总学员",
                     registered:"临时登记已报名学员",
                     all_registered:"临时登记总学员",
+                    new_password:"修改密码",
+                    check_password:"确认修改密码"
                     
                 },
                 enroll: {
@@ -244,13 +248,13 @@ const Language = {
                 area: {
                     title: "管理员区域",
                 },
-                password:{
-                    title:"修改密码",
+                document:{
+                    title:"文档管理",
                     info:{
-                        account:"用户名",
-                        old_password:"原始密码",
-                        new_password:"修改密码",
-                        check_password:"确认修改密码"
+                       file_name:"文件名称",
+                       file_url:"下载地址",
+                       file_type:"文件类型",
+                       file_edit:"文件版本",
                     }
                 }
 

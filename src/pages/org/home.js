@@ -9,12 +9,19 @@ import List, {
     ListSubheader,
 } from 'material-ui/List';
 import Typography from 'material-ui/Typography';
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from 'material-ui/Dialog';
+import TextField from 'material-ui/TextField';
 import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-ui/Card';
 
 import { initCache, getData, getRouter,getInst, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
     LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
-    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT
+    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT,NOTICE,EDIT_PASSWORD
 } from '../../enum';
 import Lang from '../../language';
 import Code from '../../code';
@@ -37,6 +44,7 @@ class Home extends Component {
         clazz_count:[],
         train_count:[],
         unarrange_count:[],
+        myinfo:[],
         // 界面状态
 
         // 提示状态
@@ -46,6 +54,7 @@ class Home extends Component {
          alertContent: "",
          alertAction: [],
          openNewStudentDialog: false,
+         openPasswordDialog: false,
          alertType: "notice",
          alertContent: "登录成功",
     };
@@ -86,6 +95,7 @@ class Home extends Component {
                 clazz_count: message.data.clazz_count,
                 train_count: message.data.train_count,
                 unarrange_count: message.data.unarrange_count,
+                myinfo:message.data.myinfo
                 
             })
         }
@@ -127,7 +137,91 @@ class Home extends Component {
     init_num(num){
         return num?num:0
     }
-    
+    submit = (sendObj) => {
+        var cb = (route, message, arg) => {
+            this.popUpNotice(NOTICE, 0, message.msg);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+                window.CacheData.admin = arg.data;
+                // for (var key in this.state.temObj) {
+                //     console.log(temObj);
+                //     window.CacheData.admin[key] = this.state.temObj[key];
+                // }
+            }
+        }
+       
+         var  password=document.getElementById("check_password_org").value;
+        console.log(password)
+
+        getData(getRouter(EDIT_PASSWORD), { session: sessionStorage.session, password: password }, cb, {});
+    }
+    handleRequestClose = () => {
+        this.setState({
+          
+            openPasswordDialog: false
+        })
+    }
+    changePasswordDialog = () => {
+        return (
+            <Dialog open={this.state.openPasswordDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    修改密码
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                    <TextField
+                                    className="nyx-form-div"
+                                    key={"newpasswordorg"}
+                                    id="new_password_org"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.org.home.new_password}
+                                    
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    className="nyx-form-div"
+                                    key={"checkpasswordorg"}
+                                    id="check_password_org"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.org.home.check_password}
+                                    
+                                    fullWidth>
+                                </TextField>
+                        
+                        
+                     
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                if(document.getElementById("new_password_org").value!=document.getElementById("check_password_org").value){
+                                    this.popUpNotice(NOTICE, 0, "两次密码不一致");
+                                    return
+                                }
+                                this.submit();
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
     // canvas(area){
     //     var components=<canvas ref={this.canvas_content} className="canvas"  id={"canvas"+area.area_id} style={{width:300,height:150,position:"absolute",top:"3rem",backgroundColor:"#fff"
     //     ,zIndex:"1000"}}></canvas>
@@ -202,6 +296,39 @@ class Home extends Component {
                                 unarrange_count =>
                             <div key={unarrange_count.ti_id}><span>{"未安排:"+unarrange_count.num+"人"}</span></div>)}
                             </div>                            
+                            
+                            </Typography>
+
+                        </Paper>
+                    </div>
+                    <div style={{ margin: 10,float: "right",marginRight:"1rem",width:"300px" }}>
+                        <Paper  style={{ padding: 10 }}>
+                            <Typography type="headline" component="h5">
+                               个人信息
+                            </Typography>
+                            <Typography type="body1" component="div">
+                            <div>
+                            
+                             用户名:{this.state.myinfo.my_name}
+                          
+                            
+                                <Button
+                                raised
+                                style={{float:"right"}}
+                                color="primary"
+                                className="nyx-org-btn-md"
+                                // className="nyx-home-button"
+                                    onClick={()=>{
+                                        this.setState({ openPasswordDialog: true });
+                                    }}
+                                    >修改密码</Button>
+                                     <div>
+                                 所属机构:{this.state.myinfo.my_institution?getInst(this.state.myinfo.my_institution):""}
+                             </div>
+                            </div>
+                    
+                        
+                                                       
                             
                             </Typography>
 
@@ -500,6 +627,7 @@ class Home extends Component {
 
                     </div>
                 </div>
+                {this.changePasswordDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

@@ -441,6 +441,7 @@ class Info extends Component {
                                 className="nyx-form-div"
                                 key={"account"}
                                 id={"input_account"}
+                                disabled
                                 label={Lang[window.Lang].pages.com.infos.base.base_info["account"]}
                                 value={this.state.base["account"] === null ? "" : this.state.base["account"]}
                                 onChange={(event) => {

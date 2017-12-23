@@ -8,9 +8,14 @@ import Grid from 'material-ui/Grid';
 import Typography from 'material-ui/Typography';
 import TextField from 'material-ui/TextField';
 import List, { ListItem, ListItemIcon, ListItemText } from 'material-ui/List';
-
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from 'material-ui/Dialog';
 import { initCache, getData, getCache, getRouter } from '../../../utils/helpers';
-import { NOTICE,DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN, UPDATE_ADMIN } from '../../../enum';
+import { NOTICE,DATA_TYPE_BASE, UPDATE_COMPANY, DATA_TYPE_ADMIN, UPDATE_ADMIN,EDITCOMPANYNAME } from '../../../enum';
 import Code from '../../../code';
 import Lang from '../../../language';
 import CommonAlert from '../../../components/CommonAlert';
@@ -22,11 +27,14 @@ class Admin extends Component {
             account: "",
             password: ""
         },
+        change_company:"",
         alertOpen: false,
         alertType: "notice",
         alertCode: Code.LOGIC_SUCCESS,
         alertContent: "",
-        alertAction: []
+        alertAction: [],
+        openPasswordDialog: false,
+        openCompanyDialog:false
     }
     componentDidMount() {
         window.currentPage = this;
@@ -64,8 +72,159 @@ class Admin extends Component {
             alertAction: action
         });
     }
+    submit = (sendObj) => {
+        var cb = (route, message, arg) => {
+            this.popUpNotice(NOTICE, 0, message.msg);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+                window.CacheData.admin = arg.data;
+                // for (var key in this.state.temObj) {
+                //     console.log(temObj);
+                //     window.CacheData.admin[key] = this.state.temObj[key];
+                // }
+            }
+        }
+        var obj = {
+            password: document.getElementById("check_password_com").value,
+        }
 
+        getData(getRouter(UPDATE_ADMIN), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
+    }
+    company_submit = (sendObj) => {
+        var cb = (route, message, arg) => {
+            this.popUpNotice(NOTICE, 0, message.msg);
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+                window.CacheData.admin = arg.data;
+              this.fresh()
+            }
+        }
+       
 
+        getData(getRouter(EDITCOMPANYNAME), { session: sessionStorage.session, company_name: this.state.change_company }, cb, {});
+    }
+    handleRequestClose = () => {
+        this.setState({
+          
+            openPasswordDialog: false,
+            openCompanyDialog:false
+        })
+    }
+    changePasswordDialog = () => {
+        return (
+            <Dialog open={this.state.openPasswordDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    修改密码
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                    <TextField
+                                    className="nyx-form-div"
+                                    key={"newpasswordcom"}
+                                    id="new_password_com"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.org.home.new_password}
+                                    
+                                    fullWidth>
+                                </TextField>
+                                <TextField
+                                    className="nyx-form-div"
+                                    key={"checkpasswordcom"}
+                                    id="check_password_com"
+                                    type="password"
+                                    label={Lang[window.Lang].pages.org.home.check_password}
+                                    
+                                    fullWidth>
+                                </TextField>
+                        
+                        
+                     
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                if(document.getElementById("new_password_com").value!=document.getElementById("check_password_com").value){
+                                    this.popUpNotice(NOTICE, 0, "两次密码不一致");
+                                    return
+                                }
+                                this.submit();
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
+    changeCompanyDialog = () => {
+        return (
+            <Dialog open={this.state.openCompanyDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    修改公司名称
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                    <TextField
+                        className="nyx-form-div"
+                        key={"changecompanynamecom"}
+                        id="change_company_com"
+                        style={{width:"20rem"}}
+                        label={Lang[window.Lang].pages.com.infos.admin.change_company}
+                        onChange={(e)=>{
+                              this.setState({
+                                  change_company:e.target.value
+                              })
+                        }}
+                        fullWidth>
+                    </TextField>            
+                               
+                        
+                        
+                     
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                //console.log(this.state.change_company);
+                                this.company_submit();
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
     subShow = () => {
         switch (this.state.show) {
             default:
@@ -80,18 +239,17 @@ class Admin extends Component {
                                     className="nyx-form-div"
                                     key={"account"}
                                     id="account"
+                                    disabled
                                     label={Lang[window.Lang].pages.com.infos.admin.account}
                                     value={this.state.admin["account"] === null ? "" : this.state.admin["account"]}
-                                    onChange={(event, value) => {
-
-                                        this.setState({
-
-                                            admin: this.state.admin
-
-                                        });
-                                    }}
                                     fullWidth>
                                 </TextField>
+                                <span
+                                style={{position:"absolute",top:"4rem",left:"19rem",color:"#2196F3",cursor:"pointer"}}
+                                onClick={()=>{
+                                    this.setState({ openCompanyDialog: true });
+                                }}
+                                >修改公司全称</span>
                                 <TextField
                                     className="nyx-form-div"
                                     key={"password"}
@@ -99,52 +257,17 @@ class Admin extends Component {
                                     disabled
                                     label={Lang[window.Lang].pages.com.infos.admin.old_password}
                                     value={this.state.admin["password"] === null ? "" : this.state.admin["password"]}
-                                    onChange={(event, value) => {
-
-                                        this.setState({
-
-                                            admin: this.state.admin
-
-                                        });
-                                    }}
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    className="nyx-form-div"
-                                    key={"newpassword"}
-                                    id="new_password"
-                                    type="password"
-                                    label={Lang[window.Lang].pages.com.infos.admin.new_password}
                                     
                                     fullWidth>
                                 </TextField>
-                                <TextField
-                                    className="nyx-form-div"
-                                    key={"checkpassword"}
-                                    id="check_password"
-                                    type="password"
-                                    label={Lang[window.Lang].pages.com.infos.admin.check_password}
-                                    
-                                    fullWidth>
-                                </TextField>
-                                <Button
-                                    style={{
-                                        position: "relative",
-                                        marginTop: "0.5rem"
-                                    }}
-                                    raised
-                                    color="accent"
-                                    onClick={() => {
-                                        if(document.getElementById("new_password").value!=document.getElementById("check_password").value){
-                                            this.popUpNotice(NOTICE, 0, "两次密码不一致");
-                                            return
-                                        }
-                                        this.submit();
-                                    }}
-                                    className=""
-                                >
-                                    {Lang[window.Lang].pages.main.certain_button}
-                                </Button>
+                                <span
+                                style={{position:"absolute",top:"4rem",right:"2.8rem",color:"#2196F3",cursor:"pointer"}}
+                                onClick={()=>{
+                                    this.setState({ openPasswordDialog: true });
+                                }}
+                                >修改密码</span>
+                                
+                               
                             </Paper>
                         </List>
                     </div>
@@ -152,24 +275,7 @@ class Admin extends Component {
         }
     }
 
-    submit = (sendObj) => {
-        var cb = (route, message, arg) => {
-            this.popUpNotice(NOTICE, 0, message.msg);
-            if (message.code === Code.LOGIC_SUCCESS) {
-                
-                window.CacheData.admin = arg.data;
-                // for (var key in this.state.temObj) {
-                //     console.log(temObj);
-                //     window.CacheData.admin[key] = this.state.temObj[key];
-                // }
-            }
-        }
-        var obj = {
-            password: document.getElementById("check_password").value,
-        }
 
-        getData(getRouter(UPDATE_ADMIN), { session: sessionStorage.session, admin: obj }, cb, { self: this, data: obj });
-    }
 
     render() {
         return (
@@ -179,6 +285,8 @@ class Admin extends Component {
                         {this.subShow()}
                     </div>
                 </div>
+                {this.changePasswordDialog()}
+                {this.changeCompanyDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

@@ -19,7 +19,7 @@ import Students from '../pages/com/students/students.page.js';
 import Exams from '../pages/com/exams/exams.page.js';
 import Infos from '../pages/com/infos/info.page.js';
 
-import PasswordOrg from '../pages/org/password';
+import Document from '../pages/org/document';
 import OrganizationHome from '../pages/org/home';
 import Area from '../pages/org/area';
 import Score from '../pages/org/score';
@@ -60,7 +60,7 @@ var AppRouter = {
         component={Enrolled}
       />
       <Route
-        title={titleize(Lang[window.Lang].pages.com.infos.admin.password)}
+        title={titleize(Lang[window.Lang].pages.com.infos.admin.account_info)}
         path={'/com/password'}
         content={Password}
         nav
@@ -110,11 +110,11 @@ var AppRouter = {
         component={Area}
       />
        <Route
-        title={titleize(Lang[window.Lang].pages.org.password.title)}
-        path={'/org/password'}
-        content={PasswordOrg}
+        title={titleize(Lang[window.Lang].pages.org.document.title)}
+        path={'/org/document'}
+        content={Document}
         nav
-        component={PasswordOrg}
+        component={Document}
       />
     </Route>
   </Router>)
