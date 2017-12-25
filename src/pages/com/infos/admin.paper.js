@@ -235,7 +235,7 @@ class Admin extends Component {
                         }} disablePadding>
                             <Paper
                                 className={"nyx-form"}>
-                                <TextField
+                                <div style={{display:"inline",position:"relative"}}><TextField
                                     className="nyx-form-div"
                                     key={"account"}
                                     id="account"
@@ -245,11 +245,16 @@ class Admin extends Component {
                                     fullWidth>
                                 </TextField>
                                 <span
-                                style={{position:"absolute",top:"4rem",left:"19rem",color:"#2196F3",cursor:"pointer"}}
+                                style={{position:"absolute",top:"0",right:"1rem",color:"#2196F3",cursor:"pointer"}}
                                 onClick={()=>{
                                     this.setState({ openCompanyDialog: true });
                                 }}
-                                >修改公司全称</span>
+                                >
+                                 <i
+                                style={{marginRight:"0.2rem"}}
+                                  className="glyphicon glyphicon-pencil"> </i>
+                                修改公司全称</span></div>
+                                <div style={{display:"inline",position:"relative"}}>
                                 <TextField
                                     className="nyx-form-div"
                                     key={"password"}
@@ -261,12 +266,17 @@ class Admin extends Component {
                                     fullWidth>
                                 </TextField>
                                 <span
-                                style={{position:"absolute",top:"4rem",right:"2.8rem",color:"#2196F3",cursor:"pointer"}}
+                                
+                                style={{position:"absolute",top:"0",right:"1rem",color:"#2196F3",cursor:"pointer"}}
                                 onClick={()=>{
                                     this.setState({ openPasswordDialog: true });
                                 }}
-                                >修改密码</span>
-                                
+                                >
+                                <i
+                                 style={{marginRight:"0.2rem"}}
+                                className="glyphicon glyphicon-pencil"></i>
+                                修改密码</span>
+                                </div>
                                
                             </Paper>
                         </List>

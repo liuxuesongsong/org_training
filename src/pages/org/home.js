@@ -301,8 +301,8 @@ class Home extends Component {
 
                         </Paper>
                     </div>
-                    <div style={{ margin: 10,float: "right",marginRight:"1rem",width:"300px" }}>
-                        <Paper  style={{ padding: 10 }}>
+                    <div style={{ margin: 10,float: "left",marginRight:"1rem",width:"300px" }}>
+                        <Paper  style={{ padding: 10,height:"150px" }}>
                             <Typography type="headline" component="h5">
                                个人信息
                             </Typography>
