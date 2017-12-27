@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,CREATE_FILE } from '../../enum';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -47,6 +47,8 @@ class Student extends Component {
          openNewStudentDialog: false,
          openaddFileDialog: false,
          openchangeFileDialog:false,
+         opentypeDialog: false,
+         addtype:false,
     }
 
     componentDidMount() {
@@ -215,6 +217,20 @@ class Student extends Component {
             selectedStudentID: this.state.selectedStudentID
         })
     }  
+
+    create_file = () => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
+
+    }
+
     checkTrain = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -229,14 +245,14 @@ class Student extends Component {
            // clazz_id: id,
             student_ids: this.state.selectedStudentID
         }
-        console.log(sessionStorage);
         getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
     }
     handleRequestClose = () => {
         this.setState({
           
             openaddFileDialog: false,
-            openchangeFileDialog:false
+            openchangeFileDialog:false,
+            opentypeDialog: false,
         })
     }
     addFileDialog = () => {
@@ -253,6 +269,11 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"new_file_name"}
                            id="new_file_name"
+                           onChange={(e)=>{
+                            this.setState({
+                                new_file_name:e.target.value
+                            })
+                      }}
                            label={Lang[window.Lang].pages.org.document.info.file_name}
                            fullWidth>
                      </TextField>
@@ -261,6 +282,11 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"new_file_url"}
                            id="new_file_url"
+                           onChange={(e)=>{
+                            this.setState({
+                                new_file_url:e.target.value
+                            })
+                      }}
                            label={Lang[window.Lang].pages.org.document.info.file_url}
                            fullWidth>
                      </TextField>  
@@ -269,6 +295,11 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"new_file_edit"}
                            id="new_file_edit"
+                           onChange={(e)=>{
+                            this.setState({
+                                new_file_edit:e.target.value
+                            })
+                      }}
                            label={Lang[window.Lang].pages.org.document.info.file_edit}
                            fullWidth>
                      </TextField>  
@@ -300,7 +331,7 @@ class Student extends Component {
                                if(this.state.new_select_file_type==""){
                                    this.state.new_select_file_type=1
                                }
-                               console.log(this.state.new_select_file_type)
+                               this.create_file();
                                 this.handleRequestClose()
                                 
                             }}
@@ -383,7 +414,6 @@ class Student extends Component {
                                if(this.state.new_select_file_type==""){
                                    this.state.new_select_file_type=1
                                }
-                               console.log(this.state.new_select_file_type)
                                 this.handleRequestClose()
                                 
                             }}
@@ -404,7 +434,110 @@ class Student extends Component {
         )
 
     }
-    
+    typeDialog = () => {
+        return (
+            <Dialog open={this.state.opentypeDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle style={{width:"26rem"}}>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    类型管理
+                    <Button
+                        raised 
+                        color="primary"
+                       
+                        className="nyx-org-btn-md"
+                        onClick={() => {
+                         this.setState({
+                            addtype:true
+                         })
+                        }}
+                        style={{float:"right",marginTop:"-5px"}}
+                    >
+                        {"新增类型"}
+                    </Button>
+            </DialogTitle>
+                <DialogContent>
+                    <div
+                    style={{display:this.state.addtype==true?"block":"none"}}
+                    
+                    >
+                    <TextField
+                   // disabled={this.state.addtype==true?true:false}
+                           style={{width:"17rem"}}
+                           className="nyx-form-div"
+                           key={"change_file_edit"}
+                           id="change_file_edit"
+                           label={Lang[window.Lang].pages.org.document.info.file_edit}
+                           fullWidth>
+                     </TextField>  
+                    
+                     <Button
+                        color="primary"
+                        className="nyx-org-btn-sm"
+                        onClick={() => {
+                            this.setState({
+                                addtype:false
+                            })
+                        }}
+                        style={{position:"relative",top:"5px"}}
+                    >
+                        {"保存"}
+                    </Button>
+                    <Button
+                       color="primary"
+                       className="nyx-org-btn-sm"
+                       onClick={() => {
+                          this.setState({
+                              addtype:false
+                          })
+                       }}
+                       style={{position:"relative",top:"5px"}}
+                   >
+                       {"取消"}
+                   </Button>      
+                    </div>
+                    <table 
+                       
+                        >
+                        <tr>
+                            <td>编号</td><td>类型名称</td><td></td><td></td>
+                        </tr>
+                            {/* {this.state.tableSearchData.map(student => {
+                                return <tr>
+                                <td title={student.student_id}>{student.student_id}</td><td title={student.class_id}>{student.class_id}</td><td title={student.student_name}>{student.student_name}</td><td title={student.company_name}>{student.company_name}</td>
+                            </tr>
+                            })} */}
+                    </table>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                               this.setState({
+                                    addtype:false
+                                })
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.setState({
+                                    addtype:false
+                                })
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -455,8 +588,7 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-md"
                         onClick={() => {
-                          //  console.log(this.state.search_file_name)
-                          //  this.queryStudents(1, true);
+                            this.setState({ opentypeDialog: true });
                         }}
                         style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
                     >
@@ -651,6 +783,7 @@ class Student extends Component {
                 
                 {this.addFileDialog()}
                 {this.changeFileDialog()}
+                {this.typeDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

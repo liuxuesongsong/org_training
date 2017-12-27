@@ -336,3 +336,26 @@ button.nyx-clazz-card-button{
     text-overflow:ellipsis;
   }
 }
+.nyx-input-date{
+  display: inline-block;
+  position: relative;
+  span{
+    margin: 0;
+    position: absolute;
+    font-size: 12px;
+    color: rgba(0,0,0,0.54);
+    top: -20px;
+  }
+  input{
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.42);
+    padding-bottom: 5px;
+    outline: none;
+    font-size: 16px;
+    width:180px;
+  }
+}
+.nyx-clazz-message{
+width: 180px;
+margin: 1px;
+}

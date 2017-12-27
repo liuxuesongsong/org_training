@@ -50,6 +50,9 @@ class Clazz extends Component {
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         clazzStudents: [],          //班级内的学生
+        leading_in_arr:[],
+        checklist_arr:[],
+        same_check_arr:[],
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
@@ -67,7 +70,12 @@ class Clazz extends Component {
         search_company: "",
         search_account: "",
         search_id:"",
-        
+        selected_start_year:"",
+        selected_start_month:"",
+        selected_start_date:"",
+        selected_end_year:"",
+        selected_end_month:"",
+        selected_end_date:"",
         search_area_id: null,
         search_clazz_course_id: null,
         search_clazz_area_id: null,
@@ -184,7 +192,7 @@ class Clazz extends Component {
         var obj = {
             session: sessionStorage.session,
         }
-     //   getData(getRouter(CREATE_CLAZZ), Object.assign(clazz, obj), cb, {});
+        getData(getRouter(CREATE_CLAZZ), Object.assign(clazz, obj), cb, {});
     }
 
     createTrain = (id) => {
@@ -241,7 +249,7 @@ class Clazz extends Component {
                 // this.setState({ clazzes: this.state.clazzes })
             }
         }
-      //  getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
+        getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
     search_message = () => {
         
@@ -294,7 +302,7 @@ class Clazz extends Component {
                 <DialogContent>
                     <div>
                         <TextField
-                            className="nyx-form-div"
+                            className="nyx-clazz-message"
                             key={"class_head"}
                             id={"class_head"}
                             label={"班主任"}
@@ -307,7 +315,7 @@ class Clazz extends Component {
                             }}>
                         </TextField>
                         <TextField
-                            className="nyx-form-div"
+                            className="nyx-clazz-message"
                             key={"teacher"}
                             id={"teacher"}
                             label={"老师"}
@@ -320,7 +328,7 @@ class Clazz extends Component {
                             }}>
                         </TextField>
                         <TextField
-                            className="nyx-form-div"
+                            className="nyx-clazz-message"
                             key={"address"}
                             id={"address"}
                             label={"开班地址"}
@@ -332,21 +340,77 @@ class Clazz extends Component {
                                 });
                             }}>
                         </TextField>
-                        <TextField
+                        {/* <TextField
                             className="nyx-form-div"
                             key={"train_starttime"}
                             id={"train_starttime"}
                             label={"开班时间"}
                             value={this.state.selected["train_starttime"] === null ? "" : this.state.selected["train_starttime"]}
                             onChange={(event) => {
+                                console.log(event.target.value)
                                 this.state.selected["train_starttime"] = event.target.value
                                 this.setState({
                                     selected: this.state.selected
                                 });
                             }}>
-                        </TextField>
-                        <TextField
+                        </TextField> */}
+                        {/* <TextField
                             className="nyx-form-div"
+                            key={"train_starttime_"}
+                            id={"train_starttime_"}
+                            label={"开班时间"}
+                            type="date"
+                            defaultValue={"2017"}
+                           // value={this.state.selected["train_starttime"] === null ? "" : this.state.selected["train_starttime"]}
+                            onChange={(event) => {
+                                console.log(event.target.value)
+                                // this.state.selected["train_starttime"] = event.target.value
+                                // this.setState({
+                                //     selected: this.state.selected
+                                // });
+                            }}>
+                        </TextField> */}
+                       <div
+                       className="nyx-input-date nyx-clazz-message"
+                       >
+                       <span 
+                       >开始时间</span>
+                        <input
+                       // id="train_starttime"
+                         style={{}}
+                          type="date"
+                          defaultValue={this.state.selected_start_year+"-"+this.state.selected_start_month+"-"+this.state.selected_start_date}
+                          onChange={(event) => {
+                              var year=event.target.value.substr(0,4),
+                                  month=event.target.value.substr(5,2),
+                                  date=event.target.value.substr(8,2)
+                                  this.state.selected["train_starttime"]=year+month+date;
+                             
+                          }}
+                        />
+                       </div>
+                       <div
+                       className="nyx-input-date nyx-clazz-message"
+                       >
+                       <span 
+                       >结束时间</span>
+                        <input
+                       // id="train_starttime"
+                         style={{}}
+                          type="date"
+                          defaultValue={this.state.selected_end_year+"-"+this.state.selected_end_month+"-"+this.state.selected_end_date}
+                          onChange={(event) => {
+                              var end_year=event.target.value.substr(0,4),
+                                  end_month=event.target.value.substr(5,2),
+                                  end_date=event.target.value.substr(8,2)
+                                  this.state.selected["train_endtime"]=end_year+end_month+end_date;
+                             
+                          }}
+                        />
+                       </div>
+
+                        {/* <TextField
+                            className="nyx-clazz-message"
                             key={"train_endtime"}
                             id={"train_endtime"}
                             label={"结束时间"}
@@ -357,9 +421,9 @@ class Clazz extends Component {
                                     selected: this.state.selected
                                 });
                             }}>
-                        </TextField>
+                        </TextField> */}
                         <TextField
-                            className="nyx-form-div"
+                            className="nyx-clazz-message"
                             key={"class_code"}
                             id={"class_code"}
                             label={"班级编号"}
@@ -372,7 +436,7 @@ class Clazz extends Component {
                             }}>
                         </TextField>
                         <TextField
-                            className="nyx-form-div"
+                            className="nyx-clazz-message"
                             key={"mobile"}
                             id={"mobile"}
                             label={"班主任电话"}
@@ -393,8 +457,8 @@ class Clazz extends Component {
                                 var class_head = (document.getElementById("class_head").value);
                                 var teacher = (document.getElementById("teacher").value);
                                 var address = (document.getElementById("address").value);
-                                var train_starttime = Number(document.getElementById("train_starttime").value);
-                                var train_endtime = Number(document.getElementById("train_endtime").value);
+                                var train_starttime =  this.state.selected["train_starttime"];
+                                var train_endtime = this.state.selected["train_endtime"];
                                 var class_code = document.getElementById("class_code").value;
                                 var mobile = (document.getElementById("mobile").value);
                                 this.modifyClazz(this.state.selected.id, {
@@ -872,6 +936,8 @@ class Clazz extends Component {
 
         getData(getRouter(UNCHOOSE_STUDENT), obj, cb, {});
     }
+
+
     clazz_item = (clazz) => {
            
         return (
@@ -947,6 +1013,14 @@ class Clazz extends Component {
                                                           // this.state.btns=true
                                                        //   this.state.selected.btns=true;
                                                             this.state.selected = clazz;
+                                                            this.state.selected_start_year = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(0,4)
+                                                            this.state.selected_start_month = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(4,2)
+                                                            this.state.selected_start_date = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(6,2)
+
+                                                            this.state.selected_end_year = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(0,4)
+                                                            this.state.selected_end_month = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(4,2)
+                                                            this.state.selected_end_date = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(6,2)
+                                                           
                                                             // this.state.showInfo = true;
                                                             this.setState({ openEditClazzDialog: true });
                                                             {/* this.toggleDrawer(true)() */ }
@@ -1214,13 +1288,75 @@ class Clazz extends Component {
                                                         }}>
                                                         {"全部同意"}
                                                     </Button>
+
+
+                                                    <TextField
+                                                    style={{width:"70%",marginLeft:"1rem"}}
+                                                        className="nyx-form-div"
+                                                        key={"id_list"}
+                                                        id="id_list"
+                                                        
+                                                        >
+                                                    </TextField>
+                                                    <Button
+                                                        raised
+                                                            color="primary"
+                                                            id='checked_id_list'
+                                                           
+                                                            onClick={() => {
+                                                                 var checklist = document.getElementsByName("selected");
+                                                                  this.state.checklist_arr=[];
+                                                                 for(var i=0;i<checklist.length;i++){
+                                                                    checklist[i].checked=false;
+                                                                      this.state.checklist_arr.push(checklist[i].value)
+                                                                 }
+                                                                 var leading_in =document.getElementById("id_list").value;
+                                                                  this.state.leading_in_arr=[];
+                                                                 var leading_ins=leading_in.split(" ");
+                                                                for (i=0;i<leading_ins.length ;i++ ) 
+                                                                { 
+                                                                    this.state.leading_in_arr.push(leading_ins[i])
+                                                                } 
+                                                               this.state.same_check_arr=[];
+                                                                for(var i=0;i<this.state.leading_in_arr.length;i++){
+                                                                    for(var j=0;j<checklist.length;j++){
+
+                                                                        if(this.state.leading_in_arr[i]==checklist[j].value){
+                                                                           checklist[j].checked=true;
+                                                                           this.state.same_check_arr.push(checklist[j].value)
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }}
+                                                        style={{margin: 0,marginLeft:15,padding:"0",minHeight:30,minWidth:50 }}
+                                                        >
+                                                            {"导入"}
+                                                        </Button><br/>
+                                                        <input 
+                                                        id="controlAll"
+                                                        style={{margin:"1rem 0rem 0 1.39rem"}}
+                                                        onClick={()=>{
+                                                            var checklist = document.getElementsByName("selected");
+                                                            if(document.getElementById("controlAll").checked) {
+                                                                for(var i = 0; i < checklist.length; i++) {
+                                                                    checklist[i].checked = 1;
+                                                                }
+                                                            } else {
+                                                                for(var j = 0; j < checklist.length; j++) {
+                                                                    checklist[j].checked = 0;
+                                                                }
+                                                            }
+                                                        }}
+                                                        type="checkbox"/> <span>全选</span>
                             {console.log(this.state.clazzStudents.sort(function(a,b){
                          return a.student_id-b.student_id;}))}
                             {this.state.clazzStudents.map(
                                 student => {
                                     return <div className="nyx-clazz-student-name"
 
-                                    ><div style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
+                                    >
+                                     <input name="selected" value={student.student_id} type="checkbox"/> 
+                                    <div style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
                                         <i
                                            className="glyphicon glyphicon-ok"
                                             style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
@@ -1242,7 +1378,24 @@ class Clazz extends Component {
                                              className="glyphicon glyphicon-trash"                               
                                            style={{ float:"right",right:"1rem",top:"-0.5rem"}}
                                             onClick={() => {
-                                                this.removeClassStudent(student.id);
+                                                this.popUpNotice(ALERT, 0, <select
+                                                style={{marginLeft:"1rem"}}
+                                                id="del_reason"
+                                                >
+                                                    <option value="1">未联系</option>
+                                                    <option value="2">短期内无法培训</option>
+                                                    <option value="3">该人员已离职</option>
+                                                    
+                                                </select>, [
+                                                    () => {
+                                                        console.log(document.getElementById("del_reason").value)
+
+                                                       // this.removeStudent(clazz.id);
+                                                        this.closeNotice();
+                                                    }, () => {
+                                                        this.closeNotice();
+                                                    }]);
+                                                //this.removeClassStudent(student.id);
                                             }}
                                         ></i>
                                     </div>

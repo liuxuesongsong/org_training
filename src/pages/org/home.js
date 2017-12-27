@@ -45,6 +45,7 @@ class Home extends Component {
         train_count:[],
         unarrange_count:[],
         myinfo:[],
+        modules_id:[],
         // 界面状态
 
         // 提示状态
@@ -62,12 +63,14 @@ class Home extends Component {
     componentWillMount() {
         window.currentPage = this;
         this.fresh()
+        
     }
 //    componentDidMount(){
 //        this.canvas_content()
 //    }
     fresh = () => {
         initCache(this.cacheToState);
+       
     }
 
 
@@ -95,10 +98,14 @@ class Home extends Component {
                 clazz_count: message.data.clazz_count,
                 train_count: message.data.train_count,
                 unarrange_count: message.data.unarrange_count,
-                myinfo:message.data.myinfo
+                myinfo:message.data.myinfo,
+                modules_id:message.data.myinfo.modules_id
+               
                 
             })
+            
         }
+       
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
         window.currentPage.state.clazz_count = getCache("clazz_count").sort((a, b) => {
             return b.id - a.id
@@ -231,19 +238,19 @@ class Home extends Component {
     // refCb(instance){
     //   console.log(instance.id)
     // }
-    canvas_content(area){
-       
-    }
+ 
     render() {
         return (
             <div>
                 <div
                     style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
                 >
-                    <div style={{ margin: 10,float: "left" }}>
+              {this.state.modules_id.indexOf('1')==-1?"":
+                    <div style={{ margin: 10,float: "left"}}>
                         <Paper id="companyid" width="500px" style={{ padding: 10 }}>
                             <Typography type="headline" component="h5">
                                 {this.state.name}
+                                
                             </Typography>
                             <Typography type="body1" component="div">
                             <div>
@@ -301,6 +308,7 @@ class Home extends Component {
 
                         </Paper>
                     </div>
+                    }
                     <div style={{ margin: 10,float: "left",marginRight:"1rem",width:"300px" }}>
                         <Paper  style={{ padding: 10,height:"150px" }}>
                             <Typography type="headline" component="h5">
@@ -334,6 +342,7 @@ class Home extends Component {
 
                         </Paper>
                     </div>
+                    {this.state.modules_id.indexOf('1')==-1?"":
                     <div className="nyx-areacount-list">
                         <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)
                         <Button
@@ -608,26 +617,13 @@ class Home extends Component {
                         }
                         )}
                     </div>
+                    }
                     <div style={{ margin: 10, width: 300,height:150, float: "left" }}>
-                        <Paper elevation={4}>
-
-                            <List  subheader={<ListSubheader>{"班级列表"}</ListSubheader>}>
-                                {/* {this.state.clazzes.map(value =>
-                                    <ListItem dense button key={value}>
-                                        <ListItemText primary={`班级 ${value + 1}`} />
-                                        <ListItemSecondaryAction>
-
-                                        </ListItemSecondaryAction>
-                                    </ListItem>,
-                                )} */}
-                            </List>
-
-
-                        </Paper>
-
+                       
                     </div>
                 </div>
                 {this.changePasswordDialog()}
+               
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
