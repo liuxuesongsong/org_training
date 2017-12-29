@@ -29,7 +29,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_AGREE_CLAZZ, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY } from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 import BeingLoading from '../../components/BeingLoading';
@@ -53,6 +53,8 @@ class Clazz extends Component {
         leading_in_arr:[],
         checklist_arr:[],
         same_check_arr:[],
+        agree_checklist_arr:[],
+        del_checklist_arr:[],
         showInfo: false,
         showStudents: false,
         openNewClazzDialog: false,
@@ -268,28 +270,53 @@ class Clazz extends Component {
         
             }
         
-    agreeAllStudent = (id) => {
+        agreecheckStudent = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                for (var i = 0; i < this.state.clazzes.length; i++) {
-                    if (this.state.clazzes[i].id === arg.id) {
-                        this.state.clazzes.splice(i, 1);
-                        this.setState({
-                            clazzes: this.state.clazzes
-                        })
-                        break;
-                    }
-                }
+                this.queryClazzStudents(this.state.selected.id);
                 this.popUpNotice(NOTICE, 0, message.msg);
                 this.fresh();
                 // this.setState({ clazzes: this.state.clazzes })
             }
         }
-        // console.log(sessionStorage.session);
-        // console.log(id);
-        getData(getRouter(STATUS_AGREE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
-    }
+        var checklist = document.getElementsByName("selected");
+        this.state.agree_checklist_arr=[];
+        for(var i=0;i<checklist.length;i++){
+           if(checklist[i].checked==true)
+             this.state.agree_checklist_arr.push(checklist[i].value)
+        }   
 
+         console.log(this.state.agree_checklist_arr);
+        // console.log(id);
+        getData(getRouter(BATCH_AGREE_STUDENT), { session: sessionStorage.session, ids: this.state.agree_checklist_arr }, cb, { id: id });
+    }
+    delcheckStudent = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.queryClazzStudents(this.state.selected.id);
+                this.popUpNotice(NOTICE, 0, message.msg);
+                this.fresh();
+                var checklist = document.getElementsByName("selected");
+                for(var i=0;i<checklist.length;i++){
+                    checklist[i].checked=false
+                   
+                }
+                
+                // this.setState({ clazzes: this.state.clazzes })
+            }
+        }
+        var checklist = document.getElementsByName("selected");
+        this.state.del_checklist_arr=[];
+        for(var i=0;i<checklist.length;i++){
+           if(checklist[i].checked==true)
+             this.state.del_checklist_arr.push(checklist[i].value)
+        }   
+
+         console.log(this.state.del_checklist_arr);
+         var reason = document.getElementById("del_reason_arr").value;
+         console.log(document.getElementById("del_reason_arr").value);
+        getData(getRouter(BATCH_DELETE_STUDENT), { session: sessionStorage.session, ids: this.state.del_checklist_arr,reason:reason }, cb, { id: id });
+    }
     editClazzDialog = () => {
         return (
             <Dialog open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
@@ -737,7 +764,10 @@ class Clazz extends Component {
     }
 
     handleUptateAllData = (newData) => {
+        this.state.allData=[];
         this.state.allData = this.state.allData.concat(newData);
+        
+
     }
 
     handleUpdateData = (page) => {
@@ -754,8 +784,11 @@ class Clazz extends Component {
         } else {
             var data = this.state.allData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
             this.state.onloading = false;
+            console.log(this.state.allData)
             this.setState({ tableData: data });
+            this.state.tableData=[];
             this.state.tableData = data;
+           
             if (data.length > 0) {
                 var allCheckBox = true;
                 this.state.currentPageSelectedID = [];
@@ -1267,27 +1300,7 @@ class Clazz extends Component {
                             >
                                 {"导出详细信息"}
                             </Button>
-                            <Button
-                                                   // data_id={clazz.num}
-                                                   disabled={this.state.selected.num-this.state.selected.agree_num == 0 ? true : false}
-                                                        raised
-                                                        color="primary"
-                                                        className="nyx-org-btn-md"
-                                                        style={{margin: 0,marginLeft:5,padding:"0" }}
-                                                        onClick={() => {
-                                                           // console.log(this.state.selected.id);
-                                                            this.popUpNotice(ALERT, 0, "全部同意考试", [
-                                                                () => {
-                                                                  //  this.state.selected = clazz;
-                                                                    this.agreeAllStudent(this.state.selected.id);
-                                                                    this.closeNotice();
-                                                                }, () => {
-                                                                    this.closeNotice();
-                                                                }]);
-                                                            // this.agreeAllStudent(); 
-                                                        }}>
-                                                        {"全部同意"}
-                                                    </Button>
+                           
 
 
                                                     <TextField
@@ -1330,8 +1343,13 @@ class Clazz extends Component {
                                                             }}
                                                         style={{margin: 0,marginLeft:15,padding:"0",minHeight:30,minWidth:50 }}
                                                         >
-                                                            {"导入"}
-                                                        </Button><br/>
+                                                            {"选择"}
+                                                        </Button>
+                                                        <i
+                                                        title="将学生id输入,以空格符分隔，进行批量选择"
+                                                        style={{marginTop:"-1px",marginLeft:"5px"}}
+                                                        >?</i>
+                                                        <br/>
                                                         <input 
                                                         id="controlAll"
                                                         style={{margin:"1rem 0rem 0 1.39rem"}}
@@ -1348,6 +1366,77 @@ class Clazz extends Component {
                                                             }
                                                         }}
                                                         type="checkbox"/> <span>全选</span>
+                                                        
+                                                        <Button
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-sm"
+                                                        style={{margin: 0,marginLeft:20,padding:"0" }}
+                                                        onClick={() => {
+                                                            var checklist = document.getElementsByName("selected");
+                                                            
+                                                                for(var i = 0; i < checklist.length; i++) {
+                                                                    if(checklist[i].checked==true){
+                                                                        checklist[i].checked =false
+                                                                    }else{
+                                                                        checklist[i].checked =true
+                                                                    }
+                                                                }
+                                                        }}>
+                                                        {"反选"}
+                                                    </Button>
+                                                  <Button
+                                                   // data_id={clazz.num}
+                                                   disabled={this.state.selected.num-this.state.selected.agree_num == 0 ? true : false}
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-md"
+                                                        style={{margin: 0,marginLeft:20,padding:"0" }}
+                                                        onClick={() => {
+                                                           // console.log(this.state.selected.id);
+                                                            this.popUpNotice(ALERT, 0, "同意已选择学员考试", [
+                                                                () => {
+                                                                    
+                                                                  //  console.log(this.state.clazzStudents)
+                                                                  //  this.state.selected = clazz;
+                                                                    this.agreecheckStudent(this.state.selected.id);
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                            // this.agreeAllStudent(); 
+                                                        }}>
+                                                        {"批量同意"}
+                                                    </Button>
+                                                    <Button
+                                                   // data_id={clazz.num}
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-md"
+                                                        style={{margin: 0,marginLeft:20,padding:"0" }}
+                                                        onClick={() => {
+                                                           // console.log(this.state.selected.id);
+                                                            this.popUpNotice(ALERT, 0,  <select
+                                                                style={{marginLeft:"1rem"}}
+                                                                id="del_reason_arr"
+                                                                >
+                                                                    <option value="1">未联系</option>
+                                                                    <option value="2">短期内无法培训</option>
+                                                                    <option value="3">该人员已离职</option>
+                                                                    
+                                                                </select>, [
+                                                                () => {
+                                                                this.delcheckStudent(this.state.selected.id)
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                            // this.agreeAllStudent(); 
+                                                        }}>
+                                                        {"批量删除"}
+                                                    </Button>
+
+
                             {console.log(this.state.clazzStudents.sort(function(a,b){
                          return a.student_id-b.student_id;}))}
                             {this.state.clazzStudents.map(
@@ -1388,9 +1477,7 @@ class Clazz extends Component {
                                                     
                                                 </select>, [
                                                     () => {
-                                                        console.log(document.getElementById("del_reason").value)
-
-                                                       // this.removeStudent(clazz.id);
+                                                        this.removeClassStudent(student.id)
                                                         this.closeNotice();
                                                     }, () => {
                                                         this.closeNotice();
@@ -1692,11 +1779,19 @@ class Clazz extends Component {
             // if (message.code === Code.LOGIC_SUCCESS) {
             //     // this.setState({ clazzes: message.clazz })
             // }
-            this.queryClazzStudents(this.state.selected.id);
             this.fresh();
+            this.queryClazzStudents(this.state.selected.id);
+           
             this.popUpNotice(NOTICE, 0, message.msg);
+            var checklist = document.getElementsByName("selected");
+            for(var i=0;i<checklist.length;i++){
+                checklist[i].checked=false
+               
+            }
+            
         }
-        getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id }, cb, {});
+        var reason = document.getElementById("del_reason").value;
+        getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id ,reason:reason}, cb, {});
     }
 
 }

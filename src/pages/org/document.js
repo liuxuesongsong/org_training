@@ -48,6 +48,7 @@ class Student extends Component {
          openaddFileDialog: false,
          openchangeFileDialog:false,
          opentypeDialog: false,
+         opendownFileDialog:false,
          addtype:false,
     }
 
@@ -80,7 +81,7 @@ class Student extends Component {
     queryStudents = (query_page = 1, reload = false) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                var result = message.data.students;
+                var result = message.data.files;
                 this.handleUptateAllData(result);
                 this.handleUpdateData(this.state.currentPage);
                 this.setState({
@@ -104,7 +105,7 @@ class Student extends Component {
                 
             })
         }
-        getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
+        getData(getRouter("file_list"), { session: sessionStorage.session }, cb, {});
     }
 
 
@@ -253,6 +254,7 @@ class Student extends Component {
             openaddFileDialog: false,
             openchangeFileDialog:false,
             opentypeDialog: false,
+            opendownFileDialog:false,
         })
     }
     addFileDialog = () => {
@@ -404,6 +406,46 @@ class Student extends Component {
                                 <option value="1">类型1</option>
                                 <option value="2">类型2</option>
                             </select>  
+                     
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                               if(this.state.new_select_file_type==""){
+                                   this.state.new_select_file_type=1
+                               }
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
+    downFileDialog = () => {
+        return (
+            <Dialog open={this.state.opendownFileDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    下载
+            </DialogTitle>
+                <DialogContent>
+                    <div style={{width:"21rem"}}>
+                    
                      
                     </div>
                 </DialogContent>
@@ -633,7 +675,7 @@ class Student extends Component {
                             {
                                 key: "file_name",
                                 name: "文件名称",
-                                width: 80,
+                                width: 180,
                                 resizable: true
                             },
                             {
@@ -686,11 +728,11 @@ class Student extends Component {
                         return {
                             id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
-                            file_name: this.state.tableData[i].student_name,
-                            file_type: this.state.tableData[i].company_name,
-                            file_edition: this.state.tableData[i].company_admin,
-                            file_time: this.state.tableData[i].company_mobile,
-                            file_upload: this.state.tableData[i].company_mail,
+                            file_name: this.state.tableData[i].file_name,
+                            file_type: this.state.tableData[i].type_name,
+                            file_edition: this.state.tableData[i].edition,
+                            file_time: this.state.tableData[i].time,
+                            file_upload: this.state.tableData[i].uploader,
                             file_download:<Button
                             //raised
                             title="下载"
@@ -698,7 +740,8 @@ class Student extends Component {
                             color="primary"
                             style={{minHeight:"25px"}}
                             onClick={() => {
-                                console.log("下载")
+                                this.setState({ opendownFileDialog: true });
+                                
                             }}
                         >
                             {"下载"}
@@ -784,6 +827,7 @@ class Student extends Component {
                 {this.addFileDialog()}
                 {this.changeFileDialog()}
                 {this.typeDialog()}
+                {this.downFileDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
