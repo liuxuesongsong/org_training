@@ -1393,6 +1393,18 @@ class Clazz extends Component {
                                                         className="nyx-org-btn-md"
                                                         style={{margin: 0,marginLeft:20,padding:"0" }}
                                                         onClick={() => {
+                                                            var checklist = document.getElementsByName("selected");
+                                                            var m=0;
+                                                            for(var i = 0; i < checklist.length; i++) {
+
+                                                                if(checklist[i].checked==true){
+                                                                    m++
+                                                                }
+                                                            }
+                                                           if(m==0){
+                                                            this.popUpNotice(NOTICE, 0, "请选择学员");
+                                                            return false
+                                                           }
                                                            // console.log(this.state.selected.id);
                                                             this.popUpNotice(ALERT, 0, "同意已选择学员考试", [
                                                                 () => {
@@ -1415,6 +1427,17 @@ class Clazz extends Component {
                                                         className="nyx-org-btn-md"
                                                         style={{margin: 0,marginLeft:20,padding:"0" }}
                                                         onClick={() => {
+                                                            var checklist = document.getElementsByName("selected");
+                                                            var m=0;
+                                                            for(var i = 0; i < checklist.length; i++) {
+                                                                if(checklist[i].checked==true){
+                                                                    m++
+                                                                }
+                                                            }
+                                                           if(m==0){
+                                                            this.popUpNotice(NOTICE, 0, "请选择学员");
+                                                            return false
+                                                           }
                                                            // console.log(this.state.selected.id);
                                                             this.popUpNotice(ALERT, 0,  <select
                                                                 style={{marginLeft:"1rem"}}

@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,CREATE_FILE } from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,CREATE_FILE,SEARCH_FILE } from '../../enum';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -37,6 +37,10 @@ class Student extends Component {
         new_file_edit:"",
         new_select_file_type:"",
         change_select_file_type:"",
+        change_file_name:"",
+        change_type_name:"",
+        change_edition:"",
+        change_url:"",
 
          // 提示状态
          alertOpen: false,
@@ -49,6 +53,7 @@ class Student extends Component {
          openchangeFileDialog:false,
          opentypeDialog: false,
          opendownFileDialog:false,
+         openhistoryFileDialog:false,
          addtype:false,
     }
 
@@ -223,7 +228,7 @@ class Student extends Component {
         
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                
+               
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -232,21 +237,17 @@ class Student extends Component {
 
     }
 
-    checkTrain = (id) => {
+    searchFile = () => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.state.selectedStudentID = [];
-                this.state.currentPageSelectedID = [];
-                this.queryStudents(1, true)
+                console.log(message.data.files)
+                this.state.tableData = [];
+                this.state.tableData = message.data.files;
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        var obj = {
-            session: sessionStorage.session,
-           // clazz_id: id,
-            student_ids: this.state.selectedStudentID
-        }
-        getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
+       
+        getData(getRouter(SEARCH_FILE), {session:sessionStorage.session,name:this.state.search_file_name}, cb, {});
     }
     handleRequestClose = () => {
         this.setState({
@@ -255,6 +256,7 @@ class Student extends Component {
             openchangeFileDialog:false,
             opentypeDialog: false,
             opendownFileDialog:false,
+            openhistoryFileDialog:false,
         })
     }
     addFileDialog = () => {
@@ -368,6 +370,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_name"}
                            id="change_file_name"
+                           defaultValue={this.state.change_file_name}
                            label={Lang[window.Lang].pages.org.document.info.file_name}
                            fullWidth>
                      </TextField>
@@ -376,6 +379,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_url"}
                            id="change_file_url"
+                           defaultValue={this.state.change_url}
                            label={Lang[window.Lang].pages.org.document.info.file_url}
                            fullWidth>
                      </TextField>  
@@ -384,6 +388,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_edit"}
                            id="change_file_edit"
+                           defaultValue={this.state.change_edition}
                            label={Lang[window.Lang].pages.org.document.info.file_edit}
                            fullWidth>
                      </TextField>  
@@ -395,10 +400,10 @@ class Student extends Component {
                                id="change_select_file_type"
                                 style={{border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.53)",width:"20rem",padding:"0.5rem",paddingLeft:0}}                               
                                
-                                defaultValue={this.state.change_select_file_type}
+                                defaultValue={this.state.change_type_name}
                                 onChange={(e) => {
                                     this.setState({
-                                        change_select_file_type:e.target.value
+                                        change_type_name:e.target.value
                                     })
                                 }}
                             >
@@ -451,17 +456,56 @@ class Student extends Component {
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        <Button
+                        {/* <Button
                             onClick={() => {
-                               if(this.state.new_select_file_type==""){
-                                   this.state.new_select_file_type=1
-                               }
+                            //    if(this.state.new_select_file_type==""){
+                            //        this.state.new_select_file_type=1
+                            //    }
                                 this.handleRequestClose()
                                 
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
+                        </Button> */}
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
                         </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
+    historyFileDialog = () => {
+        return (
+            <Dialog open={this.state.openhistoryFileDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    历史记录
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                      
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        {/* <Button
+                            onClick={() => {
+                            //    if(this.state.new_select_file_type==""){
+                            //        this.state.new_select_file_type=1
+                            //    }
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button> */}
                         <Button
                             onClick={() => {
                                 this.handleRequestClose()
@@ -600,6 +644,7 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-sm"
                         onClick={() => {
+                            this.searchFile();
                             console.log(this.state.search_file_name)
                           //  this.queryStudents(1, true);
                         }}
@@ -653,8 +698,7 @@ class Student extends Component {
                         className="nyx-org-btn-md"
                        
                         onClick={() => {
-                          //  console.log(this.state.search_file_name)
-                          //  this.queryStudents(1, true);
+                            this.setState({ openhistoryFileDialog: true });
                         }}
                         style={{margin: 15,marginLeft:30,position:"relative",top:"-5px",float:"right"}}
                     >
@@ -726,7 +770,7 @@ class Student extends Component {
                     rowGetter={(i) => {
                         if (i === -1) { return {} }
                         return {
-                            id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
+                            id:  this.state.tableData[i].id,
                             student_id: this.state.tableData[i].id,
                             file_name: this.state.tableData[i].file_name,
                             file_type: this.state.tableData[i].type_name,
@@ -754,6 +798,12 @@ class Student extends Component {
                         style={{minHeight:"25px"}}
                         onClick={() => {
                             this.setState({ openchangeFileDialog: true });
+                            this.state.change_file_name=this.state.tableData[i].file_name;
+                            this.state.change_type_name=this.state.tableData[i].type_name;
+                            this.state.change_edition=this.state.tableData[i].edition;
+                            this.state.change_url=this.state.tableData[i].url;
+                            
+                            console.log(this.state.tableData[i].file_name)
                         }}
                     >
                         {"编辑"}
@@ -828,6 +878,7 @@ class Student extends Component {
                 {this.changeFileDialog()}
                 {this.typeDialog()}
                 {this.downFileDialog()}
+                {this.historyFileDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

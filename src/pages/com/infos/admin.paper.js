@@ -176,7 +176,7 @@ class Admin extends Component {
             <Dialog open={this.state.openCompanyDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
-                    修改公司名称
+                    修改公司名称/登录全称
             </DialogTitle>
                 <DialogContent>
                     <div>

@@ -79,7 +79,7 @@ const Language = {
                     },
                     admin: {
                         title: "联系人信息",
-                        account: "公司全称/用户名",
+                        account: "公司全称/登录全称",
                         account_info:"账户信息",
                         password: "修改密码",
                         old_password: "密码",
