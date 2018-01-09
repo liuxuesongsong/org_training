@@ -99,9 +99,12 @@ class Admin extends Component {
               this.fresh()
             }
         }
-       
+        var account = document.getElementById("change_company_com").value;
+                                    account=account.replace(/（/g,'(');  
+                                    account=account.replace(/ /g,''); 
+                                    account=account.replace(/）/g,')');  
 
-        getData(getRouter(EDITCOMPANYNAME), { session: sessionStorage.session, company_name: this.state.change_company }, cb, {});
+        getData(getRouter(EDITCOMPANYNAME), { session: sessionStorage.session, company_name: account}, cb, {});
     }
     handleRequestClose = () => {
         this.setState({
@@ -186,11 +189,11 @@ class Admin extends Component {
                         id="change_company_com"
                         style={{width:"20rem"}}
                         label={Lang[window.Lang].pages.com.infos.admin.change_company}
-                        onChange={(e)=>{
-                              this.setState({
-                                  change_company:e.target.value
-                              })
-                        }}
+                        // onChange={(e)=>{
+                        //       this.setState({
+                        //           change_company:e.target.value
+                        //       })
+                        // }}
                         fullWidth>
                     </TextField>            
                                
@@ -204,6 +207,9 @@ class Admin extends Component {
                         <Button
                             onClick={() => {
                                 //console.log(this.state.change_company);
+                                if(document.getElementById("change_company_com").value==""){
+                                    return false
+                                }
                                 this.company_submit();
                                 this.handleRequestClose()
                                 

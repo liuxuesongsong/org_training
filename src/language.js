@@ -253,7 +253,7 @@ const Language = {
                     info:{
                        file_name:"文件名称",
                        file_url:"下载地址",
-                       file_type:"文件类型",
+                       file_type:"类型名称",
                        file_edit:"文件版本",
                     }
                 }

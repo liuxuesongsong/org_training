@@ -2419,3 +2419,54 @@ button.nyx-org-btn-sm {
   margin: 0.2rem;
   padding: 0;
 }
+
+button.nyx-document-btn {
+  margin: 15px;
+  margin-left: 30px;
+  position: relative;
+  top: -5px;
+}
+
+.nyx-file-type-select {
+  border: none;
+  outline: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.53);
+  width: 20rem;
+  padding: 0.5rem;
+  padding-left: 0;
+}
+
+.nyx-history-list {
+  font-size: 14px;
+  width: 97%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.nyx-history-list td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nyx-file-text {
+  position: relative;
+  top: -5px;
+  font-size: 12px;
+  width: 210px;
+}
+
+.nyx-change-page {
+  font-size: 14px;
+  float: right;
+  margin-top: 2rem;
+  margin-right: 1rem;
+}
+
+.nyx-change-page-href {
+  color: black;
+  padding: 0 0.5rem;
+  color: #2196F3;
+  font-size: 14px;
+  cursor: pointer;
+}

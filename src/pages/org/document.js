@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,CREATE_FILE,SEARCH_FILE } from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,CREATE_FILE,SEARCH_FILE,DEL_FILE,CREATE_TYPE,TYPE_INFOS,DEL_TYPE,EDIT_FILE,EDIT_TYPE,SEARCH_TYPE,NOTE_LIST} from '../../enum';
 import Dialog, {
     DialogActions,
     DialogContent,
@@ -17,6 +17,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 import Code from '../../code';
 import Lang from '../../language';
 import CommonAlert from '../../components/CommonAlert';
+import { type } from 'os';
 class Student extends Component {
     state = {
         allData: [],
@@ -27,7 +28,7 @@ class Student extends Component {
         currentPage: 1,
        
         totalPage: 1,
-        rowsPerPage: 20,             //每页显示数据
+        rowsPerPage: 10,             //每页显示数据
         count: 0,
         search_file_name: "",
         search_file_type: "",
@@ -41,6 +42,18 @@ class Student extends Component {
         change_type_name:"",
         change_edition:"",
         change_url:"",
+        change_id:"",
+        down_file_url:"",
+        del_file_id:"",
+        create_type_name:"",
+        type_info_name:"",
+        selected_type_id:"",
+        edit_type_name:0,
+        type_infos:[],
+        note_list:[],
+        barcon:"",
+        pno:1,
+        psize:10,
 
          // 提示状态
          alertOpen: false,
@@ -54,12 +67,13 @@ class Student extends Component {
          opentypeDialog: false,
          opendownFileDialog:false,
          openhistoryFileDialog:false,
-         addtype:false,
+         isblock:"",
     }
 
     componentDidMount() {
         window.currentPage = this;
         this.fresh();
+       
     }
     closeNotice = () => {
         this.setState({
@@ -67,11 +81,14 @@ class Student extends Component {
         })
     }
     fresh = () => {
+        this.state.allData=[];
         initCache(this.cacheToState);
     }
 
     cacheToState() {
         window.currentPage.queryStudents();
+        window.currentPage.type_infos();
+       // window.currentPage.note_list();
         window.currentPage.state.areas = getAreas();
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
@@ -224,7 +241,223 @@ class Student extends Component {
         })
     }  
 
+ 
+ 
+    create_type = () => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({
+                    edit_type_name:0
+                })
+               
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(CREATE_TYPE), { session: sessionStorage.session, type_name:this.state.create_type_name }, cb, {});
+
+    }
+    del_type = (id) => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({
+                    edit_type_name:0
+                })
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        console.log(id)
+        getData(getRouter(DEL_TYPE), { session: sessionStorage.session, id:id }, cb, {});
+
+    }
+    timestamp2Time = (timestamp, separator) =>{
+        var result = "";  
+              
+        if(timestamp) {  
+            var reg = new RegExp(/\D/, "g"); //提取数字字符串  
+            var timestamp_str = timestamp.replace(reg, "");  
+
+            var d = new Date();  
+            d.setTime(timestamp_str);  
+            var year = d.getFullYear();  
+            var month = d.getMonth() + 1;  
+            var day = d.getDate();  
+            if(month < 10) {  
+                month = "0" + month;  
+            }  
+            if(day < 10) {  
+                day = "0" + day;  
+            }  
+            result = year + separator + month + separator + day;  
+        }  
+        return result;  
+    }
+    note_list = () => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               this.state.note_list=message.data
+               console.log(this.state.note_list.length)
+               //console.log(document.getElementById("idData").rows.length)
+               
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(NOTE_LIST), { session: sessionStorage.session}, cb, {});
+
+    }
+    goPage= (pno,psize) =>{
+        // {this.historyFileDialog()}
+        var components = [];
+        var num = this.state.note_list.length;//表格所有行数(所有记录数)
+        var totalPage = 0;//总页数
+        var pageSize = psize;//每页显示行数
+       // //总共分几页 
+       if(num/pageSize > parseInt(num/pageSize)){   
+               totalPage=parseInt(num/pageSize)+1;   
+          }else{   
+              totalPage=parseInt(num/pageSize);   
+          }   
+       var currentPage = pno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
+        var endRow = currentPage * pageSize;//结束显示的行   40
+        endRow = (endRow > num)? num : endRow;    40
+       // console.log(startRow)
+
+        this.state.note_list.map((note_list)=>{
+      //  console.log(this.state.note_list.indexOf(note_list)+1>=startRow &&this.state.note_list.indexOf(note_list)+1<=endRow?"哈哈哈":"嘿嘿")
+           
+          components.push (<tr
+                  style={{maxHeight:"25px",display:this.state.note_list.indexOf(note_list)+1>=startRow &&this.state.note_list.indexOf(note_list)+1<=endRow?"":"none"}}
+                  key = {note_list.id}> 
+                  <td width={60} height={25} style={{textAlign:"center"}}>{this.state.note_list.indexOf(note_list)+1}</td>
+                  <td title={this.timestamp2Time(note_list.time+"000", "-")} width={100} style={{textAlign:"center"}}>{this.timestamp2Time(note_list.time+"000", "-")}</td>
+                  <td title={note_list.user} width={120}  style={{textAlign:"center"}}>{note_list.user}</td>
+                  <td title={note_list.content} width={180}>{note_list.content}</td>
+                </tr>
+       
+        )});
+         return components
+        
+     }
+     change_page = (pno,psize)=>{
+        var num = this.state.note_list.length;//表格所有行数(所有记录数)
+        var totalPage = 0;//总页数
+        var pageSize = psize;//每页显示行数
+       // //总共分几页 
+       if(num/pageSize > parseInt(num/pageSize)){   
+               totalPage=parseInt(num/pageSize)+1;   
+          }else{   
+              totalPage=parseInt(num/pageSize);   
+          }   
+       var currentPage = this.state.pno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
+        var endRow = currentPage * pageSize;//结束显示的行   40
+        endRow = (endRow > num)? num : endRow;    40
+        var components =<div>
+            <span>{"共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页"}</span>
+        <a 
+         className="nyx-change-page-href"
+         onClick={()=>{
+             this.setState({
+                 pno:1
+             })
+            currentPage>1?this.goPage(this.state.pno,"+psize+"):""
+         }}
+         >首页</a>
+        <a 
+            className="nyx-change-page-href" onClick={()=>{
+            // console.log("currentPage"+currentPage)
+            // console.log("goPage("+(currentPage-1)+","+psize+")")
+            currentPage>1?this.setState({pno:this.state.pno-1}):""
+            currentPage>1?this.goPage(this.state.pno,"+psize+"):""
+        }}
+         >{"<上一页"}</a>
+        <a 
+            className="nyx-change-page-href" 
+            onClick={()=>{
+           // console.log("goPage("+(currentPage+1)+","+psize+")")
+            currentPage<totalPage?this.setState({pno:this.state.pno+1}):""
+           { this.goPage("+(currentPage+1)+","+psize+")}
+            currentPage<totalPage?this.goPage(this.state.pno,"+psize+"):""
+        }}
+         >{"下一页>"}</a>
+        <a 
+             className="nyx-change-page-href"
+             onClick={()=>{
+             currentPage<totalPage?this.setState({pno:totalPage}):""
+            currentPage<totalPage?this.goPage(this.state.pno,"+psize+"):""} }
+        >{"尾页"}</a>
+        </div>
+
+     return components
+     }
+    type_infos = () => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               this.state.type_infos=message.data
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(TYPE_INFOS), { session: sessionStorage.session}, cb, {});
+
+    }
+    edit_type = (id,type_name) => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.setState({
+                    edit_type_name:0
+                })
+                this.state.allData = [];
+                this.fresh();
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+    var type_name= document.getElementById(type_name).value;
+        getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
+
+    }
     create_file = () => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.allData=[];
+               this.fresh()
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        console.log("hahah ")
+        getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
+
+    }
+    edit_file = (id) => {
+        
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               this.fresh();
+            }
+           
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+         // change_file_name change_file_url change_file_edit change_select_file_type
+         var name = document.getElementById("change_file_name").value,
+             url = document.getElementById("change_file_url").value,
+             edition = document.getElementById("change_file_edit").value,
+        
+             type_id = this.state.change_type_name==""?this.state.selected_type_id:this.state.change_type_name;
+    console.log(type_id)
+               getData(getRouter(EDIT_FILE), { session: sessionStorage.session,id:this.state.change_id, name:name,edition:edition,url:url,type_id:type_id }, cb, {});
+             }
+    del_file = () => {
         
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -233,10 +466,10 @@ class Student extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
+        var id = this.state.del_file_id;
+        getData(getRouter(DEL_FILE), { session: sessionStorage.session,id:id }, cb, {});
 
     }
-
     searchFile = () => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -249,6 +482,19 @@ class Student extends Component {
        
         getData(getRouter(SEARCH_FILE), {session:sessionStorage.session,name:this.state.search_file_name}, cb, {});
     }
+    search_type = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                console.log(message.data.files)
+                this.state.tableData = [];
+                this.state.tableData = message.data.files;
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+       
+        getData(getRouter(SEARCH_TYPE), {session:sessionStorage.session,type_id:id}, cb, {});
+    }
+    
     handleRequestClose = () => {
         this.setState({
           
@@ -313,17 +559,17 @@ class Student extends Component {
                             
                             <select
                                id="new_select_file_type"
-                                style={{border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.53)",width:"20rem",padding:"0.5rem",paddingLeft:0}}                               
-                                defaultValue={1}
+                                className="nyx-file-type-select"                             
                                 onChange={(e) => {
                                     this.setState({
                                         new_select_file_type:e.target.value
                                     })
                                 }}
                             >
-                               
-                                <option value="1">类型1</option>
-                                <option value="2">类型2</option>
+                              <option selected>-类型-</option>
+                               {this.state.type_infos.map((type_infos)=>{
+                                return <option value={type_infos.id}  key={type_infos.id}>{type_infos.type_name}</option>
+                            })}
                             </select>  
                      
                     </div>
@@ -333,10 +579,12 @@ class Student extends Component {
                         <Button
                             onClick={() => {
                                if(this.state.new_select_file_type==""){
-                                   this.state.new_select_file_type=1
+                                this.popUpNotice(NOTICE, 0, "请选择文件类型");
+                                return false;
                                }
+                               console.log(this.state.new_select_file_type)
                                this.create_file();
-                                this.handleRequestClose()
+                               this.handleRequestClose()
                                 
                             }}
                         >
@@ -370,6 +618,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_name"}
                            id="change_file_name"
+                         
                            defaultValue={this.state.change_file_name}
                            label={Lang[window.Lang].pages.org.document.info.file_name}
                            fullWidth>
@@ -398,31 +647,26 @@ class Student extends Component {
                             
                             <select
                                id="change_select_file_type"
-                                style={{border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.53)",width:"20rem",padding:"0.5rem",paddingLeft:0}}                               
-                               
-                                defaultValue={this.state.change_type_name}
+                               className="nyx-file-type-select"
+                                defaultValue={this.state.selected_type_id}
                                 onChange={(e) => {
                                     this.setState({
                                         change_type_name:e.target.value
                                     })
                                 }}
                             >
-                               
-                                <option value="1">类型1</option>
-                                <option value="2">类型2</option>
+                               {this.state.type_infos.map((type_infos)=>{
+                                return <option  value={type_infos.id} key={type_infos.id}>{type_infos.type_name}</option>
+                            })}
                             </select>  
-                     
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <div>
                         <Button
                             onClick={() => {
-                               if(this.state.new_select_file_type==""){
-                                   this.state.new_select_file_type=1
-                               }
+                                 this.edit_file();
                                 this.handleRequestClose()
-                                
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
@@ -430,7 +674,6 @@ class Student extends Component {
                         <Button
                             onClick={() => {
                                 this.handleRequestClose()
-                            
                             }}
                         >
                             {Lang[window.Lang].pages.main.cancel_button}
@@ -446,12 +689,11 @@ class Student extends Component {
             <Dialog open={this.state.opendownFileDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
-                    下载
+                    下载地址
             </DialogTitle>
                 <DialogContent>
                     <div style={{width:"21rem"}}>
-                    
-                     
+                    {this.state.down_file_url}
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -483,15 +725,34 @@ class Student extends Component {
     }
     historyFileDialog = () => {
         return (
-            <Dialog open={this.state.openhistoryFileDialog} onRequestClose={this.handleRequestClose} >
+            <Dialog  open={this.state.openhistoryFileDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     历史记录
             </DialogTitle>
                 <DialogContent>
-                    <div>
+                  <div
+                  style={{height:"300px"}}
+                  >
+                    <table
+                    className="nyx-history-list"
+                   id="idData"
+                   >
+                       <tr style={{textAlign:"center",maxHeight:"25px"}}>
+                           <td  height={25} width={60}>序号</td>
+                           <td width={100}>操作时间</td>
+                           <td width={120}>操作人</td>
+                           <td width={180}>操作信息</td>
+                        </tr>
+                       {this.goPage(this.state.pno,this.state.psize)}
+                   </table>
+                  </div>
+                   
+                  
+                    <div className="nyx-change-page"
                       
-                    </div>
+                    >{this.change_page(1,10)}</div>
+               
                 </DialogContent>
                 <DialogActions>
                     <div>
@@ -517,8 +778,9 @@ class Student extends Component {
                     </div>
                 </DialogActions>
             </Dialog >
+           
         )
-
+       
     }
     typeDialog = () => {
         return (
@@ -532,8 +794,12 @@ class Student extends Component {
                        
                         className="nyx-org-btn-md"
                         onClick={() => {
+                            if(this.state.edit_type_name!=0){
+                                this.popUpNotice(NOTICE, 0, "请保存正在编辑的文档");
+                                return false
+                            }
                          this.setState({
-                            addtype:true
+                            edit_type_name:-1
                          })
                         }}
                         style={{float:"right",marginTop:"-5px"}}
@@ -542,75 +808,149 @@ class Student extends Component {
                     </Button>
             </DialogTitle>
                 <DialogContent>
-                    <div
-                    style={{display:this.state.addtype==true?"block":"none"}}
                     
-                    >
-                    <TextField
-                   // disabled={this.state.addtype==true?true:false}
-                           style={{width:"17rem"}}
-                           className="nyx-form-div"
-                           key={"change_file_edit"}
-                           id="change_file_edit"
-                           label={Lang[window.Lang].pages.org.document.info.file_edit}
-                           fullWidth>
-                     </TextField>  
-                    
-                     <Button
-                        color="primary"
-                        className="nyx-org-btn-sm"
-                        onClick={() => {
-                            this.setState({
-                                addtype:false
-                            })
-                        }}
-                        style={{position:"relative",top:"5px"}}
-                    >
-                        {"保存"}
-                    </Button>
-                    <Button
-                       color="primary"
-                       className="nyx-org-btn-sm"
-                       onClick={() => {
-                          this.setState({
-                              addtype:false
-                          })
-                       }}
-                       style={{position:"relative",top:"5px"}}
-                   >
-                       {"取消"}
-                   </Button>      
-                    </div>
                     <table 
-                       
+                       style={{textAlign:"center",marginTop:"10px"}}
                         >
                         <tr>
-                            <td>编号</td><td>类型名称</td><td></td><td></td>
+                            <td>编号</td><td style={{width:"215px"}}>类型名称</td><td></td><td></td>
                         </tr>
-                            {/* {this.state.tableSearchData.map(student => {
+                        <tr style={{display:this.state.edit_type_name==-1?"":"none"}}>
+                            <td></td>
+                            <td style={{width:"215px"}}>
+                            <TextField
+                                    className="nyx-form-div"
+                                    key={"change_file_edit"}
+                                    id="change_file_edit"
+                                    className="nyx-file-text"
+                                    onChange={(e)=>{
+                                        this.state.create_type_name=e.target.value
+                                    }}
+                                    label={Lang[window.Lang].pages.org.document.info.file_type}
+                                    fullWidth>
+                                </TextField>  
+                            </td>
+                            <td>
+                            <Button
+                                    color="primary"
+                                    className="nyx-org-btn-sm"
+                                    onClick={() => {
+                                    
+
+                                        this.create_type();
+                                        this.state.allData = [];
+                                        this.fresh();
+                                    }}
+                                    style={{margin: 0,marginLeft:20,top:7}}
+                                >
+                                    {"保存"}
+                                </Button>
+                                </td>
+                                <td>
+                                <Button
+                                    color="primary"
+                                    className="nyx-org-btn-sm"
+                                    onClick={() => {
+                                        this.setState({
+                                            edit_type_name:0
+                                        })
+                                    }}
+                                    style={{margin: 0,marginLeft:6,top:7}}
+                                >
+                                    {"取消"}
+                                </Button>      
+                                </td>
+                        </tr>
+                            {this.state.type_infos.map(type_infos => {
+                              
                                 return <tr>
-                                <td title={student.student_id}>{student.student_id}</td><td title={student.class_id}>{student.class_id}</td><td title={student.student_name}>{student.student_name}</td><td title={student.company_name}>{student.company_name}</td>
+                                <td title={type_infos.id}>{this.state.type_infos.indexOf(type_infos)+1}</td><td
+                                 style={{width:"215px"}}
+                                >
+                              {/* <input
+                              
+                              value={type_infos.type_name}/> */}
+                                 <TextField
+                                 key={type_infos.type_name}
+                                    id={"type_name"+type_infos.id}
+                                    className="nyx-file-text"
+                                    defaultValue={type_infos.type_name}
+                                    disabled={this.state.edit_type_name==type_infos.id?false:true}
+                                    // onChange={event => {
+                                       
+                                    //     type_infos.type_name= event.target.value
+                                       
+                                    // }}
+                                />
+                                 </td>
+                                <td>
+                                <Button
+                                   // raised 
+                                    color="primary"
+                                    className="nyx-org-btn-sm"
+                                    style={{margin: 0,marginLeft:20,display:this.state.edit_type_name==type_infos.id?"none":"block"}}
+                                    onClick={() => {
+                                     
+                                      this.setState({
+                                        edit_type_name:type_infos.id
+                                      })
+                                      console.log(type_infos.type_name)
+                                    }}
+                                        >
+                                    {"编辑"}
+                                    </Button>
+                                    <Button
+                                   // raised 
+                                   style={{margin: 0,marginLeft:20,display:this.state.edit_type_name==type_infos.id?"block":"none"}}
+                                    color="primary"
+                                    className="nyx-org-btn-sm"
+                                    onClick={() => {
+                                        this.edit_type(type_infos.id,"type_name"+type_infos.id);
+                                       
+                                        this.setState({
+                                            edit_type_name:0
+                                        })
+                                    }}
+                                        >
+                                    {"保存"}
+                                    </Button>
+                                
+                                </td><td>
+                                <Button
+                                   // raised 
+                                    color="primary"
+                                    className="nyx-org-btn-sm"
+                                    onClick={() => {
+                                        this.del_type(type_infos.id);
+                                        this.state.allData = [];
+                                        this.fresh();
+                                    }}
+                                    style={{margin:0,marginLeft:10}}
+                                    >
+                                    {"删除"}
+                                    </Button>
+                                </td>
                             </tr>
-                            })} */}
+                            })}
                     </table>
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        <Button
+                        {/* <Button
                             onClick={() => {
                                this.setState({
-                                    addtype:false
+                                edit_type_name:0
                                 })
                                 this.handleRequestClose()
                                 
                             }}
                         >
                             {Lang[window.Lang].pages.main.certain_button}
-                        </Button>
+                        </Button> */}
                         <Button
                             onClick={() => {
                                 this.setState({
-                                    addtype:false
+                                    edit_type_name:0
                                 })
                                 this.handleRequestClose()
                             
@@ -624,6 +964,7 @@ class Student extends Component {
         )
 
     }
+
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -642,13 +983,13 @@ class Student extends Component {
                     <Button
                         raised 
                         color="primary"
-                        className="nyx-org-btn-sm"
+                        className="nyx-org-btn-sm nyx-document-btn"
                         onClick={() => {
                             this.searchFile();
                             console.log(this.state.search_file_name)
                           //  this.queryStudents(1, true);
                         }}
-                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
+                       
                     >
                         {"搜索"}
                     </Button>
@@ -658,49 +999,44 @@ class Student extends Component {
                         style={{marginLeft:"1rem",position:"relative",top:"-5px",height:"30px",borderColor:"#2196f3"}}
                         className="nyx-info-select-lg"
                         id={"search_file_type"}
-                      //  defaultValue={null}
-                      //  Value={this.state.search_file_type ? this.state.search_file_type : null}
                         onChange={(e) => {
-                            this.state.search_file_type = e.target.value == "null"? null:e.target.value;
-                         //   this.state.queryCondition.is_inlist = e.target.value == "null"? null:e.target.value;
+                           this.search_type(e.target.value);
                         }}
                     >
-                        <option value={"null"}>{"-类型-"}</option>
-                        <option value={-1}>{"类型1"}</option>
-                        <option value={0}>{"类型2"}</option>
-                        <option value={1}>{"类型3"}</option>
+                        <option value="">{"-类型-"}</option>
+                        {this.state.type_infos.map((type_infos)=>{
+                            return <option value={type_infos.id} key={type_infos.id}>{type_infos.type_name}</option>
+                        })}
                     </select>
                     <Button
                         raised 
                         color="primary"
-                        className="nyx-org-btn-md"
+                        className="nyx-org-btn-md nyx-document-btn"
                         onClick={() => {
                             this.setState({ opentypeDialog: true });
                         }}
-                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
                     >
                         {"类型管理"}
                     </Button>
                     <Button
                         raised 
                         color="primary"
-                        className="nyx-org-btn-md"
+                        className="nyx-org-btn-md nyx-document-btn"
                         onClick={() => {
                             this.setState({ openaddFileDialog: true });
                         }}
-                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
                     >
                         {"新增文件"}
                     </Button>
                     <Button
                         raised 
                         color="primary"
-                        className="nyx-org-btn-md"
-                       
+                        className="nyx-org-btn-md nyx-document-btn"
                         onClick={() => {
-                            this.setState({ openhistoryFileDialog: true });
+                            this.note_list()
+                            this.setState({ openhistoryFileDialog: true,pno:1});
                         }}
-                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px",float:"right"}}
+                        style={{float:"right"}}
                     >
                         {"历史记录"}
                     </Button>
@@ -749,19 +1085,19 @@ class Student extends Component {
                             {
                                 key: "file_download",
                                 name: "",
-                                width: 100,
+                                width: 90,
                                 resizable: true
                             },
                             {
                                 key: "file_edit",
                                 name: "",
-                                width: 100,
+                                width: 90,
                                 resizable: true
                             },
                             {
                                 key: "file_delete",
                                 name: "",
-                                width: 100,
+                                width: 90,
                                 resizable: true
                             }
                         ]
@@ -770,7 +1106,7 @@ class Student extends Component {
                     rowGetter={(i) => {
                         if (i === -1) { return {} }
                         return {
-                            id:  this.state.tableData[i].id,
+                            id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
                             file_name: this.state.tableData[i].file_name,
                             file_type: this.state.tableData[i].type_name,
@@ -780,10 +1116,11 @@ class Student extends Component {
                             file_download:<Button
                             //raised
                             title="下载"
-                            className="nyx-org-btn-sm"
+                            className="nyx-org-btn-md"
                             color="primary"
                             style={{minHeight:"25px"}}
                             onClick={() => {
+                                this.state.down_file_url=this.state.tableData[i].url
                                 this.setState({ opendownFileDialog: true });
                                 
                             }}
@@ -793,30 +1130,41 @@ class Student extends Component {
                         file_edit:<Button
                         //raised
                         title="编辑"
-                        className="nyx-org-btn-sm"
+                        className="nyx-org-btn-md"
                         color="primary"
                         style={{minHeight:"25px"}}
                         onClick={() => {
                             this.setState({ openchangeFileDialog: true });
                             this.state.change_file_name=this.state.tableData[i].file_name;
-                            this.state.change_type_name=this.state.tableData[i].type_name;
+                           // this.state.change_type_name=this.state.tableData[i].type_name;
                             this.state.change_edition=this.state.tableData[i].edition;
                             this.state.change_url=this.state.tableData[i].url;
+                            this.state.change_id=this.state.tableData[i].id;
+                            {this.state.type_infos.map((type_infos)=>{
+                                if(this.state.tableData[i].type_name==type_infos.type_name){
+                                    this.setState({
+                                        selected_type_id:type_infos.id
+                                    })
+                                }
+                            })}
                             
-                            console.log(this.state.tableData[i].file_name)
                         }}
                     >
                         {"编辑"}
                     </Button>,
                     file_delete:<Button
                    // raised
-                    className="nyx-org-btn-sm"
+                    className="nyx-org-btn-md"
                     color="primary"
                     title="删除"
                     style={{minHeight:"25px"}}
                     onClick={() => {
+                        this.state.del_file_id=this.state.tableData[i].id;
                         this.popUpNotice(ALERT, 0, "是否删除该文件？", [
                             () => {
+                             this.del_file();
+                             this.state.allData = [];
+                               this.fresh();
                                 this.closeNotice();
                             }, () => {
                                 this.closeNotice();
