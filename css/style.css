@@ -2436,6 +2436,11 @@ button.nyx-document-btn {
   padding-left: 0;
 }
 
+.nyx-file-list-btn {
+  color: #2196F3;
+  cursor: pointer;
+}
+
 .nyx-history-list {
   font-size: 14px;
   width: 97%;

@@ -967,10 +967,10 @@ class Student extends Component {
 
     render() {
         return (
-            <div style={{ marginTop: 80, width: "100%" }}>
+            <div style={{ marginTop: 80, width: "100%",marginLeft:"3rem"}}>
                 <div>
                 <TextField
-                        style={{top:"-0.5rem",left:"1rem"}}
+                        style={{top:"-0.5rem"}}
                         id="search_file_name"
                         label={"搜索文件名称"}
                         value={this.state.search_file_name}
@@ -1043,6 +1043,7 @@ class Student extends Component {
                     
                 </div>
                 <ReactDataGrid
+                   
                     rowKey="id"
                     columns={
                         [
@@ -1106,19 +1107,17 @@ class Student extends Component {
                     rowGetter={(i) => {
                         if (i === -1) { return {} }
                         return {
-                            id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
+                            id: this.state.tableData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
                             file_name: this.state.tableData[i].file_name,
                             file_type: this.state.tableData[i].type_name,
                             file_edition: this.state.tableData[i].edition,
                             file_time: this.state.tableData[i].time,
                             file_upload: this.state.tableData[i].uploader,
-                            file_download:<Button
+                            file_download:<div
                             //raised
                             title="下载"
-                            className="nyx-org-btn-md"
-                            color="primary"
-                            style={{minHeight:"25px"}}
+                            className="nyx-file-list-btn"
                             onClick={() => {
                                 this.state.down_file_url=this.state.tableData[i].url
                                 this.setState({ opendownFileDialog: true });
@@ -1126,53 +1125,46 @@ class Student extends Component {
                             }}
                         >
                             {"下载"}
-                        </Button>,
-                        file_edit:<Button
-                        //raised
-                        title="编辑"
-                        className="nyx-org-btn-md"
-                        color="primary"
-                        style={{minHeight:"25px"}}
-                        onClick={() => {
-                            this.setState({ openchangeFileDialog: true });
-                            this.state.change_file_name=this.state.tableData[i].file_name;
-                           // this.state.change_type_name=this.state.tableData[i].type_name;
-                            this.state.change_edition=this.state.tableData[i].edition;
-                            this.state.change_url=this.state.tableData[i].url;
-                            this.state.change_id=this.state.tableData[i].id;
-                            {this.state.type_infos.map((type_infos)=>{
-                                if(this.state.tableData[i].type_name==type_infos.type_name){
-                                    this.setState({
-                                        selected_type_id:type_infos.id
-                                    })
-                                }
-                            })}
-                            
-                        }}
-                    >
+                        </div>,
+                        file_edit:<div
+                                    title="编辑"
+                                    className="nyx-file-list-btn"
+                                    onClick={() => {
+                                        this.setState({ openchangeFileDialog: true });
+                                        this.state.change_file_name=this.state.tableData[i].file_name;
+                                    // this.state.change_type_name=this.state.tableData[i].type_name;
+                                        this.state.change_edition=this.state.tableData[i].edition;
+                                        this.state.change_url=this.state.tableData[i].url;
+                                        this.state.change_id=this.state.tableData[i].id;
+                                        {this.state.type_infos.map((type_infos)=>{
+                                            if(this.state.tableData[i].type_name==type_infos.type_name){
+                                                this.setState({
+                                                    selected_type_id:type_infos.id
+                                                })
+                                            }
+                                        })}
+                                    }}
+                                >
                         {"编辑"}
-                    </Button>,
-                    file_delete:<Button
-                   // raised
-                    className="nyx-org-btn-md"
-                    color="primary"
-                    title="删除"
-                    style={{minHeight:"25px"}}
-                    onClick={() => {
-                        this.state.del_file_id=this.state.tableData[i].id;
-                        this.popUpNotice(ALERT, 0, "是否删除该文件？", [
-                            () => {
-                             this.del_file();
-                             this.state.allData = [];
-                               this.fresh();
-                                this.closeNotice();
-                            }, () => {
-                                this.closeNotice();
-                            }]);
+                    </div>,
+                    file_delete:<div
+                        className="nyx-file-list-btn"
+                        title="删除"
+                        onClick={() => {
+                            this.state.del_file_id=this.state.tableData[i].id;
+                            this.popUpNotice(ALERT, 0, "是否删除该文件？", [
+                                () => {
+                                this.del_file();
+                                this.state.allData = [];
+                                this.fresh();
+                                    this.closeNotice();
+                                }, () => {
+                                    this.closeNotice();
+                                }]);
                     }}
                 >
                     {"删除"}
-                </Button>,
+                </div>,
 
                             
                         }
