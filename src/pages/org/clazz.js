@@ -186,7 +186,6 @@ class Clazz extends Component {
                 Object.assign({ id: message.data.clazz_id }, clazz)
                 this.state.clazzes.push(clazz)
                 this.setState({ clazzes: this.state.clazzes })
-                this.fresh();
             }
             //console.log(message.msg)
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -202,7 +201,8 @@ class Clazz extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.selectedStudentID = [];
                 this.state.currentPageSelectedID = [];
-                this.queryStudents(1, true)
+               this.state.allData=[];
+                this.queryStudents(1, true);
                 this.fresh();
             }
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -231,9 +231,7 @@ class Clazz extends Component {
     }
 
     deleteClazz = (id) => {
-        console.log(this.state.clazzes)
         var cb = (route, message, arg) => {
-            console.log(arg)
             if (message.code === Code.LOGIC_SUCCESS) {
                 for (var i = 0; i < this.state.clazzes.length; i++) {
                     if (this.state.clazzes[i].id === arg.id) {
@@ -246,7 +244,7 @@ class Clazz extends Component {
                 }
                
                 this.popUpNotice(NOTICE, 0, message.msg);
-                this.fresh();
+               // this.fresh();
                 console.log(this.state.clazzes)
                 // this.setState({ clazzes: this.state.clazzes })
             }
@@ -295,6 +293,7 @@ class Clazz extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.queryClazzStudents(this.state.selected.id);
                 this.popUpNotice(NOTICE, 0, message.msg);
+                this.state.allData=[];
                 this.fresh();
                 var checklist = document.getElementsByName("selected");
                 for(var i=0;i<checklist.length;i++){
@@ -764,7 +763,7 @@ class Clazz extends Component {
     }
 
     handleUptateAllData = (newData) => {
-        this.state.allData=[];
+      //  this.state.allData=[];
         this.state.allData = this.state.allData.concat(newData);
         
 
@@ -779,16 +778,12 @@ class Clazz extends Component {
         }
         this.state.currentPage = page;
         if (this.state.allData.length <= this.state.rowsPerPage * (page - 1) && this.state.allData.length < this.state.count) {
-            // this.handleQueryRechargeCode(false, false);
-            this.queryStudents((Math.floor((this.state.currentPage - 1) / 4) + 1));
+           this.queryStudents((Math.floor((this.state.currentPage - 1) / 4) + 1));
         } else {
             var data = this.state.allData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
             this.state.onloading = false;
-            console.log(this.state.allData)
-            this.setState({ tableData: data });
-            this.state.tableData=[];
             this.state.tableData = data;
-           
+            this.setState({ tableData: data }); 
             if (data.length > 0) {
                 var allCheckBox = true;
                 this.state.currentPageSelectedID = [];
@@ -1802,6 +1797,7 @@ class Clazz extends Component {
             // if (message.code === Code.LOGIC_SUCCESS) {
             //     // this.setState({ clazzes: message.clazz })
             // }
+            this.state.allData=[];
             this.fresh();
             this.queryClazzStudents(this.state.selected.id);
            

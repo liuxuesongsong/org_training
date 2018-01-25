@@ -1840,6 +1840,15 @@ label.react-grid-checkbox-label {
   line-height: 1.5rem;
 }
 
+.nyx-check-code {
+  position: absolute;
+  top: 7.6rem;
+  right: 1rem;
+  color: #2196F3;
+  cursor: pointer;
+  font-size: 14px;
+}
+
 @media only screen and (max-width: 960px) {
   .nyx-form .nyx-form-div {
     width: 100%;
