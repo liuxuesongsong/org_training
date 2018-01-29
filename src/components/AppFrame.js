@@ -41,7 +41,7 @@ import Lang from '../language';
 import Code from '../code';
 import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
-import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE } from '../enum';
+import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE,CHECK_CODE_PASSWORD } from '../enum';
 
 import Base from '../pages/com/infos/base.paper'
 import Express from '../pages/com/infos/express.paper'
@@ -155,11 +155,17 @@ class AppFrame extends Component {
     check_code: "",
     code_img_url: "",
     image: "",
+    register_phone_number:"",
     activeStep: 0,
     index: 0,
+    count:60,
+    liked:true,
+    check_register:true,
     unavailable: false,
     password_error: false,
     repeat_error: false,
+    login_phone:"",
+    register_account:"",
     available_result: "",
     password_result: "",
     repeat_result: "",
@@ -341,6 +347,15 @@ class AppFrame extends Component {
     // { account: account, password: password, type: apptype }
   }
 
+  register_check_button=()=>{
+    var cb = (route, message, arg) => {
+      this.popUpNotice(NOTICE, 0, message.msg);
+      if (message.code === Code.LOGIC_SUCCESS) {
+         
+      }
+  }
+  getData(getRouter(), { session: sessionStorage.session,}, cb, {});
+  }
   handleNext = () => {
     if (this.state.activeStep === 5) {
       this.login(name, password);
@@ -374,123 +389,123 @@ class AppFrame extends Component {
       //   </div>
       case 0:
         return <div>
-          <TextField
-            error={this.state.unavailable}
-            name="register_account"
-            id="register_account"
-            label={Lang[window.Lang].pages.main.com_account}
-            fullWidth={true}
-            defaultValue={sessionStorage.account}
-            onFocus={(e) => {
+        <TextField
+          error={this.state.unavailable}
+          name="register_account"
+          id="register_account"
+          label={Lang[window.Lang].pages.main.com_account}
+          fullWidth={true}
+          defaultValue={sessionStorage.account}
+          onFocus={(e) => {
+            this.setState({
+              unavailable: false,
+              available_result: "请输入公司全称"
+            })
+          }}
+          onBlur={(e) => {
+            if (document.getElementById("register_account").value === "") { } else {
+              this.check_available(document.getElementById("register_account").value);
+            }
+          }}
+          helperText={this.state.available_result}
+        />
+        <TextField
+          error={this.state.password_error}
+          name="register_password"
+          id="register_password"
+          label={Lang[window.Lang].pages.main.password}
+          style={{
+            marginLeft: "auto",
+            marginRight: "auto",
+            marginTop: 20,
+          }}
+          type="password"
+          fullWidth={true}
+          onBlur={(e) => {
+            // if (document.getElementById("register_password").value === "") {
+            //   this.setState({
+            //     password_error: true,
+            //     password_result: Lang[window.Lang].ErrorCode[1001]
+            //   })
+            // } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
+            //   this.setState({
+            //     password_error: true,
+            //     password_result: Lang[window.Lang].ErrorCode[1000]
+            //   })
+            // } else {
+            //   this.setState({
+            //     password_error: false,
+            //     password_result: ""
+            //   })
+            // }
+          }}
+          helperText={this.state.password_result}
+        />
+        <TextField
+          style={{
+            marginLeft: "auto",
+            marginRight: "auto",
+            width: "75%",
+            marginTop: 20,
+          }}
+          error={this.state.repeat_error}
+          name="repeat_password"
+          id="repeat_password"
+          label={Lang[window.Lang].pages.main.repeat_password}
+          type="password"
+          fullWidth={true}
+         
+          onBlur={(e) => {
+            if (document.getElementById("register_password").value === "" && document.getElementById("repeat_password").value === "") {
               this.setState({
-                unavailable: false,
-                available_result: "请输入公司全称"
+                repeat_error: false,
+                password_error: false,
+                repeat_result: "",
+                password_result: ""
               })
-            }}
-            onBlur={(e) => {
-              if (document.getElementById("register_account").value === "") { } else {
-                this.check_available(document.getElementById("register_account").value);
-              }
-            }}
-            helperText={this.state.available_result}
-          />
-          <TextField
-            error={this.state.password_error}
-            name="register_password"
-            id="register_password"
-            label={Lang[window.Lang].pages.main.password}
-            style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              marginTop: 20,
-            }}
-            type="password"
-            fullWidth={true}
-            onBlur={(e) => {
-              // if (document.getElementById("register_password").value === "") {
-              //   this.setState({
-              //     password_error: true,
-              //     password_result: Lang[window.Lang].ErrorCode[1001]
-              //   })
-              // } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
-              //   this.setState({
-              //     password_error: true,
-              //     password_result: Lang[window.Lang].ErrorCode[1000]
-              //   })
-              // } else {
-              //   this.setState({
-              //     password_error: false,
-              //     password_result: ""
-              //   })
-              // }
-            }}
-            helperText={this.state.password_result}
-          />
-          <TextField
-            style={{
-              marginLeft: "auto",
-              marginRight: "auto",
-              width: "75%",
-              marginTop: 20,
-            }}
-            error={this.state.repeat_error}
-            name="repeat_password"
-            id="repeat_password"
-            label={Lang[window.Lang].pages.main.repeat_password}
-            type="password"
-            fullWidth={true}
-           
-            onBlur={(e) => {
-              if (document.getElementById("register_password").value === "" && document.getElementById("repeat_password").value === "") {
+            } else {
+              if (document.getElementById("register_password").value === "") {
+                this.setState({
+                  repeat_error: true,
+                  repeat_result: Lang[window.Lang].ErrorCode[1001]
+                })
+              } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
+                this.setState({
+                  repeat_error: true,
+                  repeat_result: Lang[window.Lang].ErrorCode[1000]
+                })
+              } else {
                 this.setState({
                   repeat_error: false,
                   password_error: false,
                   repeat_result: "",
                   password_result: ""
                 })
-              } else {
-                if (document.getElementById("register_password").value === "") {
-                  this.setState({
-                    repeat_error: true,
-                    repeat_result: Lang[window.Lang].ErrorCode[1001]
-                  })
-                } else if (document.getElementById("repeat_password").value !== document.getElementById("register_password").value) {
-                  this.setState({
-                    repeat_error: true,
-                    repeat_result: Lang[window.Lang].ErrorCode[1000]
-                  })
-                } else {
-                  this.setState({
-                    repeat_error: false,
-                    password_error: false,
-                    repeat_result: "",
-                    password_result: ""
-                  })
-                }
               }
-            }}
-            helperText={this.state.repeat_result}
-          />
-          <Button
-            className="nyx-btn-circle"
-            raised
-            color="primary"
-            onClick={() => {
-              
-              let account = document.getElementById("register_account").value;
-              account=account.replace(/（/g,'('); 
-              account=account.replace(/ /g,''); 
-              account=account.replace(/）/g,')');  
-              console.log(account);
-              let password = document.getElementById("register_password").value;
-              let repeat = document.getElementById("repeat_password").value;
-              this.register(account, password, repeat);//TODO
+            }
+          }}
+          helperText={this.state.repeat_result}
+        />
+        <Button
+          className="nyx-btn-circle"
+          raised
+          color="primary"
+          onClick={() => {
+            
+            let account = document.getElementById("register_account").value;
+            account=account.replace(/（/g,'('); 
+            account=account.replace(/ /g,''); 
+            account=account.replace(/）/g,')');  
+            console.log(account);
+            let password = document.getElementById("register_password").value;
+            let repeat = document.getElementById("repeat_password").value;
+            this.register(account, password, repeat);//TODO
 
-            }}
-          >
-            {Lang[window.Lang].pages.main.register_button}
-          </Button>
-        </div>
+          }}
+        >
+          {Lang[window.Lang].pages.main.register_button}
+        </Button>
+      </div>
       case 2:
         return <div>
           <Base />
@@ -534,45 +549,82 @@ class AppFrame extends Component {
               event => this.setState({ name: event.target.value })}
           />
           <TextField
-            label={"预留联系人手机号"}
+            label={"短信验证码"}
             id={"phone_number"}
             type="phone_number"
             style={{
               marginLeft: "auto",//styleManager.theme.spacing.unit,
               marginRight: "auto",//theme.spacing.unit,  
+              height:"5rem"
             }}
             fullWidth={true}
-            onChange={event => this.setState({ phone_number: event.target.value })}
+            onChange={event => this.setState({ phone_code: event.target.value })}
+            helperText={this.state.login_phone}
           />
+          
           <a
 
-            color="primary"
+           style={{color:"#2196f3"}}
             className={'nyx-send-checkcode'}
             onClick={() => {
-              var cb = (route, message, arg) => {
-                // Code.LOGIC_SUCCESS
-                this.popUpNotice(NOTICE, 0, message.msg);
+             console.log(this.state.name)
+              if(this.state.name==Lang[window.Lang].pages.main.input_your_account){
+                this.popUpNotice(NOTICE, 0,"请输入公司全称");
+                return false;
               }
-              var apptype;
-             // var name = this.state.name;
-             // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
-              if (window.type === 1) {
-                console.log("0000");
-                apptype = APP_TYPE_COMPANY;
-                getData(getRouter("forget_code"), { account: this.state.name, type: 0,tel: this.state.phone_number}, cb, {});
-              } else if (window.type === 2) {
-                console.log("11111");
-                apptype = APP_TYPE_ORANIZATION;
-                getData(getRouter("forget_code"), { account: this.state.name, type: 1,tel: this.state.phone_number}, cb, {});
+              if(this.state.liked){
+                this.timer = setInterval(function () {
+                  var count = this.state.count;
+                  this.state.liked = false;
+                  count -= 1;
+                  if (count < 1) {
+                    this.setState({
+                      liked: true
+                    });
+                    count = 60;
+      　　　　　　　　clearInterval(this.timer);
+                  }
+                  this.setState({
+                    count: count
+                  });
+                }.bind(this), 1000);
               }
-
+              if(this.state.count==60){
+                var cb = (route, message, arg) => {
+                  // Code.LOGIC_SUCCESS
+                  if (message.code === Code.LOGIC_SUCCESS) {
+                   // window.CacheData.base = arg.data;
+                   this.setState({
+                     login_phone:"验证码已发送至"+message.data.tel
+                   })
+                  
+                }
+                  this.popUpNotice(NOTICE, 0, message.msg);
+                }
+                var apptype;
+               // var name = this.state.name;
+               // getData(getRouter("forget_code_login"), { account: this.state.name, code: this.state.phone_code, }, cb, { account: name });
+                if (window.type === 1) {
+                  apptype = APP_TYPE_COMPANY;
+                  console.log(this.state.name)
+                  getData(getRouter("login_sendcode"), { account: this.state.name}, cb, {});
+                } else if (window.type === 2) {
+                  apptype = APP_TYPE_ORANIZATION;
+                 // getData(getRouter("send_code"), { account: this.state.name, type: 1}, cb, {});
+                }
+  
+              }
+              
+             
             //  getData(getRouter("forget_code"), { account: this.state.name, tel: this.state.phone_number, }, cb, {});
 
             }}
+            
           >
-            {"发送手机验证码"}
+            {this.state.liked ? '获取验证码' : this.state.count + '秒后重新获取验证码'}
           </a>
-          <TextField
+          
+          {/* <TextField
             label={"验证码"}
             id={"phone_code" + this.state.index}
             type="phone_code"
@@ -583,13 +635,16 @@ class AppFrame extends Component {
             }}
             fullWidth={true}
             onChange={event => this.setState({ phone_code: event.target.value })}
-          />
+          /> */}
+        
           <Button
             raised
             color="primary"
             className={'nyx-btn-circle'}
             onClick={() => {
-
+              this.setState({
+                login_phone:""
+              })
             var cb = (route, message, arg) => {
               // Code.LOGIC_SUCCESS
               if (message.code === Code.LOGIC_SUCCESS) {
@@ -614,34 +669,27 @@ class AppFrame extends Component {
             if (window.type === 1) {
               console.log("0000");
               apptype = APP_TYPE_COMPANY;
-              getData(getRouter("forget_code_login"), { account: name, type: 0, code: this.state.phone_code }, cb, { account: name, type: apptype });
+              getData(getRouter("login_telcode"), { account: name, code: this.state.phone_code }, cb, { account: name, type: apptype });
             } else if (window.type === 2) {
               console.log("11111");
               apptype = APP_TYPE_ORANIZATION;
-              getData(getRouter("forget_code_login"), { account: name, type: 1,  code: this.state.phone_code}, cb, { account: name, type: apptype });
+              getData(getRouter(CHECK_CODE_PASSWORD), { account: name, type: 1,  code: this.state.phone_code}, cb, { account: name, type: apptype });
             }
-              // var cb = (route, message, arg) => {
-              //   // Code.LOGIC_SUCCESS
-              //   if (message.code === Code.LOGIC_SUCCESS) {
-              //     sessionStorage.logged = true;
-              //     sessionStorage.account = arg["account"];
-              //     sessionStorage.session = message.data.session;
-              //     sessionStorage.apptype = APP_TYPE_COMPANY;
-
-
-              //     this.login_success(APP_TYPE_COMPANY);
-              //     // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
-              //   } else {
-              //     this.popUpNotice(NOTICE, 0, message.msg);
-              //   }
-              // }
-              // console.log(account)
-              // var code = document.getElementById("phone_code").value;
              
             }}
           >
             {"登录"}
           </Button>
+          <br/>
+          <a 
+           style={{color:"#2196f3",fontSize:"12px",cursor:"pointer",position:"relative",top:"2.4rem"}}
+           onClick={() => {
+            this.setState({
+              findPassword: false,
+              login_phone:""
+            })
+          }}
+          >{"密码登录?"}</a>
         </div > :
         <div>
           <TextField
@@ -667,16 +715,7 @@ class AppFrame extends Component {
             fullWidth={true}
             onChange={event => this.setState({ password: event.target.value })}
           />
-
-          {this.state.index === 0 ? <a
-            className="nyx-findpassword"
-            onClick={() => {
-              this.setState({
-                findPassword: true
-              })
-            }}>忘记密码?</a> : ""}
-
-          <TextField
+           <TextField
             label={"验证码"}
             id={"check_code" + this.state.index}
             style={{
@@ -687,35 +726,49 @@ class AppFrame extends Component {
             onChange={event => this.setState({ check_code: event.target.value })}
             fullWidth={true}
           />
-
           <ListItem
 
-            /* onClick={() => {this.get_check_code(); }} */
-            style={{
-              marginLeft: "auto",//styleManager.theme.spacing.unit,
-              marginRight: "auto",//theme.spacing.unit, 
-              width: "25%",
-              display: "inline-block"
-            }}>
-            <img
-              id={"code_img" + this.state.index}
-              style={{
-                height: "45px",
-                position: "absolute",
-                width: "80%"
-              }}
-              src={this.state.code_img_url}
-              onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
+/* onClick={() => {this.get_check_code(); }} */
+style={{
+  marginLeft: "auto",//styleManager.theme.spacing.unit,
+  marginRight: "auto",//theme.spacing.unit, 
+  width: "25%",
+  display: "inline-block"
+}}>
+<img
+  id={"code_img" + this.state.index}
+  style={{
+    height: "45px",
+    position: "absolute",
+    width: "80%"
+  }}
+  src={this.state.code_img_url}
+  onClick={event => this.setState({ code_img: event.target.src = getRouter(CHECK_CODE).url + "&time=" + Math.random() })}
 
 
-            />
+/>
 
-          </ListItem>
+</ListItem>
+           <br/>
+          {this.state.index == 0 ? 
+          <a 
+           style={{color:"#2196f3",fontSize:"12px",cursor:"pointer"}}
+            onClick={() => {
+              this.setState({
+                findPassword: true
+              })
+            }}>{"短息验证码登录?"}</a> : ""}
+
+         
+          
           <Button
             raised
             color="primary"
             className={'nyx-btn-circle'}
             onClick={() => {
+              this.setState({
+                login_phone:""
+              })
               var name = this.state.name;
               name=name.replace(/（/g,'(');  
               name=name.replace(/）/g,')');  

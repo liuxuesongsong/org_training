@@ -167,6 +167,63 @@ class Info extends Component {
         }
         getData(getRouter(UPDATE_COMPANY), { session: sessionStorage.session, company: sendObj }, cb, { self: this, type: objType, data: sendObj });
     }
+    company_message = () =>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                window.CacheData.base = arg.data;
+            }
+            this.fresh();
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var account = this.state.base["account"];
+        account=account.replace(/（/g,'(');  
+        account=account.replace(/ /g,''); 
+        account=account.replace(/）/g,')');  
+   
+        var name = this.state.base["name"],
+            mobile = this.state.base["mobile"],
+            tel = this.state.base["tel"],
+            mail = this.state.base["mail"],
+            department = this.state.base["department"],
+            duty = this.state.base["duty"],
+            wechat = this.state.base["wechat"],
+            c_area_id = this.state.base["c_area_id"],
+            c_level = this.state.base["c_level"],
+            district=this.state.express["district"],
+            receive_phone=this.state.express["receive_phone"],
+            receiver=this.state.express["receiver"],
+            zip_code=this.state.express["zip_code"],
+            bank_account=this.state.finance["bank_account"],
+            c_address=this.state.finance["c_address"],
+            financial_call=this.state.finance["financial_call"],
+            opening_bank=this.state.finance["opening_bank"],
+            taxpayer_number=this.state.finance["taxpayer_number"];
+        
+        var obj = {
+            c_name: account === "" ? null : account,
+            name: name === "" ? null : name,
+            mobile: mobile === "" ? null : mobile,
+            tel: tel === "" ? null : tel,
+            mail: mail === "" ? null : mail,
+            department: department === "" ? null : department,
+            duty: duty === "" ? null : duty,
+            wechat: wechat === "" ? null : wechat,
+            "c_area_id": c_area_id === "" ? null : Number(c_area_id),
+            "c_level": c_level === "" ? null : Number(c_level),
+            receiver: receiver === "" ? null : receiver,
+            district: district === "" ? null : district,
+            receive_phone: receive_phone === "" ? null : receive_phone,
+            zip_code: zip_code === "" ? null : zip_code,
+            taxpayer_number: taxpayer_number === "" ? null : taxpayer_number,
+            opening_bank: opening_bank === "" ? null : opening_bank,
+            bank_account: bank_account === "" ? null : bank_account,
+            c_address: c_address === "" ? null : c_address,
+            financial_call: financial_call === "" ? null : financial_call,
+        }
+        getData(getRouter(UPDATE_COMPANY), {
+            session: sessionStorage.session, company: obj
+        }, cb, { self: this, data: obj });
+    }
 
     toggleDrawer = (open) => () => {
         this.setState({
@@ -561,6 +618,7 @@ class Info extends Component {
                                     });
                                 }}
                             >
+                             <option value={null}>{"-省市-"}</option>
                                 {getAreas().map(area => {
                                     return <option key={area.id} value={area.id}>{area.area_name}</option>
                                 })}
@@ -582,6 +640,7 @@ class Info extends Component {
                                     });
                                 }}
                             >
+                                <option value={null}>{"-等级-"}</option>
                                 <option value={1}>{"1级"}</option>
                                 <option value={2}>{"2级"}</option>
                                 <option value={3}>{"3级"}</option>
@@ -595,43 +654,7 @@ class Info extends Component {
                                        marginTop:"0.5rem"}}
                                 color="accent"
                                 onClick={() => {
-                                    var cb = (route, message, arg) => {
-                                        if (message.code === Code.LOGIC_SUCCESS) {
-                                            window.CacheData.base = arg.data;
-                                        }
-                                        this.fresh();
-                                        this.popUpNotice(NOTICE, 0, message.msg);
-                                    }
-
-                                    var account = document.getElementById("input_account").value;
-                                    account=account.replace(/（/g,'(');  
-                                    account=account.replace(/ /g,''); 
-                                    account=account.replace(/）/g,')');  
-                                    console.log(account);
-                                    var name = document.getElementById("input_name").value;
-                                    var mobile = document.getElementById("input_mobile").value;
-                                    var tel = document.getElementById("input_tel").value;
-                                    var mail = document.getElementById("input_mail").value;
-                                    var department = document.getElementById("input_department").value;
-                                    var duty = document.getElementById("input_duty").value;
-                                    var wechat = document.getElementById("input_wechat").value;
-                                    var c_area_id = document.getElementById("input_c_area_id").value;
-                                    var c_level = document.getElementById("input_c_level").value;
-                                    var obj = {
-                                        c_name: account === "" ? null : account,
-                                        name: name === "" ? null : name,
-                                        mobile: mobile === "" ? null : mobile,
-                                        tel: tel === "" ? null : tel,
-                                        mail: mail === "" ? null : mail,
-                                        department: department === "" ? null : department,
-                                        duty: duty === "" ? null : duty,
-                                        wechat: wechat === "" ? null : wechat,
-                                        "c_area_id": c_area_id === "" ? null : Number(c_area_id),
-                                        "c_level": c_level === "" ? null : Number(c_level),
-                                    }
-                                    getData(getRouter(UPDATE_COMPANY), {
-                                        session: sessionStorage.session, company: obj
-                                    }, cb, { self: this, data: obj });
+                                   this.company_message();
 
                                 }}
                             >
@@ -707,22 +730,7 @@ class Info extends Component {
                                         this.fresh();
                                         this.popUpNotice(NOTICE, 0, message.msg);
                                     }
-                                    
-                                    var zip_code = document.getElementById("zip_code").value;
-                                    var receiver = document.getElementById("input_receiver").value;
-                                    var district = document.getElementById("input_district").value;
-                                    var receive_phone = document.getElementById("input_receive_phone").value;
-                                    var obj = {
-                                        receiver: receiver === "" ? null : receiver,
-                                        district: district === "" ? null : district,
-                                        receive_phone: receive_phone === "" ? null : receive_phone,
-                                        zip_code: zip_code === "" ? null : zip_code
-                                        
-                                    }
-                                  
-                                    getData(getRouter(UPDATE_COMPANY), {
-                                        session: sessionStorage.session, company: obj
-                                    }, cb, { self: this, data: obj });
+                                    this.company_message();
                                 }}
                             >
                                 {Lang[window.Lang].pages.main.certain_button}
@@ -824,24 +832,7 @@ class Info extends Component {
                                         this.popUpNotice(NOTICE, 0, message.msg);
                                     }
 
-                                    var allname = document.getElementById("input_allname").value;
-                                    var taxpayer_number = document.getElementById("input_taxpayer_number").value;
-                                    var opening_bank = document.getElementById("input_opening_bank").value;
-                                    var bank_account = document.getElementById("input_bank_account").value;
-                                    var c_address = document.getElementById("input_c_address").value;
-                                    var financial_call = document.getElementById("input_financial_call").value;
-                                    var obj = {
-                                        c_name: allname === "" ? null : allname,
-                                        taxpayer_number: taxpayer_number === "" ? null : taxpayer_number,
-                                        opening_bank: opening_bank === "" ? null : opening_bank,
-                                        bank_account: bank_account === "" ? null : bank_account,
-                                        c_address: c_address === "" ? null : c_address,
-                                        financial_call: financial_call === "" ? null : financial_call,
-                                    }
-                                   
-                                    getData(getRouter(UPDATE_COMPANY), {
-                                        session: sessionStorage.session, company: obj
-                                    }, cb, { self: this, data: obj });
+                                    this.company_message();
 
                                 }}
                             >

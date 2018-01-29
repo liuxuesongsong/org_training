@@ -37,6 +37,7 @@ class Admin extends Component {
         new_password:"",
         check_password:"",
         check_code:"",
+        available_result:"",
         count:60,
         liked:"true",
         alertOpen: false,
@@ -105,7 +106,9 @@ class Admin extends Component {
         var cb = (route, message, arg) => {
             this.popUpNotice(NOTICE, 0, message.msg);
             if (message.code === Code.LOGIC_SUCCESS) {
-
+                 this.setState({
+                    available_result:"已发送短信至"+this.state.base["mobile"]
+                 })
             }
         }
         getData(getRouter(SEND_CODE), { session: sessionStorage.session, c_name:this.state.base["account"],mobile:this.state.base["mobile"] }, cb, {});
@@ -177,9 +180,11 @@ class Admin extends Component {
                            onChange={(e) => {
                                this.setState({check_code:e.target.value})
                            }
-                             } 
+                             }
+                            
                              fullWidth>         
                                 </TextField>
+                                <p style={{margin:0,marginTop:"3px",fontSize:"12px",color:"#2196F3"}}>{this.state.available_result} </p>
                                 <span
                                 disabled={this.state.liked?false:true}
                                 className="nyx-check-code"
@@ -371,6 +376,9 @@ class Admin extends Component {
                                 style={{position:"absolute",top:"0",right:"1rem",color:"#2196F3",cursor:"pointer"}}
                                 onClick={()=>{
                                     this.state.base["mobile"]?this.setState({ openPasswordDialog: true }): this.popUpNotice(NOTICE, 0, "请在企业信息中添加手机号") 
+                                    this.setState({
+                                        available_result:""
+                                     })
                                 }}
                                 >
                                 <i

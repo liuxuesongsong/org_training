@@ -109,13 +109,13 @@ var AppRouter = {
         nav
         component={Area}
       />
-       <Route
+       {/* <Route
         title={titleize(Lang[window.Lang].pages.org.document.title)}
         path={'/org/document'}
         content={Document}
         nav
         component={Document}
-      />
+      /> */}
     </Route>
   </Router>)
   // 3: (roles, obj) => {

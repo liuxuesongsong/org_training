@@ -20,6 +20,7 @@ const Language = {
                 login_button: "登录",
                 forget_password_button: "忘记密码",
                 register_button: "注册",
+                register_check_button:"验证",
                 certain_button: "确定",
                 cancel_button: "取消",
                 next_step: "跳过",
@@ -49,7 +50,7 @@ const Language = {
                         base_info: {
                             account: "公司全称(在账户信息修改公司全称)",
                             name: "联系人",
-                            mobile: "手机",
+                            mobile: "手机(用于短信验证)",
                             tel: "电话",
                             mail: "E-mail",
                             department: "部门",
@@ -86,9 +87,9 @@ const Language = {
                         change_company:"修改公司全称",
                         new_password: "修改密码",
                         check_password: "确认修改密码",
-                        check_code:"验证码",
+                        check_code:"短信验证码",
                         name: "联系人(在企业相关信息修改)",
-                        mobile: "手机(在企业相关信息修改)",
+                        mobile: "手机(用于短信验证)",
                         mail: "邮箱",
                         duty: "职位",
                         department: "部门"
