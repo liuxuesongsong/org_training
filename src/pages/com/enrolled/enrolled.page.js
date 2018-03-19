@@ -134,6 +134,17 @@ class Enrolled extends Component {
         }
         getData(getRouter(UNROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
+    send_cancel(id){
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.fresh();
+            }
+            this.handleRequestClose()
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+     //   getData(getRouter(UNROLL_STUDENT), { session: sessionStorage.session, id: id }, cb, { id: id });
+        
+    }
 
     // 将新加入的学生排队
     erollStudent(id) {
@@ -782,7 +793,8 @@ class Enrolled extends Component {
                                                         this.state.selectedStudentId = student.id;
                                                         this.popUpNotice(ALERT, 0, "正在安排中,不可取消" + student.name + "报名,请等待通知", [
                                                             () => {
-                                                                //this.cancelEnroll(student.id);
+                                                                console.log(student.id)
+                                                                //this.send_cancel(student.id);
                                                                 this.closeNotice();
                                                             }, () => {
                                                                 this.closeNotice();

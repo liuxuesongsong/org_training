@@ -40,6 +40,7 @@ class Student extends Component {
         change_select_file_type:"",
         change_file_name:"",
         change_type_name:"",
+        changed_type_name:"",
         change_edition:"",
         change_url:"",
         change_id:"",
@@ -435,6 +436,7 @@ class Student extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+        console.log(this.state.new_file_url)
         getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
 
     }
@@ -442,7 +444,25 @@ class Student extends Component {
         
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-               this.fresh();
+               
+                for(var i=0;i<this.state.tableData.length;i++){
+                    if(this.state.tableData[i].id==this.state.change_id){
+                        for(var j = 0;j<this.state.type_infos.length;j++){
+                   
+                            if(this.state.type_infos[j].id==message.data.type_id){
+                               // console.log(this.state.type_infos[j].type_name)
+                                this.state.changed_type_name=this.state.type_infos[j].type_name
+                            }
+                        }
+                        this.state.tableData[i].file_name=message.data.name;
+                        this.state.tableData[i].edition=message.data.edition;
+                        this.state.tableData[i].url=message.data.url;
+                        this.state.tableData[i].type_name=this.state.changed_type_name;
+                        this.state.tableData[i].time=message.data.time;
+                    }
+                }
+                console.log(this.state.tableData)
+              //  document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -459,7 +479,14 @@ class Student extends Component {
         
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-               
+                document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
+            //    for(var i=0;i<this.state.tableData.length;i++){
+            //        //console.log(this.state.tableData[i].id)
+            //     if(this.state.tableData[i].id==this.state.del_file_id){
+            //         console.log(this.state.tableData)
+            //         {this.state.tableData.remove(this.state.tableData[i])}
+            //     }
+            // }
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -468,24 +495,66 @@ class Student extends Component {
         getData(getRouter(DEL_FILE), { session: sessionStorage.session,id:id }, cb, {});
 
     }
-    searchFile = () => {
+    searchFile = (query_page = 1, reload = false) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.state.tableData = [];
-                this.state.tableData = message.data.files;
+                var result = message.data.files;
+                this.handleUptateAllData(result);
+                this.handleUpdateData(this.state.currentPage);
+                this.setState({
+                    totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
+                    count: message.data.count
+                })
+                this.state.count = message.data.count
+                // this.setState({ students: message.data, tableData: message.data })
+            } else {
+
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+        if (reload) {
+            this.state.allData = [];
+            this.state.tableData = [];
+            this.currentPage = 1;
+            this.setState({
+                totalPage: 1,
+                count: 0,
+                is_inlist:1
+                
+            })
+        }
+     
+
        
         getData(getRouter(SEARCH_FILE), {session:sessionStorage.session,name:this.state.search_file_name}, cb, {});
     }
-    search_type = (id) => {
+    search_type =  (query_page = 1, reload = false,id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                this.state.tableData = [];
-                this.state.tableData = message.data.files;
+                var result = message.data.files;
+                this.handleUptateAllData(result);
+                this.handleUpdateData(this.state.currentPage);
+                this.setState({
+                    totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
+                    count: message.data.count
+                })
+                this.state.count = message.data.count
+                // this.setState({ students: message.data, tableData: message.data })
+            } else {
+
             }
             this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        if (reload) {
+            this.state.allData = [];
+            this.state.tableData = [];
+            this.currentPage = 1;
+            this.setState({
+                totalPage: 1,
+                count: 0,
+                is_inlist:1
+                
+            })
         }
        
         getData(getRouter(SEARCH_TYPE), {session:sessionStorage.session,type_id:id}, cb, {});
@@ -559,6 +628,7 @@ class Student extends Component {
                                 onChange={(e) => {
                                     this.setState({
                                         new_select_file_type:e.target.value
+                                        
                                     })
                                 }}
                             >
@@ -688,7 +758,7 @@ class Student extends Component {
                     下载地址
             </DialogTitle>
                 <DialogContent>
-                    <div style={{width:"21rem"}}>
+                    <div style={{width:"33rem"}}>
                     {this.state.down_file_url}
                     </div>
                 </DialogContent>
@@ -981,7 +1051,8 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-sm nyx-document-btn"
                         onClick={() => {
-                            this.searchFile();
+                            this.searchFile(1,true);
+                            document.getElementById("search_file_type").value="";
                             console.log(this.state.search_file_name)
                           //  this.queryStudents(1, true);
                         }}
@@ -996,7 +1067,10 @@ class Student extends Component {
                         className="nyx-info-select-lg"
                         id={"search_file_type"}
                         onChange={(e) => {
-                           this.search_type(e.target.value);
+                            this.setState({
+                                search_file_name: "",
+                            });
+                           this.search_type(1,true,e.target.value);
                         }}
                     >
                         <option value="">{"-类型-"}</option>
@@ -1019,7 +1093,8 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-md nyx-document-btn"
                         onClick={() => {
-                            this.setState({ openaddFileDialog: true });
+                            this.setState({ openaddFileDialog: true,new_file_url:"",new_file_name:"",new_select_file_type:"" });
+                            
                         }}
                     >
                         {"新增文件"}
@@ -1151,8 +1226,8 @@ class Student extends Component {
                             this.popUpNotice(ALERT, 0, "是否删除该文件？", [
                                 () => {
                                 this.del_file();
-                                this.state.allData = [];
-                                this.fresh();
+                                //this.state.allData = [];
+                               // this.fresh();
                                     this.closeNotice();
                                 }, () => {
                                     this.closeNotice();

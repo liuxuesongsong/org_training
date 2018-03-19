@@ -1764,6 +1764,15 @@ class Clazz extends Component {
                             this.cancelTrain();
                         }}
                     >退回学生</Button>
+                    {/* <Button
+                    raised
+                    color="primary"
+                    className="nyx-org-btn-md"
+                    //style={{minWidth:"70px",minHeight:"30px",margin:"0.2rem",padding:0}}
+                        onClick={() => {
+                          //  this.cancelTrain();
+                        }}
+                    >取消报名</Button> */}
                     {this.state.showStudents === true ?
                         <Drawer
                             anchor="right"
