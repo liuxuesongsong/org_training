@@ -17,11 +17,11 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import TextField from 'material-ui/TextField';
 import Card, { CardHeader, CardActions, CardContent, CardMedia } from 'material-ui/Card';
-
+import Drawer from 'material-ui/Drawer';
 import { initCache, getData, getRouter,getInst, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
     LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
-    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT,NOTICE,EDIT_PASSWORD
+    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT,NOTICE,EDIT_PASSWORD,SEARCH_COMPANYINFO,RESET_PASSWORD,CLASS_COUNT_TIME
 } from '../../enum';
 import Lang from '../../language';
 import Code from '../../code';
@@ -46,6 +46,14 @@ class Home extends Component {
         unarrange_count:[],
         myinfo:[],
         modules_id:[],
+        company_name:"",
+        company_message_arr:[],
+        change_company_password:"",
+        new_date:"",
+        date_arr:[],
+        first_time:"",
+        second_time:"",
+        year_train_count:[],
         // 界面状态
 
         // 提示状态
@@ -56,6 +64,7 @@ class Home extends Component {
          alertAction: [],
          openNewStudentDialog: false,
          openPasswordDialog: false,
+        openCompanyPasswordDialog: false,
          alertType: "notice",
          alertContent: "登录成功",
     };
@@ -92,19 +101,22 @@ class Home extends Component {
             // all_students
         }
         getData(getRouter(LAST_COUNT), { session: sessionStorage.session }, cb, {});
-
+       
         var cb = (router, message, arg) => {
             window.currentPage.setState({
                 clazz_count: message.data.clazz_count,
                 train_count: message.data.train_count,
                 unarrange_count: message.data.unarrange_count,
                 myinfo:message.data.myinfo,
-                modules_id:message.data.myinfo.modules_id
-               
+                modules_id:message.data.myinfo.modules_id,
+               // new_date:d.getFullYear()
                 
             })
             
         }
+        
+       
+        
        
         getData(getRouter(INST_QUERY), { session: sessionStorage.session }, cb, {});
         window.currentPage.state.clazz_count = getCache("clazz_count").sort((a, b) => {
@@ -116,6 +128,33 @@ class Home extends Component {
         window.currentPage.state.unarrange_count = getCache("unarrange_count").sort((a, b) => {
             return b.id - a.id
         });
+    }
+    date_arr() {
+        var components = [],
+         d = new Date(),
+        new_date=d.getFullYear();
+    for(var i=2017;i<=new_date;i++){
+        var first_date = new Date(i+"-01-01 00:00:00"),
+            first_time = first_date.getTime().toString(),
+            first_time = first_time.substring(0,10),
+            second_date = new Date(i+"-12-31 23:59:59"),
+            second_time = second_date.getTime().toString(),
+            second_time = second_time.substring(0,10);
+            components.push(
+                <option selected={true?"i=new_date":""} value={first_time+second_time} key={i}>{i}</option>
+            )
+        }
+        return components
+    }
+    class_count_time=()=>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+              this.setState({
+                  year_train_count:message.data.train_count
+              })
+            }
+        }
+        getData(getRouter(CLASS_COUNT_TIME), { session: sessionStorage.session, first_time: this.state.first_time,second_time:this.state.second_time }, cb, {}); 
     }
     closeNotice = () => {
         this.setState({
@@ -139,8 +178,31 @@ class Home extends Component {
             alertAction: action
         });
     }
-
-
+    toggleDrawer = (open) => () => {
+        if(open==false){
+            this.state.btns=0;
+        }
+         this.setState({
+             right: open,
+             showInfo: true
+         });
+     };
+    company_message=()=>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+            this.setState({
+                company_message_arr:message.data
+            })
+            }
+        }
+        getData(getRouter(SEARCH_COMPANYINFO), { session: sessionStorage.session, c_name: this.state.company_name }, cb, {}); 
+    }
+    change_company_password=()=>{
+        var cb = (route, message, arg) => {
+            this.popUpNotice(NOTICE, 0, message.msg);  
+        }
+        getData(getRouter(RESET_PASSWORD), { session: sessionStorage.session, account: this.state.change_company_password }, cb, {}); 
+    }
     init_num(num){
         return num?num:0
     }
@@ -158,14 +220,14 @@ class Home extends Component {
         }
        
          var  password=document.getElementById("check_password_org").value;
-        console.log(password)
 
         getData(getRouter(EDIT_PASSWORD), { session: sessionStorage.session, password: password }, cb, {});
     }
     handleRequestClose = () => {
         this.setState({
           
-            openPasswordDialog: false
+            openPasswordDialog: false,
+            openCompanyPasswordDialog:false
         })
     }
     changePasswordDialog = () => {
@@ -178,26 +240,23 @@ class Home extends Component {
                 <DialogContent>
                     <div>
                     <TextField
-                                    className="nyx-form-div"
-                                    key={"newpasswordorg"}
-                                    id="new_password_org"
-                                    type="password"
-                                    label={Lang[window.Lang].pages.org.home.new_password}
-                                    
-                                    fullWidth>
-                                </TextField>
-                                <TextField
-                                    className="nyx-form-div"
-                                    key={"checkpasswordorg"}
-                                    id="check_password_org"
-                                    type="password"
-                                    label={Lang[window.Lang].pages.org.home.check_password}
-                                    
-                                    fullWidth>
-                                </TextField>
+                        className="nyx-form-div"
+                        key={"newpasswordorg"}
+                        id="new_password_org"
+                        type="password"
+                        label={Lang[window.Lang].pages.org.home.new_password}
                         
+                        fullWidth>
+                    </TextField>
+                    <TextField
+                        className="nyx-form-div"
+                        key={"checkpasswordorg"}
+                        id="check_password_org"
+                        type="password"
+                        label={Lang[window.Lang].pages.org.home.check_password}
                         
-                     
+                        fullWidth>
+                    </TextField>
                     </div>
                 </DialogContent>
                 <DialogActions>
@@ -229,15 +288,43 @@ class Home extends Component {
         )
 
     }
-    // canvas(area){
-    //     var components=<canvas ref={this.canvas_content} className="canvas"  id={"canvas"+area.area_id} style={{width:300,height:150,position:"absolute",top:"3rem",backgroundColor:"#fff"
-    //     ,zIndex:"1000"}}></canvas>
-    //     // console.log("render")
-    //     return components
-    // }
-    // refCb(instance){
-    //   console.log(instance.id)
-    // }
+
+    changeCompanyPasswordDialog = () => {
+        return (
+            <Dialog open={this.state.openCompanyPasswordDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                是否将{this.state.change_company_password}重置密码
+            </DialogTitle>
+                
+            <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                
+                                this.change_company_password();
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions> 
+                
+            </Dialog >
+        )
+
+    }
+  
  
     render() {
         return (
@@ -282,16 +369,36 @@ class Home extends Component {
                                     }}
                                     >刷新数据</Button>
                             </div>
+                           
                             <div>
                             {Lang[window.Lang].pages.org.home.registered + "/" + Lang[window.Lang].pages.org.home.all_registered + ":"
                                     + this.state.registered_nums + Lang[window.Lang].pages.com.home.human + "/" + this.state.all_registered_nums + Lang[window.Lang].pages.com.home.human}
                             </div>
+                            <select
+                            onChange={event => {
+                                    this.state.first_time = event.target.value.substring(0,10),
+                                    this.state.second_time = event.target.value.substring(10,20)
+                                
+                                {this.class_count_time()}
+                            }}
+                            >
+                                <option value={"1483200000"+Date.parse(new Date())/1000}>All</option>
+                                {this.date_arr()}
+                            </select>
+                            <br/>
                             <div  style={{width:200,float:"left"}}>
-                            {this.state.clazz_count.map(
-                                clazz_count =>
-                            <div key={clazz_count.ti_id}><span style={{display:"block",float:"left",width:"100px"}}>{getInst(clazz_count.ti_id)}</span><span>{"已建立:"+clazz_count.num+"班"}</span></div>
-                                )}
+                            {this.state.year_train_count.length==0?
+                                this.state.clazz_count.map(
+                                    clazz_count =>
+                                <div key={clazz_count.ti_id}><span style={{display:"block",float:"left",width:"100px"}}>{getInst(clazz_count.ti_id)}</span><span>{"已建立:"+clazz_count.num+"班"}</span></div>
+                                    )
+                                : this.state.year_train_count.map(
+                                    clazz_count =>
+                                <div key={clazz_count.ti_id}><span style={{display:"block",float:"left",width:"100px"}}>{getInst(clazz_count.ti_id)}</span><span>{"已建立:"+clazz_count.num+"班"}</span></div>
+                                    )}
+                            
                             </div>
+                            
                             <div style={{width:100,float:"left"}}>
                             {this.state.train_count.map(
                                 train_count =>
@@ -342,7 +449,125 @@ class Home extends Component {
 
                         </Paper>
                     </div>
+                    
                     {this.state.modules_id.indexOf('1')==-1?"":
+                    <div>
+                        <div style={{ margin: 10,float: "left",marginRight:"1rem",width:"300px" }}>
+                        <Paper  style={{ padding: 10,height:"150px" }}>
+                            <Typography type="headline" component="h5">
+                              重置公司密码
+                            </Typography>
+                            <div
+                            style={{float:"left",width:"70%"}}
+                            >可搜索相关公司，将对应的公司密码重置为12345678。重置前请审核企业相关信息无误。</div>
+                            <Typography type="body1" component="div">
+                            <div>
+                            
+                             
+                          
+                            
+                                <Button
+                                raised
+                                style={{float:"right"}}
+                                color="primary"
+                                className="nyx-org-btn-md"
+                                // className="nyx-home-button"
+                                    onClick={()=>{
+                                        this.toggleDrawer(true)()
+                                        this.state.company_message_arr=[]
+                                    }}
+                                    >重置密码</Button>
+                                     
+                            </div>
+                    
+                        
+                                                       
+                            
+                            </Typography>
+
+                        </Paper>
+                    </div>
+                    <Drawer
+                        anchor="right"
+                        open={this.state.right}
+                        onRequestClose={this.toggleDrawer(false)}
+                        >
+                        <div key="draw-class"  style={{ width: "700px" }}>
+                        <div className="nyx-clazz-list" style={{boxShadow:"none",width:"100%",paddingTop:10}}>
+                            <TextField
+                            style={{width:"70%",marginLeft:"4rem"}}
+                                className="nyx-form-div"
+                                label={"公司全称"}
+                                onChange={event => {
+                                    var name = event.target.value;
+                                        name=name.replace(/（/g,'(');  
+                                        name=name.replace(/）/g,')');  
+                                        name=name.replace(/ /g,''); 
+                                    this.setState({
+                                        company_name:name
+                                    })
+                                }}
+                                >
+                            </TextField>
+                            <Button
+                                raised
+                                    color="primary"
+                                    id='check_company_message'
+                                   
+                                    onClick={() => {
+                                         this.company_message()
+                                    }}
+                                   
+                                style={{margin: 0,marginLeft:15,padding:"0",minHeight:30,minWidth:50 }}
+                                >
+                                    {"查询"}
+                                    </Button>
+                                    <table 
+                                     //style={{margin:"1rem"}}
+            className="nyx-search-company-table"
+            >
+                <tr>
+                    <td>公司全称</td><td>纳税人识别号</td><td>联系人</td><td>联系电话</td><td>地址</td><td colspan="2">报名人数</td><td></td>
+                </tr>
+               
+                    {this.state.company_message_arr.map(company_message => {
+                        return <tr>
+                        <td title={company_message.c_name}>{company_message.c_name}</td>
+                        <td title={company_message.taxpayer_number}>{company_message.taxpayer_number}</td>
+                        <td title={company_message.name}>{company_message.name}</td>
+                        <td title={company_message.mobile}>{company_message.mobile}</td>
+                        <td title={company_message.c_address}>{company_message.c_address}</td>
+                        <td title={company_message.number}>{company_message.number}</td>
+                        <td>
+                        <Button
+                                raised
+                                    color="primary"
+                                    id='check_company_message'
+                                   
+                                    onClick={()=>{
+
+                                        this.setState({ openCompanyPasswordDialog: true,
+                                        change_company_password:company_message.c_name
+                                        });
+                                    }}
+                                   
+                               style={{margin: 0,padding:"0",minHeight:30,minWidth:70 }}
+                                >
+                                    {"重置密码"}
+                                    </Button> 
+                        </td>
+                    </tr>
+                    })}
+            </table>
+                               
+                          
+                            
+
+
+    
+</div>
+</div>
+</Drawer>
                     <div className="nyx-areacount-list">
                         <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)
                         <Button
@@ -616,13 +841,15 @@ class Home extends Component {
                             )
                         }
                         )}
-                    </div>
+                    </div></div>
                     }
                     <div style={{ margin: 10, width: 300,height:150, float: "left" }}>
                        
                     </div>
                 </div>
+                
                 {this.changePasswordDialog()}
+                {this.changeCompanyPasswordDialog()}
                
                 <CommonAlert
                     show={this.state.alertOpen}

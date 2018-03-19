@@ -435,7 +435,6 @@ class Student extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        console.log("hahah ")
         getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
 
     }
@@ -454,7 +453,6 @@ class Student extends Component {
              edition = document.getElementById("change_file_edit").value,
         
              type_id = this.state.change_type_name==""?this.state.selected_type_id:this.state.change_type_name;
-    console.log(type_id)
                getData(getRouter(EDIT_FILE), { session: sessionStorage.session,id:this.state.change_id, name:name,edition:edition,url:url,type_id:type_id }, cb, {});
              }
     del_file = () => {
@@ -473,7 +471,6 @@ class Student extends Component {
     searchFile = () => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(message.data.files)
                 this.state.tableData = [];
                 this.state.tableData = message.data.files;
             }
@@ -485,7 +482,6 @@ class Student extends Component {
     search_type = (id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-                console.log(message.data.files)
                 this.state.tableData = [];
                 this.state.tableData = message.data.files;
             }
@@ -554,7 +550,7 @@ class Student extends Component {
                            fullWidth>
                      </TextField>  
                      <p
-                        style={{margin:0,marginTop:"1rem",color:"rgba(0, 0, 0, 0.53)"}}
+                        style={{margin:0,marginTop:"0.1rem",fontSize:"12px",color:"rgba(0, 0, 0, 0.53)"}}
                             >文件类型</p>
                             
                             <select
@@ -642,7 +638,7 @@ class Student extends Component {
                            fullWidth>
                      </TextField>  
                      <p
-                        style={{margin:0,marginTop:"1rem",color:"rgba(0, 0, 0, 0.53)"}}
+                        style={{margin:0,marginTop:"0.1rem",fontSize:"12px",color:"rgba(0, 0, 0, 0.53)"}}
                             >文件类型</p>
                             
                             <select

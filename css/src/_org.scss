@@ -336,6 +336,21 @@ button.nyx-clazz-card-button{
     text-overflow:ellipsis;
   }
 }
+.nyx-search-company-table{
+  margin: 10px;
+  margin-top: 1rem;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  width: 97%;
+  table-layout:fixed;
+  border-collapse: collapse;  
+  td{
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+}
 .nyx-input-date{
   display: inline-block;
   position: relative;
