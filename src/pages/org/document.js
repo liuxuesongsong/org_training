@@ -26,7 +26,7 @@ class Student extends Component {
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         currentPage: 1,
-       
+        selected:{},
         totalPage: 1,
         rowsPerPage: 10,             //每页显示数据
         count: 0,
@@ -431,6 +431,7 @@ class Student extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.allData=[];
+                document.getElementById("search_file_type").value="";
                this.fresh()
             }
            
@@ -458,7 +459,7 @@ class Student extends Component {
                         this.state.tableData[i].edition=message.data.edition;
                         this.state.tableData[i].url=message.data.url;
                         this.state.tableData[i].type_name=this.state.changed_type_name;
-                        this.state.tableData[i].time=message.data.time;
+                        this.state.tableData[i].time=this.timestamp2Time(message.data.time+"000", "-");
                     }
                 }
                 console.log(this.state.tableData)
@@ -685,7 +686,7 @@ class Student extends Component {
                            key={"change_file_name"}
                            id="change_file_name"
                          
-                           defaultValue={this.state.change_file_name}
+                           defaultValue={this.state.selected["file_name"] ? this.state.selected["file_name"] : ""}
                            label={Lang[window.Lang].pages.org.document.info.file_name}
                            fullWidth>
                      </TextField>
@@ -694,7 +695,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_url"}
                            id="change_file_url"
-                           defaultValue={this.state.change_url}
+                           defaultValue={this.state.selected["url"] ? this.state.selected["url"] : ""}
                            label={Lang[window.Lang].pages.org.document.info.file_url}
                            fullWidth>
                      </TextField>  
@@ -703,7 +704,7 @@ class Student extends Component {
                            className="nyx-form-div"
                            key={"change_file_edit"}
                            id="change_file_edit"
-                           defaultValue={this.state.change_edition}
+                           defaultValue={this.state.selected["edition"] ? this.state.selected["edition"] : ""}
                            label={Lang[window.Lang].pages.org.document.info.file_edit}
                            fullWidth>
                      </TextField>  
@@ -1127,13 +1128,13 @@ class Student extends Component {
                             {
                                 key: "file_name",
                                 name: "文件名称",
-                                width: 180,
+                                width: 220,
                                 resizable: true
                             },
                             {
                                 key: "file_type",
                                 name: "文件类型",
-                                width: 100,
+                                width: 200,
                                 resizable: true
                             },
                             {
@@ -1180,7 +1181,10 @@ class Student extends Component {
                         return {
                             id: this.state.tableData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
-                            file_name: this.state.tableData[i].file_name,
+                            file_name:  <div title={this.state.tableData[i].file_name}
+                                            style={{textAlign:"left",paddingLeft:"0.5rem"}}>
+                                            {this.state.tableData[i].file_name}
+                                        </div>,
                             file_type: this.state.tableData[i].type_name,
                             file_edition: this.state.tableData[i].edition,
                             file_time: this.state.tableData[i].time,
@@ -1201,12 +1205,14 @@ class Student extends Component {
                                     title="编辑"
                                     className="nyx-file-list-btn"
                                     onClick={() => {
+                                        this.state.selected = this.state.tableData[i];
+                                        console.log(this.state.selected)
                                         this.setState({ openchangeFileDialog: true });
-                                        this.state.change_file_name=this.state.tableData[i].file_name;
-                                    // this.state.change_type_name=this.state.tableData[i].type_name;
-                                        this.state.change_edition=this.state.tableData[i].edition;
-                                        this.state.change_url=this.state.tableData[i].url;
-                                        this.state.change_id=this.state.tableData[i].id;
+                                    //     this.state.change_file_name=this.state.tableData[i].file_name;
+                                    // // this.state.change_type_name=this.state.tableData[i].type_name;
+                                    //     this.state.change_edition=this.state.tableData[i].edition;
+                                    //     this.state.change_url=this.state.tableData[i].url;
+                                         this.state.change_id=this.state.tableData[i].id;
                                         {this.state.type_infos.map((type_infos)=>{
                                             if(this.state.tableData[i].type_name==type_infos.type_name){
                                                 this.setState({

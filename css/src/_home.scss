@@ -192,12 +192,12 @@
     }
     .nyx-card-name-lg{
       
-        width: 8em;
+        width: 6.3em;
         color: $grey900;
         @extend .nyx-oneline;
     }
     .nyx-card-first-info{
-        width: 220px;
+        width: 175px;
         color: #212121;
         margin-right: 2rem;
         color: $grey900;
@@ -207,6 +207,7 @@
         color: $grey500;
         margin-bottom: 0.5rem;
         float: left;
+        width: 12rem;
     }
     .nyx-card-key{
         //width:8rem;
@@ -377,6 +378,51 @@
     color: $blue;
     cursor: pointer;
     font-size: 14px;
+}
+.nyx-message-card{
+    height: 24px;
+    overflow: hidden;
+    font-size: 12px;
+  //  transition: height .3s;
+    //transition-delay: 1.5s;
+    margin:0rem 1rem;
+    border-bottom:1px solid #BDBDBD;
+    padding:0rem;
+    padding-top: 2px;
+}
+.nyx-message-card-block{
+  margin:0rem 1rem;
+  padding:0rem;
+  font-size: 12px;
+  border-bottom:1px solid #BDBDBD;
+  height: 74px;
+  padding-top: 2px;
+}
+
+.nyx-message-card-block-lg{
+    margin:0rem 1rem;
+    padding:0rem;
+    font-size: 12px;
+    border-bottom:1px solid #BDBDBD;
+    height: 94px;
+    padding-top: 2px;
+  }
+.nyx-message-hidden{
+    overflow: hidden;
+    display: inline-block;
+    margin: 0;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.nyx-message-unread-name{
+    color: #0D47A1;
+}
+.nyx-message-read{
+    color: $grey500;
+}
+.nyx-message-unread{
+    color: $blue;
 }
 @media only screen and (max-width:960px ){
     .nyx-form{

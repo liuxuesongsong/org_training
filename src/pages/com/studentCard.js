@@ -14,6 +14,7 @@ import {
   CARD_TYPE_ARRANGE,
   CARD_TYPE_EXAM,
   CARD_TYPE_UNARRANGE,
+  CARD_TYPE_UNARRANGE_ING,
   CARD_TYPE_KNOW,
   STATUS_AGREED_AGREE,
 } from '../../enum';
@@ -131,9 +132,21 @@ class ComCard extends Component {
         );
       case CARD_TYPE_UNARRANGE:
         return (
-          <button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
-            取消
-          </button>
+          <div><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
+		  取消
+		</button>
+		<span 
+		style={{marginLeft:"0.1rem"}}
+		>待安排</span></div>
+		);
+		case CARD_TYPE_UNARRANGE_ING:
+        return (
+          <div><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
+		  撤销
+		</button>
+		<span 
+		style={{marginLeft:"0.1rem"}}
+		>待确定</span></div>
         );
       default:
         return this.getStatusDescribe();
@@ -175,13 +188,13 @@ class ComCard extends Component {
             <div className="nyx-card-body">
               <div className="nyx-card-round-ing" />
               <div className="nyx-card-first-info">
-                <div className={'nyx-card-name'}>{name}</div>
-                <div className={'nyx-card-name-lg'}>{getCourse(level)}</div>
-                <div className={'nyx-card-name'}>{getCity(city)}</div>
+                <div title={name} className={'nyx-card-name'}>{name}</div>
+                <div title={getCourse(level)} className={'nyx-card-name-lg'}>{getCourse(level)}</div>
+                <div title={getCity(city)} className={'nyx-card-name'}>{getCity(city)}</div>
               </div>
               <div className="nyx-card-second-info">
-                <div className={'nyx-card-value'}>{mobile}</div>
-                <div className={'nyx-card-value'}>{email}</div>
+                <div title={mobile} style={{width:"3.5rem"}} className={'nyx-card-value'}>{mobile}</div>
+                <div title={email} style={{width:"3.5rem"}} className={'nyx-card-value'}>{email}</div>
                 {institution !== 0 ? <div className={'nyx-card-value'}>{getInst(institution)}</div> : null}
               </div>
             </div>

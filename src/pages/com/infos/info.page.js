@@ -31,7 +31,7 @@ import Finance from './finance.paper';
 import Express from './express.paper';
 import Admin from './admin.paper';
 
-import { initCache, getCache, getData,companyRegex, getRouter, getCity, getAreas } from '../../../utils/helpers';
+import { initCache, getCache, getData,companyRegex, getRouter, getCity, getAreas,getCourses } from '../../../utils/helpers';
 import Lang from '../../../language';
 import Code from '../../../code';
 

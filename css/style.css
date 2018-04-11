@@ -1654,12 +1654,12 @@ label.react-grid-checkbox-label {
 }
 
 .nyx-card .nyx-card-name-lg {
-  width: 8em;
+  width: 6.3em;
   color: #212121;
 }
 
 .nyx-card .nyx-card-first-info {
-  width: 220px;
+  width: 175px;
   color: #212121;
   margin-right: 2rem;
   color: #212121;
@@ -1670,6 +1670,7 @@ label.react-grid-checkbox-label {
   color: #9E9E9E;
   margin-bottom: 0.5rem;
   float: left;
+  width: 12rem;
 }
 
 .nyx-card .nyx-card-value {
@@ -1847,6 +1848,54 @@ label.react-grid-checkbox-label {
   color: #2196F3;
   cursor: pointer;
   font-size: 14px;
+}
+
+.nyx-message-card {
+  height: 24px;
+  overflow: hidden;
+  font-size: 12px;
+  margin: 0rem 1rem;
+  border-bottom: 1px solid #BDBDBD;
+  padding: 0rem;
+  padding-top: 2px;
+}
+
+.nyx-message-card-block {
+  margin: 0rem 1rem;
+  padding: 0rem;
+  font-size: 12px;
+  border-bottom: 1px solid #BDBDBD;
+  height: 74px;
+  padding-top: 2px;
+}
+
+.nyx-message-card-block-lg {
+  margin: 0rem 1rem;
+  padding: 0rem;
+  font-size: 12px;
+  border-bottom: 1px solid #BDBDBD;
+  height: 94px;
+  padding-top: 2px;
+}
+
+.nyx-message-hidden {
+  overflow: hidden;
+  display: inline-block;
+  margin: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.nyx-message-unread-name {
+  color: #0D47A1;
+}
+
+.nyx-message-read {
+  color: #9E9E9E;
+}
+
+.nyx-message-unread {
+  color: #2196F3;
 }
 
 @media only screen and (max-width: 960px) {

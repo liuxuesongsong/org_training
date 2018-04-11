@@ -112,7 +112,7 @@ const Language = {
                     },
                     select:
                     {
-                        "course_id": "中项或高项",
+                        "course_id": "课程名称",
                         "area_id": "培训城市"
                     },
                     title: "学生",

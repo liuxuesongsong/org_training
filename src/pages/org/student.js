@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
-import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse, getTotalPage, getAreas } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
 import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, } from '../../enum';
 
@@ -254,9 +254,10 @@ class Student extends Component {
                             this.state.queryCondition.course_id =  e.target.value == "null"? null:e.target.value;
                         }}
                     >
-                        <option value={"null"}>{"-中项或高项-"}</option>
-                        <option value={1}>{"项目经理"}</option>
-                        <option value={2}>{"高级项目经理"}</option>
+                        <option value={"null"}>{"-课程名称-"}</option>
+                        {getCourses().map(course => {
+                                return <option key={course.id} value={course.id}>{course.course_name}</option>
+                            })}
 
                     </select>
                     <select
