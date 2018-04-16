@@ -2003,6 +2003,11 @@ label.react-grid-checkbox-label {
   width: 384px;
 }
 
+.nyx-resit-name {
+  display: inline-block;
+  margin: 0;
+}
+
 @media only screen and (max-width: 800px) {
   .nyx-enroller-paper {
     width: 320px;

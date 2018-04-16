@@ -69,6 +69,7 @@ class Clazz extends Component {
         rowsPerPage: 25,             //每页显示数据
         count: 0,
         btns:0,
+        resit_btn:0,
         change_area:0,
         change_course:0,
         onloading: false,
@@ -149,6 +150,34 @@ class Clazz extends Component {
      * @param reload 重新载入数据
      */
     queryStudents = (query_page = 1, reload = false) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                var result = message.data.students;
+                this.handleUptateAllData(result);
+                this.handleUpdateData(this.state.currentPage);
+                this.setState({
+                    totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
+                    count: message.data.count
+                })
+                this.state.count = message.data.count
+                // this.setState({ students: message.data, tableData: message.data })
+            } else {
+
+            }
+        }
+        //console.log(this.state.count)
+        if (reload) {
+            this.state.allData = [];
+            this.state.tableData = [];
+            this.currentPage = 1;
+            this.setState({
+                totalPage: 1,
+                count: 0
+            })
+        }
+        getData(getRouter(SELECT_STUDNETS), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
+    }
+    resitStudents = (query_page = 1, reload = false) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 var result = message.data.students;
@@ -1038,6 +1067,7 @@ class Clazz extends Component {
                                                     className="nyx-clazz-card-button"
                                                     dense
                                                     onClick={() => {
+                                                        this.state.resit_btn=0;
                                                         this.setState({
                                                             queryCondition: {},
                                                             selected: {},
@@ -1067,6 +1097,7 @@ class Clazz extends Component {
                                                         this.state.queryCondition = {};
                                                         this.queryStudents(1, true);
                                                         this.state.btns=0;
+                                                        this.state.resit_btn=0;
                                                         document.getElementById("search_course_id").value=null;
                                                         document.getElementById("search_area_id").value=null;
                                                         return
@@ -1135,7 +1166,7 @@ class Clazz extends Component {
                                                     <Button
                                                         raised
                                                         color="primary"
-                                                        className="nyx-org-btn-md"
+                                                        className="nyx-org-btn-sm"
                                                       //  style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                                                         onClick={() => {
                                                             this.state.btns=clazz.id;
@@ -1154,9 +1185,33 @@ class Clazz extends Component {
                                                             })
                                                             this.queryStudents(1, true);
                                                         }}>
-                                                        {"添加学生"}
+                                                        {"+培训"}
                                                     </Button>
-                                                   
+                                                    <Button
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-sm"
+                                                      //  style={{ minWidth:"70px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+                                                        onClick={() => {
+                                                            this.state.resit_btn=1;
+                                                            this.state.btns=clazz.id;
+                                                            this.state.selected = clazz;
+                                                            this.state.showStudents = true;
+                                                            this.state.queryCondition = {}
+                                                            this.state.queryCondition.course_id = clazz.course_id;
+                                                            document.getElementById("search_course_id").value=clazz.course_id;
+                                                            document.getElementById("search_area_id").value=clazz.area_id;
+                                                            this.state.queryCondition.area_id = clazz.area_id;
+                                                            this.setState({
+                                                                stateSelected: true,
+                                                                selectedStudentID:[]
+                                                                //search_course_id:clazz.course_id,
+                                                               // search_area_id:search_area_id
+                                                            })
+                                                            this.resitStudents(1, true);
+                                                        }}>
+                                                        {"+补考"}
+                                                    </Button>
                                                    
                                                 </CardActions>
                                             </div>
@@ -1843,7 +1898,7 @@ class Clazz extends Component {
                     <div className="nyx-right-bottom-table" >
                         <ReactDataGrid
                             rowKey="id"
-                            columns={
+                            columns={this.state.resit_btn==0?
                                 [
                                     {
                                         key: "id",
@@ -1873,6 +1928,61 @@ class Clazz extends Component {
                                     {
                                         key: "detail",
                                         name: "分班记录",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "area_name",
+                                        name: "培训城市",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "course_name",
+                                        name: "课程",
+                                        width: 100,
+                                        resizable: true
+                                    },{
+                                        key: "company_mobile",
+                                        name: "联系电话",
+                                        width: 100,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "company_mail",
+                                        name: "联系邮箱",
+                                        width: 120,
+                                        resizable: true
+                                    },
+                                ]:[
+                                    {
+                                        key: "id",
+                                        name: "序号",
+                                        width: 40,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "student_name",
+                                        name: "姓名",
+                                        width: 80,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "company_name",
+                                        name: "公司全称",
+                                        width: 200,
+                                        resizable: true
+                                    },
+                                    {
+                                        key: "company_admin",
+                                        name: "联系人",
+                                        width: 80,
+                                        resizable: true
+                                    },
+                                    
+                                    {
+                                        key: "detail",
+                                        name: "上次班级id",
                                         width: 100,
                                         resizable: true
                                     },

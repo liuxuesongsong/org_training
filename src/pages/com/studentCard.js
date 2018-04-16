@@ -93,7 +93,7 @@ class ComCard extends Component {
         );
       case CARD_TYPE_ARRANGE:
         return (
-          <CardActions style={{ height: '1.5rem' }}>
+          <CardActions style={{ height: '1.5rem',paddingRight:0 }}>
             {this.state.status === '' ?
               (
                 <button className="nyx-card-button" onClick={this.props.action[0]}>
@@ -132,7 +132,7 @@ class ComCard extends Component {
         );
       case CARD_TYPE_UNARRANGE:
         return (
-          <div><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
+          <div style={{marginRight:"0.5rem"}}><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
 		  取消
 		</button>
 		<span 
@@ -141,7 +141,7 @@ class ComCard extends Component {
 		);
 		case CARD_TYPE_UNARRANGE_ING:
         return (
-          <div><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
+          <div style={{marginRight:"0.5rem"}}><button className="nyx-card-unarrange-button" onClick={this.props.action[0]}>
 		  撤销
 		</button>
 		<span 
