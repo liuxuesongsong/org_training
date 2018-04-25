@@ -297,6 +297,7 @@ class AppFrame extends Component {
     }
     var cb = (route, message, arg) => {
       if (message.code === Code.LOGIC_SUCCESS) {
+        
         sessionStorage.session = message.data.session;
         sessionStorage.accent = arg.account;
         sessionStorage.apptype = 1;
@@ -327,6 +328,7 @@ class AppFrame extends Component {
       
       // Code.LOGIC_SUCCESS
       if (message.code === Code.LOGIC_SUCCESS) {
+      //  debugger;
         console.log(message.data.session);
         sessionStorage.logged = true;
         sessionStorage.modules_id = message.data.modules_id;
@@ -334,6 +336,7 @@ class AppFrame extends Component {
         sessionStorage.session = message.data.session;
         sessionStorage.apptype = arg["type"];
         this.login_success(Number(arg["type"]));
+        console.log(sessionStorage)
         // this.popUpNotice(NOTICE, message.code, Lang[window.Lang].pages.main.login_success);
       } else {
         this.popUpNotice(NOTICE, 0, message.msg);

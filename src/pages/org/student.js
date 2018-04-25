@@ -13,6 +13,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 import Code from '../../code';
 import Lang from '../../language';
 import CommonAlert from '../../components/CommonAlert';
+import { fstat } from 'fs';
 class Student extends Component {
     state = {
         allData: [],
@@ -43,6 +44,7 @@ class Student extends Component {
         search_is_inlist: 1,
         search_institution: 0,
         resitshowInfo: false,
+        showStudents:false,
          // 提示状态
          alertOpen: false,
          alertType: ALERT,
@@ -69,8 +71,8 @@ class Student extends Component {
             
         // }
         this.setState({
-            resitshowInfo: open,
-            right: open,
+            resitshowInfo: true,
+            resitright: open,
         });
      
     };
@@ -100,8 +102,6 @@ class Student extends Component {
                     count: message.data.count
                 })
                 this.state.count = message.data.count
-                console.log("学生列表")
-                console.log(this.state.tableData)
                 // this.setState({ students: message.data, tableData: message.data })
             } else {
 
@@ -225,8 +225,9 @@ class Student extends Component {
             page = this.state.resittotalPage;
         }
         this.state.resitcurrentPage = page;
-        if (this.state.allResitData.length <= this.state.rowsPerPage * (page - 1) && this.state.allResitData.length < this.state.count) {
+        if (this.state.allResitData.length <= this.state.rowsPerPage * (page - 1) && this.state.allResitData.length < this.state.resitcount) {
             // this.handleQueryRechargeCode(false, false);
+            console.log(page)
             this.queryResitStudents((Math.floor((this.state.resitcurrentPage - 1) / 4) + 1));
         } else {
             var data = this.state.allResitData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
@@ -311,113 +312,7 @@ class Student extends Component {
         console.log(sessionStorage);
         getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
     }  
-    resit_list = () => {
-        
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-               this.state.resit_list=message.data.resitinfos
-               console.log(this.state.resit_list)
-               //console.log(document.getElementById("idData").rows.length)
-               
-            }
-           
-            this.popUpNotice(NOTICE, 0, message.msg);
-        }
-        getData(getRouter("select_all_resits"), { session: sessionStorage.session, }, cb, {});
-
-    }
-    goPage= (pno,psize) =>{
-        // {this.historyFileDialog()}
-        var components = [];
-        var num = this.state.resit_list.length;//表格所有行数(所有记录数)
-        var totalPage = 0;//总页数
-        var pageSize = psize;//每页显示行数
-       // //总共分几页 
-       if(num/pageSize > parseInt(num/pageSize)){   
-               totalPage=parseInt(num/pageSize)+1;   
-          }else{   
-              totalPage=parseInt(num/pageSize);   
-          }   
-       var currentPage = pno;//当前页数
-        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
-        var endRow = currentPage * pageSize;//结束显示的行   40
-        endRow = (endRow > num)? num : endRow;    40
-       // console.log(startRow)
-
-        this.state.resit_list.map((resit_list)=>{
-      //  console.log(this.state.resit_list.indexOf(resit_list)+1>=startRow &&this.state.resit_list.indexOf(resit_list)+1<=endRow?"哈哈哈":"嘿嘿")
-           
-          components.push (<tr
-                  style={{maxHeight:"25px",display:this.state.resit_list.indexOf(resit_list)+1>=startRow &&this.state.resit_list.indexOf(resit_list)+1<=endRow?"":"none"}}
-                  key = {resit_list.id}> 
-                  <td width={60} height={25} style={{textAlign:"center"}}>{this.state.resit_list.indexOf(resit_list)+1}</td>
-                
-                  <td title={resit_list.student_name} width={80}  style={{textAlign:"center"}}>{resit_list.student_name}</td>
-                  <td title={resit_list.company_name} width={120} style={{textAlign:"center"}}>{resit_list.company_name}</td>
-                  <td title={getCity(resit_list.area_id)} width={120} style={{textAlign:"center"}}>{getCity(resit_list.area_id)}</td>
-                  <td title={getCourse(resit_list.course_id)} width={120} style={{textAlign:"center"}}>{getCourse(resit_list.course_id)}</td>
-                  <td title={resit_list.train_class_id} width={80}  style={{textAlign:"center"}}>{resit_list.train_class_id}</td>
-                  <td title={getInst(resit_list.train_institution)} width={120} style={{textAlign:"center"}}>{getInst(resit_list.train_institution)}</td>
-                  <td title={resit_list.company_admin} width={80}  style={{textAlign:"center"}}>{resit_list.company_admin}</td>
-                  <td title={resit_list.company_mobile} width={80}  style={{textAlign:"center"}}>{resit_list.company_mobile}</td>
-                  <td title={resit_list.company_mail} width={80}  style={{textAlign:"center"}}>{resit_list.company_mail}</td>
-                </tr>
-        )});
-         return components
-        
-     }
-     change_page = (pno,psize)=>{
-        var num = this.state.resit_list.length;//表格所有行数(所有记录数)
-        var totalPage = 0;//总页数
-        var pageSize = psize;//每页显示行数
-       // //总共分几页 
-       if(num/pageSize > parseInt(num/pageSize)){   
-               totalPage=parseInt(num/pageSize)+1;   
-          }else{   
-              totalPage=parseInt(num/pageSize);   
-          }   
-       var currentPage = this.state.pno;//当前页数
-        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
-        var endRow = currentPage * pageSize;//结束显示的行   40
-        endRow = (endRow > num)? num : endRow;    40
-        var components =<div>
-            <span>{"共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页"}</span>
-        <a 
-         className="nyx-change-page-href"
-         onClick={()=>{
-             this.setState({
-                 pno:1
-             })
-            currentPage>1?this.goPage(this.state.pno,"+psize+"):""
-         }}
-         >首页</a>
-        <a 
-            className="nyx-change-page-href" onClick={()=>{
-            // console.log("currentPage"+currentPage)
-            // console.log("goPage("+(currentPage-1)+","+psize+")")
-            currentPage>1?this.setState({pno:this.state.pno-1}):""
-            currentPage>1?this.goPage(this.state.pno,"+psize+"):""
-        }}
-         >{"<上一页"}</a>
-        <a 
-            className="nyx-change-page-href" 
-            onClick={()=>{
-           // console.log("goPage("+(currentPage+1)+","+psize+")")
-            currentPage<totalPage?this.setState({pno:this.state.pno+1}):""
-           { this.goPage("+(currentPage+1)+","+psize+")}
-            currentPage<totalPage?this.goPage(this.state.pno,"+psize+"):""
-        }}
-         >{"下一页>"}</a>
-        <a 
-             className="nyx-change-page-href"
-             onClick={()=>{
-             currentPage<totalPage?this.setState({pno:totalPage}):""
-            currentPage<totalPage?this.goPage(this.state.pno,"+psize+"):""} }
-        >{"尾页"}</a>
-        </div>
-
-     return components
-     }   
+   
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -550,7 +445,7 @@ class Student extends Component {
                             this.queryResitStudents(1,true) //查看补考列表
                            // console.log(this.state.tableResitData)
                         }}
-                        style={{float:"right",marginRight:"2rem",marginTop:"0.6rem",minWidth:"100px"}}
+                        style={{marginRight:"2rem",top:"-0.25rem",minWidth:"100px"}}
                     >
                         <i
                     className="glyphicon glyphicon-tasks"
@@ -558,7 +453,268 @@ class Student extends Component {
                     ></i>{"补考列表"}
                     </Button>
                 </div>
-                
+                <Drawer
+                       
+                       anchor="right"
+                       open={this.state.resitright}
+                       onRequestClose={this.resitDrawer(false)}
+                   >
+                    <div style={{width:"1000px",paddingLeft:"1rem",paddingTop:"1rem"}}> 
+
+                    <select
+                    style={{marginLeft:20}}
+                        className="nyx-info-select-lg"
+                        id="search_resit_area_id"
+                        label={Lang[window.Lang].pages.org.clazz.info.area}
+                        defaultValue={this.state.search_resit_area_id === null ? "" : this.state.search_resit_area_id}
+                        onChange={(e) => {
+                            console.log(e.target.value)
+                            this.state.search_resit_area_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryResitCondition.area_id =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >   
+                        <option value={"null"}>{"-省市-"}</option>
+                        {getAreas().map(area => {
+                            return <option key={area.id} value={area.id}>{area.area_name}</option>
+                        })}
+                    </select>
+                    <select
+                        style={{marginLeft:"1rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_resit_course_id"}
+                        defaultValue={this.state.search_resit_course_id ? this.state.search_resit_course_id : ""}
+                        disabled={this.state.search_resit_course_id == -1 ? true : false}
+                        onChange={(e) => {
+                            this.state.search_resit_course_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryResitCondition.course_id =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-课程名称-"}</option>
+                        {getCourses().map(course => {
+                                return <option key={course.id} value={course.id}>{course.course_name}</option>
+                            })}
+
+                    </select>
+                    <select
+                        style={{marginLeft:"1rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_resit_is_inlist"}
+                        //defaultValue={1}
+                       // Value={this.state.search_resit_is_inlist ? this.state.search_resit_is_inlist : 0}
+                        onChange={(e) => {
+                            this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
+                            this.state.queryResitCondition.state = e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-所有状态-"}</option>
+                      
+                        <option value={1}>{"待安排"}</option>
+                        <option value={2}>{"已安排"}</option>
+                       
+
+                    </select>
+                   
+                    <TextField
+                        style={{top:"-0.5rem",left:"1rem"}}
+                        id="search_resit_input"
+                        label={"搜索公司名称"}
+                        value={this.state.search_input}
+                        onChange={event => {
+                            this.setState({
+                                search_input: event.target.value,
+                            });
+                        }}
+                    />
+                    <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-sm"
+                        onClick={() => {
+                            this.state.queryResitCondition.company_name = document.getElementById("search_resit_input").value;
+                            
+                            this.queryResitStudents(1, true);
+                        }}
+                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
+                    >
+                        {"搜索"}
+                    </Button>
+
+
+                    <ReactDataGrid
+                        
+                     //style={{overflow:"hidden"}}
+                       rowKey="id"
+                       columns={
+                       [
+                           {
+                               key: "id",
+                               name: "序号",
+                               width: 40,
+                               resizable: true
+                           },
+                           {
+                               key: "student_name",
+                               name: "姓名",
+                               width: 70,
+                               resizable: true
+                           },
+                           {
+                               key: "company_name",
+                               name: "公司全称",
+                               width: 130,
+                               resizable: true
+                           },
+                           {
+                               key: "area_name",
+                               name: "培训城市",
+                               width: 80,
+                               resizable: true
+                           },
+                           {
+                               key: "course_name",
+                               name: "课程",
+                               width: 80,
+                               resizable: true
+                           },
+                           {
+                               key: "old_class_id",
+                               name: "上次培训班级id",
+                               width: 60,
+                               resizable: true
+                           },{
+                               key: "institution",
+                               name: "上次培训机构",
+                               width: 100,
+                               resizable: true
+                           },{
+                               key: "resit_state",
+                               name: "补考状态",
+                               width: 80,
+                               resizable: true
+                           },
+                           {
+                               key: "company_admin",
+                               name: "联系人",
+                               width: 100,
+                               resizable: true
+                           },
+                           
+                           {
+                               key: "company_mobile",
+                               name: "联系电话",
+                               width: 100,
+                               resizable: true
+                           },
+                           
+                           {
+                               key: "company_mail",
+                               name: "联系邮箱",
+                               width: 100,
+                               resizable: true
+                           }
+                       ]
+                   }
+                   
+                   rowGetter={(i) => {
+                       if (i === -1) { return {} }
+                       return {
+                           id: this.state.allResitData.indexOf(this.state.tableResitData[i]) + 1,
+                           student_id: this.state.tableResitData[i].id,
+                           student_name: this.state.tableResitData[i].student_name,
+                           company_name: this.state.tableResitData[i].company_name,
+                           company_admin: this.state.tableResitData[i].company_admin,
+                           company_mobile: this.state.tableResitData[i].company_mobile,
+                           company_mail: this.state.tableResitData[i].company_mail,
+                          resit_state:this.state.tableResitData[i].state === "1" ? "待安排" :
+                          this.state.tableResitData[i].state === "2" ? "已安排" :"",
+                          old_class_id: this.state.tableResitData[i].train_class_id,
+                          institution: getInst(this.state.tableResitData[i].train_institution),
+                           area_name: getCity(this.state.tableResitData[i].area_id),
+                           course_name: getCourse(this.state.tableResitData[i].course_id),
+                          
+                       }
+                   }}
+                   rowsCount={this.state.tableResitData.length}
+                   onRowClick={(rowIdx, row) => {
+                       if (rowIdx !== -1) {
+                           this.handleSelection(rowIdx, row);
+                       }
+                   }}
+                   renderColor={(idx) => { return "black" }}
+                   maxHeight={1000}
+                   minHeight={535}
+                   rowHeight={20}
+                   
+                   
+               />
+               <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitPre();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"上页"}
+               </Button>
+               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
+               <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitNext();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"下页"}
+               </Button>
+               <Button
+                raised
+                color="primary"
+                className="nyx-org-btn-sm"
+               // style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
+               onClick={() => {
+                   var all_area;
+                   var all_course;
+                   var all_is_inlist;
+                   var all_institution;
+                   {this.state.search_resit_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_resit_area_id)}
+                   {this.state.search_resit_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_resit_course_id)}
+                   var my_select_is_inlist=document.getElementById('search_resit_is_inlist');
+                   var is_inlist_index=my_select_is_inlist.selectedIndex;
+                  // var my_select_institution=document.getElementById('search_institution');
+                   //var institution_index=my_select_institution.selectedIndex;
+                   //console.log(document.getElementById('search_is_inlist').value)
+                   {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
+                 //  {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
+                   this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
+                       () => {
+                           var href =  getRouter("export_resit").url+"&session=" + sessionStorage.session;
+                           if(this.state.queryResitCondition.area_id!=undefined && this.state.queryResitCondition.area_id!=null){
+                                href = href+"&area_id=" + this.state.queryResitCondition.area_id;
+                           }
+                           if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
+                            href = href+"&state=" + this.state.queryResitCondition.state;
+                           }
+                        //    if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
+                        //         href = href+"&institution=" + this.state.queryCondition.institution;
+                        //    }
+                           if(this.state.queryResitCondition.course_id!=undefined && this.state.queryResitCondition.course_id!=null){
+                            href = href+"&course_id=" + this.state.queryResitCondition.course_id;
+                           } 
+                           var a = document.createElement('a');
+                           a.href = href;
+                        //    console.log(href);
+                           a.click();  
+                           this.closeNotice();
+                       }, () => {
+                           this.closeNotice();
+                       }]);
+
+
+                 
+               }}
+               >导出</Button>
+                   </div>
+                   </Drawer>
                 <ReactDataGrid
                     
                     rowKey="id"
@@ -763,290 +919,7 @@ class Student extends Component {
                     this.state.search_is_inlist == 1? this.checkTrain():"";
                 }}
                 >添加为该机构学员</Button>
-                <Drawer
-                       id="resit_drawer"
-                       anchor="right"
-                       open={this.state.right}
-                       onRequestClose={this.resitDrawer(false)}
-                   >
-                    <div style={{width:"1000px",paddingLeft:"1rem",paddingTop:"2rem"}}> 
-
-                    <select
-                    style={{marginLeft:20}}
-                        className="nyx-info-select-lg"
-                        id="search_resit_area_id"
-                        label={Lang[window.Lang].pages.org.clazz.info.area}
-                        defaultValue={this.state.search_resit_area_id === null ? "" : this.state.search_resit_area_id}
-                        onChange={(e) => {
-                            console.log(e.target.value)
-                            this.state.search_resit_area_id =  e.target.value == "null"? null:e.target.value;
-                            this.state.queryResitCondition.area_id =  e.target.value == "null"? null:e.target.value;
-                        }}
-                    >   
-                        <option value={"null"}>{"-省市-"}</option>
-                        {getAreas().map(area => {
-                            return <option key={area.id} value={area.id}>{area.area_name}</option>
-                        })}
-                    </select>
-                    <select
-                        style={{marginLeft:"1rem"}}
-                        className="nyx-info-select-lg"
-                        id={"search_resit_course_id"}
-                        defaultValue={this.state.search_resit_course_id ? this.state.search_resit_course_id : ""}
-                        disabled={this.state.search_resit_course_id == -1 ? true : false}
-                        onChange={(e) => {
-                            this.state.search_resit_course_id =  e.target.value == "null"? null:e.target.value;
-                            this.state.queryResitCondition.course_id =  e.target.value == "null"? null:e.target.value;
-                        }}
-                    >
-                        <option value={"null"}>{"-课程名称-"}</option>
-                        {getCourses().map(course => {
-                                return <option key={course.id} value={course.id}>{course.course_name}</option>
-                            })}
-
-                    </select>
-                    <select
-                        style={{marginLeft:"1rem"}}
-                        className="nyx-info-select-lg"
-                        id={"search_resit_is_inlist"}
-                        //defaultValue={1}
-                       // Value={this.state.search_resit_is_inlist ? this.state.search_resit_is_inlist : 0}
-                        onChange={(e) => {
-                            this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
-                            this.state.queryResitCondition.is_inlist = e.target.value == "null"? null:e.target.value;
-                        }}
-                    >
-                        <option value={"null"}>{"-所有状态-"}</option>
-                      
-                        <option value={1}>{"待安排"}</option>
-                        <option value={2}>{"已安排"}</option>
-                       
-
-                    </select>
-                   
-                    <TextField
-                        style={{top:"-0.5rem",left:"1rem"}}
-                        id="search_resit_input"
-                        label={"搜索公司名称"}
-                        value={this.state.search_input}
-                        onChange={event => {
-                            this.setState({
-                                search_input: event.target.value,
-                            });
-                        }}
-                    />
-                    <Button
-                        raised 
-                        color="primary"
-                        className="nyx-org-btn-sm"
-                        onClick={() => {
-                            this.state.queryResitCondition.company_name = document.getElementById("search_resit_input").value;
-                            this.queryResitStudents(1, true);
-                        }}
-                        style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
-                    >
-                        {"搜索"}
-                    </Button>
-
-
-                    <ReactDataGrid
-                        
-                     //style={{overflow:"hidden"}}
-                       rowKey="id"
-                       columns={
-                       [
-                           {
-                               key: "id",
-                               name: "序号",
-                               width: 40,
-                               resizable: true
-                           },
-                           {
-                               key: "student_name",
-                               name: "姓名",
-                               width: 70,
-                               resizable: true
-                           },
-                           {
-                               key: "company_name",
-                               name: "公司全称",
-                               width: 130,
-                               resizable: true
-                           },
-                           {
-                               key: "area_name",
-                               name: "培训城市",
-                               width: 80,
-                               resizable: true
-                           },
-                           {
-                               key: "course_name",
-                               name: "课程",
-                               width: 80,
-                               resizable: true
-                           },
-                           {
-                               key: "old_class_id",
-                               name: "上次培训班级id",
-                               width: 60,
-                               resizable: true
-                           },{
-                               key: "institution",
-                               name: "上次培训机构",
-                               width: 100,
-                               resizable: true
-                           },{
-                               key: "resit_state",
-                               name: "补考状态",
-                               width: 80,
-                               resizable: true
-                           },
-                           {
-                               key: "company_admin",
-                               name: "联系人",
-                               width: 100,
-                               resizable: true
-                           },
-                           
-                           {
-                               key: "company_mobile",
-                               name: "联系电话",
-                               width: 100,
-                               resizable: true
-                           },
-                           
-                           {
-                               key: "company_mail",
-                               name: "联系邮箱",
-                               width: 100,
-                               resizable: true
-                           }
-                       ]
-                   }
-                   
-                   rowGetter={(i) => {
-                       if (i === -1) { return {} }
-                       return {
-                           id: this.state.allResitData.indexOf(this.state.tableResitData[i]) + 1,
-                           student_id: this.state.tableResitData[i].id,
-                           student_name: this.state.tableResitData[i].student_name,
-                           company_name: this.state.tableResitData[i].company_name,
-                           company_admin: this.state.tableResitData[i].company_admin,
-                           company_mobile: this.state.tableResitData[i].company_mobile,
-                           company_mail: this.state.tableResitData[i].company_mail,
-                          resit_state:this.state.tableResitData[i].company_mail,
-                          old_class_id: this.state.tableResitData[i].train_class_id,
-                          institution: getInst(this.state.tableResitData[i].train_institution),
-                           area_name: getCity(this.state.tableResitData[i].area_id),
-                           course_name: getCourse(this.state.tableResitData[i].course_id),
-                          
-                       }
-                   }}
-                   rowsCount={this.state.tableResitData.length}
-                   onRowClick={(rowIdx, row) => {
-                       if (rowIdx !== -1) {
-                           this.handleSelection(rowIdx, row);
-                       }
-                   }}
-                   renderColor={(idx) => { return "black" }}
-                   maxHeight={1000}
-                   minHeight={535}
-                   rowHeight={20}
-                   
-                   
-               />
-                {/* <table
-                    className="nyx-history-list"
-                   id="idData"
-                   >
-                       <tr style={{textAlign:"center",maxHeight:"25px"}}>
-                           <td  height={25} width={60}>序号</td>
-                           <td width={100}>姓名</td>
-                           <td width={80}>公司全称</td>
-                           <td width={120}>培训城市</td>
-                           <td width={120}>培训课程</td>
-                           <td width={120}>上次培训班级id</td>
-                           <td width={120}>上次培训机构</td>
-                           <td width={120}>联系人</td>
-                           <td width={120}>联系电话</td>
-                           <td width={120}>联系邮箱</td>
-                        </tr>
-                       {this.goPage(this.state.pno,this.state.psize)}
-                   </table>
-                  </div>
-                   
-                  
-                    <div className="nyx-change-page"
-                      
-                    >{this.change_page(1,10)} */}
-               <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitPre();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"上页"}
-               </Button>
-               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
-               <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitNext();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"下页"}
-               </Button>
-               <Button
-                raised
-                color="primary"
-                className="nyx-org-btn-sm"
-               // style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
-               onClick={() => {
-                   // var all_area;
-                   // var all_course;
-                   // var all_is_inlist;
-                   // var all_institution;
-                   // {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
-                   // {this.state.search_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_course_id)}
-                   // var my_select_is_inlist=document.getElementById('search_is_inlist');
-                   // var is_inlist_index=my_select_is_inlist.selectedIndex;
-                   // var my_select_institution=document.getElementById('search_institution');
-                   // var institution_index=my_select_institution.selectedIndex;
-                   // //console.log(document.getElementById('search_is_inlist').value)
-                   // {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
-                   // {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
-                   // this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_institution+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
-                   //     () => {
-                   //         var href =  getRouter("export_csv").url+"&session=" + sessionStorage.session;
-                   //         if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
-                   //              href = href+"&area_id=" + this.state.queryCondition.area_id;
-                   //         }
-                   //         if(this.state.queryCondition.is_inlist!=undefined && this.state.queryCondition.is_inlist!=null){
-                   //          href = href+"&is_inlist=" + this.state.queryCondition.is_inlist;
-                   //         }
-                   //         if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
-                   //              href = href+"&institution=" + this.state.queryCondition.institution;
-                   //         }
-                   //         if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
-                   //          href = href+"&course_id=" + this.state.queryCondition.course_id;
-                   //         } 
-                   //         var a = document.createElement('a');
-                   //         a.href = href;
-                   //      //    console.log(href);
-                   //         a.click();  
-                   //         this.closeNotice();
-                   //     }, () => {
-                   //         this.closeNotice();
-                   //     }]);
-
-
-                 
-               }}
-               >导出</Button>
-                   </div>
-                   </Drawer>
+                
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

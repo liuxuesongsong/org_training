@@ -585,6 +585,54 @@ this.handleRequestClose()
 			   </div>
 			   </div>
 		   )
+		   case "6":
+			return (
+				<div
+				className={this.state.btns==message.message_id?"nyx-message-card-block":"nyx-message-card" }
+				   onClick={() => {
+					  if(message.is_read==0){
+						this.check_message(message.message_id);
+					  }
+					   this.setState({
+						   btns:message.message_id
+					   })
+					  
+					   }}>
+				   <div className={message.is_read==1?"nyx-message-read":"nyx-message-unread"}>
+			   <div>
+				   <span
+				   className={message.is_read==1?"nyx-message-read":"nyx-message-unread-name"}
+				   ><p 
+				   style={{width:"1.2rem",float:"left",margin:"0"}}
+				   >{index+1}.</p>{getMessage(message.type_id)}</span><span 
+				   style={{marginLeft:"0.5rem"}}
+				   >{message.name}</span>
+				  <Button  raised
+					 style={message.is_read==0?{backgroundColor:"#2196f3",color:"#FFFFFF",float:"right",margin:0,padding:0,minHeight:"18px",minWidth:"34px",marginLeft:"0.3rem"}:{backgroundColor:"#ececec",color:"#9E9E9E",float:"right",margin:0,padding:0,minHeight:"18px",minWidth:"34px",marginLeft:"0.3rem"}}>查看</Button>
+					<span
+					style={{float:"right"}}
+					>{message.is_read==0?"未读":"已读"} {this.timestampToTime(message.time)}</span>
+			   </div>
+			   <div
+			    style={{marginLeft:"1.2rem",height:"18px"}}>
+				<p title={message.name} className="nyx-message-hidden" style={{width:"2.5rem"}}>{message.name}</p> 
+				    <p className="nyx-message-hidden"> 成功报名 {getInst(message.ti_id)} </p>
+				    <p title={getCourse(message.course_id)+"培训班"} className="nyx-message-hidden" style={{width:"6.5rem",marginLeft:"0.2rem"}}>{getCourse(message.course_id)}培训班</p>
+					
+			   </div>
+			   <div 
+			   style={{marginLeft:"1.2rem",height:"18px"}}>
+			    {message.train_starttime ==null?"":"开班时间:"+message.train_starttime.substr(0,4)+"/"+message.train_starttime.substr(4,2)+"/"+message.train_starttime.substr(6,2)} {message.class_head==null?"":"班主任:"+message.class_head}
+				
+			   </div>
+			   <div 
+			   style={{marginLeft:"1.2rem"}}>
+			   {message.mobile==null?"":"联系方式:"+message.mobile}
+			
+			   </div>
+			   </div>
+			   </div>
+		   )
 		
 		}
 
