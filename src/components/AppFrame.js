@@ -43,10 +43,6 @@ import config from '../config';
 import { initCache, getData, getRouter, getCache } from '../utils/helpers';
 import { APP_TYPE_COMPANY, CHECK_CODE, APP_TYPE_ORANIZATION, APP_TYPE_UNLOGIN, NOTICE, LOGIN, ORG_LOGIN, REGISTER_COMPANY, CHECK_AVAILABLE,CHECK_CODE_PASSWORD,REGISTER_CHECKCODE,REGISTER_NEW } from '../enum';
 
-import Base from '../pages/com/infos/base.paper'
-import Express from '../pages/com/infos/express.paper'
-import Finance from '../pages/com/infos/finance.paper'
-import Admin from '../pages/com/infos/admin.paper'
 
 import CommonAlert from './CommonAlert';
 import BeingLoading from './BeingLoading';
