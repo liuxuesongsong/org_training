@@ -130,7 +130,6 @@ class Student extends Component {
                     resittotalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
                     resitcount: message.data.count
                 })
-                console.log(this.state.tableResitData)
                 this.state.resitcount = message.data.count
             } else {
 
@@ -227,7 +226,6 @@ class Student extends Component {
         this.state.resitcurrentPage = page;
         if (this.state.allResitData.length <= this.state.rowsPerPage * (page - 1) && this.state.allResitData.length < this.state.resitcount) {
             // this.handleQueryRechargeCode(false, false);
-            console.log(page)
             this.queryResitStudents((Math.floor((this.state.resitcurrentPage - 1) / 4) + 1));
         } else {
             var data = this.state.allResitData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
@@ -309,7 +307,6 @@ class Student extends Component {
            // clazz_id: id,
             student_ids: this.state.selectedStudentID
         }
-        console.log(sessionStorage);
         getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
     }  
    
@@ -325,7 +322,6 @@ class Student extends Component {
                         label={Lang[window.Lang].pages.org.clazz.info.area}
                         defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                         onChange={(e) => {
-                            console.log(e.target.value)
                             this.state.search_area_id =  e.target.value == "null"? null:e.target.value;
                             this.state.queryCondition.area_id =  e.target.value == "null"? null:e.target.value;
                         }}
@@ -424,7 +420,7 @@ class Student extends Component {
                             this.setState(
                                 {search_is_inlist:1,search_institution:0},
                                 ()=>{
-                                    console.log(this.state.is_inlist)}
+                                }
                             );
                         }}
                         style={{margin: 15,marginLeft:0,position:"relative",top:"-5px"}}
@@ -436,14 +432,8 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-lg"
                         onClick={() => {
-                           
-                            //this.state.allResitData=[];
-                            //this.state.tableResitData=[];
                             this.resitDrawer(true)()//打开补考抽屉
-                           // this.resit_list();//table
-                          
                             this.queryResitStudents(1,true) //查看补考列表
-                           // console.log(this.state.tableResitData)
                         }}
                         style={{marginRight:"2rem",top:"-0.25rem",minWidth:"100px"}}
                     >
@@ -468,7 +458,6 @@ class Student extends Component {
                         label={Lang[window.Lang].pages.org.clazz.info.area}
                         defaultValue={this.state.search_resit_area_id === null ? "" : this.state.search_resit_area_id}
                         onChange={(e) => {
-                            console.log(e.target.value)
                             this.state.search_resit_area_id =  e.target.value == "null"? null:e.target.value;
                             this.state.queryResitCondition.area_id =  e.target.value == "null"? null:e.target.value;
                         }}
@@ -499,21 +488,15 @@ class Student extends Component {
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_resit_is_inlist"}
-                        //defaultValue={1}
-                       // Value={this.state.search_resit_is_inlist ? this.state.search_resit_is_inlist : 0}
                         onChange={(e) => {
                             this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
                             this.state.queryResitCondition.state = e.target.value == "null"? null:e.target.value;
                         }}
                     >
                         <option value={"null"}>{"-所有状态-"}</option>
-                      
                         <option value={1}>{"待安排"}</option>
                         <option value={2}>{"已安排"}</option>
-                       
-
                     </select>
-                   
                     <TextField
                         style={{top:"-0.5rem",left:"1rem"}}
                         id="search_resit_input"
@@ -538,11 +521,7 @@ class Student extends Component {
                     >
                         {"搜索"}
                     </Button>
-
-
                     <ReactDataGrid
-                        
-                     //style={{overflow:"hidden"}}
                        rowKey="id"
                        columns={
                        [
@@ -644,8 +623,6 @@ class Student extends Component {
                    maxHeight={1000}
                    minHeight={535}
                    rowHeight={20}
-                   
-                   
                />
                <Button
                    color="primary"
@@ -670,7 +647,6 @@ class Student extends Component {
                 raised
                 color="primary"
                 className="nyx-org-btn-sm"
-               // style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                onClick={() => {
                    var all_area;
                    var all_course;
@@ -680,11 +656,7 @@ class Student extends Component {
                    {this.state.search_resit_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_resit_course_id)}
                    var my_select_is_inlist=document.getElementById('search_resit_is_inlist');
                    var is_inlist_index=my_select_is_inlist.selectedIndex;
-                  // var my_select_institution=document.getElementById('search_institution');
-                   //var institution_index=my_select_institution.selectedIndex;
-                   //console.log(document.getElementById('search_is_inlist').value)
                    {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
-                 //  {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
                    this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
                        () => {
                            var href =  getRouter("export_resit").url+"&session=" + sessionStorage.session;
@@ -694,23 +666,16 @@ class Student extends Component {
                            if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
                             href = href+"&state=" + this.state.queryResitCondition.state;
                            }
-                        //    if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
-                        //         href = href+"&institution=" + this.state.queryCondition.institution;
-                        //    }
                            if(this.state.queryResitCondition.course_id!=undefined && this.state.queryResitCondition.course_id!=null){
                             href = href+"&course_id=" + this.state.queryResitCondition.course_id;
                            } 
                            var a = document.createElement('a');
                            a.href = href;
-                        //    console.log(href);
                            a.click();  
                            this.closeNotice();
                        }, () => {
                            this.closeNotice();
                        }]);
-
-
-                 
                }}
                >导出</Button>
                    </div>
@@ -867,7 +832,6 @@ class Student extends Component {
                  raised
                  color="primary"
                  className="nyx-org-btn-sm"
-                // style={{ minWidth:"50px",minHeight:"30px",margin: 0,marginLeft:5,padding:"0" }}
                 onClick={() => {
                     var all_area;
                     var all_course;
@@ -879,7 +843,6 @@ class Student extends Component {
                     var is_inlist_index=my_select_is_inlist.selectedIndex;
                     var my_select_institution=document.getElementById('search_institution');
                     var institution_index=my_select_institution.selectedIndex;
-                    //console.log(document.getElementById('search_is_inlist').value)
                     {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
                     {my_select_institution.options[institution_index].text=="-培训机构-"?all_institution="无培训机构":all_institution=my_select_institution.options[institution_index].text}
                     this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_institution+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
@@ -899,7 +862,6 @@ class Student extends Component {
                             } 
                             var a = document.createElement('a');
                             a.href = href;
-                         //    console.log(href);
                             a.click();  
                             this.closeNotice();
                         }, () => {

@@ -210,12 +210,7 @@ class Home extends Component {
         var cb = (route, message, arg) => {
             this.popUpNotice(NOTICE, 0, message.msg);
             if (message.code === Code.LOGIC_SUCCESS) {
-                
                 window.CacheData.admin = arg.data;
-                // for (var key in this.state.temObj) {
-                //     console.log(temObj);
-                //     window.CacheData.admin[key] = this.state.temObj[key];
-                // }
             }
         }
        
@@ -358,14 +353,9 @@ class Home extends Component {
                                                 //已临时登记人数
                                                 registered_nums:  message.data.info.sum.registered_nums,
                                                 all_registered_nums: message.data.info.sum.all_registered_nums
-                                                // arranged_nums: message.data.info.sum.all_student_inlist,
-                                                // all_students_nums: message.data.info.sum.all_student_reg,
                                             })
-                                            // all_students
                                         }
-                                        // console.log(this.state.all_registered_nums)
                                         getData(getRouter(UPDATE_COUNT),{ session: sessionStorage.session }, cb, {});
-                                        //console.log("刷新数据");
                                     }}
                                     >刷新数据</Button>
                             </div>
@@ -583,10 +573,8 @@ class Home extends Component {
                             this.popUpNotice(ALERT, 0, "导出各地区开班情况", [
                                 () => {
                                     var href =  getRouter("export_csv_count").url+"&session=" + sessionStorage.session;
-                                    console.log(href);
                                     var a = document.createElement('a');
                                     a.href = href;
-                                 //    console.log(href);
                                     a.click();  
                                     this.closeNotice();
                                 }, () => {
@@ -635,7 +623,6 @@ class Home extends Component {
                                         var canvas=document.getElementById("z_canvas"+area.area_id);
                                         var m_canvas=document.getElementById("m_canvas"+area.area_id);
                                         
-                                        // console.log("ref_render")
                                         m_canvas.style.display="block"
                                          canvas.width="300";
                                          canvas.height="200";
@@ -676,7 +663,6 @@ class Home extends Component {
                                           for(var i=0;i<data.length;i++){
                                               
                                               if(data[i].value!=0){
-                                                 // console.log(data[i].value)
                                                   var obj=data[i];
                                                   context.beginPath();
                                                   context.moveTo(150,100);
@@ -693,23 +679,19 @@ class Home extends Component {
                                                   var textAngle=tempAngle+1/2*currentAngle;
                                                   var x=150+Math.cos(textAngle*Math.PI/180)*(r+5);
                                                   var y=100+Math.sin(textAngle*Math.PI/180)*(r+10);
-                                                 //  console.log(x)
                                                   context.font="bold 12px '微软雅黑'";
                                                   if(textAngle>90&&tempAngle<270){
                                                       context.textAlign="end"
                                                   }
                                                   context.fillText(text,x,y);
-                                                 //  console.log(text);
                                                   context.fill();
                                                   tempAngle+=currentAngle;
-                                                 //  console.log(tempAngle)
                                               }
                                           }
                                           
                                     }}
                                     onMouseOut={()=>{
                                         var m_canvas=document.getElementById("m_canvas"+area.area_id);
-                                        // console.log("ref_render")
                                         m_canvas.style.display="none"
                                     }}
                                   
@@ -739,7 +721,6 @@ class Home extends Component {
                                         var canvas=document.getElementById("g_canvas"+area.area_id);
                                         var h_canvas=document.getElementById("h_canvas"+area.area_id);
                                         
-                                        // console.log("ref_render")
                                         h_canvas.style.display="block"
                                          canvas.width="300";
                                          canvas.height="200";
@@ -780,7 +761,6 @@ class Home extends Component {
                                           for(var i=0;i<data.length;i++){
                                               
                                               if(data[i].value!=0){
-                                                 // console.log(data[i].value)
                                                   var obj=data[i];
                                                   context.beginPath();
                                                   context.moveTo(150,100);
@@ -797,23 +777,19 @@ class Home extends Component {
                                                   var textAngle=tempAngle+1/2*currentAngle;
                                                   var x=150+Math.cos(textAngle*Math.PI/180)*(r+5);
                                                   var y=100+Math.sin(textAngle*Math.PI/180)*(r+10);
-                                                 //  console.log(x)
                                                   context.font="bold 12px '微软雅黑'";
                                                   if(textAngle>90&&tempAngle<270){
                                                       context.textAlign="end"
                                                   }
                                                   context.fillText(text,x,y);
-                                                 //  console.log(text);
                                                   context.fill();
                                                   tempAngle+=currentAngle;
-                                                 //  console.log(tempAngle)
                                               }
                                           }
                                           
                                     }}
                                     onMouseOut={()=>{
                                         var h_canvas=document.getElementById("h_canvas"+area.area_id);
-                                        // console.log("ref_render")
                                         h_canvas.style.display="none"
                                     }}
                                     >

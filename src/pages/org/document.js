@@ -270,7 +270,6 @@ class Student extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        console.log(id)
         getData(getRouter(DEL_TYPE), { session: sessionStorage.session, id:id }, cb, {});
 
     }
@@ -301,9 +300,6 @@ class Student extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                this.state.note_list=message.data
-               console.log(this.state.note_list.length)
-               //console.log(document.getElementById("idData").rows.length)
-               
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -312,7 +308,6 @@ class Student extends Component {
 
     }
     goPage= (pno,psize) =>{
-        // {this.historyFileDialog()}
         var components = [];
         var num = this.state.note_list.length;//表格所有行数(所有记录数)
         var totalPage = 0;//总页数
@@ -327,10 +322,7 @@ class Student extends Component {
         var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
         var endRow = currentPage * pageSize;//结束显示的行   40
         endRow = (endRow > num)? num : endRow;    40
-       // console.log(startRow)
-
         this.state.note_list.map((note_list)=>{
-      //  console.log(this.state.note_list.indexOf(note_list)+1>=startRow &&this.state.note_list.indexOf(note_list)+1<=endRow?"哈哈哈":"嘿嘿")
            
           components.push (<tr
                   style={{maxHeight:"25px",display:this.state.note_list.indexOf(note_list)+1>=startRow &&this.state.note_list.indexOf(note_list)+1<=endRow?"":"none"}}
@@ -372,8 +364,6 @@ class Student extends Component {
          >首页</a>
         <a 
             className="nyx-change-page-href" onClick={()=>{
-            // console.log("currentPage"+currentPage)
-            // console.log("goPage("+(currentPage-1)+","+psize+")")
             currentPage>1?this.setState({pno:this.state.pno-1}):""
             currentPage>1?this.goPage(this.state.pno,"+psize+"):""
         }}
@@ -381,7 +371,6 @@ class Student extends Component {
         <a 
             className="nyx-change-page-href" 
             onClick={()=>{
-           // console.log("goPage("+(currentPage+1)+","+psize+")")
             currentPage<totalPage?this.setState({pno:this.state.pno+1}):""
            { this.goPage("+(currentPage+1)+","+psize+")}
             currentPage<totalPage?this.goPage(this.state.pno,"+psize+"):""
@@ -437,7 +426,6 @@ class Student extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        console.log(this.state.new_file_url)
         getData(getRouter(CREATE_FILE), { session: sessionStorage.session, name:this.state.new_file_name,edition:this.state.new_file_edit,url:this.state.new_file_url,type_id:this.state.new_select_file_type }, cb, {});
 
     }
@@ -451,7 +439,6 @@ class Student extends Component {
                         for(var j = 0;j<this.state.type_infos.length;j++){
                    
                             if(this.state.type_infos[j].id==message.data.type_id){
-                               // console.log(this.state.type_infos[j].type_name)
                                 this.state.changed_type_name=this.state.type_infos[j].type_name
                             }
                         }
@@ -462,13 +449,10 @@ class Student extends Component {
                         this.state.tableData[i].time=this.timestamp2Time(message.data.time+"000", "-");
                     }
                 }
-                console.log(this.state.tableData)
-              //  document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-         // change_file_name change_file_url change_file_edit change_select_file_type
          var name = document.getElementById("change_file_name").value,
              url = document.getElementById("change_file_url").value,
              edition = document.getElementById("change_file_edit").value,
@@ -481,13 +465,6 @@ class Student extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
-            //    for(var i=0;i<this.state.tableData.length;i++){
-            //        //console.log(this.state.tableData[i].id)
-            //     if(this.state.tableData[i].id==this.state.del_file_id){
-            //         console.log(this.state.tableData)
-            //         {this.state.tableData.remove(this.state.tableData[i])}
-            //     }
-            // }
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -649,7 +626,6 @@ class Student extends Component {
                                 this.popUpNotice(NOTICE, 0, "请选择文件类型");
                                 return false;
                                }
-                               console.log(this.state.new_select_file_type)
                                this.create_file();
                                this.handleRequestClose()
                                 
@@ -961,7 +937,6 @@ class Student extends Component {
                                       this.setState({
                                         edit_type_name:type_infos.id
                                       })
-                                      console.log(type_infos.type_name)
                                     }}
                                         >
                                     {"编辑"}
@@ -1054,8 +1029,6 @@ class Student extends Component {
                         onClick={() => {
                             this.searchFile(1,true);
                             document.getElementById("search_file_type").value="";
-                            console.log(this.state.search_file_name)
-                          //  this.queryStudents(1, true);
                         }}
                        
                     >
@@ -1181,15 +1154,13 @@ class Student extends Component {
                         return {
                             id: this.state.tableData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
-                            file_name:  <div title={this.state.tableData[i].file_name}
-                                            style={{textAlign:"left",paddingLeft:"0.5rem"}}>
-                                            {this.state.tableData[i].file_name}
-                                        </div>,
+                            file_name:  this.state.tableData[i].file_name,
                             file_type: this.state.tableData[i].type_name,
                             file_edition: this.state.tableData[i].edition,
                             file_time: this.state.tableData[i].time,
                             file_upload: this.state.tableData[i].uploader,
-                            file_download:<div
+                            file_download:
+                            <div
                             //raised
                             title="下载"
                             className="nyx-file-list-btn"
@@ -1206,7 +1177,6 @@ class Student extends Component {
                                     className="nyx-file-list-btn"
                                     onClick={() => {
                                         this.state.selected = this.state.tableData[i];
-                                        console.log(this.state.selected)
                                         this.setState({ openchangeFileDialog: true });
                                     //     this.state.change_file_name=this.state.tableData[i].file_name;
                                     // // this.state.change_type_name=this.state.tableData[i].type_name;

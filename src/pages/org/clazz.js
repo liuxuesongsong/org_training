@@ -167,7 +167,6 @@ class Clazz extends Component {
 
             }
         }
-        //console.log(this.state.count)
         if (reload) {
             this.state.allData = [];
             this.state.tableData = [];
@@ -195,7 +194,7 @@ class Clazz extends Component {
 
             }
         }
-        //console.log(this.state.count)
+        
         if (reload) {
             this.state.allData = [];
             this.state.tableData = [];
@@ -213,7 +212,6 @@ class Clazz extends Component {
         var cb = (route, message, arg) => {
 
             if (message.code === Code.LOGIC_SUCCESS) {
-                // console.log(message.data)
                 arg.self.setState({ clazzStudents: message.data.studentinfos,clazzResitStudents: message.data.resitinfos });
                 arg.self.handleMakeDownloadData(message.data.studentinfos);
               //  this.cancel_list();
@@ -230,7 +228,6 @@ class Clazz extends Component {
                 this.setState({ clazzes: this.state.clazzes })
                 this.fresh()
             }
-            //console.log(message.msg)
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         var obj = {
@@ -307,7 +304,6 @@ class Clazz extends Component {
             resit_ids: this.state.selectedStudentID
         }
         this.state.btns=0;
-        console.log(obj)
         getData(getRouter(CREATE_RESIT), obj, cb, {});
     }
 
@@ -320,7 +316,6 @@ class Clazz extends Component {
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-      //  console.log(clazz)
         getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
 
     }
@@ -406,7 +401,6 @@ class Clazz extends Component {
             if(checklist[i].checked==true)
                 this.state.agree_checklist_arr.push(checklist[i].value)
             }   
-          console.log(this.state.agree_checklist_arr)
 
         getData(getRouter(BATCH_AGREE_STUDENT), { session: sessionStorage.session, ids: this.state.agree_checklist_arr }, cb, {});
     }
@@ -432,14 +426,6 @@ class Clazz extends Component {
         }   
 
          var reason = document.getElementById("del_reason_arr").value;
-        //  if(reason=="1"){
-        //     console.log("未联系")
-        //    // getData(getRouter(BATCH_DELETE_STUDENT), { session: sessionStorage.session, ids: this.state.del_checklist_arr,reason:reason }, cb, { id: id });
-        // }else if(reason=="2"){
-        //      console.log("短期内无法参加培训")
-        //  }else if(reason=="3"){
-        //     console.log("该人员已离职")
-        // }
         getData(getRouter(BATCH_DELETE_STUDENT), { session: sessionStorage.session, ids: this.state.del_checklist_arr,reason:reason }, cb, { id: id });     
     }
     editClazzDialog = () => {
@@ -686,7 +672,6 @@ class Clazz extends Component {
                                         return
                                     }
                                 this.search_message()
-                               // console.log( this.state.tableSearchData);
                                 }}
                             >
                              {Lang[window.Lang].pages.org.clazz.search}
@@ -816,7 +801,6 @@ class Clazz extends Component {
         var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
         var tableContent = [];
         var item = [];
-         console.log(result)
         tableContent.push(tableHeadTitle.join(','));
         for (var j = 0; j < result.length; j++) {
             item = [];
@@ -826,7 +810,6 @@ class Clazz extends Component {
                         item.push(getTimeString(result[j][tableHeadKey[key]]));
                         break;
                     default:
-                        // console.log(result[j][tableHeadKey[key]]);
                         item.push(result[j][tableHeadKey[key]]);
                         break;
                 }
@@ -1134,11 +1117,6 @@ class Clazz extends Component {
                                                         className="glyphicon glyphicon-pencil"
                                                         onClick={(e) => {
                                                             this.state.btns=clazz.id;
-                                                           // var event_parent=e.target.parentNode.parentNode;
-                                                            //event_parent.style.display="block"
-                                                           // console.log(e.target.parentNode.parentNode)
-                                                          // this.state.btns=true
-                                                       //   this.state.selected.btns=true;
                                                             this.state.selected = clazz;
                                                             this.state.selected_start_year = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(0,4)
                                                             this.state.selected_start_month = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(4,2)
@@ -1248,7 +1226,6 @@ class Clazz extends Component {
 
                 <div className="nyx-left-list" >
                     {this.state.clazzStudents.map(student => {
-                        // console.log(student);
                         <Card
                             key={student.id}
                         >
@@ -1328,7 +1305,6 @@ class Clazz extends Component {
                                 this.state.change_area=1;
                                 this.state.search_clazz_area_id = e.target.value == "null" ? null : e.target.value;
                                 this.state.search_clazzes=[];
-                                //console.log(this.state.clazzes)
                                 {this.state.clazzes.map(
                                     clazz =>{
                                         if(this.state.search_clazz_area_id == null&&this.state.search_clazz_course_id==null){
@@ -1359,13 +1335,10 @@ class Clazz extends Component {
                             style={{ marginLeft: "0.5rem",position:"relative",marginBottom:"1rem",width:"6rem"}}
                             className="nyx-info-select-lg"
                             id={"search_clazz_course_id"}
-                            //defaultValue={this.state.search_clazz_course_id === null ? "" : this.state.search_clazz_course_id}
                             onChange={(e) => {
-                                //this.state.class_number=0;
                                 this.state.change_course=1;
                                 this.state.search_clazz_course_id = e.target.value == "null" ? null : e.target.value;
                                 this.state.search_clazzes=[];
-                                //console.log(this.state.clazzes)
                                 {this.state.clazzes.map(
                                     clazz =>{
                                         if(this.state.search_clazz_area_id == null&&this.state.search_clazz_course_id==null){
@@ -1378,10 +1351,6 @@ class Clazz extends Component {
                                                 this.state.search_clazzes.push(clazz)
                                             }    
 
-                                        // if(clazz.area_id==this.state.search_clazz_area_id){
-                                        //     this.state.search_clazzes.push(clazz)
-                                            
-                                        // }
                                     })}
                                     {this.fresh()}
                             }}
@@ -1415,10 +1384,8 @@ class Clazz extends Component {
                                 </div>    
                                 }
 
-                                //  this.setState({search_clazzes:this.state.search_clazzes})
                             })}
-                       {/* {console.log(this.state.search_clazzes)}
-                       {console.log(this.state.clazzes)} */}
+                      
                     </List>
                     <Drawer
 
@@ -1453,11 +1420,9 @@ class Clazz extends Component {
                                     () => {
                                         this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
                                             () => {
-                                                // console.log(this.state.my_institution);
                                                 var href = getRouter("export_csv_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
                                                 var a = document.createElement('a');
                                                 a.href = href;
-                                                // console.log(href);
                                                 a.click();
                                                 this.closeNotice();
                                             }, () => {
@@ -1585,18 +1550,14 @@ class Clazz extends Component {
                                                             this.popUpNotice(NOTICE, 0, "请选择学员");
                                                             return false
                                                            }
-                                                           // console.log(this.state.selected.id);
                                                             this.popUpNotice(ALERT, 0, "同意已选择学员考试", [
                                                                 () => {
                                                                     
-                                                                  //  console.log(this.state.clazzStudents)
-                                                                  //  this.state.selected = clazz;
                                                                     this.agreecheckStudent(this.state.selected.id);
                                                                     this.closeNotice();
                                                                 }, () => {
                                                                     this.closeNotice();
                                                                 }]);
-                                                            // this.agreeAllStudent(); 
                                                         }}>
                                                         {"批量同意"}
                                                     </Button>
@@ -1618,7 +1579,6 @@ class Clazz extends Component {
                                                             this.popUpNotice(NOTICE, 0, "请选择学员");
                                                             return false
                                                            }
-                                                           // console.log(this.state.selected.id);
                                                             this.popUpNotice(ALERT, 0,  <select
                                                                 style={{marginLeft:"1rem"}}
                                                                 id="del_reason_arr"
@@ -1652,9 +1612,6 @@ class Clazz extends Component {
                                      disabled={student.is_cancel == 1? true : false}
                                      value={student.id} type="checkbox"/> 
                                     <div name="student_id_select" style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
-                                    {/* {this.state.cancel_list.map(cancel_list=>{
-                                       console.log() 
-                                    })} */}
                                         {student.is_cancel=="0"?<i
                                            className="glyphicon glyphicon-ok"
                                             style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
@@ -1720,9 +1677,6 @@ class Clazz extends Component {
                                     >
                                     
                                     <div style={{width:"3rem",marginLeft:"1.2rem"}} title={student.user_id} className="nyx-clazz-student-message">{student.user_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
-                                    {/* {this.state.cancel_list.map(cancel_list=>{
-                                       console.log() 
-                                    })} */}
                                        <i
                                            className="glyphicon glyphicon-ok"
                                             style={student.state == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
@@ -1810,15 +1764,11 @@ class Clazz extends Component {
                                 
                                 this.popUpNotice(ALERT, 0, "同意已选择学员取消报名", [
                                     () => {
-                                      //  console.log(this.state.selected.id)
-                                    //  console.log(this.state.clazzStudents)
-                                    //  this.state.selected = clazz;
                                         this.agreecheckCancelStudent(this.state.selected.cancel_id);
                                         this.closeNotice();
                                     }, () => {
                                         this.closeNotice();
                                     }]);
-                                // this.agreeAllStudent(); 
                             }}>
                             {"批量同意"}
                         </Button>
@@ -1847,7 +1797,6 @@ class Clazz extends Component {
                              </div>
                              <div>
                             {this.state.cancel_list.map(cancel_list => {
-                               // console.log(cancel_list.name)
                                 if(cancel_list.class_id==class_cancecl){
                                     return <div 
                                     ><input 
@@ -2191,7 +2140,6 @@ class Clazz extends Component {
                             { this.state.search_course_id === null ? all_course = "所有级别" : all_course = getCourse(this.state.search_course_id) }
                             this.popUpNotice(ALERT, 0, "导出的学生信息:【" + all_area + "】【 " + all_course + "】的人员", [
                                 () => {
-                                    // console.log(this.state.my_institution);
                                     var href = getRouter("export_csv").url + "&session=" + sessionStorage.session + "&is_inlist=1&institution=" + this.state.my_institution;
                                     if (this.state.queryCondition.area_id != undefined && this.state.queryCondition.area_id != null) {
                                         href = href + "&area_id=" + this.state.queryCondition.area_id;
@@ -2281,16 +2229,7 @@ class Clazz extends Component {
             
         }
         var reason = document.getElementById("del_reason").value;
-        // if(reason=="1"){
-        //     console.log("未联系")
-        //     getData(getRouter(BATCH_DELETE_STUDENT), { session: sessionStorage.session, ids: this.state.del_checklist_arr,reason:reason }, cb, { id: id });
-        // }else if(reason=="2"){
-        //      console.log("短期内无法参加培训")
-        //  }else if(reason=="3"){
-        //     console.log("该人员已离职")
-        // }
         getData(getRouter(DEL_TRAIN), { session: sessionStorage.session, id: id ,reason:reason}, cb, {});
-        
     }
     removeResitClassStudent(id) {
         var cb = (route, message, arg) => {
@@ -2303,7 +2242,6 @@ class Clazz extends Component {
             this.popUpNotice(NOTICE, 0, message.msg);
             
         }
-        console.log("删除补考学员"+id)
        getData(getRouter(DEL_RESIT), { session: sessionStorage.session, resit_id: id }, cb, {});
         
     }

@@ -126,11 +126,12 @@
   <div id="app">
     <script>
       window.Lang = "Chin";
-      if (window.location.search.indexOf("?admin") !== -1) {
-        window.type = 2;
-      } else {
-        window.type = 1;
-      }
+      window.type = 2;
+      // if (window.location.search.indexOf("?admin") !== -1) {
+      //   window.type = 2;
+      // } else {
+      //   window.type = 1;
+      // }
       window.onload = function () {
         var loading = document.getElementById("load");
         loading.parentNode.removeChild(loading);

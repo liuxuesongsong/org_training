@@ -104,18 +104,6 @@ class Area extends Component {
          }
          
      }
-    
-        // nav_list = (name) => {
-        //     //console.log(document.getElementById("select_role").value)
-        //     var components = []
-        //     var list = {1:"首页",2:"学生信息",3:"班级安排",4:"管理员区域"}
-        //     for(var id in list){
-        //         components.push(
-        //             <label style={{width:"33%",float:"left",display:"block"}} key={id} value={id}><input name={name} key={id} value={id} type="checkbox"></input>{list[id]}</label>
-        //         )
-        //     }
-        //     return components
-        // }
      select_list = (name) => {
         var obj =  document.getElementsByName(name);
         this.state.check_list_val = [];
@@ -124,23 +112,11 @@ class Area extends Component {
              this.state.check_list_val.push(obj[k].value);
          }
      }
-    //  change_check_role =(id,modules_arr)=>{
-    //     for(var i in modules_arr){
-    //      //   console.log(i)
-    //         if(modules_arr[i]==id){
-    //             console.log("id是"+id)
-    //             console.log(modules_arr[i])
-    //             return true           
-    //         }
-    //     }
-    //     return false
-    //  }
     selected_roles = () => {
         
         var components = []
         var list = {1:"首页",2:"学生信息",3:"班级安排"}
         var modules_arr = this.state.selected_role_model;
-        console.log(this.state.selected_role_model)
         for(var id in list){
             components.push(
                 <label style={{width:"33%",float:"left",display:"block"}}  key={id}  value={id}><input name={"checkbox_list"} key={id} checked={this.state.selected_role_model.indexOf(id)!=-1?true:false} value={id} type="checkbox"></input>{list[id]}</label>
@@ -312,7 +288,6 @@ class Area extends Component {
                             })}
                         </div>
                              <p>班主任分配</p>
-                            { console.log(this.state.clazzes)}
                             {this.state.clazzes.map(
                                 clazz =>
                                {
@@ -332,9 +307,6 @@ class Area extends Component {
                                 this.select_area("checkbox_area");
                                 this.select_list("checkbox_list");
                                 this.select_clazz("checkbox_clazz");
-                                // console.log(this.state.check_area_val);
-                               // console.log(this.state.check_list_val);
-                                
                                 this.newArea({
                                     account: document.getElementById("account_area").value,
                                     password: document.getElementById("area_name_password").value,
@@ -382,10 +354,6 @@ class Area extends Component {
             areas_id:this.state.check_area_val,
             clazz_id:this.state.check_clazz_val
         }
-        // var select_role=document.getElementById('select_role');
-        // var select_role_index=select_role.selectedIndex;
-        // console.log(select_role.options[select_role_index].text)
-        // console.log(obj);
         getData(getRouter(ADMIN_ADD), obj, cb, { area: area });
 
     }
@@ -405,8 +373,6 @@ class Area extends Component {
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        
-     // console.log(id);
         getData(getRouter(ADMIN_DEL), { session: sessionStorage.session, id: id }, cb, { id: id });
     }
     changeArea = (area) => {
@@ -426,7 +392,6 @@ class Area extends Component {
              areas_id:this.state.check_area_val,
              clazz_id:this.state.check_clazz_val,
         }
-       // console.log(obj);
         getData(getRouter(ADMIN_EDIT), obj, cb, { area: area });
 
     }
