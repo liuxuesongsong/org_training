@@ -340,40 +340,40 @@ class AppFrame extends Component {
     this.setState({ index });
   };
 
-  RegisterStep = () => {
-    switch (this.state.activeStep) {
-      // 遵守协议
-      // case 0:
-      //   return <div>
-      //     <Typography>遵循中软科技以下条款</Typography>
-      //   </div>
+  // RegisterStep = () => {
+  //   switch (this.state.activeStep) {
+  //     // 遵守协议
+  //     // case 0:
+  //     //   return <div>
+  //     //     <Typography>遵循中软科技以下条款</Typography>
+  //     //   </div>
       
-      case 2:
-        return <div>
-          <Base />
-        </div>
-      case 3:
-        return <div>
-          <Finance />
-        </div>
-      case 4:
-        return <div>
-          <Express />
-        </div>
-      case 5:
-        return <div>
-          <Admin />
-        </div>
-    }
-  }
+  //     case 2:
+  //       return <div>
+  //         <Base />
+  //       </div>
+  //     case 3:
+  //       return <div>
+  //         <Finance />
+  //       </div>
+  //     case 4:
+  //       return <div>
+  //         <Express />
+  //       </div>
+  //     case 5:
+  //       return <div>
+  //         <Admin />
+  //       </div>
+  //   }
+  // }
 
-  RegisterView = () => {
-    return (
-      <div>
-        {this.RegisterStep()}
-      </div>
-    )
-  }
+  // RegisterView = () => {
+  //   return (
+  //     <div>
+  //       {this.RegisterStep()}
+  //     </div>
+  //   )
+  // }
 
   LoginView = () => {
     return (

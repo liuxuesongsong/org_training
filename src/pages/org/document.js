@@ -55,7 +55,8 @@ class Student extends Component {
         barcon:"",
         pno:1,
         psize:10,
-
+        filepno:1,
+        filepsize:10,
          // 提示状态
          alertOpen: false,
          alertType: ALERT,
@@ -308,6 +309,7 @@ class Student extends Component {
 
     }
     goPage= (pno,psize) =>{
+        // {this.historyFileDialog()}
         var components = [];
         var num = this.state.note_list.length;//表格所有行数(所有记录数)
         var totalPage = 0;//总页数
@@ -323,7 +325,6 @@ class Student extends Component {
         var endRow = currentPage * pageSize;//结束显示的行   40
         endRow = (endRow > num)? num : endRow;    40
         this.state.note_list.map((note_list)=>{
-           
           components.push (<tr
                   style={{maxHeight:"25px",display:this.state.note_list.indexOf(note_list)+1>=startRow &&this.state.note_list.indexOf(note_list)+1<=endRow?"":"none"}}
                   key = {note_list.id}> 
@@ -336,6 +337,137 @@ class Student extends Component {
         )});
          return components
         
+     }
+     filePage= (filepno,psize) =>{
+        // {this.historyFileDialog()}
+        var components = [];
+        var num = this.state.allData.length;//表格所有行数(所有记录数)
+        var totalPage = 0;//总页数
+        var pageSize = psize;//每页显示行数
+       // //总共分几页 
+       if(num/pageSize > parseInt(num/pageSize)){   
+               totalPage=parseInt(num/pageSize)+1;   
+          }else{   
+              totalPage=parseInt(num/pageSize);   
+          }   
+       var currentPage = filepno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
+        var endRow = currentPage * pageSize;//结束显示的行   40
+        endRow = (endRow > num)? num : endRow;    40
+        this.state.allData.map((file_list)=>{   
+          components.push (<tr
+                  style={{maxHeight:"25px",display:this.state.allData.indexOf(file_list)+1>=startRow &&this.state.allData.indexOf(file_list)+1<=endRow?"":"none"}}
+                  key = {file_list.id}> 
+                  <td width={60} height={25}>{this.state.allData.indexOf(file_list)+1}</td>
+                  <td title={file_list.file_name} width={140} style={{textAlign:"left",paddingLeft:"1rem"}}>{file_list.file_name}</td>
+                  <td title={file_list.type_name} width={120}>{file_list.type_name}</td>
+                  <td title={file_list.edition} width={80}>{file_list.edition}</td>
+                  <td title={file_list.time} width={80}>{file_list.time}</td>
+                  <td title={file_list.uploader} width={80}>{file_list.uploader}</td>
+                  <td>
+                  <div
+                            title="下载"
+                            className="nyx-file-list-btn"
+                            onClick={() => {
+                                this.state.down_file_url=file_list.url
+                                this.setState({ opendownFileDialog: true });
+                                
+                            }}
+                        >
+                            {"下载"}
+                        </div>
+                  </td>
+                  <td><div
+                                    title="编辑"
+                                    className="nyx-file-list-btn"
+                                    onClick={() => {
+                                        this.state.selected = file_list;
+                                        this.setState({ openchangeFileDialog: true });
+                                         this.state.change_id=file_list.id;
+                                        {this.state.type_infos.map((type_infos)=>{
+                                            if(file_list.type_name==type_infos.type_name){
+                                                this.setState({
+                                                    selected_type_id:type_infos.id
+                                                })
+                                            }
+                                        })}
+                                    }}
+                                >
+                        {"编辑"}
+                    </div></td>
+                  <td><div
+                        className="nyx-file-list-btn"
+                        title="删除"
+                        onClick={() => {
+                            this.state.del_file_id=file_list.id;
+                            this.popUpNotice(ALERT, 0, "是否删除该文件？", [
+                                () => {
+                                this.del_file();
+                                //this.state.allData = [];
+                               // this.fresh();
+                                    this.closeNotice();
+                                }, () => {
+                                    this.closeNotice();
+                                }]);
+                    }}
+                >
+                    {"删除"}
+                </div></td>
+                </tr>
+       
+        )});
+         return components
+        
+     }
+     change_file_page = (pno,psize)=>{
+        var num = this.state.allData.length;//表格所有行数(所有记录数)
+        var totalPage = 0;//总页数
+        var pageSize = psize;//每页显示行数
+       // //总共分几页 
+       if(num/pageSize > parseInt(num/pageSize)){   
+               totalPage=parseInt(num/pageSize)+1;   
+          }else{   
+              totalPage=parseInt(num/pageSize);   
+          }   
+       var currentPage = this.state.filepno;//当前页数
+        var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31 
+        var endRow = currentPage * pageSize;//结束显示的行   40
+        endRow = (endRow > num)? num : endRow;    40
+        var components =<div>
+            <span>{"共"+num+"条记录 分"+totalPage+"页 当前第"+currentPage+"页"}</span>
+        <a 
+         className="nyx-change-page-href"
+         onClick={()=>{
+             this.setState({
+                 filepno:1
+             })
+            currentPage>1?this.filePage(this.state.filepno,"+psize+"):""
+         }}
+         >首页</a>
+        <a 
+            className="nyx-change-page-href" onClick={()=>{
+            currentPage>1?this.setState({filepno:this.state.filepno-1}):""
+            currentPage>1?this.filePage(this.state.filepno,"+psize+"):""
+        }}
+         >{"<上一页"}</a>
+         
+        <a 
+            className="nyx-change-page-href" 
+            onClick={()=>{
+            currentPage<totalPage?this.setState({filepno:this.state.filepno+1}):""
+           { this.filePage("+(currentPage+1)+","+psize+")}
+            currentPage<totalPage?this.filePage(this.state.filepno,"+psize+"):""
+        }}
+         >{"下一页>"}</a>
+        <a 
+             className="nyx-change-page-href"
+             onClick={()=>{
+             currentPage<totalPage?this.setState({filepno:totalPage}):""
+            currentPage<totalPage?this.filePage(this.state.filepno,"+psize+"):""} }
+        >{"尾页"}</a>
+        </div>
+
+     return components
      }
      change_page = (pno,psize)=>{
         var num = this.state.note_list.length;//表格所有行数(所有记录数)
@@ -439,6 +571,7 @@ class Student extends Component {
                         for(var j = 0;j<this.state.type_infos.length;j++){
                    
                             if(this.state.type_infos[j].id==message.data.type_id){
+                               // console.log(this.state.type_infos[j].type_name)
                                 this.state.changed_type_name=this.state.type_infos[j].type_name
                             }
                         }
@@ -449,10 +582,13 @@ class Student extends Component {
                         this.state.tableData[i].time=this.timestamp2Time(message.data.time+"000", "-");
                     }
                 }
+                console.log(this.state.tableData)
+              //  document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+         // change_file_name change_file_url change_file_edit change_select_file_type
          var name = document.getElementById("change_file_name").value,
              url = document.getElementById("change_file_url").value,
              edition = document.getElementById("change_file_edit").value,
@@ -465,6 +601,13 @@ class Student extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 document.getElementById("search_file_type").value!=""?this.search_type(1,true,document.getElementById("search_file_type").value):this.searchFile(1,true)
+            //    for(var i=0;i<this.state.tableData.length;i++){
+            //        //console.log(this.state.tableData[i].id)
+            //     if(this.state.tableData[i].id==this.state.del_file_id){
+            //         console.log(this.state.tableData)
+            //         {this.state.tableData.remove(this.state.tableData[i])}
+            //     }
+            // }
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -511,10 +654,11 @@ class Student extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 var result = message.data.files;
                 this.handleUptateAllData(result);
-                this.handleUpdateData(this.state.currentPage);
+               // this.handleUpdateData(this.state.currentPage);
                 this.setState({
                     totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
-                    count: message.data.count
+                    count: message.data.count,
+                    allData:message.data.files
                 })
                 this.state.count = message.data.count
                 // this.setState({ students: message.data, tableData: message.data })
@@ -626,6 +770,7 @@ class Student extends Component {
                                 this.popUpNotice(NOTICE, 0, "请选择文件类型");
                                 return false;
                                }
+                               console.log(this.state.new_select_file_type)
                                this.create_file();
                                this.handleRequestClose()
                                 
@@ -937,6 +1082,7 @@ class Student extends Component {
                                       this.setState({
                                         edit_type_name:type_infos.id
                                       })
+                                      console.log(type_infos.type_name)
                                     }}
                                         >
                                     {"编辑"}
@@ -1029,6 +1175,8 @@ class Student extends Component {
                         onClick={() => {
                             this.searchFile(1,true);
                             document.getElementById("search_file_type").value="";
+                            console.log(this.state.search_file_name)
+                          //  this.queryStudents(1, true);
                         }}
                        
                     >
@@ -1087,7 +1235,7 @@ class Student extends Component {
                     </Button>
                     
                 </div>
-                <ReactDataGrid
+                {/* <ReactDataGrid
                    
                     rowKey="id"
                     columns={
@@ -1154,13 +1302,15 @@ class Student extends Component {
                         return {
                             id: this.state.tableData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
-                            file_name:  this.state.tableData[i].file_name,
+                            file_name:  <div title={this.state.tableData[i].file_name}
+                                            style={{textAlign:"left",paddingLeft:"0.5rem"}}>
+                                            {this.state.tableData[i].file_name}
+                                        </div>,
                             file_type: this.state.tableData[i].type_name,
                             file_edition: this.state.tableData[i].edition,
                             file_time: this.state.tableData[i].time,
                             file_upload: this.state.tableData[i].uploader,
-                            file_download:
-                            <div
+                            file_download:<div
                             //raised
                             title="下载"
                             className="nyx-file-list-btn"
@@ -1177,6 +1327,7 @@ class Student extends Component {
                                     className="nyx-file-list-btn"
                                     onClick={() => {
                                         this.state.selected = this.state.tableData[i];
+                                        console.log(this.state.selected)
                                         this.setState({ openchangeFileDialog: true });
                                     //     this.state.change_file_name=this.state.tableData[i].file_name;
                                     // // this.state.change_type_name=this.state.tableData[i].type_name;
@@ -1239,8 +1390,32 @@ class Student extends Component {
                     //     // }
                     // }}
                   
-                />
-                <Button
+                /> */}
+                 <div
+                 style={{height:"355px"}}
+                 ><table
+                 className="nyx-file-list"
+                >
+                    <tr style={{textAlign:"center",maxHeight:"25px"}}>
+                        <td  height={25} width={60}>序号</td>
+                        <td width={140}>文件名称</td>
+                        <td width={120}>文件类型</td>
+                        <td width={80}>文件版本</td>
+                        <td width={80}>更新时间</td>
+                        <td width={80}>上传人</td>
+                        <td width={80}></td>
+                        <td width={80}></td>
+                        <td width={80}></td>
+                     </tr>
+                    {this.filePage(this.state.filepno,this.state.filepsize)}
+                </table>
+                 </div>
+                   
+                  
+                    <div
+                      //style={{position:"absolute",bottom:"5rem"}}
+                    >{this.change_file_page(1,10)}</div>
+                {/* <Button
                     color="primary"
                     onClick={() => {
                         this.showPre();
@@ -1258,7 +1433,7 @@ class Student extends Component {
                     style={{ margin: 10 }}
                 >
                     {"下页"}
-                </Button>
+                </Button> */}
              
                 
                 {this.addFileDialog()}

@@ -1,6 +1,6 @@
 // @flow
 import config from "../config";
-import { DATA_TYPE_ALL, QUERY, INST_QUERY, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, DATA_TYPE_STUDENT, DATA_TYPE_AREA,DATA_TYPE_COURSE } from "../enum";
+import { DATA_TYPE_ALL, QUERY, INST_QUERY, APP_TYPE_COMPANY, APP_TYPE_ORANIZATION, DATA_TYPE_STUDENT, DATA_TYPE_AREA,DATA_TYPE_COURSE,DATA_TYPE_CLASSTYPE } from "../enum";
 import Code from "../code";
 
 export function kebabCase(string: String) {
@@ -216,11 +216,15 @@ export function getInst(id) {
 export function getCourse(id) {
   return window.CacheData.courses[id];
 }
+export function getClasstype(id) {
+  return window.CacheData.classtype[id];
+}
 export function getCourses() {
   var Courses = [], CoursesData = getCache(DATA_TYPE_COURSE),course,courseKeys=[];
   if (CoursesData === undefined) {
     return [];
   }
+  
   courseKeys = Object.keys(CoursesData);
   for (var i = 0; i < CoursesData.length; i++) {
     course = new Object();
@@ -234,7 +238,24 @@ export function getCourses() {
   // console.log(areas);
   return Courses;
 }
-
+export function getClasstypes() {
+  var Courses = [], CoursesData = getCache(DATA_TYPE_CLASSTYPE),course,courseKeys=[];
+  if (CoursesData === undefined) {
+    return [];
+  }  
+  courseKeys = Object.keys(CoursesData);
+  for (var i = 0; i < CoursesData.length; i++) {
+    course = new Object();
+    course.id = courseKeys[i];
+    if (CoursesData[course.id] === undefined) {
+      continue;
+    }
+    course.course_name = CoursesData[course.id];
+    Courses.push(course)
+  }
+  // console.log(areas);
+  return Courses;
+}
 /**
  * areaData 中序列从1开始
  */

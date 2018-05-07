@@ -23,7 +23,7 @@ import Drawer from 'material-ui/Drawer';
 import { LabelRadio, RadioGroup } from 'material-ui/Radio';
 import { FormLabel, FormControl, FormControlLabel } from 'material-ui/Form';
 
-import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas, getTimeString, downloadTimeString } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas, getTimeString, downloadTimeString,getClasstypes,getClasstype } from '../../utils/helpers';
 
 import ReactDataGrid from 'angon_react_data_grid';
 
@@ -52,6 +52,7 @@ class Clazz extends Component {
         clazzStudents: [],          //班级内的学生
         clazzResitStudents:[],
         cancelClazzStudent:[],
+        allStudentinfos:null,
         leading_in_arr:[],
         checklist_arr:[],
         same_check_arr:[],
@@ -161,7 +162,8 @@ class Clazz extends Component {
                     totalPage: getTotalPage(message.data.count, this.state.rowsPerPage),
                     count: message.data.count
                 })
-                this.state.count = message.data.count
+                this.state.count = message.data.count;
+              //  console.log(this.state.queryCondition)
                 // this.setState({ students: message.data, tableData: message.data })
             } else {
 
@@ -176,6 +178,7 @@ class Clazz extends Component {
                 count: 0
             })
         }
+       
         getData(getRouter(SELECT_STUDNETS), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
     resitStudents = (query_page = 1, reload = false) => {
@@ -213,7 +216,10 @@ class Clazz extends Component {
 
             if (message.code === Code.LOGIC_SUCCESS) {
                 arg.self.setState({ clazzStudents: message.data.studentinfos,clazzResitStudents: message.data.resitinfos });
-                arg.self.handleMakeDownloadData(message.data.studentinfos);
+               // this.state.allStudentinfos=message.data.studentinfos;
+                // console.log(this.state.allStudentinfos)
+                // console.log(message.data.studentinfos)
+                // arg.self.handleMakeDownloadData(message.data.studentinfos);
               //  this.cancel_list();
             }
         }
@@ -435,7 +441,7 @@ class Clazz extends Component {
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     修改班级-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
                     -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
-                    -{this.state.selected["course_id"]?getCourse(this.state.selected["course_id"]):""}
+                    -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
             </DialogTitle>
                 <DialogContent>
                     <div>
@@ -613,7 +619,7 @@ class Clazz extends Component {
                             label={Lang[window.Lang].pages.org.clazz.info.area}
                             defaultValue={""}
                         >
-                            {getCourses().map(course => {
+                            {getClasstypes().map(course => {
                                 return <option key={course.id} value={course.id}>{course.course_name}</option>
                             })}
                         </select>
@@ -795,39 +801,39 @@ class Clazz extends Component {
     /**
      * 按班级建造下载数据
      */
-    handleMakeDownloadData = (result) => {
-        var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
-        var tableHeadKey = ['student_id', 'student_name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
-        var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
-        var tableContent = [];
-        var item = [];
-        tableContent.push(tableHeadTitle.join(','));
-        for (var j = 0; j < result.length; j++) {
-            item = [];
-            for (var key = 0; key <= tableHeadKey.length; key++) {
-                switch (tableHeadKey[key]) {
-                    case 'time':
-                        item.push(getTimeString(result[j][tableHeadKey[key]]));
-                        break;
-                    default:
-                        item.push(result[j][tableHeadKey[key]]);
-                        break;
-                }
-            }
-            tableContent.push(item.join(','));
-        }
+    // handleMakeDownloadData = (result) => {
+    //     var downloadData = [new Uint8Array([0xEF, 0xBB, 0xBF])];
+    //     var tableHeadKey = ['student_id', 'student_name', 'company_name', 'company_admin', 'mobile', 'mail', 'time'];
+    //     var tableHeadTitle = ['学生id', '姓名', '公司', '管理员', '电话', '邮箱', '注册时间']
+    //     var tableContent = [];
+    //     var item = [];
+    //     tableContent.push(tableHeadTitle.join(','));
+    //     for (var j = 0; j < result.length; j++) {
+    //         item = [];
+    //         for (var key = 0; key <= tableHeadKey.length; key++) {
+    //             switch (tableHeadKey[key]) {
+    //                 case 'time':
+    //                     item.push(getTimeString(result[j][tableHeadKey[key]]));
+    //                     break;
+    //                 default:
+    //                     item.push(result[j][tableHeadKey[key]]);
+    //                     break;
+    //             }
+    //         }
+    //         tableContent.push(item.join(','));
+    //     }
 
-        downloadData.push(tableContent.join('\n'));
-        this.setState({
-            // download_num: message.count,
-            filename: downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length,
-            // showRechargeInfo: "download"
-        })
-        this.state.download_data = downloadData;
-        this.state.filename = downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length;
-        this.handleDownloadFile();
+    //     downloadData.push(tableContent.join('\n'));
+    //     this.setState({
+    //         // download_num: message.count,
+    //         filename: downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length,
+    //         // showRechargeInfo: "download"
+    //     })
+    //     this.state.download_data = downloadData;
+    //     this.state.filename = downloadTimeString(Math.round(new Date().getTime())) + "_" + result.length;
+    //     this.handleDownloadFile();
 
-    }
+    // }
 
     handleUptateAllData = (newData) => {
       //  this.state.allData=[];
@@ -1052,7 +1058,7 @@ class Clazz extends Component {
                                 <span title={clazz.id} className="nyx-clazz-id">{clazz.id}</span>
                                 <span title={getCity(clazz.area_id)} className="nyx-clazz-area-id">{getCity(clazz.area_id)}</span>
                                 <span title={clazz.address?clazz.address:""} className="nyx-clazz-address">{clazz.address?clazz.address:""}</span>
-                                <span title={getCourse(clazz.course_id)} className="nyx-clazz-course-id">{getCourse(clazz.course_id)}</span>
+                                <span title={getClasstype(clazz.course_id)} className="nyx-clazz-course-id">{getClasstype(clazz.course_id)}</span>
                                 <span title={getInst(clazz.ti_id)} className="nyx-clazz-ti-id">{getInst(clazz.ti_id)}</span>
                                 <span title={clazz.class_head?clazz.class_head:""} className="nyx-clazz-head">{clazz.class_head?clazz.class_head:""}</span>
                                 <span title={clazz.train_starttime?clazz.train_starttime:""} className="nyx-clazz-start-time">{clazz.train_starttime?clazz.train_starttime:""}</span>
@@ -1170,10 +1176,17 @@ class Clazz extends Component {
                                                             this.state.selected = clazz;
                                                             this.state.showStudents = true;
                                                             this.state.queryCondition = {}
-                                                            this.state.queryCondition.course_id = clazz.course_id;
-                                                            document.getElementById("search_course_id").value=clazz.course_id;
+                                                           
+                                                           
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
+                                                            if(clazz.course_id==3){
+                                                                this.state.queryCondition.course_id = null;
+                                                                document.getElementById("search_course_id").value=null;
+                                                            }else{
+                                                                this.state.queryCondition.course_id = clazz.course_id;
+                                                                document.getElementById("search_course_id").value=clazz.course_id;
+                                                            }
                                                             this.setState({
                                                                 stateSelected: true,
                                                                 selectedStudentID:[]
@@ -1195,10 +1208,17 @@ class Clazz extends Component {
                                                             this.state.selected = clazz;
                                                             this.state.showStudents = true;
                                                             this.state.queryCondition = {}
-                                                            this.state.queryCondition.course_id = clazz.course_id;
-                                                            document.getElementById("search_course_id").value=clazz.course_id;
+                                                          //  this.state.queryCondition.course_id = clazz.course_id;
+                                                           // document.getElementById("search_course_id").value=clazz.course_id;
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
+                                                            if(clazz.course_id==3){
+                                                                this.state.queryCondition.course_id = null;
+                                                                document.getElementById("search_course_id").value=null;
+                                                            }else{
+                                                                this.state.queryCondition.course_id = clazz.course_id;
+                                                                document.getElementById("search_course_id").value=clazz.course_id;
+                                                            }
                                                             this.setState({
                                                                 stateSelected: true,
                                                                 selectedStudentID:[],
@@ -1356,7 +1376,7 @@ class Clazz extends Component {
                             }}
                         >
                             <option value={"null"}>{"-课程名称-"}</option>
-                            {getCourses().map(course => {
+                            {getClasstypes().map(course => {
                                 return <option key={course.id} value={course.id}>{course.course_name}</option>
                             })}
 
@@ -1396,7 +1416,7 @@ class Clazz extends Component {
                         <div key="draw-class"  style={{ width: "500px" }}>
 
                         <div className="nyx-clazz-list" style={{boxShadow:"none",width:"100%",paddingTop:10}}>
-                            <Button
+                            {/* <Button
                             raised
                                 color="primary"
                                 id='downloadData'
@@ -1410,15 +1430,16 @@ class Clazz extends Component {
                                style={{margin: 0,marginLeft:15,padding:"0",minHeight:30,minWidth:50 }}
                             >
                                 {"下载"}
-                            </Button>
+                            </Button> */}
                             <Button
                             raised
                                 color="primary"
                                 className="nyx-org-btn-lg"
-                                style={{margin: 0,marginLeft:5,padding:"0" }}
+                                style={{margin: 0,marginLeft:15,padding:"0",minWidth:"100px" }}
                                 onClick={
                                     () => {
-                                        this.popUpNotice(ALERT, 0, "导出本班级学生信息", [
+                                        this.state.clazzStudents.length!=0?
+                                        this.popUpNotice(ALERT, 0, "导出本班级培训学员信息", [
                                             () => {
                                                 var href = getRouter("export_csv_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
                                                 var a = document.createElement('a');
@@ -1427,11 +1448,44 @@ class Clazz extends Component {
                                                 this.closeNotice();
                                             }, () => {
                                                 this.closeNotice();
+                                            }]): this.popUpNotice(ALERT, 0, "暂无培训学员", [
+                                                () => {
+                                                    this.closeNotice();
+                                                }, () => {
+                                                    this.closeNotice();
+                                                }]);
+                                    }
+                                }
+                            >
+                                {"导出培训学员"}
+                            </Button>
+                            <Button
+                            raised
+                                color="primary"
+                                className="nyx-org-btn-lg"
+                                style={{margin: 0,marginLeft:5,padding:"0",minWidth:"100px" }}
+                                onClick={
+                                    () => {
+                                        this.state.clazzResitStudents.length!=0?this.popUpNotice(ALERT, 0, "导出本班级补考学员信息", [
+                                            () => {
+                                                var href = getRouter("export_resit_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
+                                                var a = document.createElement('a');
+                                                a.href = href;
+                                                a.click();
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
+                                            }]):
+                                        this.popUpNotice(ALERT, 0, "暂无补考人员", [
+                                            () => {
+                                                this.closeNotice();
+                                            }, () => {
+                                                this.closeNotice();
                                             }]);
                                     }
                                 }
                             >
-                                {"导出详细信息"}
+                                {"导出补考学员"}
                             </Button>
                            
 

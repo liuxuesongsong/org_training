@@ -29,6 +29,22 @@ button.nyx-document-btn{
     text-overflow: ellipsis;
     }
 }
+.nyx-file-list {
+    font-size: 14px;
+    width: 97%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+    td
+    {
+    line-height: 2;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 1px solid #ddd;
+    }
+}
 .nyx-file-text{
     position: relative;
     top: -5px;
