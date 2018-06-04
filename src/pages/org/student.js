@@ -79,7 +79,7 @@ class Student extends Component {
 
     cacheToState() {
         window.currentPage.queryStudents();
-       // window.currentPage.queryResitStudents();
+        //window.currentPage.queryResitStudents();
         window.currentPage.state.areas = getAreas();
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
@@ -146,7 +146,7 @@ class Student extends Component {
                 
             })
         }
-        getData(getRouter("select_all_resits"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 },this.state.queryResitCondition) }, cb, {});
+        getData(getRouter("select_all_resits"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 500 },this.state.queryResitCondition) }, cb, {});
     }
 
 
@@ -572,9 +572,15 @@ class Student extends Component {
                                resizable: true
                            },
                            {
+                            key: "resit_clazz_state",
+                            name: "排班情况",
+                            width: 100,
+                            resizable: true
+                        },
+                           {
                                key: "company_admin",
                                name: "联系人",
-                               width: 100,
+                               width: 80,
                                resizable: true
                            },
                            
@@ -606,6 +612,7 @@ class Student extends Component {
                            company_mail: this.state.tableResitData[i].company_mail,
                           resit_state:this.state.tableResitData[i].state === "1" ? "待安排" :
                           this.state.tableResitData[i].state === "2" ? "已安排" :"",
+                         resit_clazz_state:this.state.tableResitData[i].resit_class_id=="0"?"未排班":"已进入班级",
                           old_class_id: this.state.tableResitData[i].train_class_id,
                           institution: getInst(this.state.tableResitData[i].train_institution),
                            area_name: getCity(this.state.tableResitData[i].area_id),
@@ -670,6 +677,7 @@ class Student extends Component {
                             href = href+"&course_id=" + this.state.queryResitCondition.course_id;
                            } 
                            var a = document.createElement('a');
+                           console.log(a)
                            a.href = href;
                            a.click();  
                            this.closeNotice();
@@ -862,6 +870,7 @@ class Student extends Component {
                             } 
                             var a = document.createElement('a');
                             a.href = href;
+                            console.log(a)
                             a.click();  
                             this.closeNotice();
                         }, () => {

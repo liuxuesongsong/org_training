@@ -1180,7 +1180,7 @@ class Clazz extends Component {
                                                            
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
-                                                            if(clazz.course_id==3){
+                                                            if(clazz.course_id==4){
                                                                 this.state.queryCondition.course_id = null;
                                                                 document.getElementById("search_course_id").value=null;
                                                             }else{
@@ -1212,7 +1212,7 @@ class Clazz extends Component {
                                                            // document.getElementById("search_course_id").value=clazz.course_id;
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
-                                                            if(clazz.course_id==3){
+                                                            if(clazz.course_id==4){
                                                                 this.state.queryCondition.course_id = null;
                                                                 document.getElementById("search_course_id").value=null;
                                                             }else{
@@ -1641,7 +1641,7 @@ class Clazz extends Component {
                                                                     <option value="1">1个月内参加</option>
                                                                     <option value="2">1-2个月内参加</option>
                                                                     <option value="3">2个月后参加</option>
-                                                                    <option value="-1">该人员已离职</option>
+                                                                    <option value="-1">无需参加培训</option>
                                                                 </select>, [
                                                                 () => {
                                                                 this.delcheckStudent(this.state.selected.id)
@@ -1706,7 +1706,7 @@ class Clazz extends Component {
                                                     <option value="1">1个月内参加</option>
                                                     <option value="2">1-2个月内参加</option>
                                                     <option value="3">2个月后参加</option>
-                                                    <option value="-1">该人员已离职</option>
+                                                    <option value="-1">无需参加培训</option>
                                                     
                                                 </select>, [
                                                     () => {

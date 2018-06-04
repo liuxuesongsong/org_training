@@ -1202,11 +1202,13 @@
 .nyx {
   font-size: 14px;
   line-height: 1.5;
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+ "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
 }
 
 .nyx a, .nyx h1, .nyx h2, .nyx h3, .nyx h4, .nyx h5, .nyx h6, .nyx p, .nyx div, .nyx span, .nyx input, .nyx label {
-  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC",
+ "Hiragino Sans GB", "Microsoft YaHei","Heiti SC", "WenQuanYi Micro Hei", sans-serif;
 }
 
 .react-grid-HeaderCell {
@@ -1355,6 +1357,11 @@ label.react-grid-checkbox-label {
 .nyx-instructions-glyphicon {
   top: 0.15rem;
   margin-left: 0.3rem;
+}
+
+.nyx-login-select {
+  width: 960px;
+  margin: 0;
 }
 
 @media only screen and (max-width: 960px) {
@@ -1865,7 +1872,7 @@ label.react-grid-checkbox-label {
   padding: 0rem;
   font-size: 12px;
   border-bottom: 1px solid #BDBDBD;
-  height: 74px;
+  height: 78px;
   padding-top: 2px;
 }
 
@@ -2533,24 +2540,29 @@ button.nyx-document-btn {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-
 .nyx-file-list {
   font-size: 14px;
   width: 97%;
   table-layout: fixed;
   border-collapse: collapse;
   border: 1px solid #ddd;
+  
 }
-
-.nyx-file-list td {
+.nyx-file-list td
+  {
   line-height: 2;
   text-align: center;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   border: 1px solid #ddd;
+  }
+.nyx-file-text{
+  position: relative;
+  top: -5px;
+  font-size: 12px;
+  width: 210px;
 }
-
 .nyx-file-text {
   position: relative;
   top: -5px;
