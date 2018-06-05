@@ -29,7 +29,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT } from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT,BATCH_DEL_RESIT } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 import BeingLoading from '../../components/BeingLoading';
@@ -58,6 +58,7 @@ class Clazz extends Component {
         same_check_arr:[],
         agree_checklist_arr:[],
         del_checklist_arr:[],
+        del_resit_checklist_arr:[],
         class_cancel_arr:[],
         class_cancecl:[],
         showInfo: false,
@@ -433,6 +434,32 @@ class Clazz extends Component {
 
          var reason = document.getElementById("del_reason_arr").value;
         getData(getRouter(BATCH_DELETE_STUDENT), { session: sessionStorage.session, ids: this.state.del_checklist_arr,reason:reason }, cb, { id: id });     
+    }
+    delresitcheckStudent = (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.queryClazzStudents(this.state.selected.id);
+                this.popUpNotice(NOTICE, 0, message.msg);  
+                this.fresh();
+                this.state.allData=[];
+                var checklist = document.getElementsByName("resitselected");
+                for(var i=0;i<checklist.length;i++){
+                    checklist[i].checked=false
+                   
+                }
+            }
+        }
+        var checklist = document.getElementsByName("resitselected");
+        this.state.del_resit_checklist_arr=[];
+        for(var i=0;i<checklist.length;i++){
+           if(checklist[i].checked==true)
+             this.state.del_resit_checklist_arr.push(checklist[i].value)
+        }   
+
+         var reason = document.getElementById("del_resit_reason_arr").value;
+         console.log(this.state.del_resit_checklist_arr)
+         console.log(reason)
+        getData(getRouter(BATCH_DEL_RESIT), { session: sessionStorage.session, resit_ids: this.state.del_resit_checklist_arr,reason:reason }, cb, {});     
     }
     editClazzDialog = () => {
         return (
@@ -1722,14 +1749,51 @@ class Clazz extends Component {
                                     
 
                                 })}
-                                {this.state.clazzResitStudents.length!=0?<p style={{marginLeft:"1.5rem"}}>补考学员</p>:""}
+                                {this.state.clazzResitStudents.length!=0?<div><span style={{marginLeft:"1.5rem"}}>补考学员</span><Button
+                                                   // data_id={clazz.num}
+                                                        raised
+                                                        color="primary"
+                                                        className="nyx-org-btn-md"
+                                                        style={{margin: 0,marginLeft:20,padding:"0" }}
+                                                        onClick={() => {
+                                                            var checklist = document.getElementsByName("resitselected");
+                                                            var m=0;
+                                                            for(var i = 0; i < checklist.length; i++) {
+                                                                if(checklist[i].checked==true){
+                                                                    m++
+                                                                }
+                                                            }
+                                                           if(m==0){
+                                                            this.popUpNotice(NOTICE, 0, "请选择学员");
+                                                            return false
+                                                           }
+                                                            this.popUpNotice(ALERT, 0,  <select
+                                                                style={{marginLeft:"1rem"}}
+                                                                id="del_resit_reason_arr"
+                                                                >
+                                                                    <option value="0">未联系</option>
+                                                                    <option value="1">已参加过补考</option>
+                                                                    <option value="2">短期内无法参加补考</option>
+                                                                </select>, [
+                                                                () => {
+                                                                this.delresitcheckStudent(this.state.selected.id)
+                                                                    this.closeNotice();
+                                                                }, () => {
+                                                                    this.closeNotice();
+                                                                }]);
+                                                            // this.agreeAllStudent(); 
+                                                        }}>
+                                                        {"批量删除"}
+                                                    </Button></div>:""}
                                 {this.state.clazzResitStudents.map(
                                 student => {
                                    
                                     return <div className="nyx-clazz-student-name"
 
                                     >
+                                    <input name="resitselected" 
                                     
+                                     value={student.resit_id} type="checkbox"/> 
                                     <div style={{width:"3rem",marginLeft:"1.2rem"}} title={student.user_id} className="nyx-clazz-student-message">{student.user_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
                                        <i
                                            className="glyphicon glyphicon-ok"
@@ -1755,8 +1819,16 @@ class Clazz extends Component {
                                              //style={{ float:"right",right:"1rem",top:"-0.5rem"}}
                                              onClick={() => {
                                               
-                                                this.popUpNotice(ALERT, 0, "删除"+student.student_name+"参加本次补考", [
+                                                this.popUpNotice(ALERT, 0, <select
+                                                    style={{marginLeft:"1rem"}}
+                                                    id="del_resit_reason"
+                                                    >
+                                                        <option value="0">未联系</option>
+                                                        <option value="1">已参加过补考</option>
+                                                        <option value="2">短期内无法参加补考</option>
+                                                    </select>, [
                                                     () => {
+                                                       // this.delresitcheckStudent(student.resit_id)
                                                         this.removeResitClassStudent(student.resit_id)
                                                         this.closeNotice();
                                                     }, () => {
@@ -2295,8 +2367,14 @@ class Clazz extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
             
+            
         }
-       getData(getRouter(DEL_RESIT), { session: sessionStorage.session, resit_id: id }, cb, {});
+        var del_resit_id=[];
+        del_resit_id.push(id)
+        console.log(del_resit_id);
+        var reason=document.getElementById("del_resit_reason").value;
+        console.log(reason)
+       getData(getRouter(BATCH_DEL_RESIT), { session: sessionStorage.session, resit_ids: del_resit_id ,reason:reason}, cb, {});
         
     }
 

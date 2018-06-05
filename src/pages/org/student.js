@@ -21,7 +21,7 @@ class Student extends Component {
         allResitData: [],
         tableResitData: [],
         queryCondition: { is_inlist:1,institution:0},
-        queryResitCondition: {},
+        queryResitCondition: {class_state:2},
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         resit_list:[],
@@ -434,6 +434,7 @@ class Student extends Component {
                         onClick={() => {
                             this.resitDrawer(true)()//打开补考抽屉
                             this.queryResitStudents(1,true) //查看补考列表
+                          
                         }}
                         style={{marginRight:"2rem",top:"-0.25rem",minWidth:"100px"}}
                     >
@@ -449,7 +450,7 @@ class Student extends Component {
                        open={this.state.resitright}
                        onRequestClose={this.resitDrawer(false)}
                    >
-                    <div style={{width:"1000px",paddingLeft:"1rem",paddingTop:"1rem"}}> 
+                    <div style={{width:"1000px",paddingLeft:"1rem",paddingTop:"1rem",overflow:"hidden"}}> 
 
                     <select
                     style={{marginLeft:20}}
@@ -484,7 +485,7 @@ class Student extends Component {
                             })}
 
                     </select>
-                    <select
+                    {/* <select
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_resit_is_inlist"}
@@ -496,7 +497,20 @@ class Student extends Component {
                         <option value={"null"}>{"-所有状态-"}</option>
                         <option value={1}>{"待安排"}</option>
                         <option value={2}>{"已安排"}</option>
-                    </select>
+                    </select> */}
+                    {/* <select
+                        style={{marginLeft:"1rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_resit_state"}
+                        onChange={(e) => {
+                           // this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
+                            this.state.queryResitCondition.class_state = e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-排班情况-"}</option>
+                        <option value={1}>{"已进入班级"}</option>
+                        <option value={2}>{"未排班"}</option>
+                    </select> */}
                     <TextField
                         style={{top:"-0.5rem",left:"1rem"}}
                         id="search_resit_input"
@@ -514,7 +528,6 @@ class Student extends Component {
                         className="nyx-org-btn-sm"
                         onClick={() => {
                             this.state.queryResitCondition.company_name = document.getElementById("search_resit_input").value;
-                            
                             this.queryResitStudents(1, true);
                         }}
                         style={{margin: 15,marginLeft:30,position:"relative",top:"-5px"}}
@@ -662,19 +675,23 @@ class Student extends Component {
                    {this.state.search_resit_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_resit_area_id)}
                    {this.state.search_resit_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_resit_course_id)}
                    var my_select_is_inlist=document.getElementById('search_resit_is_inlist');
-                   var is_inlist_index=my_select_is_inlist.selectedIndex;
-                   {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
-                   this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_is_inlist+"】【 "+all_course+"】的人员", [
+                //    var is_inlist_index=my_select_is_inlist.selectedIndex;
+                //    {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
+                   this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
                        () => {
                            var href =  getRouter("export_resit").url+"&session=" + sessionStorage.session;
                            if(this.state.queryResitCondition.area_id!=undefined && this.state.queryResitCondition.area_id!=null){
                                 href = href+"&area_id=" + this.state.queryResitCondition.area_id;
                            }
-                           if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
-                            href = href+"&state=" + this.state.queryResitCondition.state;
-                           }
+                        //    if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
+                        //     href = href+"&state=" + this.state.queryResitCondition.state;
+                        //    }
                            if(this.state.queryResitCondition.course_id!=undefined && this.state.queryResitCondition.course_id!=null){
                             href = href+"&course_id=" + this.state.queryResitCondition.course_id;
+                           } 
+                           console.log(this.state.queryResitCondition.class_state)
+                           if(this.state.queryResitCondition.class_state!=undefined && this.state.queryResitCondition.class_state!=null){
+                            href = href+"&class_state=" + this.state.queryResitCondition.class_state;
                            } 
                            var a = document.createElement('a');
                            console.log(a)
