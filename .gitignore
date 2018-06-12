@@ -6,7 +6,9 @@
 /src/config.js
 /css/.sass-cache
 /.sass-cache
+/scripts/release.js
 src/config.js
 src/config.js
 css/style.css
 css/style.css.map
+scripts/release.js
