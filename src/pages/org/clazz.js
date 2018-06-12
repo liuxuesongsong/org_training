@@ -2371,9 +2371,7 @@ class Clazz extends Component {
         }
         var del_resit_id=[];
         del_resit_id.push(id)
-        console.log(del_resit_id);
         var reason=document.getElementById("del_resit_reason").value;
-        console.log(reason)
        getData(getRouter(BATCH_DEL_RESIT), { session: sessionStorage.session, resit_ids: del_resit_id ,reason:reason}, cb, {});
         
     }

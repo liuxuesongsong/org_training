@@ -20,7 +20,7 @@ class Student extends Component {
         tableData: [],
         allResitData: [],
         tableResitData: [],
-        queryCondition: { is_inlist:1,institution:0},
+        queryCondition: {},
         queryResitCondition: {class_state:2},
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
@@ -39,6 +39,7 @@ class Student extends Component {
         search_resit_course_id:null,
         search_resit_is_inlist: null,
         search_resit_institution:null,
+        search_resit_class_state:null,
         search_area_id: null,
         search_course_id: null,
         search_is_inlist: 1,
@@ -67,9 +68,11 @@ class Student extends Component {
         initCache(this.cacheToState);
     }
     resitDrawer = (open) => () => {
-        // if(!open){
-            
-        // }
+        if(!open){
+           console.log("@@2");
+           //this.state.queryResitCondition.class_state="2";
+          // this.state.queryCondition 
+        }
         this.setState({
             resitshowInfo: true,
             resitright: open,
@@ -434,6 +437,9 @@ class Student extends Component {
                         onClick={() => {
                             this.resitDrawer(true)()//打开补考抽屉
                             this.queryResitStudents(1,true) //查看补考列表
+                            console.log(this.state.queryResitCondition.class_state)
+                           // this.state.queryResitCondition.class_state=="2";
+                            
                           
                         }}
                         style={{marginRight:"2rem",top:"-0.25rem",minWidth:"100px"}}
@@ -485,32 +491,35 @@ class Student extends Component {
                             })}
 
                     </select>
-                    {/* <select
+                    <select
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_resit_is_inlist"}
+                        defaultValue={this.state.queryResitCondition.state}
                         onChange={(e) => {
                             this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
                             this.state.queryResitCondition.state = e.target.value == "null"? null:e.target.value;
                         }}
                     >
                         <option value={"null"}>{"-所有状态-"}</option>
+                        <option value={0}>{"报名作废"}</option>
                         <option value={1}>{"待安排"}</option>
                         <option value={2}>{"已安排"}</option>
-                    </select> */}
-                    {/* <select
+                    </select> 
+                     <select
                         style={{marginLeft:"1rem"}}
                         className="nyx-info-select-lg"
                         id={"search_resit_state"}
+                        defaultValue={this.state.queryResitCondition.class_state}
                         onChange={(e) => {
-                           // this.state.search_resit_is_inlist = e.target.value == "null"? null:e.target.value;
+                            this.state.search_resit_class_state = e.target.value == "null"? null:e.target.value;
                             this.state.queryResitCondition.class_state = e.target.value == "null"? null:e.target.value;
                         }}
                     >
                         <option value={"null"}>{"-排班情况-"}</option>
                         <option value={1}>{"已进入班级"}</option>
                         <option value={2}>{"未排班"}</option>
-                    </select> */}
+                    </select>
                     <TextField
                         style={{top:"-0.5rem",left:"1rem"}}
                         id="search_resit_input"
@@ -623,9 +632,13 @@ class Student extends Component {
                            company_admin: this.state.tableResitData[i].company_admin,
                            company_mobile: this.state.tableResitData[i].company_mobile,
                            company_mail: this.state.tableResitData[i].company_mail,
-                          resit_state:this.state.tableResitData[i].state === "1" ? "待安排" :
-                          this.state.tableResitData[i].state === "2" ? "已安排" :"",
-                         resit_clazz_state:this.state.tableResitData[i].resit_class_id=="0"?"未排班":"已进入班级",
+                           resit_state:this.state.tableResitData[i].state === "0"?"报名作废":
+                           this.state.tableResitData[i].state === "1"?"待安排":this.state.tableResitData[i].state === "2"?"已安排":"",
+
+                        //    this.state.tableResitData[i].state === 
+                        //   resit_state:this.state.tableResitData[i].state === "1" ? "待安排" :
+                        //   this.state.tableResitData[i].state === "2" ? "已安排" :"",
+                         resit_clazz_state:this.state.tableResitData[i].resit_class_id=="0"?"未排班": getInst(this.state.tableResitData[i].resit_train_institution)+this.state.tableResitData[i].resit_class_id,
                           old_class_id: this.state.tableResitData[i].train_class_id,
                           institution: getInst(this.state.tableResitData[i].train_institution),
                            area_name: getCity(this.state.tableResitData[i].area_id),
@@ -671,21 +684,30 @@ class Student extends Component {
                    var all_area;
                    var all_course;
                    var all_is_inlist;
+                   var all_class_state;
                    var all_institution;
+                  // {this.state.search_resit_class_state===null?all_class_state="所有排班情况":}
                    {this.state.search_resit_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_resit_area_id)}
                    {this.state.search_resit_course_id===null?all_course="所有级别":all_course=getCourse(this.state.search_resit_course_id)}
                    var my_select_is_inlist=document.getElementById('search_resit_is_inlist');
-                //    var is_inlist_index=my_select_is_inlist.selectedIndex;
-                //    {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
-                   this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】的人员", [
+                    var is_inlist_index=my_select_is_inlist.selectedIndex;
+
+                    var my_select_class_state=document.getElementById('search_resit_state');
+                    var class_state_index=my_select_class_state.selectedIndex;
+                    console.log(class_state_index)
+                    {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
+                    {my_select_class_state.options[class_state_index].text=="-排班情况-"?all_class_state="所有排班情况":all_class_state=my_select_class_state.options[class_state_index].text}
+
+                    console.log(all_class_state)
+                   this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】【"+all_is_inlist+"】【"+all_class_state+"】的人员", [
                        () => {
                            var href =  getRouter("export_resit").url+"&session=" + sessionStorage.session;
                            if(this.state.queryResitCondition.area_id!=undefined && this.state.queryResitCondition.area_id!=null){
                                 href = href+"&area_id=" + this.state.queryResitCondition.area_id;
                            }
-                        //    if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
-                        //     href = href+"&state=" + this.state.queryResitCondition.state;
-                        //    }
+                           if(this.state.queryResitCondition.state!=undefined && this.state.queryResitCondition.state!=null){
+                            href = href+"&state=" + this.state.queryResitCondition.state;
+                           }
                            if(this.state.queryResitCondition.course_id!=undefined && this.state.queryResitCondition.course_id!=null){
                             href = href+"&course_id=" + this.state.queryResitCondition.course_id;
                            } 
