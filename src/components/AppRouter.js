@@ -20,6 +20,7 @@ import Home from 'training/src/pages/Home';
 // import Infos from '../pages/com/infos/info.page.js';
 
 import Document from '../pages/org/document';
+import Classrecord from '../pages/org/clazzrecord';
 import OrganizationHome from '../pages/org/home';
 import Area from '../pages/org/area';
 import Score from '../pages/org/score';
@@ -72,6 +73,13 @@ var AppRouter = {
         content={Document}
         nav
         component={Document}
+      />
+      <Route
+        title={titleize(Lang[window.Lang].pages.org.clazzrecord.title)}
+        path={'/org/clazzrecord'}
+        content={Classrecord}
+        nav
+        component={Classrecord}
       />
     </Route>
   </Router>)

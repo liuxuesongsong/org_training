@@ -258,6 +258,18 @@ const Language = {
                        file_type:"类型名称",
                        file_edit:"文件版本",
                     }
+                },
+                clazzrecord:{
+                   title:"开班备案",
+                   info:{
+                       name:"姓名",
+                       mobile:"电话",
+                       number:"讲师编号",
+                       areas:"区域",
+                       detailed:"详细地址",
+
+
+                   }
                 }
 
             },

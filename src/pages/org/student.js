@@ -20,8 +20,8 @@ class Student extends Component {
         tableData: [],
         allResitData: [],
         tableResitData: [],
-        queryCondition: {},
-        queryResitCondition: {class_state:2},
+        queryCondition: { is_inlist:1,institution:0},
+        queryResitCondition: {class_state:2,state:1},
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         resit_list:[],
@@ -69,7 +69,6 @@ class Student extends Component {
     }
     resitDrawer = (open) => () => {
         if(!open){
-           console.log("@@2");
            //this.state.queryResitCondition.class_state="2";
           // this.state.queryCondition 
         }
