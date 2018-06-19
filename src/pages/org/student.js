@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
-
+import Dialog, {
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+} from 'material-ui/Dialog';
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
 import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST} from '../../enum';
@@ -436,18 +441,30 @@ class Student extends Component {
                         onClick={() => {
                             this.resitDrawer(true)()//打开补考抽屉
                             this.queryResitStudents(1,true) //查看补考列表
-                            console.log(this.state.queryResitCondition.class_state)
                            // this.state.queryResitCondition.class_state=="2";
                             
                           
                         }}
-                        style={{marginRight:"2rem",top:"-0.25rem",minWidth:"100px"}}
+                        style={{marginRight:"1rem",top:"-0.25rem",minWidth:"100px"}}
                     >
                         <i
                     className="glyphicon glyphicon-tasks"
                     style={{marginRight:"0.2rem",marginTop:"-2px"}}
                     ></i>{"补考列表"}
                     </Button>
+                    {/* <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-lg"
+                        onClick={() => {
+                           
+                            
+                          
+                        }}
+                        style={{top:"-0.25rem",minWidth:"100px"}}
+                    >
+                        {"企业信誉标注"}
+                    </Button> */}
                 </div>
                 <Drawer
                        
@@ -801,7 +818,7 @@ class Student extends Component {
                             id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
                             student_id: this.state.tableData[i].id,
                             student_name: this.state.tableData[i].student_name,
-                            company_name: this.state.tableData[i].company_name,
+                            company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
                             company_admin: this.state.tableData[i].company_admin,
                             company_mobile: this.state.tableData[i].company_mobile,
                             company_mail: this.state.tableData[i].company_mail,

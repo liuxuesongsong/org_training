@@ -10,7 +10,9 @@ import Dialog, {
 } from 'material-ui/Dialog';
 import { initCache, getData, getRouter, getCache, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
-import {  ALERT, NOTICE, QUERY} from '../../enum';
+import {  ALERT, NOTICE, QUERY,CLASSTEACHER_ADD,CLASSTEACHER_INFOS,CLASSTEACHER_DEL,CLASSTEACHER_UPDATA,SPONSOR_ADD,SPONSOR_INFOS,SPONSOR_DEL,SPONSOR_UPDATA,
+    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA
+} from '../../enum';
 import Drawer from 'material-ui/Drawer';
 
 
@@ -259,8 +261,17 @@ class Clazzrecord extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        
-        console.log(this.state.create_name+this.state.create_number)
+       // getData(getRouter(CLASSTEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {})
+       //班主任 
+       {this.state.openhead?getData(getRouter(CLASSTEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
+       //主办方联系人 
+       {this.state.opensponsor?getData(getRouter(SPONSOR_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
+       //理论讲师
+       {this.state.opentheory?getData(getRouter(TEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
+       //实践讲师
+       {this.state.openpractice?getData(getRouter(EXPERT_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
+
+       //  {this.state.openimplement?console.log(this.state.create_name+this.state.create_number+"implement"):""}
      //   getData(getRouter(CREATE_TYPE), { session: sessionStorage.session, type_name:this.state.create_type_name }, cb, {});
 
     }
@@ -277,6 +288,14 @@ class Clazzrecord extends Component {
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         console.log(id)
+        {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id }, cb, {}):""}
+        //主办方联系人 
+        {this.state.opensponsor?getData(getRouter(SPONSOR_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
+        //理论讲师
+        {this.state.opentheory?getData(getRouter(TEACHER_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
+        //实践讲师
+        {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
+ 
       //  getData(getRouter(DEL_TYPE), { session: sessionStorage.session, id:id }, cb, {});
 
     }
@@ -295,9 +314,18 @@ class Clazzrecord extends Component {
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+        
     var name= document.getElementById(name).value;
     var number = document.getElementById(number).value;
     console.log(name+number)
+    {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
+    //主办方联系人 
+    {this.state.opensponsor?getData(getRouter(SPONSOR_DEL), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
+    //理论讲师
+    {this.state.opentheory?getData(getRouter(TEACHER_DEL), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
+    //实践讲师
+    {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id,areas:name,detailed:number }, cb, {}):""}
+
        // getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
 
     }
@@ -342,13 +370,12 @@ class Clazzrecord extends Component {
                         border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.54)",marginLeft:"1rem",height:"36px",outline:"none"
                     }}
                         className="nyx-info-select-lg"
-                        id="search_area_id"
+                        id="create_implement_area"
                         label={Lang[window.Lang].pages.org.clazz.info.area}
                         // defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
-                        // onChange={(e) => {
-                        //     this.state.search_area_id =  e.target.value == "null"? null:e.target.value;
-                        //     this.state.queryCondition.area_id =  e.target.value == "null"? null:e.target.value;
-                        // }}
+                        onChange={(e) => {
+                            this.state.create_name =  e.target.value == "null"? null:e.target.value;
+                        }}
                     >   
                         <option value={"null"}>{"-省市-"}</option>
                         {getAreas().map(area => {
@@ -391,9 +418,11 @@ class Clazzrecord extends Component {
                                     color="primary"
                                     className="nyx-org-btn-sm"
                                     onClick={() => {
+                                        
                                     if(this.state.create_name==""){
-                                        this.popUpNotice(NOTICE, 0, "请输入姓名");  
-                                        return
+                                        {this.state.openimplement?"":this.popUpNotice(NOTICE, 0, "请输入姓名");return}
+                                       // this.popUpNotice(NOTICE, 0, "请输入姓名");  
+                                      //  return
                                     }
                                         this.create_module();
                                      //   this.state.allData = [];
@@ -410,8 +439,12 @@ class Clazzrecord extends Component {
                                     className="nyx-org-btn-sm"
                                     onClick={() => {
                                         this.setState({
-                                            edit_state:0
+                                            edit_state:0,
                                         })
+                                        {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
+                                     //   document.getElementById("create_implement_area").value=null;
+                                       
+                                        document.getElementById("create_number").value="";
                                     }}
                                     style={{margin: 0,marginLeft:6,top:7}}
                                 >
@@ -419,22 +452,31 @@ class Clazzrecord extends Component {
                                 </Button>      
                                 </td>
                         </tr>
-                        {this.state.see_manage_list.map(see_manages => {
+                        {this.state.openimplement?this.state.see_manage_list.map(see_manages => {
                               
                               return <tr>
                               <td>
-                              <TextField
-                               key={see_manages.category}
-                               style={{width:"110px"}}
-                                  id={"edit_name"+see_manages.id}
-                                  className="nyx-file-text"
-                                  defaultValue= {see_manages.category}
-                                 disabled={this.state.edit_state==see_manages.id?false:true}
-                                
-                              />
-                             </td><td
-                               style={{width:"215px"}}
-                              >
+
+                              <select
+                                style={
+                                    this.state.edit_state==see_manages.id?{border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.38)",marginLeft:"1rem",height:"26px",outline:"none",marginBottom:"6px",paddingBottom:"5px",fontSize:"12px",color:"rgba(0, 0, 0, 0.87)"}
+                                    :{border:"none",borderBottom:"1px dashed rgba(0, 0, 0, 0.38)",marginLeft:"1rem",height:"26px",outline:"none",marginBottom:"6px",paddingBottom:"5px",fontSize:"12px",color:"rgba(0, 0, 0, 0.38)"}
+                                    
+                                }
+                                    className="nyx-info-select-lg"
+                                    id={"implement_area"+see_manages.id}
+                                    disabled={this.state.edit_state==see_manages.id?false:true}
+                                    defaultValue={see_manages.id}
+                                    label={Lang[window.Lang].pages.org.clazz.info.area}
+                                >   
+                                    <option style={{marginBottom:"0.5rem"}} value={"null"}>{"-省市-"}</option>
+                                    {getAreas().map(area => {
+                                        return <option key={area.id} value={area.id}>{area.area_name}</option>
+                                    })}
+                                </select>
+                                            </td><td
+                                            style={{width:"215px"}}
+                                            >
                             {/* <input
                             
                             value={type_infos.type_name}/> */}
@@ -469,7 +511,8 @@ class Clazzrecord extends Component {
                                   color="primary"
                                   className="nyx-org-btn-sm"
                                   onClick={() => {
-                                      this.edit_module(see_manages.id,"edit_name"+see_manages.id,"edit_number"+see_manages.id);
+                                      
+                                      this.edit_module(see_manages.id,"implement_area"+see_manages.id,"edit_number"+see_manages.id);
                                      
                                     //   this.setState({
                                     //       edit_state:0
@@ -494,7 +537,83 @@ class Clazzrecord extends Component {
                                   </Button>
                               </td>
                           </tr>
-                          })}
+                          }):this.state.see_manage_list.map(see_manages => {
+                              
+                            return <tr>
+                            <td>
+
+                            <TextField
+                                          key={see_manages.name}
+                                          style={{width:"110px"}}
+                                              id={"edit_name"+see_manages.id}
+                                              className="nyx-file-text"
+                                              defaultValue= {see_manages.name}
+                                              disabled={this.state.edit_state==see_manages.id?false:true}
+                                              
+                                          />
+                                          </td><td
+                                          style={{width:"215px"}}
+                                          >
+                          {/* <input
+                          
+                          value={type_infos.type_name}/> */}
+                             <TextField
+                             key={see_manages.number}
+                                id={"edit_number"+see_manages.id}
+                                className="nyx-file-text"
+                                defaultValue={see_manages.number}
+                               disabled={this.state.edit_state==see_manages.id?false:true}
+                              
+                            />
+                             </td>
+                            <td>
+                            <Button
+                               // raised 
+                                color="primary"
+                                className="nyx-org-btn-sm"
+                                style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"none":"block"}}
+                                onClick={() => {
+                                 
+                                  this.setState({
+                                    edit_state:see_manages.id
+                                  })
+                                //  console.log(see_manages.type_name)
+                                }}
+                                    >
+                                {"编辑"}
+                                </Button>
+                                <Button
+                               // raised 
+                               style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"block":"none"}}
+                                color="primary"
+                                className="nyx-org-btn-sm"
+                                onClick={() => {
+                                    this.edit_module(see_manages.id,"edit_name"+see_manages.id,"edit_number"+see_manages.id);
+                                   
+                                  //   this.setState({
+                                  //       edit_state:0
+                                  //   })
+                                }}
+                                    >
+                                {"保存"}
+                                </Button>
+                            
+                            </td><td>
+                            <Button
+                               // raised 
+                                color="primary"
+                                className="nyx-org-btn-sm"
+                                onClick={() => {
+                                    this.del_module(see_manages.id);
+                                   // this.fresh();
+                                }}
+                                style={{margin:0,marginLeft:10}}
+                                >
+                                {"删除"}
+                                </Button>
+                            </td>
+                        </tr>
+                        })}
                     </table>
                 </DialogContent>
                 <DialogActions>
@@ -538,7 +657,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({openDialog: true , openhead: true });
-                        this.see_module("type_infos");
+                        this.see_module(CLASSTEACHER_INFOS);
                     }}
                 >
                     {"班主任管理"}
@@ -550,6 +669,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,opensponsor:true });
+                        this.see_module(SPONSOR_INFOS);
                     }}
                 >
                     {"主办方联系人管理"}
@@ -561,6 +681,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true ,opentheory:true});
+                        this.see_module(TEACHER_INFOS);
                     }}
                 >
                     {"理论讲师管理"}
@@ -572,6 +693,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,openpractice:true });
+                        this.see_module(EXPERT_INFOS);
                     }}
                 >
                     {"实践讲师管理"}
@@ -583,6 +705,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,openimplement: true });
+                        this.see_module("type_infos");
                     }}
                 >
                     {"实施地点管理"}
