@@ -14,7 +14,7 @@ import {  ALERT, NOTICE, QUERY,CLASSTEACHER_ADD,CLASSTEACHER_INFOS,CLASSTEACHER_
     TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA
 } from '../../enum';
 import Drawer from 'material-ui/Drawer';
-
+import BeingLoading from '../../components/BeingLoading'
 
 import ReactDataGrid from 'angon_react_data_grid';
 import Code from '../../code';
@@ -34,6 +34,7 @@ class Clazzrecord extends Component {
         pno:1,
         psize:10,
         count: 0,
+        islength:"",
         showStudents:false,
         openDialog:false,
         opentheory:false,
@@ -41,6 +42,7 @@ class Clazzrecord extends Component {
         opensponsor:false,
         openpractice:false,
         openimplement:false,//实施地点管理模块
+        beingLoading: false,
         see_manage_list:[],
         edit_state:0,
         create_name:"",
@@ -231,17 +233,38 @@ class Clazzrecord extends Component {
             opensponsor:false,//主办方
             openpractice:false,//实践
             openimplement:false,//实施
-            edit_state:0
+            beingLoading: false,//loading结束
+            edit_state:0,
+            islength:""
          
         })
     }
+    // see_manage_list_length = (type,islength) => {
+        
+    //     var components = []
+       
+    //         components.push(
+    //             this.state.see_manage_list.length==0&&this.state.edit_state==0?<p>
+    //                 {islength}
+    //             </p>:<tr>
+    //              <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
+    //          </tr>
+    //         )
+        
+    //     return components
+       
+    //  }
     //查看管理模块
     see_module = (see_module) =>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-               // console.log(message.data);
+               console.log(message.data);
+               this.setState({
+                beingLoading: false
+               })
                 this.state.see_manage_list=message.data;
-               
+                console.log(this.state.see_manage_list)
+               {this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击添加！":""}
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -254,8 +277,11 @@ class Clazzrecord extends Component {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.setState({
-                    edit_state:0
+                    edit_state:0,
+                   // beingLoading: false
                 })
+                {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
+                //this.fresh();
                
             }
            
@@ -283,10 +309,12 @@ class Clazzrecord extends Component {
                 this.setState({
                     edit_state:0
                 })
+                {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
+        //this.fresh();
         console.log(id)
         {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id }, cb, {}):""}
         //主办方联系人 
@@ -308,8 +336,9 @@ class Clazzrecord extends Component {
                 this.setState({
                     edit_state:0
                 })
+               // this.fresh()
               //  this.state.allData = [];
-                this.fresh();
+              {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -318,21 +347,25 @@ class Clazzrecord extends Component {
     var name= document.getElementById(name).value;
     var number = document.getElementById(number).value;
     console.log(name+number)
-    {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
+    {this.state.openhead?getData(getRouter(CLASSTEACHER_UPDATA), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
     //主办方联系人 
-    {this.state.opensponsor?getData(getRouter(SPONSOR_DEL), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
+    {this.state.opensponsor?getData(getRouter(SPONSOR_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
     //理论讲师
-    {this.state.opentheory?getData(getRouter(TEACHER_DEL), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
+    {this.state.opentheory?getData(getRouter(TEACHER_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
     //实践讲师
-    {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id,areas:name,detailed:number }, cb, {}):""}
+    {this.state.openpractice?getData(getRouter(EXPERT_UPDATA), { session: sessionStorage.session, id:id,areas:name,detailed:number }, cb, {}):""}
 
        // getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
 
     }
-     Dialogs = (title,type) => {
+     Dialogs = (title,type,islength) => {
         return (
             <Dialog open={this.state.openDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle style={{width:"515px"}}>
+                {this.state.beingLoading ?
+          <BeingLoading /> : ''
+        }
+
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     {title}
                     <Button
@@ -359,9 +392,14 @@ class Clazzrecord extends Component {
                     <table 
                        style={{textAlign:"center",marginTop:"10px"}}
                         >
-                        <tr>
-                            <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
-                        </tr>
+                        <p>{this.state.islength}</p>
+                        {/* <tr>
+                 <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
+             </tr> */}
+                       {this.state.see_manage_list.length==0&&this.state.edit_state==0?this.state.islength="":<tr>
+                 <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
+             </tr>}
+                        
                         <tr style={{display:this.state.edit_state==-1?"":"none"}}>
                            
                             <td style={{width:"110px"}}>
@@ -656,7 +694,7 @@ class Clazzrecord extends Component {
                     className="nyx-org-btn-lg nyx-document-btn"
                     onClick={() => {
                         this.state.see_manage_list=[];
-                        this.setState({openDialog: true , openhead: true });
+                        this.setState({openDialog: true , openhead: true ,beingLoading: true});
                         this.see_module(CLASSTEACHER_INFOS);
                     }}
                 >
@@ -867,11 +905,11 @@ class Clazzrecord extends Component {
                  */}
                  {/* {this.headDialog()} */}
                   
-                  {this.state.openhead?this.Dialogs("班主任管理","电话"):""}
-                  {this.state.opensponsor?this.Dialogs("主办方联系人管理","电话"):""}
-                  {this.state.opentheory?this.Dialogs("理论讲师管理","讲师编号"):""}
-                  {this.state.openpractice?this.Dialogs("实践讲师管理","讲师编号"):""}
-                  {this.state.openimplement?this.Dialogs("实施地点管理","详细地址"):""}
+                  {this.state.openhead?this.Dialogs("班主任管理","电话","暂无班主任信息，请点击新增！"):""}
+                  {this.state.opensponsor?this.Dialogs("主办方联系人管理","电话","暂无主办方联系人信息，请点击新增！"):""}
+                  {this.state.opentheory?this.Dialogs("理论讲师管理","讲师编号","暂无理论讲师信息，请点击新增！"):""}
+                  {this.state.openpractice?this.Dialogs("实践讲师管理","讲师编号","暂无实践讲师信息，请点击新增！"):""}
+                  {this.state.openimplement?this.Dialogs("实施地点管理","详细地址","暂无实施地点信息，请点击新增！"):""}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

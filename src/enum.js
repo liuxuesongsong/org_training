@@ -30,19 +30,19 @@ export const DATA_TYPE_ADMIN = 'admin'; // 管理员数据
 export const CLASSTEACHER_ADD ='classteacher_add';//班主任新增
 export const CLASSTEACHER_INFOS ='classteacher_infos';//班主任查询
 export const CLASSTEACHER_DEL ='classteacher_del';//班主任删除
-export const CLASSTEACHER_UPDATA ='classteacher_update';//班主任修改
+export const CLASSTEACHER_UPDATA ='classteacher_updata';//班主任修改
 export const SPONSOR_ADD ='sponsor_add';//主办方联系人新增
 export const SPONSOR_INFOS ='sponsor_infos';//主办方联系人查询
 export const SPONSOR_DEL ='sponsor_del';//主办方联系人删除
-export const SPONSOR_UPDATA ='sponsor_update';//主办方联系人修改
+export const SPONSOR_UPDATA ='sponsor_updata';//主办方联系人修改
 export const TEACHER_ADD ='teacher_add';//理论讲师新增
 export const TEACHER_INFOS ='teacher_infos';//理论讲师查询
 export const TEACHER_DEL ='teacher_del';//理论讲师删除
-export const TEACHER_UPDATA ='teacher_update';//理论讲师修改
+export const TEACHER_UPDATA ='teacher_updata';//理论讲师修改
 export const EXPERT_ADD ='expert_add';//实践讲师新增
 export const EXPERT_INFOS ='expert_infos';//实践讲师查询
 export const EXPERT_DEL ='expert_del';//实践讲师删除
-export const EXPERT_UPDATA ='expert_update';//实践讲师修改
+export const EXPERT_UPDATA ='expert_updata';//实践讲师修改
 
 /**
  * 状态枚举
