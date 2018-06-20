@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
+
+import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
+
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST,UNLOCK_STUDENT} from '../../enum';
+import Drawer from 'material-ui/Drawer';
 import Dialog, {
     DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
-import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
-
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST} from '../../enum';
-import Drawer from 'material-ui/Drawer';
-
 
 import ReactDataGrid from 'angon_react_data_grid';
 import Code from '../../code';
@@ -40,6 +40,7 @@ class Student extends Component {
         count: 0,
         resitcount: 0,
         search_input: "",
+        idcard:"",
         search_resit_area_id:null,
         search_resit_course_id:null,
         search_resit_is_inlist: null,
@@ -57,7 +58,8 @@ class Student extends Component {
          alertCode: Code.LOGIC_SUCCESS,
          alertContent: "",
          alertAction: [],
-         openNewStudentDialog: false
+         openNewStudentDialog: false,
+         openunlockDialog:false
     }
     componentDidMount() {
         window.currentPage = this;
@@ -91,6 +93,12 @@ class Student extends Component {
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
+    }
+    handleRequestClose = () => {
+        this.setState({
+            openunlockDialog: false,
+            
+        })
     }
 
     /**
@@ -315,7 +323,65 @@ class Student extends Component {
             student_ids: this.state.selectedStudentID
         }
         getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
-    }  
+    } 
+    unlock_student = () =>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        console.log(this.state.idcard);
+      //  getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
+    }
+    unlockDialog = () => {
+        return (
+            <Dialog  open={this.state.openunlockDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    取消学员90天锁定
+                </DialogTitle>
+                <DialogContent>
+                    <div>
+                        
+                    <TextField
+                            className="nyx-clazz-message"
+                            key={"class_head"}
+                            id={"class_head"}
+                            style={{width:"260px"}}
+                            label={"解锁学员身份证号"}
+                            onChange={(event) => {
+                               this.state.idcard=event.target.value
+                            }}>
+                        </TextField>   
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                if(this.state.idcard==""){
+                                    this.popUpNotice(NOTICE, 0, "请输入有效身份证号");
+                                    return;
+                                }
+                              this.unlock_student()
+                               // this.fresh();
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+    } 
    
     render() {
         return (
@@ -452,19 +518,21 @@ class Student extends Component {
                     style={{marginRight:"0.2rem",marginTop:"-2px"}}
                     ></i>{"补考列表"}
                     </Button>
-                    {/* <Button
+                    <Button
                         raised 
                         color="primary"
                         className="nyx-org-btn-lg"
                         onClick={() => {
-                           
+                           this.setState({
+                            openunlockDialog:true
+                           })
                             
                           
                         }}
                         style={{top:"-0.25rem",minWidth:"100px"}}
                     >
-                        {"企业信誉标注"}
-                    </Button> */}
+                        {"取消企业锁定"}
+                    </Button>
                 </div>
                 <Drawer
                        
@@ -945,7 +1013,7 @@ class Student extends Component {
                     this.state.search_is_inlist == 1? this.checkTrain():"";
                 }}
                 >添加为该机构学员</Button>
-                
+                 {this.unlockDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
@@ -954,6 +1022,7 @@ class Student extends Component {
                     action={this.state.alertAction}>
                 </CommonAlert>
             </div>
+           
             
         )
     }

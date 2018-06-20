@@ -11,7 +11,7 @@ import Dialog, {
 import { initCache, getData, getRouter, getCache, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
 import {  ALERT, NOTICE, QUERY,CLASSTEACHER_ADD,CLASSTEACHER_INFOS,CLASSTEACHER_DEL,CLASSTEACHER_UPDATA,SPONSOR_ADD,SPONSOR_INFOS,SPONSOR_DEL,SPONSOR_UPDATA,
-    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA
+    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA,ADDRESS_ADD,ADDRESS_INFOS,ADDRESS_DEL,ADDRESS_UPDATA,
 } from '../../enum';
 import Drawer from 'material-ui/Drawer';
 import BeingLoading from '../../components/BeingLoading'
@@ -283,6 +283,8 @@ class Clazzrecord extends Component {
                 {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
                 {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
                 {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+                {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
+                
             //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
                 
                 //this.fresh();
@@ -299,6 +301,8 @@ class Clazzrecord extends Component {
        {this.state.opentheory?getData(getRouter(TEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
        //实践讲师
        {this.state.openpractice?getData(getRouter(EXPERT_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
+      //实施地点
+       {this.state.openimplement?getData(getRouter(ADDRESS_ADD), { session: sessionStorage.session, address_area_id:this.state.create_name,detailed:this.state.create_number }, cb, {}):""}
 
        //  {this.state.openimplement?console.log(this.state.create_name+this.state.create_number+"implement"):""}
      //   getData(getRouter(CREATE_TYPE), { session: sessionStorage.session, type_name:this.state.create_type_name }, cb, {});
@@ -316,6 +320,8 @@ class Clazzrecord extends Component {
                 {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
                 {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
                 {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+                {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
+                
             //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
                 
             }
@@ -329,6 +335,8 @@ class Clazzrecord extends Component {
         {this.state.opentheory?getData(getRouter(TEACHER_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
         //实践讲师
         {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
+  //实施地点
+  {this.state.openimplement?getData(getRouter(ADDRESS_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
  
 
     }
@@ -347,6 +355,8 @@ class Clazzrecord extends Component {
               {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
               {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
               {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+              {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
+                
           //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
               
             }
@@ -356,16 +366,19 @@ class Clazzrecord extends Component {
         
     var name= document.getElementById(name).value;
     var number = document.getElementById(number).value;
-    console.log(name+number)
+    //console.log(name+number)
     {this.state.openhead?getData(getRouter(CLASSTEACHER_UPDATA), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
     //主办方联系人 
     {this.state.opensponsor?getData(getRouter(SPONSOR_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
     //理论讲师
     {this.state.opentheory?getData(getRouter(TEACHER_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
     //实践讲师
-    {this.state.openpractice?getData(getRouter(EXPERT_UPDATA), { session: sessionStorage.session, id:id,areas:name,detailed:number }, cb, {}):""}
+    {this.state.openpractice?getData(getRouter(EXPERT_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number  }, cb, {}):""}
 
-       // getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
+//实施地点
+{this.state.openimplement?getData(getRouter(ADDRESS_UPDATA), { session: sessionStorage.session, id:id,address_area_id:name,detailed:number  }, cb, {}):""}
+
+// getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
 
     }
      Dialogs = (title,type,islength) => {
@@ -520,7 +533,7 @@ class Clazzrecord extends Component {
                                     className="nyx-info-select-lg"
                                     id={"implement_area"+see_manages.id}
                                     disabled={this.state.edit_state==see_manages.id?false:true}
-                                    defaultValue={see_manages.id}
+                                    defaultValue={see_manages.address_area_id}
                                     label={Lang[window.Lang].pages.org.clazz.info.area}
                                 >   
                                     <option style={{marginBottom:"0.5rem"}} value={"null"}>{"-省市-"}</option>
@@ -535,10 +548,10 @@ class Clazzrecord extends Component {
                             
                             value={type_infos.type_name}/> */}
                                <TextField
-                               key={see_manages.type_name}
+                               key={see_manages.detailed}
                                   id={"edit_number"+see_manages.id}
                                   className="nyx-file-text"
-                                  defaultValue={see_manages.type_name}
+                                  defaultValue={see_manages.detailed}
                                  disabled={this.state.edit_state==see_manages.id?false:true}
                                 
                               />
@@ -759,7 +772,7 @@ class Clazzrecord extends Component {
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,openimplement: true });
-                        this.see_module("type_infos");
+                        this.see_module(ADDRESS_INFOS);
                     }}
                 >
                     {"实施地点管理"}
