@@ -258,15 +258,14 @@ class Clazzrecord extends Component {
     see_module = (see_module) =>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-               console.log(message.data);
                this.setState({
                 beingLoading: false
                })
                 this.state.see_manage_list=message.data;
-                console.log(this.state.see_manage_list)
-               {this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击添加！":""}
+              
             }
-           
+            {this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击新增！":""}
+            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         getData(getRouter(see_module), { session: sessionStorage.session }, cb, {});
@@ -281,13 +280,17 @@ class Clazzrecord extends Component {
                    // beingLoading: false
                 })
                 {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
+                {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
+                {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
+                {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+            //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
+                
                 //this.fresh();
                
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-       // getData(getRouter(CLASSTEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {})
        //班主任 
        {this.state.openhead?getData(getRouter(CLASSTEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
        //主办方联系人 
@@ -310,12 +313,15 @@ class Clazzrecord extends Component {
                     edit_state:0
                 })
                 {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
+                {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
+                {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
+                {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+            //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
+                
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        //this.fresh();
-        console.log(id)
         {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id }, cb, {}):""}
         //主办方联系人 
         {this.state.opensponsor?getData(getRouter(SPONSOR_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
@@ -324,7 +330,6 @@ class Clazzrecord extends Component {
         //实践讲师
         {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
  
-      //  getData(getRouter(DEL_TYPE), { session: sessionStorage.session, id:id }, cb, {});
 
     }
 
@@ -339,6 +344,11 @@ class Clazzrecord extends Component {
                // this.fresh()
               //  this.state.allData = [];
               {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
+              {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
+              {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
+              {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
+          //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
+              
             }
            
             this.popUpNotice(NOTICE, 0, message.msg);
@@ -379,8 +389,13 @@ class Clazzrecord extends Component {
                                 return false
                             }
                          this.setState({
-                            edit_state:-1
+                            edit_state:-1,
+                            islength:""
                          })
+                         {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
+                         //   document.getElementById("create_implement_area").value=null;
+                           
+                            document.getElementById("create_number").value="";
                         }}
                         style={{float:"right",marginTop:"-5px"}}
                     >
@@ -396,7 +411,7 @@ class Clazzrecord extends Component {
                         {/* <tr>
                  <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
              </tr> */}
-                       {this.state.see_manage_list.length==0&&this.state.edit_state==0?this.state.islength="":<tr>
+                       {this.state.see_manage_list.length==0&&this.state.edit_state==0?"":<tr>
                  <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
              </tr>}
                         
@@ -479,6 +494,7 @@ class Clazzrecord extends Component {
                                         this.setState({
                                             edit_state:0,
                                         })
+                                        if(this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击新增！":"")
                                         {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
                                      //   document.getElementById("create_implement_area").value=null;
                                        
