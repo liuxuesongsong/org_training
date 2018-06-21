@@ -1450,7 +1450,6 @@ class Clazz extends Component {
                                 href="#"
                                 download
                                 onClick={() => {
-
                                 }}
                                // className="nyx-org-btn-sm"            
                               // className="nyx-org-btn-sm"
@@ -2174,7 +2173,8 @@ class Clazz extends Component {
                                     id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
                                     student_id: this.state.tableData[i].id,
                                     student_name: this.state.tableData[i].student_name,
-                                    company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
+                                    //company_name: this.state.tableData[i].company_name,
+                                   company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
                                     company_admin: this.state.tableData[i].company_admin,
                                     detail: this.state.tableData[i].detail,
                                     area_name: getCity(this.state.tableData[i].area_id),

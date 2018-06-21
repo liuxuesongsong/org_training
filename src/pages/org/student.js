@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST,UNLOCK_STUDENT} from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST,UNLOCK_STUDENT,STUDENT_TRAIN_DETAIL,CHANGE_CREDIT} from '../../enum';
 import Drawer from 'material-ui/Drawer';
 import Dialog, {
     DialogActions,
@@ -30,6 +30,7 @@ class Student extends Component {
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         resit_list:[],
+        student_train_detail_list:[],//详细信息列表
         currentPage: 1,
         resitcurrentPage:1,
         totalPage: 1,
@@ -41,6 +42,8 @@ class Student extends Component {
         resitcount: 0,
         search_input: "",
         idcard:"",
+        creditcompany_id:"",
+        creditclass_id:"",
         search_resit_area_id:null,
         search_resit_course_id:null,
         search_resit_is_inlist: null,
@@ -51,6 +54,7 @@ class Student extends Component {
         search_is_inlist: 1,
         search_institution: 0,
         resitshowInfo: false,
+        creditshowInfo:false,
         showStudents:false,
          // 提示状态
          alertOpen: false,
@@ -59,7 +63,8 @@ class Student extends Component {
          alertContent: "",
          alertAction: [],
          openNewStudentDialog: false,
-         openunlockDialog:false
+         openunlockDialog:false,
+         opencreditDialog:false
     }
     componentDidMount() {
         window.currentPage = this;
@@ -85,7 +90,17 @@ class Student extends Component {
         });
      
     };
-
+    creditDrawer = (open) => () => {
+        if(!open){
+           //this.state.queryResitCondition.class_state="2";
+          // this.state.queryCondition 
+        }
+        this.setState({
+            creditshowInfo: true,
+            creditright: open,
+        });
+     
+    };
     cacheToState() {
         window.currentPage.queryStudents();
         //window.currentPage.queryResitStudents();
@@ -97,6 +112,7 @@ class Student extends Component {
     handleRequestClose = () => {
         this.setState({
             openunlockDialog: false,
+            opencreditDialog:false
             
         })
     }
@@ -324,6 +340,41 @@ class Student extends Component {
         }
         getData(getRouter(CHOOSE_STUDENT), obj, cb, {});
     } 
+    //获取失信详细信息
+    student_train_detail = () => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               // this.state.selectedStudentID = [];
+               // this.state.currentPageSelectedID = [];
+               // this.queryStudents(1, true)
+                this.state.student_train_detail_list=message.data;
+              //  console.log(this.state.student_train_detail_list)
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+            user_ids: this.state.selectedStudentID
+        }
+        getData(getRouter(STUDENT_TRAIN_DETAIL), obj, cb, {});
+    }
+    change_credit = (company_id,class_id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedStudentID = [];
+                this.state.currentPageSelectedID = [];
+                this.queryStudents(1, true)
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var msg = document.getElementById("change_credit_reason").value;
+        console.log(document.getElementById("change_credit_reason").value)
+        console.log(company_id)
+        if(class_id==null){
+            console.log("class_id为空")
+        }
+        getData(getRouter(CHANGE_CREDIT), {session: sessionStorage.session,company_id:company_id,class_id:class_id,msg:msg,type:1}, cb, {});
+    }
     unlock_student = () =>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -332,7 +383,7 @@ class Student extends Component {
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         console.log(this.state.idcard);
-      //  getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
+        getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
     }
     unlockDialog = () => {
         return (
@@ -382,7 +433,57 @@ class Student extends Component {
             </Dialog >
         )
     } 
-   
+    creditDialog = (company_id,class_id) => {
+        return (
+            <Dialog open={this.state.opencreditDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle style={{width:"26rem"}}>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                   标注失信原因 
+                    
+            </DialogTitle>
+                <DialogContent>
+                                <TextField
+                                style={{width:"22rem",marginTop:"0.5rem"}}
+                                //  className="nyx-form-div"
+                                  key={"change_credit_reason"}
+                                  id="change_credit_reason"
+                                  className="nyx-file-text"
+                                  label={"失信原因"}
+                                  fullWidth>
+                              </TextField>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                if(document.getElementById("change_credit_reason").value==""){
+                                    this.popUpNotice(NOTICE, 0, "请填写失信原因");
+                                    return;
+                                }
+                                this.change_credit(company_id,class_id);
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.setState({
+                                    edit_type_name:0
+                                })
+                                this.handleRequestClose()
+                            
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -811,6 +912,65 @@ class Student extends Component {
                >导出</Button>
                    </div>
                    </Drawer>
+                   {/* 失信抽屉 */}
+                   <Drawer
+                       
+                       anchor="right"
+                       open={this.state.creditright}
+                       onRequestClose={this.creditDrawer(false)}
+                   >
+                    <div style={{width:"600px",paddingLeft:"1rem",paddingTop:"1rem",overflow:"hidden"}}> 
+                    <p style={{color:"#2196f3",fontSize:"18px",marginLeft:"2rem"}}>企业失信标注</p>
+                    <div style={{height:"30px"}} className="nyx-clazz-student-name">
+                    
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                     姓名</div>
+                    <div style={{width:"180px",textAlign:"center"}} className="nyx-clazz-student-message">
+                    公司全称</div>
+                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    报名状态</div>
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    班级编号</div>
+                    <div style={{width:"5rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    培训机构</div>
+                    </div>
+                    {this.state.student_train_detail_list.map(detail_message => {
+                    return    <div style={{height:"30px"}} className="nyx-clazz-student-name">
+                    
+                    <div style={{width:"4rem",textAlign:"center"}} title=   {detail_message.user_name} className="nyx-clazz-student-message">
+                        {detail_message.user_name}</div>
+                     <div style={{width:"180px",textAlign:"center"}} title={detail_message.comany_name} className="nyx-clazz-student-message">{detail_message.comany_name}</div>
+                     <div style={{width:"6rem",textAlign:"center"}} title={detail_message.is_inlist==-1?"待报名-导入":
+                    detail_message.is_inlist==0?"待报名":detail_message.is_inlist==1?"待安排":detail_message.is_inlist==2?"已安排":detail_message.is_inlist==3?"已确认":""
+                    } className="nyx-clazz-student-message">
+                     {detail_message.is_inlist==-1?"待报名-导入":
+                    detail_message.is_inlist==0?"待报名":detail_message.is_inlist==1?"待安排":detail_message.is_inlist==2?"已安排":detail_message.is_inlist==3?"已确认":""}</div>
+                     <div style={{width:"4rem",textAlign:"center"}} title={detail_message.class_id==0?"未排班":detail_message.class_id} className="nyx-clazz-student-message">
+                     {detail_message.class_id==0?"未排班":detail_message.class_id}</div>
+                     <div style={{width:"5rem",textAlign:"center"}} title={getInst(detail_message.ti_id)} className="nyx-clazz-student-message">
+                     {getInst(detail_message.ti_id)}</div>
+                     <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
+                            this.setState({
+                                opencreditDialog:true,
+                                creditcompany_id:detail_message.company_id,
+                                creditclass_id:detail_message.class_id
+                            })
+                           
+                       
+                        }}
+                        className="nyx-org-btn-sm"                                            
+                        style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
+                    >
+                        {"标注"}
+                    </Button>                               
+                     </div>                
+                })}
+            
+                   </div>
+                   </Drawer>
                 <ReactDataGrid
                     
                     rowKey="id"
@@ -887,6 +1047,7 @@ class Student extends Component {
                             student_id: this.state.tableData[i].id,
                             student_name: this.state.tableData[i].student_name,
                             company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
+                           //company_name:this.state.tableData[i].company_name,
                             company_admin: this.state.tableData[i].company_admin,
                             company_mobile: this.state.tableData[i].company_mobile,
                             company_mail: this.state.tableData[i].company_mail,
@@ -1013,7 +1174,29 @@ class Student extends Component {
                     this.state.search_is_inlist == 1? this.checkTrain():"";
                 }}
                 >添加为该机构学员</Button>
+                <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-lg"
+                        onClick={() => {
+                            //console.log(this.state.selectedStudentID.length)
+                            if(this.state.selectedStudentID.length==0){
+                                this.popUpNotice(NOTICE, 0, "请选择失信企业相关信息");
+                                return;
+                            }
+                            this.creditDrawer(true)()//打开失信抽屉
+                            this.student_train_detail();
+                        }}
+                        style={{marginRight:"1rem",minWidth:"100px"}}
+                    >
+                        <i
+                    className="glyphicon glyphicon-tasks"
+                    style={{marginRight:"0.2rem",marginTop:"-2px"}}
+                    ></i>{"失信标注"}
+                    </Button>
+               
                  {this.unlockDialog()}
+                 {this.creditDialog(this.state.creditcompany_id,this.state.creditclass_id)}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
