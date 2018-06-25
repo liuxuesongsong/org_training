@@ -5,7 +5,7 @@ import TextField from 'material-ui/TextField';
 
 import { initCache, getData, getRouter, getCache, getStudent, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
 
-import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST,UNLOCK_STUDENT,STUDENT_TRAIN_DETAIL,CHANGE_CREDIT} from '../../enum';
+import { DEL_TRAIN,CHOOSE_STUDENT, ALERT, NOTICE, SELECT_ALL_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO, NOTE_LIST,UNLOCK_STUDENT,STUDENT_TRAIN_DETAIL,CHANGE_CREDIT,COMPANY_CREDIT_LOG} from '../../enum';
 import Drawer from 'material-ui/Drawer';
 import Dialog, {
     DialogActions,
@@ -28,9 +28,11 @@ class Student extends Component {
         queryCondition: { is_inlist:1,institution:0},
         queryResitCondition: {class_state:2,state:1},
         selectedStudentID: [],      //所有选择的学生ID
+        selectedCOMPANYID: "",      //所有选择的公司ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         resit_list:[],
         student_train_detail_list:[],//详细信息列表
+        company_credit_log_list:[],//失信记录列表
         currentPage: 1,
         resitcurrentPage:1,
         totalPage: 1,
@@ -42,8 +44,10 @@ class Student extends Component {
         resitcount: 0,
         search_input: "",
         idcard:"",
+        creditname:"",
         creditcompany_id:"",
         creditclass_id:"",
+        comany_name_log:"",
         search_resit_area_id:null,
         search_resit_course_id:null,
         search_resit_is_inlist: null,
@@ -55,7 +59,9 @@ class Student extends Component {
         search_institution: 0,
         resitshowInfo: false,
         creditshowInfo:false,
+        creditlogshowInfo:false,
         showStudents:false,
+        credit_log_state:false,
          // 提示状态
          alertOpen: false,
          alertType: ALERT,
@@ -79,6 +85,28 @@ class Student extends Component {
     fresh = () => {
         initCache(this.cacheToState);
     }
+    timestamp2Time = (timestamp, separator) =>{
+        var result = "";  
+              
+        if(timestamp) {  
+            var reg = new RegExp(/\D/, "g"); //提取数字字符串  
+            var timestamp_str = timestamp.replace(reg, "");  
+
+            var d = new Date();  
+            d.setTime(timestamp_str);  
+            var year = d.getFullYear();  
+            var month = d.getMonth() + 1;  
+            var day = d.getDate();  
+            if(month < 10) {  
+                month = "0" + month;  
+            }  
+            if(day < 10) {  
+                day = "0" + day;  
+            }  
+            result = year + separator + month + separator + day;  
+        }  
+        return result;  
+    }
     resitDrawer = (open) => () => {
         if(!open){
            //this.state.queryResitCondition.class_state="2";
@@ -98,6 +126,17 @@ class Student extends Component {
         this.setState({
             creditshowInfo: true,
             creditright: open,
+        });
+     
+    };
+    creditlogDrawer = (open) => () => {
+        if(!open){
+           //this.state.queryResitCondition.class_state="2";
+          // this.state.queryCondition 
+        }
+        this.setState({
+            creditlogshowInfo: true,
+            creditlogright: open,
         });
      
     };
@@ -348,7 +387,6 @@ class Student extends Component {
                // this.state.currentPageSelectedID = [];
                // this.queryStudents(1, true)
                 this.state.student_train_detail_list=message.data;
-              //  console.log(this.state.student_train_detail_list)
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
@@ -358,7 +396,34 @@ class Student extends Component {
         }
         getData(getRouter(STUDENT_TRAIN_DETAIL), obj, cb, {});
     }
-    change_credit = (company_id,class_id) => {
+    //获取是失信记录
+    company_credit_log = (company_id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               // this.state.selectedStudentID = [];
+               // this.state.currentPageSelectedID = [];
+               // this.queryStudents(1, true)
+               this.state.company_credit_log_list=[];
+               this.state.credit_log_state=false;
+               if(message.data.length>0){
+                this.setState({
+                    credit_log_state:true,
+                    company_credit_log_list:message.data
+                  })
+               }else(
+                this.popUpNotice(NOTICE, 0, "该企业暂无失信记录") 
+               )
+               // this.state.company_credit_log_list=message.data;
+            }
+          //  this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+            company_id: company_id
+        }
+        getData(getRouter(COMPANY_CREDIT_LOG), obj, cb, {});
+    }
+    change_credit = (name,company_id,class_id) => {
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.selectedStudentID = [];
@@ -368,12 +433,8 @@ class Student extends Component {
             this.popUpNotice(NOTICE, 0, message.msg);
         }
         var msg = document.getElementById("change_credit_reason").value;
-        console.log(document.getElementById("change_credit_reason").value)
-        console.log(company_id)
-        if(class_id==null){
-            console.log("class_id为空")
-        }
-        getData(getRouter(CHANGE_CREDIT), {session: sessionStorage.session,company_id:company_id,class_id:class_id,msg:msg,type:1}, cb, {});
+      
+        getData(getRouter(CHANGE_CREDIT), {session: sessionStorage.session,company_id:company_id,class_id:class_id,msg:name+"-"+msg,type:1}, cb, {});
     }
     unlock_student = () =>{
         var cb = (route, message, arg) => {
@@ -433,7 +494,7 @@ class Student extends Component {
             </Dialog >
         )
     } 
-    creditDialog = (company_id,class_id) => {
+    creditDialog = (name,company_id,class_id) => {
         return (
             <Dialog open={this.state.opencreditDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle style={{width:"26rem"}}>
@@ -460,7 +521,7 @@ class Student extends Component {
                                     this.popUpNotice(NOTICE, 0, "请填写失信原因");
                                     return;
                                 }
-                                this.change_credit(company_id,class_id);
+                                this.change_credit(name,company_id,class_id);
                                 this.handleRequestClose()
                                 
                             }}
@@ -919,7 +980,7 @@ class Student extends Component {
                        open={this.state.creditright}
                        onRequestClose={this.creditDrawer(false)}
                    >
-                    <div style={{width:"600px",paddingLeft:"1rem",paddingTop:"1rem",overflow:"hidden"}}> 
+                    <div style={{width:"700px",paddingLeft:"1rem",paddingTop:"1rem",overflow:"hidden"}}> 
                     <p style={{color:"#2196f3",fontSize:"18px",marginLeft:"2rem"}}>企业失信标注</p>
                     <div style={{height:"30px"}} className="nyx-clazz-student-name">
                     
@@ -953,8 +1014,28 @@ class Student extends Component {
                         color="primary"
                         raised 
                         onClick={() => {
+                            this.state.comany_name_log  = detail_message.comany_name;
+                            console.log(detail_message.comany_name)
+                          this.company_credit_log(detail_message.company_id)
+                          
+                        //   this.setState({
+                        //     credit_log_state:true,
+
+                        //   })
+                          console.log(this.state.company_credit_log_list)
+                        }}
+                        className="nyx-org-btn-md"                                            
+                        style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
+                    >
+                        {"失信记录"}
+                    </Button>
+                     <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
                             this.setState({
                                 opencreditDialog:true,
+                                creditname:detail_message.user_name,
                                 creditcompany_id:detail_message.company_id,
                                 creditclass_id:detail_message.class_id
                             })
@@ -965,10 +1046,43 @@ class Student extends Component {
                         style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
                     >
                         {"标注"}
-                    </Button>                               
+                    </Button>  
+                                                           
                      </div>                
                 })}
-            
+                <div style={this.state.credit_log_state?{display:"block"}:{display:"none"}}>
+                <p style={{color:"#2196f3",fontSize:"18px",marginLeft:"2rem"}}>{this.state.comany_name_log}失信记录</p>
+                <div style={{height:"30px"}} className="nyx-clazz-student-name">
+                   <div style={{width:"3rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    序号</div>
+                    <div style={{width:"260px",textAlign:"center"}} className="nyx-clazz-student-message">
+                    失信原因</div>
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    班级编号</div>
+                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    标注机构</div>
+                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    标注时间</div>
+                    </div>
+                    {this.state.company_credit_log_list.map(company_credit_log => {
+                        
+                        return <div style={{height:"30px"}} className="nyx-clazz-student-name">
+                        <div style={{width:"3rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                        {this.state.company_credit_log_list.indexOf(company_credit_log)+1}</div>
+   
+                                    <div style={{width:"260px",textAlign:"center"}} title={company_credit_log.msg} className="nyx-clazz-student-message">{company_credit_log.msg}</div>
+                                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                                     {company_credit_log.class_id==0?"未排班":company_credit_log.class_id}</div>
+                                   
+                                    <div style={{width:"6rem",textAlign:"center"}} title={getInst(company_credit_log.ti_id)} className="nyx-clazz-student-message">
+                                    {getInst(company_credit_log.ti_id)}</div>
+                                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                                    {this.timestamp2Time(company_credit_log.time+"000", "-")}
+                                    </div>
+                         </div>
+                    })}
+                </div>
+                
                    </div>
                    </Drawer>
                 <ReactDataGrid
@@ -1184,19 +1298,23 @@ class Student extends Component {
                                 this.popUpNotice(NOTICE, 0, "请选择失信企业相关信息");
                                 return;
                             }
+                            this.state.company_credit_log_list=[];
+                            this.state.credit_log_state=false;
                             this.creditDrawer(true)()//打开失信抽屉
                             this.student_train_detail();
+                            
                         }}
-                        style={{marginRight:"1rem",minWidth:"100px"}}
+                        style={{minWidth:"100px"}}
                     >
                         <i
                     className="glyphicon glyphicon-tasks"
                     style={{marginRight:"0.2rem",marginTop:"-2px"}}
                     ></i>{"失信标注"}
                     </Button>
+                    
                
                  {this.unlockDialog()}
-                 {this.creditDialog(this.state.creditcompany_id,this.state.creditclass_id)}
+                 {this.creditDialog(this.state.creditname,this.state.creditcompany_id,this.state.creditclass_id)}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

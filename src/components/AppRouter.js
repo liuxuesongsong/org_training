@@ -74,13 +74,13 @@ var AppRouter = {
         nav
         component={Document}
       />
-      <Route
+     <Route
         title={titleize(Lang[window.Lang].pages.org.clazzrecord.title)}
         path={'/org/clazzrecord'}
         content={Classrecord}
         nav
         component={Classrecord}
-      />
+      /> 
     </Route>
   </Router>)
 

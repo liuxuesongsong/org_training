@@ -23,6 +23,7 @@ import CommonAlert from '../../components/CommonAlert';
 import { fstat } from 'fs';
 class Clazzrecord extends Component {
     state = {
+        clazzes:[],
         allData: [],
         tableData: [],
         queryCondition: {},
@@ -109,7 +110,7 @@ class Clazzrecord extends Component {
                 
             })
         }
-        getData(getRouter("select_all_students"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
+        getData(getRouter("select_all_class"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
     handleUptateAllData = (newData) => {
@@ -790,22 +791,29 @@ class Clazzrecord extends Component {
                         [
                             {
                                 key: "id",
-                                name: "序号",
-                                width: 40,
-                                resizable: true
-                            },
-                            {
-                                key: "student_name",
-                                name: "姓名",
+                                name: "班级id",
                                 width: 80,
                                 resizable: true
                             },
                             {
-                                key: "company_name",
-                                name: "公司全称",
-                                width: 300,
+                                key: "course_id",
+                                name: "培训类型",
+                                width: 80,
                                 resizable: true
                             },
+                            {
+                                key: "institution",
+                                name: "培训机构",
+                                width: 100,
+                                resizable: true
+                            },
+                            {
+                                key: "area_id",
+                                name: "培训城市",
+                                width: 80,
+                                resizable: true
+                            },
+                            
                             {
                                 key: "area_name",
                                 name: "培训城市",

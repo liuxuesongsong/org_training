@@ -55,6 +55,7 @@ export const MANAGE_LISTS ='manage_lists';//管理模块显示表
 export const UNLOCK_STUDENT='unlock_student';//解锁学生
 export const STUDENT_TRAIN_DETAIL='student_train_detail';//获取学生详细信息
 export const CHANGE_CREDIT='change_credit';//失信标注
+export const COMPANY_CREDIT_LOG='company_credit_log';//失信标注
 export const DETAIL_AREA_LIST='detail_area_list';//获取省市详细地址
 /**
  * 状态枚举
