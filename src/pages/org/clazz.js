@@ -610,12 +610,12 @@ class Clazz extends Component {
                              
                         </TextField> */}
                         <TextField
-                            style={{width:"24%",margin:0,marginRight:"1px"}}
+                            style={{width:"24%",margin:0,marginRight:"1px",fontSize:"14px"}}
                             className="nyx-clazz-message"
                             key={"plan_train_num"}
                             id={"plan_train_num"}
                             label={"培训人数"}
-                            defaultValue={this.state.selected.plan_train_num==""?"65人(含15人补考)":this.state.selected.plan_train_num}
+                            defaultValue={this.state.selected.plan_train_num==null?"65人(含15人补考)":this.state.selected.plan_train_num}
                             onChange={(event) => {
                                
                             }}>

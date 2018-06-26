@@ -36,6 +36,11 @@ class Clazzrecord extends Component {
         psize:10,
         count: 0,
         islength:"",
+        search_year:null,
+        search_month:null,
+        search_area_id: null,
+        search_course_id: null,
+        search_institution: null,
         showStudents:false,
         openDialog:false,
         opentheory:false,
@@ -110,6 +115,8 @@ class Clazzrecord extends Component {
                 
             })
         }
+        console.log(this.state.queryCondition)
+        this.state.queryCondition.train_year=="null"?this.state.queryCondition.train_month=="":""
         getData(getRouter("select_all_class"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
@@ -255,6 +262,37 @@ class Clazzrecord extends Component {
     //     return components
        
     //  }
+    date_arr() {
+        var components = [],
+         d = new Date(),
+        new_date=d.getFullYear();
+    for(var i=2017;i<=new_date;i++){
+        var first_date = new Date(i+"-01-01 00:00:00"),
+            first_time = first_date.getTime().toString(),
+            first_time = first_time.substring(0,10),
+            second_date = new Date(i+"-12-31 23:59:59"),
+            second_time = second_date.getTime().toString(),
+            second_time = second_time.substring(0,10);
+            components.push(
+                <option 
+                // selected={true?"i=new_date":""}
+                value={i} key={i}>{i+"年"}</option>
+            )
+        }
+        return components
+    }
+    month_arr() {
+        var components = [];
+       
+    for(var i=1;i<=12;i++){
+            components.push(
+                <option 
+                // selected={true?"i=new_date":""}
+                value={i<10?"0"+i:i} key={i}>{i<10?"0"+i+"月":i+"月"}</option>
+            )
+        }
+        return components
+    }
     //查看管理模块
     see_module = (see_module) =>{
         var cb = (route, message, arg) => {
@@ -717,64 +755,185 @@ class Clazzrecord extends Component {
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
-                <div>
+                <div style={{marginTop:"1rem"}}>
+                <select
+                    style={{marginLeft:10}}
+                        className="nyx-info-select-lg"
+                        id="search_record_area_id"
+                        label={Lang[window.Lang].pages.org.clazz.info.area}
+                        defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
+                        onChange={(e) => {
+                            console.log( e.target.value)
+                            this.state.search_area_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.area_id =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >   
+                        <option value={"null"}>{"-省市-"}</option>
+                        {getAreas().map(area => {
+                            return <option key={area.id} value={area.id}>{area.area_name}</option>
+                        })}
+                    </select>
+                    <select
+                        style={{marginLeft:"0.5rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_record_course_id"}
+                        defaultValue={this.state.search_course_id ? this.state.search_course_id : ""}
+                        disabled={this.state.search_course_id == -1 ? true : false}
+                        onChange={(e) => {
+                            this.state.search_course_id =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.course_id =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-课程名称-"}</option>
+                        {getCourses().map(course => {
+                                return <option key={course.id} value={course.id}>{course.course_name}</option>
+                            })}
+
+                    </select>
+                    <select
+                        style={{marginLeft:"0.5rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_record_institution"}
+                        onChange={(e) => {
+                            this.state.search_institution =  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-培训机构-"}</option>
+                        {/* <option value={0}>{"无培训机构"}</option> */}
+                        <option value={1}>{"中软培训"}</option>
+                        <option value={2}>{"赛迪"}</option>
+                        <option value={3}>{"赛宝"}</option>
+
+                    </select>
+                    <select
+                     style={{marginLeft:"0.5rem"}}
+                     className="nyx-info-select-lg"
+                     id={"search_record_year"}
+                     onChange={(e) => {
+                        // console.log(e.target.value)
+                        this.setState({search_year:e.target.value == "null"? null:e.target.value})
+                        this.state.queryCondition.train_time=e.target.value == "null"? null:this.state.search_month==null?e.target.value:e.target.value+this.state.search_month;
+
+                         this.state.search_year == "null"? this.state.queryCondition.train_month=="null":"";
+                         console.log(e.target.value+this.state.queryCondition.train_month)
+                       // this.state.search_year =  e.target.value == "null"? null:e.target.value;
+                        //this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
+                    }}
+                     >
+                    <option value={"null"}>{"-培训年份-"}</option>
+                    {this.date_arr()}
+                    </select>
+                    <select
+                     style={{marginLeft:"0.5rem"}}
+                     value={ this.state.search_year==null?"null":this.state.search_month}
+                     disabled={ this.state.search_year==null?true:false}
+                     className="nyx-info-select-lg"
+                     id={"search_record_month"}
+                     onChange={(e) => {
+                         this.setState({
+                            search_month:e.target.value == "null"? null:e.target.value
+                         })
+                        // console.log(this.state.queryCondition.train_year)
+                        //this.state.search_month =  e.target.value == "null"? null:e.target.value;
+                        this.state.queryCondition.train_time =  e.target.value == "null"? this.state.search_year:this.state.search_year+e.target.value;
+                         
+                    }}
+                     >
+                    <option value={"null"}>{"-培训月份-"}</option>
+                    {this.month_arr()}
+                    </select>
+                    <select
+                        style={{marginLeft:"0.5rem"}}
+                        className="nyx-info-select-lg"
+                        id={"search_record_state"}
+                        onChange={(e) => {
+                            this.state.search_state=  e.target.value == "null"? null:e.target.value;
+                            this.state.queryCondition.state =  e.target.value == "null"? null:e.target.value;
+                        }}
+                    >
+                        <option value={"null"}>{"-备案情况-"}</option>
+                        {/* <option value={0}>{"无培训机构"}</option> */}
+                        <option value={1}>{"未备案"}</option>
+                        <option value={2}>{"已备案"}</option>
+                        
+
+                    </select>
+                    <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-sm"
+                        onClick={() => {
+                            this.state.selectedStudentID = [];
+                            this.state.currentPageSelectedID = [];
+                            this.queryStudents(1, true);
+                        }}
+                        style={{marginLeft:10,position:"relative",top:"-2px"}}
+                    >
+                        {"搜索"}
+                    </Button>
                 <Button
                     raised 
                     color="primary"
-                    className="nyx-org-btn-lg nyx-document-btn"
+                    className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({openDialog: true , openhead: true ,beingLoading: true});
                         this.see_module(CLASSTEACHER_INFOS);
                     }}
+                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"85px"}}
                 >
                     {"班主任管理"}
                 </Button>
                 <Button
                     raised 
                     color="primary"
-                    className="nyx-org-btn-lg nyx-document-btn"
+                    className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,opensponsor:true });
                         this.see_module(SPONSOR_INFOS);
                     }}
+                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"125px"}}
                 >
                     {"主办方联系人管理"}
                 </Button>
                 <Button
                     raised 
                     color="primary"
-                    className="nyx-org-btn-lg nyx-document-btn"
+                    className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true ,opentheory:true});
                         this.see_module(TEACHER_INFOS);
                     }}
+                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
                 >
                     {"理论讲师管理"}
                 </Button>   
                 <Button
                     raised 
                     color="primary"
-                    className="nyx-org-btn-lg nyx-document-btn"
+                    className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,openpractice:true });
                         this.see_module(EXPERT_INFOS);
                     }}
+                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
                 >
                     {"实践讲师管理"}
                 </Button>   
                 <Button
                     raised 
                     color="primary"
-                    className="nyx-org-btn-lg nyx-document-btn"
+                    className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
                         this.setState({ openDialog: true,openimplement: true });
                         this.see_module(ADDRESS_INFOS);
                     }}
+                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px",marginBottom:"2rem"}}
                 >
                     {"实施地点管理"}
                 </Button>   
@@ -785,14 +944,14 @@ class Clazzrecord extends Component {
                 </div>
                 
                 <ReactDataGrid
-                    
+                    style={{marginTop:"1rem"}}
                     rowKey="id"
                     columns={
                         [
                             {
                                 key: "id",
                                 name: "班级id",
-                                width: 80,
+                                width: 70,
                                 resizable: true
                             },
                             {
@@ -808,12 +967,29 @@ class Clazzrecord extends Component {
                                 resizable: true
                             },
                             {
-                                key: "area_id",
-                                name: "培训城市",
+                                key: "state",
+                                name: "备案情况",
                                 width: 80,
                                 resizable: true
                             },
-                            
+                            {
+                                key: "train_time",
+                                name: "培训时间",
+                                width: 150,
+                                resizable: true
+                            },
+                            {
+                                key: "test_time",
+                                name: "考试时间",
+                                width: 100,
+                                resizable: true
+                            },
+                            {
+                                key: "plan_train_num",
+                                name: "培训人数",
+                                width: 100,
+                                resizable: true
+                            },
                             {
                                 key: "area_name",
                                 name: "培训城市",
@@ -821,33 +997,39 @@ class Clazzrecord extends Component {
                                 resizable: true
                             },
                             {
-                                key: "course_name",
-                                name: "课程",
+                                key: "address",
+                                name: "培训地点",
+                                width: 80,
+                                resizable: true
+                            },
+                            {
+                                key: "class_head",
+                                name: "班主任-电话",
                                 width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "manager",
+                                name: "主办方负责人-电话",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "teacher",
+                                name: "理论讲师-讲师编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "expert",
+                                name: "实践讲师-讲师编号",
+                                width: 120,
                                 resizable: true
                             },
                             {
                                 key: "register",
                                 name: "备注",
                                 width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "detail",
-                                name: "分配记录",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "institution",
-                                name: "培训机构",
-                                width: 100,
-                                resizable: true
-                            },
-                            {
-                                key: "is_inlist",
-                                name: "报名状态",
-                                width: 100,
                                 resizable: true
                             }
                         ]
@@ -863,23 +1045,26 @@ class Clazzrecord extends Component {
                     rowGetter={(i) => {
                         if (i === -1) { return {} }
                         return {
-                            id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
-                            student_id: this.state.tableData[i].id,
-                            student_name: this.state.tableData[i].student_name,
-                            company_name: this.state.tableData[i].company_name,
-                            company_admin: this.state.tableData[i].company_admin,
-                            company_mobile: this.state.tableData[i].company_mobile,
-                            company_mail: this.state.tableData[i].company_mail,
-                            register: this.state.tableData[i].register,
-                            detail: this.state.tableData[i].detail,
-                            institution: getInst(this.state.tableData[i].institution),
+                            id: this.state.tableData[i].id,
+                            //student_id: this.state.tableData[i].id,
+                            course_id: getCourse(this.state.tableData[i].course_id),
+                            institution: getInst(this.state.tableData[i].ti_id),
+                            state: this.state.tableData[i].state==1?"未备案":this.state.tableData[i].state==2?"已备案":"",
+                            train_time: this.state.tableData[i].train_starttime==null?
+                            this.state.tableData[i].train_endtime==null?"":"~"+this.state.tableData[i].train_endtime:this.state.tableData[i].train_endtime==null?this.state.tableData[i].train_starttime+"~":this.state.tableData[i].train_starttime+"~"+this.state.tableData[i].train_endtime,
+                            test_time: this.state.tableData[i].test_time==null?"":this.state.tableData[i].test_time,
+                            plan_train_num:this.state.tableData[i].plan_train_num==null?"":this.state.tableData[i].plan_train_num,
                             area_name: getCity(this.state.tableData[i].area_id),
-                            course_name: getCourse(this.state.tableData[i].course_id),
-                            is_inlist: this.state.tableData[i].is_inlist === "-1" ? "待报名-导入" :
-                                this.state.tableData[i].is_inlist === "0" ? "待报名" :
-                                    this.state.tableData[i].is_inlist === "1" ? "待安排" :
-                                        this.state.tableData[i].is_inlist === "2" ? "已安排" :
-                                            this.state.tableData[i].is_inlist === "3" ? "已确认" : ""
+                            address:this.state.tableData[i].address==null?"":this.state.tableData[i].address,
+                            class_head:this.state.tableData[i].class_head==null?
+                            this.state.tableData[i].mobile==null?"":"-"+this.state.tableData[i].mobile:this.state.tableData[i].mobile==null?this.state.tableData[i].class_head:this.state.tableData[i].class_head+"-"+this.state.tableData[i].mobile,
+                            manager:this.state.tableData[i].manager==null?
+                            this.state.tableData[i].manager_mobile==null?"":"-"+this.state.tableData[i].manager_mobile:this.state.tableData[i].manager_mobile==null?this.state.tableData[i].manager:this.state.tableData[i].manager+"-"+this.state.tableData[i].manager_mobile,
+                            teacher:this.state.tableData[i].teacher==null?
+                            this.state.tableData[i].teacher_number==null?"":"-"+this.state.tableData[i].teacher_number:this.state.tableData[i].teacher_number==null?this.state.tableData[i].teacher:this.state.tableData[i].teacher+"-"+this.state.tableData[i].teacher_number,
+                            expert:this.state.tableData[i].expert==null?
+                            this.state.tableData[i].expert_number==null?"":"-"+this.state.tableData[i].expert_number:this.state.tableData[i].expert_number==null?this.state.tableData[i].expert:this.state.tableData[i].expert+"-"+this.state.tableData[i].expert_number,
+                            register: this.state.tableData[i].demo,
                         }
                     }}
                     rowsCount={this.state.tableData.length}
