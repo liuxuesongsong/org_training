@@ -8,10 +8,10 @@ import Dialog, {
     DialogContentText,
     DialogTitle,
 } from 'material-ui/Dialog';
-import { initCache, getData, getRouter, getCache, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas } from '../../utils/helpers';
+import { initCache, getData, getRouter, getCache, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas,getClasstypes ,getClasstype} from '../../utils/helpers';
 
 import {  ALERT, NOTICE, QUERY,CLASSTEACHER_ADD,CLASSTEACHER_INFOS,CLASSTEACHER_DEL,CLASSTEACHER_UPDATA,SPONSOR_ADD,SPONSOR_INFOS,SPONSOR_DEL,SPONSOR_UPDATA,
-    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA,ADDRESS_ADD,ADDRESS_INFOS,ADDRESS_DEL,ADDRESS_UPDATA,
+    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA,ADDRESS_ADD,ADDRESS_INFOS,ADDRESS_DEL,ADDRESS_UPDATA,CLASS_RECORD,
 } from '../../enum';
 import Drawer from 'material-ui/Drawer';
 import BeingLoading from '../../components/BeingLoading'
@@ -194,11 +194,11 @@ class Clazzrecord extends Component {
     onRowsSelected = (rowArray) => {
         if (rowArray.length > 1) {
             for (var i = 0; i < rowArray.length; i++) {
-                this.state.selectedStudentID.push(rowArray[i].row.student_id);
+                this.state.selectedStudentID.push(rowArray[i].row.id);
                 this.state.currentPageSelectedID.push(rowArray[i].row.id);
             }
         } else {
-            this.state.selectedStudentID.push(rowArray[0].row.student_id);
+            this.state.selectedStudentID.push(rowArray[0].row.id);
             this.state.currentPageSelectedID.push(rowArray[0].row.id)
         }
         this.setState({
@@ -211,9 +211,9 @@ class Clazzrecord extends Component {
         this.state.selectedStudentID = [...tranform];
         if (rowArray.length > 1) {
             for (var j = 0; j < rowArray.length; j++) {
-                if (this.state.selectedStudentID.indexOf(rowArray[j].row.student_id) === -1) {
+                if (this.state.selectedStudentID.indexOf(rowArray[j].row.id) === -1) {
                 } else {
-                    this.state.selectedStudentID.splice(this.state.selectedStudentID.indexOf(rowArray[j].row.student_id), 1);
+                    this.state.selectedStudentID.splice(this.state.selectedStudentID.indexOf(rowArray[j].row.id), 1);
                 }
                 if (this.state.currentPageSelectedID.indexOf(rowArray[j].row.id) === -1) {
 
@@ -222,7 +222,7 @@ class Clazzrecord extends Component {
                 }
             }
         } else {
-            var index = this.state.selectedStudentID.indexOf(rowArray[0].row.student_id);
+            var index = this.state.selectedStudentID.indexOf(rowArray[0].row.id);
             this.state.selectedStudentID.splice(index, 1);
             var currentPageIndex = this.state.currentPageSelectedID.indexOf(rowArray[0].row.id);
             this.state.currentPageSelectedID.splice(currentPageIndex, 1);
@@ -247,21 +247,17 @@ class Clazzrecord extends Component {
          
         })
     }
-    // see_manage_list_length = (type,islength) => {
-        
-    //     var components = []
-       
-    //         components.push(
-    //             this.state.see_manage_list.length==0&&this.state.edit_state==0?<p>
-    //                 {islength}
-    //             </p>:<tr>
-    //              <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
-    //          </tr>
-    //         )
-        
-    //     return components
-       
-    //  }
+    class_record =()=>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+              
+              
+            }
+            
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(CLASS_RECORD), { session: sessionStorage.session, ids:this.state.selectedStudentID}, cb, {});
+    }
     date_arr() {
         var components = [],
          d = new Date(),
@@ -785,7 +781,7 @@ class Clazzrecord extends Component {
                         }}
                     >
                         <option value={"null"}>{"-课程名称-"}</option>
-                        {getCourses().map(course => {
+                        {getClasstypes().map(course => {
                                 return <option key={course.id} value={course.id}>{course.course_name}</option>
                             })}
 
@@ -1047,7 +1043,7 @@ class Clazzrecord extends Component {
                         return {
                             id: this.state.tableData[i].id,
                             //student_id: this.state.tableData[i].id,
-                            course_id: getCourse(this.state.tableData[i].course_id),
+                            course_id: getClasstype(this.state.tableData[i].course_id),
                             institution: getInst(this.state.tableData[i].ti_id),
                             state: this.state.tableData[i].state==1?"未备案":this.state.tableData[i].state==2?"已备案":"",
                             train_time: this.state.tableData[i].train_starttime==null?
@@ -1121,6 +1117,21 @@ class Clazzrecord extends Component {
                 >
                     {"下页"}
                 </Button>
+                <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-sm"
+                        onClick={() => {
+                           console.log( this.state.selectedStudentID)
+                           this.class_record();
+                            // this.state.selectedStudentID = [];
+                            // this.state.currentPageSelectedID = [];
+                            // this.queryStudents(1, true);
+                        }}
+                        style={{marginLeft:10,position:"relative",top:"-2px"}}
+                    >
+                        {"备案"}
+                    </Button>
                 {/* {"已选择"+this.state.selectedStudentID.length + "人/"}
 
                 共{this.state.count}人
