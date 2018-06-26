@@ -808,7 +808,7 @@ class Clazz extends Component {
                        </div>
                        <TextField
                             className="nyx-clazz-message"
-                            style={{width:"24%",top:"15px"}}
+                            style={{width:"24%",top:"15px",fontSize:"14px"}}
                             key={"class_code"}
                             id={"class_code"}
                             label={"班级编号"}
@@ -823,7 +823,7 @@ class Clazz extends Component {
                         <TextField
                             className="nyx-clazz-message"
                             key={"demo"}
-                            style={{width:"96.5%",marginTop:"2rem"}}
+                            style={{width:"96.5%",marginTop:"2rem",fontSize:"14px"}}
                             id={"demo"}
                             label={"备注"}
                             defaultValue={this.state.selected["demo"] === null ? "" : this.state.selected["demo"]}
@@ -1359,6 +1359,7 @@ see_module = () =>{
             beingLoading: false
            })
             this.state.see_manage_head_list=message.data.classteacher ;
+            console.log(this.state.see_manage_head_list)
             this.state.see_manage_sponser_list=message.data.sponsor;
             this.state.see_manage_theory_list=message.data.teachermanage;
             this.state.see_manage_expert_list=message.data.expert;

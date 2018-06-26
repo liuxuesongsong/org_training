@@ -11,7 +11,7 @@ import Dialog, {
 import { initCache, getData, getRouter, getCache, getCity, getInst, getCourse,getCourses, getTotalPage, getAreas,getClasstypes ,getClasstype} from '../../utils/helpers';
 
 import {  ALERT, NOTICE, QUERY,CLASSTEACHER_ADD,CLASSTEACHER_INFOS,CLASSTEACHER_DEL,CLASSTEACHER_UPDATA,SPONSOR_ADD,SPONSOR_INFOS,SPONSOR_DEL,SPONSOR_UPDATA,
-    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA,ADDRESS_ADD,ADDRESS_INFOS,ADDRESS_DEL,ADDRESS_UPDATA,CLASS_RECORD,
+    TEACHER_ADD,TEACHER_INFOS,TEACHER_DEL,TEACHER_UPDATA,EXPERT_ADD,EXPERT_INFOS,EXPERT_DEL,EXPERT_UPDATA,ADDRESS_ADD,ADDRESS_INFOS,ADDRESS_DEL,ADDRESS_UPDATA,CLASS_RECORD,MANAGE_LISTS,DETAIL_AREA_LIST,EDIT_CLAZZ,
 } from '../../enum';
 import Drawer from 'material-ui/Drawer';
 import BeingLoading from '../../components/BeingLoading'
@@ -27,7 +27,7 @@ class Clazzrecord extends Component {
         allData: [],
         tableData: [],
         queryCondition: {},
-        selectedStudentID: [],      //所有选择的学生ID
+        selectedClazzID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         currentPage: 1,
         totalPage: 1,
@@ -48,11 +48,22 @@ class Clazzrecord extends Component {
         opensponsor:false,
         openpractice:false,
         openimplement:false,//实施地点管理模块
+        openEditClazzDialog: false,
         beingLoading: false,
         see_manage_list:[],
+        see_manage_head_list:[],//查看班主任管理列表
+        see_manage_sponser_list:[],//查看主办方管理列表
+        see_manage_theory_list:[],//查看理论讲师管理列表
+        see_manage_expert_list:[],//查看实践讲师管理列表
+        detail_area_list:[],
+        head_number:"",
+        sponsor_number:"",
+        theory_number:"",
+        expert_number:"",
         edit_state:0,
         create_name:"",
         create_number:"",
+        selected: {},
          // 提示状态
          alertOpen: false,
          alertType: ALERT,
@@ -77,6 +88,7 @@ class Clazzrecord extends Component {
 
     cacheToState() {
         window.currentPage.queryStudents();
+        window.currentPage.see_module_lists();
         window.currentPage.state.areas = getAreas();
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
@@ -111,12 +123,12 @@ class Clazzrecord extends Component {
             this.setState({
                 totalPage: 1,
                 count: 0,
-                is_inlist:1
+                
                 
             })
         }
-        console.log(this.state.queryCondition)
-        this.state.queryCondition.train_year=="null"?this.state.queryCondition.train_month=="":""
+      //  console.log(this.state.queryCondition)
+        //this.state.queryCondition.train_year=="null"?this.state.queryCondition.train_month=="":""
         getData(getRouter("select_all_class"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
@@ -143,9 +155,11 @@ class Clazzrecord extends Component {
             this.setState({ tableData: data });
             if (data.length > 0) {
                 var allCheckBox = true;
-                this.state.currentPageSelectedID = [];
+               // this.state.currentPageSelectedID = [];
                 for (var i = 0; i < data.length; i++) {
-                    if (this.state.selectedStudentID.indexOf(data[i].id) === -1) {
+                  //  console.log(data[i])
+                    if (this.state.selectedClazzID.indexOf(data[i].id) === -1) {
+                        //console.log(data[i])
                         allCheckBox = false;
                     } else {
                         this.state.currentPageSelectedID.push((this.state.currentPage - 1) * this.state.rowsPerPage + i + 1)
@@ -191,29 +205,14 @@ class Clazzrecord extends Component {
             alertAction: action
         });
     }
-    onRowsSelected = (rowArray) => {
-        if (rowArray.length > 1) {
-            for (var i = 0; i < rowArray.length; i++) {
-                this.state.selectedStudentID.push(rowArray[i].row.id);
-                this.state.currentPageSelectedID.push(rowArray[i].row.id);
-            }
-        } else {
-            this.state.selectedStudentID.push(rowArray[0].row.id);
-            this.state.currentPageSelectedID.push(rowArray[0].row.id)
-        }
-        this.setState({
-            currentPageSelectedID: this.state.currentPageSelectedID,
-            selectedStudentID: this.state.selectedStudentID
-        })
-    }
     onRowsDeselected = (rowArray) => {
-        var tranform = new Set(this.state.selectedStudentID);
-        this.state.selectedStudentID = [...tranform];
+        var tranform = new Set(this.state.selectedClazzID);
+        this.state.selectedClazzID = [...tranform];
         if (rowArray.length > 1) {
             for (var j = 0; j < rowArray.length; j++) {
-                if (this.state.selectedStudentID.indexOf(rowArray[j].row.id) === -1) {
+                if (this.state.selectedClazzID.indexOf(rowArray[j].row.id) === -1) {
                 } else {
-                    this.state.selectedStudentID.splice(this.state.selectedStudentID.indexOf(rowArray[j].row.id), 1);
+                    this.state.selectedClazzID.splice(this.state.selectedClazzID.indexOf(rowArray[j].row.id), 1);
                 }
                 if (this.state.currentPageSelectedID.indexOf(rowArray[j].row.id) === -1) {
 
@@ -222,16 +221,46 @@ class Clazzrecord extends Component {
                 }
             }
         } else {
-            var index = this.state.selectedStudentID.indexOf(rowArray[0].row.id);
-            this.state.selectedStudentID.splice(index, 1);
+            var index = this.state.selectedClazzID.indexOf(rowArray[0].row.id);
+            this.state.selectedClazzID.splice(index, 1);
             var currentPageIndex = this.state.currentPageSelectedID.indexOf(rowArray[0].row.id);
             this.state.currentPageSelectedID.splice(currentPageIndex, 1);
         }
         this.setState({
             currentPageSelectedID: this.state.currentPageSelectedID,
-            selectedStudentID: this.state.selectedStudentID
+            selectedClazzID: this.state.selectedClazzID
         })
-    }  
+    }
+    onRowsSelected = (rowArray) => {
+        if (rowArray.length > 1) {
+            for (var i = 0; i < rowArray.length; i++) {
+                this.state.selectedClazzID.push(rowArray[i].row.id);
+                this.state.currentPageSelectedID.push(rowArray[i].row.id);
+            }
+        } else {
+            this.state.selectedClazzID.push(rowArray[0].row.id);
+            this.state.currentPageSelectedID.push(rowArray[0].row.id)
+        }
+        this.setState({
+            currentPageSelectedID: this.state.currentPageSelectedID,
+            selectedClazzID: this.state.selectedClazzID
+        })
+    }
+    handleSelection = (index, row) => {
+        if (this.state.selectedClazzID.indexOf(row.id) === -1) {
+            this.state.selectedClazzID.push(row.id);
+            this.state.currentPageSelectedID.push((this.state.currentPage - 1) * this.state.rowsPerPage + index + 1)
+        } else {
+            this.state.selectedClazzID.splice(this.state.selectedClazzID.indexOf(row.id), 1);
+            if (this.state.currentPageSelectedID.indexOf((this.state.currentPage - 1) * this.state.rowsPerPage + index + 1) !== -1) {
+                this.state.currentPageSelectedID.splice(this.state.currentPageSelectedID.indexOf((this.state.currentPage - 1) * this.state.rowsPerPage + index + 1), 1)
+            }
+        }
+        this.setState({
+            currentPageSelectedID: this.state.currentPageSelectedID,
+            selectedClazzID: this.state.selectedClazzID
+        })
+    }
     handleRequestClose = () => {
         this.setState({
             openheadDialog: false,
@@ -242,10 +271,37 @@ class Clazzrecord extends Component {
             openpractice:false,//实践
             openimplement:false,//实施
             beingLoading: false,//loading结束
+            openEditClazzDialog: false,//修改班级
             edit_state:0,
             islength:""
          
         })
+    }
+    modifyClazz = (id, clazz) => {
+
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedClazzID = [];
+                this.state.currentPageSelectedID = [];
+               // this.fresh();
+                this.queryStudents(1, true);
+                // this.setState({ clazzes: message.clazz })
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(EDIT_CLAZZ), { session: sessionStorage.session, id: id, data: clazz }, cb, {});
+
+    }
+    detail_area_list= (id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+               this.state.detail_area_list=message.data.detailed;
+                this.popUpNotice(NOTICE, 0, message.msg);
+              
+            }
+        }
+        getData(getRouter(DETAIL_AREA_LIST), { session: sessionStorage.session, address_area_id: id }, cb, { id: id });
     }
     class_record =()=>{
         var cb = (route, message, arg) => {
@@ -256,7 +312,7 @@ class Clazzrecord extends Component {
             
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        getData(getRouter(CLASS_RECORD), { session: sessionStorage.session, ids:this.state.selectedStudentID}, cb, {});
+        getData(getRouter(CLASS_RECORD), { session: sessionStorage.session, ids:this.state.selectedClazzID}, cb, {});
     }
     date_arr() {
         var components = [],
@@ -288,6 +344,24 @@ class Clazzrecord extends Component {
             )
         }
         return components
+    }
+    //查看管理模块总列表
+    see_module_lists = () =>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               this.setState({
+                beingLoading: false
+               })
+                this.state.see_manage_head_list=message.data.classteacher ;
+                this.state.see_manage_sponser_list=message.data.sponsor;
+                this.state.see_manage_theory_list=message.data.teachermanage;
+                this.state.see_manage_expert_list=message.data.expert;
+              
+            }
+          
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(MANAGE_LISTS), { session: sessionStorage.session }, cb, {});
     }
     //查看管理模块
     see_module = (see_module) =>{
@@ -748,6 +822,416 @@ class Clazzrecord extends Component {
         )
 
     }
+    //修改班级信息弹出框
+    editClazzDialog = () => {
+        return (
+            <Dialog name="editClazzDialog" open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
+                    修改班级-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
+                    -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
+                    -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
+            </DialogTitle>
+                <DialogContent>
+                    <div>
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">班主任</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
+                        id="class_head"
+                        defaultValue={this.state.selected["class_head"] === null ? "" : this.state.selected["class_head"]}
+                        onChange={(e)=>{
+                            for(var i=0;i< this.state.see_manage_head_list.length;i++){
+                                if(e.target.value== this.state.see_manage_head_list[i].name){
+                                    this.setState({
+                                        head_number:  this.state.see_manage_head_list[i].number
+                                    })
+                                    
+                                }
+                            }
+                            if(e.target.value==0){
+                                this.setState({
+                                    head_number:  ""
+                                })
+                            }
+                           
+                        }}
+                        >
+                        <option value={0}>-班主任-</option>
+                        
+                        {
+                            this.state.see_manage_head_list.map(see_manages => {
+                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
+                            })
+                        }
+                           
+                        </select></div>
+                        
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">班主任电话</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
+                        id="mobile"
+                        disabled={true}
+                        value={this.state.head_number==""?this.state.selected.mobile:this.state.head_number}
+                        >
+                        <option value={0}>-班主任电话-</option>
+                        <option value={this.state.head_number}>{this.state.head_number==""?"-班主任电话-":this.state.head_number}</option>
+                        <option value={this.state.selected.mobile}>{this.state.selected.mobile}</option>
+                        </select></div>
+
+                        {/* <TextField
+                            className="nyx-clazz-message"
+                            key={"teacher"}
+                            style={{width:"24%"}}
+                            id={"mobile"}
+                            label={"班主任电话"}
+                            disabled={true}
+                            value={this.state.head_number==""?this.state.selected.mobile:this.state.head_number}
+                            >
+                             
+                        </TextField> */}
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">主办方联系人</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
+                        id="manager"
+                        defaultValue={this.state.selected.manager}
+                        onChange={(e)=>{
+                           
+                            for(var i=0;i< this.state.see_manage_sponser_list.length;i++){
+                                if(e.target.value== this.state.see_manage_sponser_list[i].name){
+                                    this.setState({
+                                        sponsor_number:  this.state.see_manage_sponser_list[i].number
+                                    })
+                                    
+                                   // this.state.head_number=see_manage_sponser_list[i].number;
+                                }
+                                    if(e.target.value==0){
+                                        this.setState({
+                                            sponsor_number:  ""
+                                        })
+                                    }
+                            }
+                        }}
+                        >
+                        <option value={0}>-主办方联系人-</option>
+                        {
+                            this.state.see_manage_sponser_list.map(see_manages => {
+                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
+                            })
+                        }
+                           
+                        </select></div>
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">主办方联系人电话</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
+                        id="manager_mobile"
+                        disabled={true}
+                        value={this.state.sponsor_number==""?this.state.selected.manager_mobile:this.state.sponsor_number}
+                        >
+                        <option value={0}>-主办方联系人电话-</option>
+                        <option value={this.state.sponsor_number}>{this.state.sponsor_number}</option>
+                        <option value={this.state.selected.manager_mobile}>{this.state.selected.manager_mobile}</option>
+                        </select></div>
+                       
+                        {/* <TextField
+                            className="nyx-clazz-message"
+                            key={"manager_mobile"}
+                            style={{width:"24%"}}
+                            id={"manager_mobile"}
+                            label={"主办方联系人电话"}
+                            disabled={true}
+                            value={this.state.sponsor_number==""?this.state.selected.manager_mobile:this.state.sponsor_number}
+                            >
+                             
+                        </TextField> */}
+                        <TextField
+                            style={{width:"24%",margin:0,marginRight:"1px",fontSize:"14px"}}
+                            className="nyx-clazz-message"
+                            key={"plan_train_num"}
+                            id={"plan_train_num"}
+                            label={"培训人数"}
+                            defaultValue={this.state.selected.plan_train_num==null?"65人(含15人补考)":this.state.selected.plan_train_num}
+                            onChange={(event) => {
+                               
+                            }}>
+                        </TextField>
+                        <div className="nyx-class-lists-div" style={{width:"74%"}}>
+                        <p className="nyx-class-lists-p">详细地址</p>
+                        <select className="nyx-class-lists-select"
+                        id="address"
+                        defaultValue={this.state.selected.address==""?"":this.state.selected.address}
+                        //defaultValue={}
+                        onChange={(e)=>{
+                           
+                        }}
+
+                        >
+                        <option value={0}>-详细地址-</option>
+                        {this.state.detail_area_list.map(detail => {
+                          return <option>
+                          {detail.detailed}</option>
+                        })}
+                       
+                           
+                        </select></div>
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">理论讲师</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
+                        id="teacher"
+                        defaultValue={this.state.selected.teacher}
+                        onChange={(e)=>{
+                            for(var i=0;i< this.state.see_manage_theory_list.length;i++){
+                                if(e.target.value== this.state.see_manage_theory_list[i].name){
+                                    this.setState({
+                                        theory_number:  this.state.see_manage_theory_list[i].number
+                                    })
+                                   // this.state.head_number=see_manage_theory_list[i].number;
+                                }
+                            }
+                            if(e.target.value==0){
+                                this.setState({
+                                    theory_number:  ""
+                                })
+                            }
+                        }}
+                        >
+                        <option value={0}>-理论讲师-</option>
+                        {
+                            this.state.see_manage_theory_list.map(see_manages => {
+                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
+                            })
+                        }
+                           
+                        </select></div>
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">理论讲师编号</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
+                        id="teacher_number"
+                         disabled={true}
+                        value={this.state.theory_number==""?this.state.selected.teacher_number:this.state.theory_number}
+                        >
+                        <option value={0}>-理论讲师编号-</option>
+                        <option value={this.state.theory_number}>{this.state.theory_number}</option>
+                        <option value={this.state.selected.teacher_number}>{this.state.selected.teacher_number}</option>
+                        </select></div>
+                       
+                        {/* <TextField
+                            className="nyx-clazz-message"
+                            key={"teacher_number"}
+                            style={{width:"24%"}}
+                            id={"teacher_number"}
+                            label={"理论讲师编号"}
+                            disabled={true}
+                            value={this.state.theory_number==""?this.state.selected.teacher_number:this.state.theory_number}
+                            >
+                             
+                        </TextField> */}
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">实践讲师</p>
+                        <select className="nyx-class-lists-select"
+                         style={{fontSize:"14px",fontFamily:"微软雅黑"}}
+                        id="expert"
+                        defaultValue={this.state.selected.expert==""?"":this.state.selected.expert}
+                        onChange={(e)=>{
+                            for(var i=0;i< this.state.see_manage_expert_list.length;i++){
+                                if(e.target.value== this.state.see_manage_expert_list[i].name){
+                                    this.setState({
+                                        expert_number:  this.state.see_manage_expert_list[i].number
+                                    })
+                                }
+                            }
+                            if(e.target.value==0){
+                                this.setState({
+                                    expert_number:  ""
+                                })
+                            }
+                        }}
+                        >
+                        <option value={0}>-实践讲师-</option>
+                        {
+                            this.state.see_manage_expert_list.map(see_manages => {
+                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
+                            })
+                        }
+                           
+                        </select></div>
+                        <div className="nyx-class-lists-div">
+                        <p className="nyx-class-lists-p">实践讲师编号</p>
+                        <select className="nyx-class-lists-select"
+                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
+                        id="expert_number"
+                        disabled={true}
+                        value={this.state.expert_number==""?this.state.selected.expert_number:this.state.expert_number}
+                        >
+                        <option value={0}>-实践讲师编号-</option>
+                        <option value={this.state.expert_number}>{this.state.expert_number}</option>
+                        <option value={this.state.selected.expert_number}>{this.state.selected.expert_number}</option>
+                        </select></div>
+                       
+                        {/* <TextField
+                            className="nyx-clazz-message"
+                            key={"expert_number"}
+                            style={{width:"24%"}}
+                            id={"expert_number"}
+                            label={"实践讲师编号"}
+                            disabled={true}
+                            value={this.state.expert_number}
+                            >
+                             
+                        </TextField> */}
+                       <div
+                       style={{width:"24%",top:"1rem"}}
+                       className="nyx-input-date nyx-clazz-message"
+                       >
+                       <span 
+                       >开始时间</span>
+                        <input
+                       // id="train_starttime"
+                         style={{}}
+                          type="date"
+                          defaultValue={this.state.selected_start_year+"-"+this.state.selected_start_month+"-"+this.state.selected_start_date}
+                          onChange={(event) => {
+                              var year=event.target.value.substr(0,4),
+                                  month=event.target.value.substr(5,2),
+                                  date=event.target.value.substr(8,2)
+                                  this.state.selected["train_starttime"]=year+month+date;
+                             
+                          }}
+                        />
+                       </div>
+                       <div
+                       style={{width:"24%",top:"1rem"}}
+                       className="nyx-input-date nyx-clazz-message"
+                       >
+                       <span 
+                       >结束时间</span>
+                        <input
+                       // id="train_starttime"
+                         style={{}}
+                          type="date"
+                          defaultValue={this.state.selected_end_year+"-"+this.state.selected_end_month+"-"+this.state.selected_end_date}
+                          onChange={(event) => {
+                              var end_year=event.target.value.substr(0,4),
+                                  end_month=event.target.value.substr(5,2),
+                                  end_date=event.target.value.substr(8,2)
+                                  this.state.selected["train_endtime"]=end_year+end_month+end_date;
+                             
+                          }}
+                        />
+                       </div>
+                       <div
+                       style={{width:"24%",top:"1rem"}}
+                       className="nyx-input-date nyx-clazz-message"
+                       >
+                       <span 
+                       >考试时间</span>
+                        <input
+                       // id="train_starttime"
+                         style={{}}
+                          type="date"
+                          defaultValue={this.state.selected_test_year+"-"+this.state.selected_test_month+"-"+this.state.selected_test_date}
+                          onChange={(event) => {
+                              var test_year=event.target.value.substr(0,4),
+                                 test_month=event.target.value.substr(5,2),
+                                 test_date=event.target.value.substr(8,2)
+                                  this.state.selected["test_time"]=test_year+test_month+test_date;
+                             
+                          }}
+                        />
+                       </div>
+                       <TextField
+                            className="nyx-clazz-message"
+                            style={{width:"24%",top:"15px",fontSize:"14px"}}
+                            key={"class_code"}
+                            id={"class_code"}
+                            label={"班级编号"}
+                            value={this.state.selected["class_code"] === null ? "" : this.state.selected["class_code"]}
+                            onChange={(event) => {
+                                this.state.selected["class_code"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
+                            className="nyx-clazz-message"
+                            key={"demo"}
+                            style={{width:"96.5%",marginTop:"2rem",fontSize:"14px"}}
+                            id={"demo"}
+                            label={"备注"}
+                            defaultValue={this.state.selected["demo"] === null ? "" : this.state.selected["demo"]}
+                            >
+                             
+                        </TextField>
+                       
+                       
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                var class_head = (document.getElementById("class_head").value==0?"":document.getElementById("class_head").value);
+                                var mobile =  (document.getElementById("mobile").value==0?"":document.getElementById("mobile").value);
+                                var manager = (document.getElementById("manager").value==0?"":document.getElementById("manager").value);
+                                var manager_mobile =  (document.getElementById("manager_mobile").value==0?"":document.getElementById("manager_mobile").value);
+                                var plan_train_num = (document.getElementById("plan_train_num").value);
+                                var class_code = document.getElementById("class_code").value;
+                                var address = (document.getElementById("address").value==0?"":document.getElementById("address").value);
+                                var teacher = (document.getElementById("teacher").value);
+                                var teacher_number = (document.getElementById("teacher_number").value==0?"":document.getElementById("teacher_number").value);
+                                var expert = (document.getElementById("expert").value==0?"":document.getElementById("expert").value);
+                                var expert_number = (document.getElementById("expert_number").value==0?"":document.getElementById("expert_number").value);
+                               
+                                var train_starttime =  this.state.selected["train_starttime"];
+                                var train_endtime = this.state.selected["train_endtime"];
+                                var test_time=this.state.selected["test_time"];
+                                var demo=(document.getElementById("demo").value);
+                                
+                               // var mobile = (document.getElementById("mobile").value);
+                                this.modifyClazz(this.state.selected.id, {
+                                    class_head: class_head,
+                                    mobile:mobile,
+                                    manager:manager,
+                                    manager_mobile:manager_mobile,
+                                    plan_train_num:plan_train_num,
+                                    class_code: class_code,
+                                    address: address,
+                                    teacher: teacher,
+                                    teacher_number:teacher_number,
+                                    expert:expert,
+                                    expert_number:expert_number,
+                                    train_starttime: train_starttime,
+                                    train_endtime: train_endtime,
+                                    test_time:test_time,
+                                    
+                                    demo:demo
+                                })
+                                this.handleRequestClose()
+                                
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+
+    }
     render() {
         return (
             <div style={{ marginTop: 80, width: "100%" }}>
@@ -860,7 +1344,7 @@ class Clazzrecord extends Component {
                         color="primary"
                         className="nyx-org-btn-sm"
                         onClick={() => {
-                            this.state.selectedStudentID = [];
+                            this.state.selectedClazzID = [];
                             this.state.currentPageSelectedID = [];
                             this.queryStudents(1, true);
                         }}
@@ -887,7 +1371,7 @@ class Clazzrecord extends Component {
                     className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,opensponsor:true });
+                        this.setState({ openDialog: true,opensponsor:true,beingLoading: true });
                         this.see_module(SPONSOR_INFOS);
                     }}
                     style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"125px"}}
@@ -900,7 +1384,7 @@ class Clazzrecord extends Component {
                     className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
-                        this.setState({ openDialog: true ,opentheory:true});
+                        this.setState({ openDialog: true ,opentheory:true,beingLoading: true});
                         this.see_module(TEACHER_INFOS);
                     }}
                     style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
@@ -913,7 +1397,7 @@ class Clazzrecord extends Component {
                     className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,openpractice:true });
+                        this.setState({ openDialog: true,openpractice:true,beingLoading: true });
                         this.see_module(EXPERT_INFOS);
                     }}
                     style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
@@ -926,7 +1410,7 @@ class Clazzrecord extends Component {
                     className="nyx-org-btn-lg"
                     onClick={() => {
                         this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,openimplement: true });
+                        this.setState({ openDialog: true,openimplement: true,beingLoading: true });
                         this.see_module(ADDRESS_INFOS);
                     }}
                     style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px",marginBottom:"2rem"}}
@@ -1023,6 +1507,12 @@ class Clazzrecord extends Component {
                                 resizable: true
                             },
                             {
+                                key: "class_code",
+                                name: "班级编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
                                 key: "register",
                                 name: "备注",
                                 width: 120,
@@ -1060,6 +1550,7 @@ class Clazzrecord extends Component {
                             this.state.tableData[i].teacher_number==null?"":"-"+this.state.tableData[i].teacher_number:this.state.tableData[i].teacher_number==null?this.state.tableData[i].teacher:this.state.tableData[i].teacher+"-"+this.state.tableData[i].teacher_number,
                             expert:this.state.tableData[i].expert==null?
                             this.state.tableData[i].expert_number==null?"":"-"+this.state.tableData[i].expert_number:this.state.tableData[i].expert_number==null?this.state.tableData[i].expert:this.state.tableData[i].expert+"-"+this.state.tableData[i].expert_number,
+                            class_code:this.state.tableData[i].class_code,
                             register: this.state.tableData[i].demo,
                         }
                     }}
@@ -1120,19 +1611,83 @@ class Clazzrecord extends Component {
                 <Button
                         raised 
                         color="primary"
-                        className="nyx-org-btn-sm"
+                        className="nyx-org-btn-lg"
                         onClick={() => {
-                           console.log( this.state.selectedStudentID)
+                            console.log(this.state.selectedClazzID)
+                           if(this.state.selectedClazzID.length!=1){
+                            this.popUpNotice(NOTICE, 0, "请选择一个班级修改班级信息");
+                            return false;
+                           }
+                           for(var i=0;i<this.state.selectedClazzID.length;i++){
+                               this.state.thisClazzId=this.state.selectedClazzID[i];
+                               
+                           }
+                           for(var i=0;i<this.state.allData.length;i++){
+                               if(this.state.allData[i].id==this.state.thisClazzId){
+                                   this.state.selected=this.state.allData[i];
+                                   this.detail_area_list(this.state.selected.area_id)
+                                   this.state.selected_start_year = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(0,4)
+                                   this.state.selected_start_month = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(4,2)
+                                   this.state.selected_start_date = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(6,2)
+
+                                   this.state.selected_end_year = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(0,4)
+                                   this.state.selected_end_month = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(4,2)
+                                   this.state.selected_end_date = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(6,2)
+                                   this.state.selected_test_year = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(0,4)
+                                   this.state.selected_test_month = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(4,2)
+                                   this.state.selected_test_date = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(6,2)
+                                  
+                                   this.setState({ openEditClazzDialog: true,
+                                    expert_number:"",
+                                    manager_mobile:"",
+                                    theory_number:"",
+                                    mobile:""})
+                                   //console.log(this.state.allData[i])
+                               }
+                           }
+                        ///   console.log(this.state.tableData)
+                        //   console.log("修改班级信息")
+                            
+                        }}
+                        style={{marginLeft:10,position:"relative",top:"-2px",minWidth:"110px"}}
+                    >
+                        {"修改班级信息"}
+                    </Button>
+                <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-md"
+                        onClick={() => {
+                           console.log( this.state.selectedClazzID)
                            this.class_record();
-                            // this.state.selectedStudentID = [];
+                            // this.state.selectedClazzID = [];
                             // this.state.currentPageSelectedID = [];
                             // this.queryStudents(1, true);
                         }}
                         style={{marginLeft:10,position:"relative",top:"-2px"}}
                     >
-                        {"备案"}
+                        {"更新备案"}
                     </Button>
-                {/* {"已选择"+this.state.selectedStudentID.length + "人/"}
+                    <Button
+                        raised 
+                        color="primary"
+                        className="nyx-org-btn-md"
+                        onClick={() => {
+                           console.log( this.state.selectedClazzID)
+                           
+                           if(this.state.selectedClazzID.length!=1){
+                            this.popUpNotice(NOTICE, 0, "请选择一个班级查询备案记录");
+                           }
+                            // this.state.selectedClazzID = [];
+                            // this.state.currentPageSelectedID = [];
+                            // this.queryStudents(1, true);
+                        }}
+                        style={{marginLeft:10,position:"relative",top:"-2px"}}
+                    >
+                        {"备案记录"}
+                    </Button>
+                    
+                {/* {"已选择"+this.state.selectedClazzID.length + "人/"}
 
                 共{this.state.count}人
                  */}
@@ -1143,6 +1698,7 @@ class Clazzrecord extends Component {
                   {this.state.opentheory?this.Dialogs("理论讲师管理","讲师编号","暂无理论讲师信息，请点击新增！"):""}
                   {this.state.openpractice?this.Dialogs("实践讲师管理","讲师编号","暂无实践讲师信息，请点击新增！"):""}
                   {this.state.openimplement?this.Dialogs("实施地点管理","详细地址","暂无实施地点信息，请点击新增！"):""}
+                {this.editClazzDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}
