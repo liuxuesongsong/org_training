@@ -106,7 +106,7 @@ class Clazzrecord extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 var result = message.data;
                 this.handleUptateAllRecordData(result);
-                // this.handleUpdateResitData(this.state.recordcurrentPage);
+                this.handleUpdateRecordData(this.state.recordcurrentPage);
                 this.setState({
                     recordtotalPage: getTotalPage(message.data.length, this.state.rowsrecordPerPage),
                     recordcount: message.data.length
@@ -132,7 +132,25 @@ class Clazzrecord extends Component {
     handleUptateAllRecordData = (newData) => {
         this.state.allRecordData = this.state.allRecordData.concat(newData);
     }
-
+    handleUpdateRecordData = (page) => {
+        if (page <= 0) {
+            page = 1;
+        }
+        if (page > this.state.recordtotalPage) {
+            page = this.state.recordtotalPage;
+        }
+        this.state.resitcurrentPage = page;
+        if (this.state.allRecordData.length <= this.state.rowsrecordPerPage * (page - 1) && this.state.allRecordData.length < this.state.recordcount) {
+            // this.handleQueryRechargeCode(false, false);
+            this.queryRecordClazz((Math.floor((this.state.recordcurrentPage - 1) / 2) + 1));
+        } else {
+            var data = this.state.allRecordData.slice(this.state.rowsrecordPerPage * (page - 1), this.state.rowsrecordPerPage * page);
+            this.state.onloading = false;
+            this.state.tablerecordData = data;
+            this.setState({ tablerecordData: data });
+           
+        }
+    }
     /**
      * 按条件查询所有学生
      * @param query_page 查询页码
@@ -344,9 +362,10 @@ class Clazzrecord extends Component {
     class_record =()=>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
+                this.queryStudents(1, true);
                 this.state.selectedClazzID = [];
                 this.state.currentPageSelectedID = [];
-                this.queryStudents(1, true);
+                
               
             }
             
@@ -379,7 +398,7 @@ class Clazzrecord extends Component {
         }
          this.setState({
              recordlogright: open,
-             recordlogshowInfo: true
+             recordlogshowInfo: open
          });
      };
     month_arr() {
@@ -1471,6 +1490,224 @@ class Clazzrecord extends Component {
                    
                    
                 </div>
+                <Drawer
+                       
+                        anchor="right"
+                        open={this.state.recordlogright}
+                        onRequestClose={this.recordLogDrawer(false)}
+                    >
+                    <div style={{width:"800px",padding:"1rem",overflowX:"hidden"}}>     
+                    <div style={{color:"#2196f3",margin:"1rem",fontSize:"18px"}}>               
+                        备案记录-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
+                        -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
+                        -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
+                    </div>
+                    <div style={{overflowX:"scroll",padding:"1rem"}}>
+                    <table
+                 className="nyx-file-list"
+                >
+                    <tr style={{textAlign:"center",maxHeight:"25px"}}>
+                        <td  height={25} width={40}>序号</td>
+                        <td width={150}>培训时间</td>
+                        <td width={100}>考试时间</td>
+                        <td width={100}>培训人数</td>
+                        <td width={150}>培训地点</td>
+                        <td width={150}>班主任-电话</td>
+                        <td width={150}>主办方负责人-电话</td>
+                        <td width={150}>理论讲师-讲师编号</td>
+                        <td width={150}>实践讲师-讲师编号</td>
+                        <td width={80}>班级编号</td>
+                        <td width={80}>备案账号</td>
+                        <td width={140}>备案时间</td>
+                        <td width={150}>备注</td>
+                     </tr>
+                     {
+                         this.state.allRecordData.map((record_log)=>{   
+                            return <tr
+                                   
+                                    key = {record_log.id}> 
+                                    <td width={60} height={25}>{this.state.allRecordData.indexOf(record_log)+1}</td>
+                                    <td title={record_log.train_starttime==null?
+                                        record_log.train_endtime==null?"":"~"+record_log.train_endtime:record_log.train_endtime==null?record_log.train_starttime+"~":record_log.train_starttime+"~"+record_log.train_endtime} 
+                                        width={150}>{record_log.train_starttime==null?
+                                         record_log.train_endtime==null?"":"~"+record_log.train_endtime:record_log.train_endtime==null?record_log.train_starttime+"~":record_log.train_starttime+"~"+record_log.train_endtime}</td>
+                                   <td width={100} title={record_log.test_time==null?"":record_log.test_time}>{record_log.test_time==null?"":record_log.test_time}</td>
+                                   <td width={100} title={record_log.plan_train_num==null?"":record_log.plan_train_num}>{record_log.plan_train_num==null?"":record_log.plan_train_num}</td>
+                                   <td width={150} title={record_log.address==null?"":record_log.address}>{record_log.address==null?"":record_log.address}</td>
+                                   <td width={150} title={record_log.class_head==null?
+                                        record_log.mobile==null?"":"-"+record_log.mobile:record_log.mobile==null?record_log.class_head:record_log.class_head+"-"+record_log.mobile}>{record_log.class_head==null?
+                                        record_log.mobile==null?"":"-"+record_log.mobile:record_log.mobile==null?record_log.class_head:record_log.class_head+"-"+record_log.mobile}</td>
+                                    <td width={150} title={record_log.manager==null?
+                                        record_log.manager_mobile==null?"":"-"+record_log.manager_mobile:record_log.manager_mobile==null?record_log.manager:record_log.manager+"-"+record_log.manager_mobile}>{record_log.manager==null?
+                                        record_log.manager_mobile==null?"":"-"+record_log.manager_mobile:record_log.manager_mobile==null?record_log.manager:record_log.manager+"-"+record_log.manager_mobile}</td>
+                                    <td width={150} title={record_log.teacher==null?
+                                        record_log.teacher_number==null?"":"-"+record_log.teacher_number:record_log.teacher_number==null?record_log.teacher:record_log.teacher+"-"+record_log.teacher_number}>{record_log.teacher==null?
+                                        record_log.teacher_number==null?"":"-"+record_log.teacher_number:record_log.teacher_number==null?record_log.teacher:record_log.teacher+"-"+record_log.teacher_number}</td>
+                                    <td width={150} title={record_log.expert==null?
+                                        record_log.expert_number==null?"":"-"+record_log.expert_number:record_log.expert_number==null?record_log.expert:record_log.expert+"-"+record_log.expert_number}>{record_log.expert==null?
+                                        record_log.expert_number==null?"":"-"+record_log.expert_number:record_log.expert_number==null?record_log.expert:record_log.expert+"-"+record_log.expert_number}</td>
+                                    <td width={80} title={record_log.class_code}>{record_log.class_code}</td>
+                                    <td width={80} title={record_log.bid}>{record_log.bid}</td>
+                                    <td width={140} title={record_log.new_time}>{record_log.new_time}</td>
+                                    <td width={150} title={record_log.demo==null?"":record_log.demo}>{record_log.demo==null?"":record_log.demo}</td>
+                                    {/* <td title={file_list.file_name} width={140} style={{textAlign:"left",paddingLeft:"1rem"}}>{file_list.file_name}</td>
+                                    <td title={file_list.type_name} width={120}>{file_list.type_name}</td>
+                                    <td title={file_list.edition} width={80}>{file_list.edition}</td>
+                                    <td title={file_list.time} width={80}>{file_list.time}</td>
+                                    <td title={file_list.uploader} width={80}>{file_list.uploader}</td> */}
+                                  </tr>
+                         
+                          })
+                     }
+                    {/* {this.filePage(this.state.filepno,this.state.filepsize)} */}
+                </table>
+                    </div>
+                    {/* {this.state.recordlogshowInfo==true?<ReactDataGrid
+                       rowKey="id"
+                       columns={
+                        [
+                           
+                            {
+                                key: "number",
+                                name: "序号",
+                                width: 50,
+                                resizable: true
+                            },
+                            {
+                                key: "train_time",
+                                name: "培训时间",
+                                width: 180,
+                                resizable: true
+                            },
+                            {
+                                key: "test_time",
+                                name: "考试时间",
+                                width: 100,
+                                resizable: true
+                            },
+                            {
+                                key: "plan_train_num",
+                                name: "培训人数",
+                                width: 100,
+                                resizable: true
+                            },
+                           
+                            {
+                                key: "address",
+                                name: "培训地点",
+                                width: 80,
+                                resizable: true
+                            },
+                            {
+                                key: "class_head",
+                                name: "班主任-电话",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "manager",
+                                name: "主办方负责人-电话",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "teacher",
+                                name: "理论讲师-讲师编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "expert",
+                                name: "实践讲师-讲师编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "class_code",
+                                name: "班级编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "record_time",
+                                name: "备案时间",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "record_ti",
+                                name: "备案账号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "register",
+                                name: "备注",
+                                width: 120,
+                                resizable: true
+                            }
+                        ]
+                   }
+                   
+                   rowGetter={(i) => {
+                       if (i === -1) { return {} }
+                       return {
+                           number: this.state.allRecordData.indexOf(this.state.tablerecordData[i]) + 1,
+                        //student_id: this.state.tableData[i].id,
+                        train_time: this.state.tablerecordData[i].train_starttime==null?
+                        this.state.tablerecordData[i].train_endtime==null?"":"~"+this.state.tablerecordData[i].train_endtime:this.state.tablerecordData[i].train_endtime==null?this.state.tablerecordData[i].train_starttime+"~":this.state.tablerecordData[i].train_starttime+"~"+this.state.tablerecordData[i].train_endtime,
+                        test_time: this.state.tablerecordData[i].test_time==null?"":this.state.tablerecordData[i].test_time,
+                        plan_train_num:this.state.tablerecordData[i].plan_train_num==null?"":this.state.tablerecordData[i].plan_train_num,
+                        address:this.state.tablerecordData[i].address==null?"":this.state.tablerecordData[i].address,
+                        class_head:this.state.tablerecordData[i].class_head==null?
+                        this.state.tablerecordData[i].mobile==null?"":"-"+this.state.tablerecordData[i].mobile:this.state.tablerecordData[i].mobile==null?this.state.tablerecordData[i].class_head:this.state.tablerecordData[i].class_head+"-"+this.state.tablerecordData[i].mobile,
+                        manager:this.state.tablerecordData[i].manager==null?
+                        this.state.tablerecordData[i].manager_mobile==null?"":"-"+this.state.tablerecordData[i].manager_mobile:this.state.tablerecordData[i].manager_mobile==null?this.state.tablerecordData[i].manager:this.state.tablerecordData[i].manager+"-"+this.state.tablerecordData[i].manager_mobile,
+                        teacher:this.state.tablerecordData[i].teacher==null?
+                        this.state.tablerecordData[i].teacher_number==null?"":"-"+this.state.tablerecordData[i].teacher_number:this.state.tablerecordData[i].teacher_number==null?this.state.tablerecordData[i].teacher:this.state.tablerecordData[i].teacher+"-"+this.state.tablerecordData[i].teacher_number,
+                        expert:this.state.tablerecordData[i].expert==null?
+                        this.state.tablerecordData[i].expert_number==null?"":"-"+this.state.tablerecordData[i].expert_number:this.state.tablerecordData[i].expert_number==null?this.state.tablerecordData[i].expert:this.state.tablerecordData[i].expert+"-"+this.state.tablerecordData[i].expert_number,
+                        class_code:this.state.tablerecordData[i].class_code,
+                        record_time:this.state.tablerecordData[i].new_time,
+                        record_ti:this.state.tablerecordData[i].bid,
+                        register: this.state.tablerecordData[i].demo,
+                          
+                       }
+                   }}
+                   rowsCount={this.state.tablerecordData.length}
+                   onRowClick={(rowIdx, row) => {
+                       if (rowIdx !== -1) {
+                           this.handleSelection(rowIdx, row);
+                       }
+                   }}
+                   renderColor={(idx) => { return "black" }}
+                   maxHeight={1000}
+                   minHeight={535}
+                   rowHeight={20}
+               />:""} */}
+                    
+               {/* <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitPre();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"上页"}
+               </Button>
+               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
+               <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitNext();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"下页"}
+               </Button> */}
+                    
+                    </div>
+                     </Drawer>
                 
                 <ReactDataGrid
                     style={{marginTop:"1rem"}}
@@ -1707,6 +1944,9 @@ class Clazzrecord extends Component {
                         color="primary"
                         className="nyx-org-btn-md"
                         onClick={() => {
+                            this.setState({
+                                recordlogshowInfo:false
+                            })
                            console.log( this.state.selectedClazzID)
                            if(this.state.selectedClazzID.length==0){
                             this.popUpNotice(NOTICE, 0, "请选择备案班级");
@@ -1742,6 +1982,8 @@ class Clazzrecord extends Component {
                                     this.popUpNotice(NOTICE, 0, "该班级尚未备案,暂无备案记录。"); 
                                 }else{
                                     this.state.selected=this.state.allData[i];
+                                    this.state.allRecordData = [];
+                                    this.state.tablerecordData = [];
                                     this.recordLogDrawer(true)()
                                     this.queryRecordClazz(1,true)
                                 }
@@ -1753,143 +1995,7 @@ class Clazzrecord extends Component {
                     >
                         {"备案记录"}
                     </Button>
-                    <Drawer
-                       
-                        anchor="right"
-                        open={this.state.recordlogright}
-                        onRequestClose={this.recordLogDrawer(false)}
-                    >
-                    <div style={{width:"800px",padding:"1rem",overflowX:"hidden"}}>     
-                    <div style={{color:"#2196f3",margin:"1rem",fontSize:"18px"}}>               
-                        备案记录-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
-                        -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
-                        -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
-                    </div>
-                    <ReactDataGrid
-                       rowKey="id"
-                       columns={
-                        [
-                           
-                           
-                            {
-                                key: "train_time",
-                                name: "培训时间",
-                                width: 180,
-                                resizable: true
-                            },
-                            {
-                                key: "test_time",
-                                name: "考试时间",
-                                width: 100,
-                                resizable: true
-                            },
-                            {
-                                key: "plan_train_num",
-                                name: "培训人数",
-                                width: 100,
-                                resizable: true
-                            },
-                           
-                            {
-                                key: "address",
-                                name: "培训地点",
-                                width: 80,
-                                resizable: true
-                            },
-                            {
-                                key: "class_head",
-                                name: "班主任-电话",
-                                width: 125,
-                                resizable: true
-                            },
-                            {
-                                key: "manager",
-                                name: "主办方负责人-电话",
-                                width: 125,
-                                resizable: true
-                            },
-                            {
-                                key: "teacher",
-                                name: "理论讲师-讲师编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "expert",
-                                name: "实践讲师-讲师编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "class_code",
-                                name: "班级编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "register",
-                                name: "备注",
-                                width: 120,
-                                resizable: true
-                            }
-                        ]
-                   }
-                   
-                   rowGetter={(i) => {
-                       if (i === -1) { return {} }
-                       return {
-                        //student_id: this.state.tableData[i].id,
-                        train_time: this.state.tablerecordData[i].train_starttime==null?
-                        this.state.tablerecordData[i].train_endtime==null?"":"~"+this.state.tablerecordData[i].train_endtime:this.state.tablerecordData[i].train_endtime==null?this.state.tablerecordData[i].train_starttime+"~":this.state.tablerecordData[i].train_starttime+"~"+this.state.tablerecordData[i].train_endtime,
-                        test_time: this.state.tablerecordData[i].test_time==null?"":this.state.tablerecordData[i].test_time,
-                        plan_train_num:this.state.tablerecordData[i].plan_train_num==null?"":this.state.tablerecordData[i].plan_train_num,
-                        address:this.state.tablerecordData[i].address==null?"":this.state.tablerecordData[i].address,
-                        class_head:this.state.tablerecordData[i].class_head==null?
-                        this.state.tablerecordData[i].mobile==null?"":"-"+this.state.tablerecordData[i].mobile:this.state.tablerecordData[i].mobile==null?this.state.tablerecordData[i].class_head:this.state.tablerecordData[i].class_head+"-"+this.state.tablerecordData[i].mobile,
-                        manager:this.state.tablerecordData[i].manager==null?
-                        this.state.tablerecordData[i].manager_mobile==null?"":"-"+this.state.tablerecordData[i].manager_mobile:this.state.tablerecordData[i].manager_mobile==null?this.state.tablerecordData[i].manager:this.state.tablerecordData[i].manager+"-"+this.state.tablerecordData[i].manager_mobile,
-                        teacher:this.state.tablerecordData[i].teacher==null?
-                        this.state.tablerecordData[i].teacher_number==null?"":"-"+this.state.tablerecordData[i].teacher_number:this.state.tablerecordData[i].teacher_number==null?this.state.tablerecordData[i].teacher:this.state.tablerecordData[i].teacher+"-"+this.state.tablerecordData[i].teacher_number,
-                        expert:this.state.tablerecordData[i].expert==null?
-                        this.state.tablerecordData[i].expert_number==null?"":"-"+this.state.tablerecordData[i].expert_number:this.state.tablerecordData[i].expert_number==null?this.state.tablerecordData[i].expert:this.state.tablerecordData[i].expert+"-"+this.state.tablerecordData[i].expert_number,
-                        class_code:this.state.tablerecordData[i].class_code,
-                        register: this.state.tablerecordData[i].demo,
-                          
-                       }
-                   }}
-                   rowsCount={this.state.tablerecordData.length}
-                   onRowClick={(rowIdx, row) => {
-                       if (rowIdx !== -1) {
-                           this.handleSelection(rowIdx, row);
-                       }
-                   }}
-                   renderColor={(idx) => { return "black" }}
-                   maxHeight={1000}
-                   minHeight={535}
-                   rowHeight={20}
-               />
-               {/* <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitPre();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"上页"}
-               </Button>
-               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
-               <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitNext();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"下页"}
-               </Button> */}
                     
-                    </div>
-                     </Drawer>
                 {/* {"已选择"+this.state.selectedClazzID.length + "人/"}
 
                 共{this.state.count}人
