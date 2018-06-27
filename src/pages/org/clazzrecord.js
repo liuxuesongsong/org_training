@@ -50,6 +50,7 @@ class Clazzrecord extends Component {
         openimplement:false,//实施地点管理模块
         openEditClazzDialog: false,
         beingLoading: false,
+        recordlogshowInfo:false,
         see_manage_list:[],
         see_manage_head_list:[],//查看班主任管理列表
         see_manage_sponser_list:[],//查看主办方管理列表
@@ -70,7 +71,6 @@ class Clazzrecord extends Component {
          alertCode: Code.LOGIC_SUCCESS,
          alertContent: "",
          alertAction: [],
-         openNewStudentDialog: false
     }
     componentDidMount() {
         window.currentPage = this;
@@ -306,7 +306,9 @@ class Clazzrecord extends Component {
     class_record =()=>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
-              
+                this.state.selectedClazzID = [];
+                this.state.currentPageSelectedID = [];
+                this.queryStudents(1, true);
               
             }
             
@@ -333,6 +335,15 @@ class Clazzrecord extends Component {
         }
         return components
     }
+    recordLogDrawer = (open) => () => {
+        if(open==false){
+           // this.state.btns=0;
+        }
+         this.setState({
+             recordlogright: open,
+             recordlogshowInfo: true
+         });
+     };
     month_arr() {
         var components = [];
        
@@ -1659,6 +1670,10 @@ class Clazzrecord extends Component {
                         className="nyx-org-btn-md"
                         onClick={() => {
                            console.log( this.state.selectedClazzID)
+                           if(this.state.selectedClazzID.length==0){
+                            this.popUpNotice(NOTICE, 0, "请选择备案班级");
+                            return false;
+                           }
                            this.class_record();
                             // this.state.selectedClazzID = [];
                             // this.state.currentPageSelectedID = [];
@@ -1673,20 +1688,170 @@ class Clazzrecord extends Component {
                         color="primary"
                         className="nyx-org-btn-md"
                         onClick={() => {
-                           console.log( this.state.selectedClazzID)
+                         //  console.log( this.state.selectedClazzID)
                            
                            if(this.state.selectedClazzID.length!=1){
                             this.popUpNotice(NOTICE, 0, "请选择一个班级查询备案记录");
+                            return false;
                            }
-                            // this.state.selectedClazzID = [];
-                            // this.state.currentPageSelectedID = [];
-                            // this.queryStudents(1, true);
+                           for(var i=0;i<this.state.selectedClazzID.length;i++){
+                            this.state.thisClazzId=this.state.selectedClazzID[i];
+                            
+                        }
+                        for(var i=0;i<this.state.allData.length;i++){
+                            if(this.state.allData[i].id==this.state.thisClazzId){
+                                if(this.state.allData[i].state==1){
+                                    this.popUpNotice(NOTICE, 0, "该班级尚未备案,暂无备案记录。"); 
+                                }else{
+                                    this.state.selected=this.state.allData[i];
+                                    this.recordLogDrawer(true)()
+                                }
+
+                            }
+                        }
                         }}
                         style={{marginLeft:10,position:"relative",top:"-2px"}}
                     >
                         {"备案记录"}
                     </Button>
+                    <Drawer
+                       
+                        anchor="right"
+                        open={this.state.recordlogright}
+                        onRequestClose={this.recordLogDrawer(false)}
+                    >
+                    <div style={{width:"800px",padding:"1rem",overflowX:"hidden"}}>     
+                    <div style={{color:"#2196f3",margin:"1rem",fontSize:"18px"}}>               
+                        备案记录-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
+                        -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
+                        -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
+                    </div>
+                    <ReactDataGrid
+                       rowKey="id"
+                       style={{marginLeft:"1rem"}}
+                       columns={
+                        [
+                           
+                           
+                            {
+                                key: "train_time",
+                                name: "培训时间",
+                                width: 180,
+                                resizable: true
+                            },
+                            {
+                                key: "test_time",
+                                name: "考试时间",
+                                width: 100,
+                                resizable: true
+                            },
+                            {
+                                key: "plan_train_num",
+                                name: "培训人数",
+                                width: 100,
+                                resizable: true
+                            },
+                           
+                            {
+                                key: "address",
+                                name: "培训地点",
+                                width: 80,
+                                resizable: true
+                            },
+                            {
+                                key: "class_head",
+                                name: "班主任-电话",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "manager",
+                                name: "主办方负责人-电话",
+                                width: 125,
+                                resizable: true
+                            },
+                            {
+                                key: "teacher",
+                                name: "理论讲师-讲师编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "expert",
+                                name: "实践讲师-讲师编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "class_code",
+                                name: "班级编号",
+                                width: 120,
+                                resizable: true
+                            },
+                            {
+                                key: "register",
+                                name: "备注",
+                                width: 120,
+                                resizable: true
+                            }
+                        ]
+                   }
+                   
+                   rowGetter={(i) => {
+                       if (i === -1) { return {} }
+                       return {
+                        //student_id: this.state.tableData[i].id,
+                        train_time: this.state.tableData[i].train_starttime==null?
+                        this.state.tableData[i].train_endtime==null?"":"~"+this.state.tableData[i].train_endtime:this.state.tableData[i].train_endtime==null?this.state.tableData[i].train_starttime+"~":this.state.tableData[i].train_starttime+"~"+this.state.tableData[i].train_endtime,
+                        test_time: this.state.tableData[i].test_time==null?"":this.state.tableData[i].test_time,
+                        plan_train_num:this.state.tableData[i].plan_train_num==null?"":this.state.tableData[i].plan_train_num,
+                        address:this.state.tableData[i].address==null?"":this.state.tableData[i].address,
+                        class_head:this.state.tableData[i].class_head==null?
+                        this.state.tableData[i].mobile==null?"":"-"+this.state.tableData[i].mobile:this.state.tableData[i].mobile==null?this.state.tableData[i].class_head:this.state.tableData[i].class_head+"-"+this.state.tableData[i].mobile,
+                        manager:this.state.tableData[i].manager==null?
+                        this.state.tableData[i].manager_mobile==null?"":"-"+this.state.tableData[i].manager_mobile:this.state.tableData[i].manager_mobile==null?this.state.tableData[i].manager:this.state.tableData[i].manager+"-"+this.state.tableData[i].manager_mobile,
+                        teacher:this.state.tableData[i].teacher==null?
+                        this.state.tableData[i].teacher_number==null?"":"-"+this.state.tableData[i].teacher_number:this.state.tableData[i].teacher_number==null?this.state.tableData[i].teacher:this.state.tableData[i].teacher+"-"+this.state.tableData[i].teacher_number,
+                        expert:this.state.tableData[i].expert==null?
+                        this.state.tableData[i].expert_number==null?"":"-"+this.state.tableData[i].expert_number:this.state.tableData[i].expert_number==null?this.state.tableData[i].expert:this.state.tableData[i].expert+"-"+this.state.tableData[i].expert_number,
+                        class_code:this.state.tableData[i].class_code,
+                        register: this.state.tableData[i].demo,
+                          
+                       }
+                   }}
+                   rowsCount={this.state.tableData.length}
+                   onRowClick={(rowIdx, row) => {
+                       if (rowIdx !== -1) {
+                           this.handleSelection(rowIdx, row);
+                       }
+                   }}
+                   renderColor={(idx) => { return "black" }}
+                   maxHeight={1000}
+                   minHeight={535}
+                   rowHeight={20}
+               />
+               {/* <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitPre();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"上页"}
+               </Button>
+               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
+               <Button
+                   color="primary"
+                   onClick={() => {
+                       this.showResitNext();
+                   }}
+                   style={{ margin: 10 }}
+               >
+                   {"下页"}
+               </Button> */}
                     
+                    </div>
+                     </Drawer>
                 {/* {"已选择"+this.state.selectedClazzID.length + "人/"}
 
                 共{this.state.count}人
