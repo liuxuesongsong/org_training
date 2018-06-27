@@ -208,7 +208,7 @@ class Student extends Component {
         if (reload) {
             this.state.allResitData = [];
             this.state.tableResitData = [];
-            this.resitcurrentPage = 1;
+            this.state.resitcurrentPage = 1;
             this.setState({
                 resittotalPage: 1,
                 resitcount: 0,

@@ -26,12 +26,19 @@ class Clazzrecord extends Component {
         clazzes:[],
         allData: [],
         tableData: [],
+        allRecordData:[],
+        tablerecordData:[],
         queryCondition: {},
         selectedClazzID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
+        queryResitCondition: {class_state:2,state:1},
         currentPage: 1,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
+        recordcurrentPage:1,
+        recordcount:0,
+        recordtotalPage:1,
+        rowsrecordPerPage: 50,    
         pno:1,
         psize:10,
         count: 0,
@@ -93,6 +100,37 @@ class Clazzrecord extends Component {
         window.currentPage.state.clazzes = getCache("clazzes").sort((a, b) => {
             return b.id - a.id
         });
+    }
+    queryRecordClazz = (query_page = 1, reload = false) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                var result = message.data;
+                this.handleUptateAllRecordData(result);
+                // this.handleUpdateResitData(this.state.recordcurrentPage);
+                this.setState({
+                    recordtotalPage: getTotalPage(message.data.length, this.state.rowsrecordPerPage),
+                    recordcount: message.data.length
+                })
+                this.state.recordcount = message.data.length
+            } else {
+
+            }
+        }
+        if (reload) {
+            this.state.allRecordData = [];
+            this.state.tablerecordData = [];
+            this.state.recordcurrentPage = 1;
+            this.setState({
+                recordtotalPage: 1,
+                recordcount: 0,
+               // is_inlist:1
+                
+            })
+        }
+        getData(getRouter("clazzrecord_log"), { session: sessionStorage.session,id:this.state.thisClazzId  }, cb, {});
+    }
+    handleUptateAllRecordData = (newData) => {
+        this.state.allRecordData = this.state.allRecordData.concat(newData);
     }
 
     /**
@@ -1705,6 +1743,7 @@ class Clazzrecord extends Component {
                                 }else{
                                     this.state.selected=this.state.allData[i];
                                     this.recordLogDrawer(true)()
+                                    this.queryRecordClazz(1,true)
                                 }
 
                             }
@@ -1728,7 +1767,6 @@ class Clazzrecord extends Component {
                     </div>
                     <ReactDataGrid
                        rowKey="id"
-                       style={{marginLeft:"1rem"}}
                        columns={
                         [
                            
@@ -1801,25 +1839,25 @@ class Clazzrecord extends Component {
                        if (i === -1) { return {} }
                        return {
                         //student_id: this.state.tableData[i].id,
-                        train_time: this.state.tableData[i].train_starttime==null?
-                        this.state.tableData[i].train_endtime==null?"":"~"+this.state.tableData[i].train_endtime:this.state.tableData[i].train_endtime==null?this.state.tableData[i].train_starttime+"~":this.state.tableData[i].train_starttime+"~"+this.state.tableData[i].train_endtime,
-                        test_time: this.state.tableData[i].test_time==null?"":this.state.tableData[i].test_time,
-                        plan_train_num:this.state.tableData[i].plan_train_num==null?"":this.state.tableData[i].plan_train_num,
-                        address:this.state.tableData[i].address==null?"":this.state.tableData[i].address,
-                        class_head:this.state.tableData[i].class_head==null?
-                        this.state.tableData[i].mobile==null?"":"-"+this.state.tableData[i].mobile:this.state.tableData[i].mobile==null?this.state.tableData[i].class_head:this.state.tableData[i].class_head+"-"+this.state.tableData[i].mobile,
-                        manager:this.state.tableData[i].manager==null?
-                        this.state.tableData[i].manager_mobile==null?"":"-"+this.state.tableData[i].manager_mobile:this.state.tableData[i].manager_mobile==null?this.state.tableData[i].manager:this.state.tableData[i].manager+"-"+this.state.tableData[i].manager_mobile,
-                        teacher:this.state.tableData[i].teacher==null?
-                        this.state.tableData[i].teacher_number==null?"":"-"+this.state.tableData[i].teacher_number:this.state.tableData[i].teacher_number==null?this.state.tableData[i].teacher:this.state.tableData[i].teacher+"-"+this.state.tableData[i].teacher_number,
-                        expert:this.state.tableData[i].expert==null?
-                        this.state.tableData[i].expert_number==null?"":"-"+this.state.tableData[i].expert_number:this.state.tableData[i].expert_number==null?this.state.tableData[i].expert:this.state.tableData[i].expert+"-"+this.state.tableData[i].expert_number,
-                        class_code:this.state.tableData[i].class_code,
-                        register: this.state.tableData[i].demo,
+                        train_time: this.state.tablerecordData[i].train_starttime==null?
+                        this.state.tablerecordData[i].train_endtime==null?"":"~"+this.state.tablerecordData[i].train_endtime:this.state.tablerecordData[i].train_endtime==null?this.state.tablerecordData[i].train_starttime+"~":this.state.tablerecordData[i].train_starttime+"~"+this.state.tablerecordData[i].train_endtime,
+                        test_time: this.state.tablerecordData[i].test_time==null?"":this.state.tablerecordData[i].test_time,
+                        plan_train_num:this.state.tablerecordData[i].plan_train_num==null?"":this.state.tablerecordData[i].plan_train_num,
+                        address:this.state.tablerecordData[i].address==null?"":this.state.tablerecordData[i].address,
+                        class_head:this.state.tablerecordData[i].class_head==null?
+                        this.state.tablerecordData[i].mobile==null?"":"-"+this.state.tablerecordData[i].mobile:this.state.tablerecordData[i].mobile==null?this.state.tablerecordData[i].class_head:this.state.tablerecordData[i].class_head+"-"+this.state.tablerecordData[i].mobile,
+                        manager:this.state.tablerecordData[i].manager==null?
+                        this.state.tablerecordData[i].manager_mobile==null?"":"-"+this.state.tablerecordData[i].manager_mobile:this.state.tablerecordData[i].manager_mobile==null?this.state.tablerecordData[i].manager:this.state.tablerecordData[i].manager+"-"+this.state.tablerecordData[i].manager_mobile,
+                        teacher:this.state.tablerecordData[i].teacher==null?
+                        this.state.tablerecordData[i].teacher_number==null?"":"-"+this.state.tablerecordData[i].teacher_number:this.state.tablerecordData[i].teacher_number==null?this.state.tablerecordData[i].teacher:this.state.tablerecordData[i].teacher+"-"+this.state.tablerecordData[i].teacher_number,
+                        expert:this.state.tablerecordData[i].expert==null?
+                        this.state.tablerecordData[i].expert_number==null?"":"-"+this.state.tablerecordData[i].expert_number:this.state.tablerecordData[i].expert_number==null?this.state.tablerecordData[i].expert:this.state.tablerecordData[i].expert+"-"+this.state.tablerecordData[i].expert_number,
+                        class_code:this.state.tablerecordData[i].class_code,
+                        register: this.state.tablerecordData[i].demo,
                           
                        }
                    }}
-                   rowsCount={this.state.tableData.length}
+                   rowsCount={this.state.tablerecordData.length}
                    onRowClick={(rowIdx, row) => {
                        if (rowIdx !== -1) {
                            this.handleSelection(rowIdx, row);
