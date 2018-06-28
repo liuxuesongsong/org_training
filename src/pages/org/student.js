@@ -436,63 +436,63 @@ class Student extends Component {
       
         getData(getRouter(CHANGE_CREDIT), {session: sessionStorage.session,company_id:company_id,class_id:class_id,msg:name+"-"+msg,type:1}, cb, {});
     }
-    unlock_student = () =>{
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
+    // unlock_student = () =>{
+    //     var cb = (route, message, arg) => {
+    //         if (message.code === Code.LOGIC_SUCCESS) {
                 
-            }
-            this.popUpNotice(NOTICE, 0, message.msg);
-        }
-        getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
-    }
-    unlockDialog = () => {
-        return (
-            <Dialog  open={this.state.openunlockDialog} onRequestClose={this.handleRequestClose} >
-                <DialogTitle>
-                    取消学员90天锁定
-                </DialogTitle>
-                <DialogContent>
-                    <div>
+    //         }
+    //         this.popUpNotice(NOTICE, 0, message.msg);
+    //     }
+    //     getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
+    // }
+    // unlockDialog = () => {
+    //     return (
+    //         <Dialog  open={this.state.openunlockDialog} onRequestClose={this.handleRequestClose} >
+    //             <DialogTitle>
+    //                 取消学员90天锁定
+    //             </DialogTitle>
+    //             <DialogContent>
+    //                 <div>
                         
-                    <TextField
-                            className="nyx-clazz-message"
-                            key={"class_head"}
-                            id={"class_head"}
-                            style={{width:"260px"}}
-                            label={"解锁学员身份证号"}
-                            onChange={(event) => {
-                               this.state.idcard=event.target.value
-                            }}>
-                        </TextField>   
-                    </div>
-                </DialogContent>
-                <DialogActions>
-                    <div>
-                        <Button
-                            onClick={() => {
-                                if(this.state.idcard==""){
-                                    this.popUpNotice(NOTICE, 0, "请输入有效身份证号");
-                                    return;
-                                }
-                              this.unlock_student()
-                               // this.fresh();
-                                this.handleRequestClose()
-                            }}
-                        >
-                            {Lang[window.Lang].pages.main.certain_button}
-                        </Button>
-                        <Button
-                            onClick={() => {
-                                this.handleRequestClose()
-                            }}
-                        >
-                            {Lang[window.Lang].pages.main.cancel_button}
-                        </Button>
-                    </div>
-                </DialogActions>
-            </Dialog >
-        )
-    } 
+    //                 <TextField
+    //                         className="nyx-clazz-message"
+    //                         key={"class_head"}
+    //                         id={"class_head"}
+    //                         style={{width:"260px"}}
+    //                         label={"解锁学员身份证号"}
+    //                         onChange={(event) => {
+    //                            this.state.idcard=event.target.value
+    //                         }}>
+    //                     </TextField>   
+    //                 </div>
+    //             </DialogContent>
+    //             <DialogActions>
+    //                 <div>
+    //                     <Button
+    //                         onClick={() => {
+    //                             if(this.state.idcard==""){
+    //                                 this.popUpNotice(NOTICE, 0, "请输入有效身份证号");
+    //                                 return;
+    //                             }
+    //                           this.unlock_student()
+    //                            // this.fresh();
+    //                             this.handleRequestClose()
+    //                         }}
+    //                     >
+    //                         {Lang[window.Lang].pages.main.certain_button}
+    //                     </Button>
+    //                     <Button
+    //                         onClick={() => {
+    //                             this.handleRequestClose()
+    //                         }}
+    //                     >
+    //                         {Lang[window.Lang].pages.main.cancel_button}
+    //                     </Button>
+    //                 </div>
+    //             </DialogActions>
+    //         </Dialog >
+    //     )
+    // } 
     creditDialog = (name,company_id,class_id) => {
         return (
             <Dialog open={this.state.opencreditDialog} onRequestClose={this.handleRequestClose} >
@@ -679,7 +679,7 @@ class Student extends Component {
                     style={{marginRight:"0.2rem",marginTop:"-2px"}}
                     ></i>{"补考列表"}
                     </Button>
-                    <Button
+                    {/* <Button
                         raised 
                         color="primary"
                         className="nyx-org-btn-lg"
@@ -693,7 +693,7 @@ class Student extends Component {
                         style={{top:"-0.25rem",minWidth:"100px"}}
                     >
                         {"取消企业锁定"}
-                    </Button>
+                    </Button> */}
                 </div>
                 <Drawer
                        
@@ -1299,7 +1299,7 @@ class Student extends Component {
                     </Button>
                     
                
-                 {this.unlockDialog()}
+                 {/* {this.unlockDialog()} */}
                  {this.creditDialog(this.state.creditname,this.state.creditcompany_id,this.state.creditclass_id)}
                 <CommonAlert
                     show={this.state.alertOpen}

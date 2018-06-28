@@ -21,7 +21,7 @@ import Drawer from 'material-ui/Drawer';
 import { initCache, getData, getRouter,getInst, getCache, getCity, getCourse } from '../../utils/helpers';
 import {
     LAST_COUNT, DATA_TYPE_BASE,UPDATE_COUNT,INST_QUERY, DATA_TYPE_CLAZZ, STATUS_ENROLLED, STATUS_ARRANGED, STATUS_ARRANGED_DOING, STATUS_ARRANGED_UNDO,
-    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT,NOTICE,EDIT_PASSWORD,SEARCH_COMPANYINFO,RESET_PASSWORD,CLASS_COUNT_TIME
+    STATUS_ENROLLED_DID, STATUS_EXAMING, STATUS_EXAMING_DID, STATUS_PASSED, STATUS_PASSED_DID, QUERY, DATA_TYPE_STUDENT,ALERT,NOTICE,EDIT_PASSWORD,SEARCH_COMPANYINFO,RESET_PASSWORD,CLASS_COUNT_TIME,UNLOCK_STUDENT
 } from '../../enum';
 import Lang from '../../language';
 import Code from '../../code';
@@ -54,6 +54,7 @@ class Home extends Component {
         first_time:"",
         second_time:"",
         year_train_count:[],
+        idcard:"",
         // 界面状态
 
         // 提示状态
@@ -65,6 +66,7 @@ class Home extends Component {
          openNewStudentDialog: false,
          openPasswordDialog: false,
         openCompanyPasswordDialog: false,
+        openunlockDialog:false,
          alertType: "notice",
          alertContent: "登录成功",
     };
@@ -222,9 +224,67 @@ class Home extends Component {
         this.setState({
           
             openPasswordDialog: false,
-            openCompanyPasswordDialog:false
+            openCompanyPasswordDialog:false,
+            openunlockDialog:false,
         })
     }
+    unlock_student = () =>{
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
+    }
+    unlockDialog = () => {
+        return (
+            <Dialog  open={this.state.openunlockDialog} onRequestClose={this.handleRequestClose} >
+                <DialogTitle>
+                    取消学员90天锁定
+                </DialogTitle>
+                <DialogContent>
+                    <div>
+                        
+                    <TextField
+                            className="nyx-clazz-message"
+                            key={"class_head"}
+                            id={"class_head"}
+                            style={{width:"260px"}}
+                            label={"解锁学员身份证号"}
+                            onChange={(event) => {
+                               this.state.idcard=event.target.value
+                            }}>
+                        </TextField>   
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <div>
+                        <Button
+                            onClick={() => {
+                                if(this.state.idcard==""){
+                                    this.popUpNotice(NOTICE, 0, "请输入有效身份证号");
+                                    return;
+                                }
+                              this.unlock_student()
+                               // this.fresh();
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button>
+                        <Button
+                            onClick={() => {
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+    } 
     changePasswordDialog = () => {
         return (
             <Dialog open={this.state.openPasswordDialog} onRequestClose={this.handleRequestClose} >
@@ -323,12 +383,12 @@ class Home extends Component {
  
     render() {
         return (
-            <div>
+            <div style={{width:"100%"}}>
                 <div
                     style={{ paddingTop: 80, paddingLeft: 40, justifyContent: 'space-between' }}
                 >
               {this.state.modules_id.indexOf('1')==-1?"":
-                    <div style={{ margin: 10,float: "left"}}>
+                    <div style={{ margin: "1%",float: "left",width:"98%"}}>
                         <Paper id="companyid" width="500px" style={{ padding: 10 }}>
                             <Typography type="headline" component="h5">
                                 {this.state.name}
@@ -376,7 +436,7 @@ class Home extends Component {
                                 {this.date_arr()}
                             </select>
                             <br/>
-                            <div  style={{width:200,float:"left"}}>
+                            <div  style={{width:220,float:"left"}}>
                             {this.state.year_train_count.length==0?
                                 this.state.clazz_count.map(
                                     clazz_count =>
@@ -389,13 +449,13 @@ class Home extends Component {
                             
                             </div>
                             
-                            <div style={{width:100,float:"left"}}>
+                            <div style={{width:120,float:"left"}}>
                             {this.state.train_count.map(
                                 train_count =>
                             <div key={train_count.ti_id}><span>{"已安排:"+train_count.num+"人"}</span></div>)}
                             </div>
 
-                            <div style={{width:100,float:"left"}}>
+                            <div style={{width:120,float:"left"}}>
                             {this.state.unarrange_count.map(
                                 unarrange_count =>
                             <div key={unarrange_count.ti_id}><span>{"未安排:"+unarrange_count.num+"人"}</span></div>)}
@@ -406,7 +466,7 @@ class Home extends Component {
                         </Paper>
                     </div>
                     }
-                    <div style={{ margin: 10,float: "left",marginRight:"1rem",width:"300px" }}>
+                    <div style={{ margin: "1%",float: "left",width:"31%" }}>
                         <Paper  style={{ padding: 10,height:"150px" }}>
                             <Typography type="headline" component="h5">
                                个人信息
@@ -442,13 +502,13 @@ class Home extends Component {
                     
                     {this.state.modules_id.indexOf('1')==-1?"":
                     <div>
-                        <div style={{ margin: 10,float: "left",marginRight:"1rem",width:"300px" }}>
+                        <div style={{ margin: "1%",float: "left",width:"31%" }}>
                         <Paper  style={{ padding: 10,height:"150px" }}>
                             <Typography type="headline" component="h5">
                               重置公司密码
                             </Typography>
                             <div
-                            style={{float:"left",width:"70%"}}
+                            style={{float:"left",width:"60%"}}
                             >可搜索相关公司，将对应的公司密码重置为12345678。重置前请审核企业相关信息无误。</div>
                             <Typography type="body1" component="div">
                             <div>
@@ -557,8 +617,48 @@ class Home extends Component {
     
 </div>
 </div>
+
 </Drawer>
-                    <div className="nyx-areacount-list">
+{this.state.modules_id.indexOf('1')==-1?"":<div>
+<div style={{ margin: "1%",float: "left",width:"32%" }}>
+<Paper  style={{ padding: 10,height:"150px" }}>
+    <Typography type="headline" component="h5">
+      取消企业锁定
+    </Typography>
+    <div
+    style={{float:"left",width:"50%"}}
+    >通过输入学员有效身份证号码,取消学员锁定90天的限制。</div>
+    <Typography type="body1" component="div">
+    <div>
+    
+     
+  
+    
+        <Button
+        raised
+        style={{float:"right",minWidth:"100px"}}
+        color="primary"
+        className="nyx-org-btn-md"
+        // className="nyx-home-button"
+            onClick={()=>{
+                this.setState({
+                    openunlockDialog:true
+                   })
+                    
+            }}
+            >取消企业锁定</Button>
+             
+    </div>
+
+
+                               
+    
+    </Typography>
+
+</Paper>
+</div>
+</div>}
+                    <div className="nyx-areacount-list" style={{margin:"1%"}}>
                         <div className="nyx-areacount-title">各省市报名情况(按照中级未安排顺序排列)
                         <Button
                         style={{
@@ -826,7 +926,7 @@ class Home extends Component {
                 
                 {this.changePasswordDialog()}
                 {this.changeCompanyPasswordDialog()}
-               
+               {this.unlockDialog()}
                 <CommonAlert
                     show={this.state.alertOpen}
                     type={this.state.alertType}

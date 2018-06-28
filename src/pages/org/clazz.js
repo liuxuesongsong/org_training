@@ -29,7 +29,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT,BATCH_DEL_RESIT,CLASSTEACHER_INFOS ,MANAGE_LISTS,DETAIL_AREA_LIST} from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT,BATCH_DEL_RESIT } from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 import BeingLoading from '../../components/BeingLoading';
@@ -89,20 +89,8 @@ class Clazz extends Component {
         selected_end_year:"",
         selected_end_month:"",
         selected_end_date:"",
-        selected_test_year:"",
-        selected_test_month:"",
-        selected_test_date:"",
         cancel_list:[],
         arr:[],
-        see_manage_head_list:[],//查看班主任管理列表
-        see_manage_sponser_list:[],//查看主办方管理列表
-        see_manage_theory_list:[],//查看理论讲师管理列表
-        see_manage_expert_list:[],//查看实践讲师管理列表
-        detail_area_list:[],
-        head_number:"",
-        sponsor_number:"",
-        theory_number:"",
-        expert_number:"",
         search_area_id: null,
         search_clazz_course_id: null,
         search_clazz_area_id: null,
@@ -145,7 +133,6 @@ class Clazz extends Component {
 
     cacheToState() {
         window.currentPage.queryStudents();
-        window.currentPage.see_module();
         window.currentPage.state.areas = getAreas();
         var cb = (router, message, arg) => {
             window.currentPage.setState({
@@ -360,17 +347,6 @@ class Clazz extends Component {
         }
         getData(getRouter(DELETE_CLAZZ), { session: sessionStorage.session, clazz_id: id }, cb, { id: id });
     }
-    detail_area_list= (id) => {
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                
-               this.state.detail_area_list=message.data.detailed;
-                this.popUpNotice(NOTICE, 0, message.msg);
-              
-            }
-        }
-        getData(getRouter(DETAIL_AREA_LIST), { session: sessionStorage.session, address_area_id: id }, cb, { id: id });
-    }
     search_message = () => {
         
                 var cb = (route, message, arg) => {
@@ -487,7 +463,7 @@ class Clazz extends Component {
     }
     editClazzDialog = () => {
         return (
-            <Dialog name="editClazzDialog" open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
+            <Dialog open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
                 {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     修改班级-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
@@ -496,258 +472,46 @@ class Clazz extends Component {
             </DialogTitle>
                 <DialogContent>
                     <div>
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">班主任</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
-                        id="class_head"
-                        defaultValue={this.state.selected["class_head"] === null ? "" : this.state.selected["class_head"]}
-                        onChange={(e)=>{
-                            for(var i=0;i< this.state.see_manage_head_list.length;i++){
-                                if(e.target.value== this.state.see_manage_head_list[i].name){
-                                    this.setState({
-                                        head_number:  this.state.see_manage_head_list[i].number
-                                    })
-                                    
-                                }
-                            }
-                            if(e.target.value==0){
-                                this.setState({
-                                    head_number:  ""
-                                })
-                            }
-                           
-                        }}
-                        >
-                        <option value={0}>-班主任-</option>
-                        
-                        {
-                            this.state.see_manage_head_list.map(see_manages => {
-                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
-                            })
-                        }
-                           
-                        </select></div>
-                        
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">班主任电话</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
-                        id="mobile"
-                        disabled={true}
-                        value={this.state.head_number==""?this.state.selected.mobile:this.state.head_number}
-                        >
-                        <option value={0}>-班主任电话-</option>
-                        <option value={this.state.head_number}>{this.state.head_number==""?"-班主任电话-":this.state.head_number}</option>
-                        <option value={this.state.selected.mobile}>{this.state.selected.mobile}</option>
-                        </select></div>
-
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"teacher"}
-                            style={{width:"24%"}}
-                            id={"mobile"}
-                            label={"班主任电话"}
-                            disabled={true}
-                            value={this.state.head_number==""?this.state.selected.mobile:this.state.head_number}
-                            >
-                             
-                        </TextField> */}
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">主办方联系人</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
-                        id="manager"
-                        defaultValue={this.state.selected.manager}
-                        onChange={(e)=>{
-                           
-                            for(var i=0;i< this.state.see_manage_sponser_list.length;i++){
-                                if(e.target.value== this.state.see_manage_sponser_list[i].name){
-                                    this.setState({
-                                        sponsor_number:  this.state.see_manage_sponser_list[i].number
-                                    })
-                                    
-                                   // this.state.head_number=see_manage_sponser_list[i].number;
-                                }
-                                    if(e.target.value==0){
-                                        this.setState({
-                                            sponsor_number:  ""
-                                        })
-                                    }
-                            }
-                        }}
-                        >
-                        <option value={0}>-主办方联系人-</option>
-                        {
-                            this.state.see_manage_sponser_list.map(see_manages => {
-                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
-                            })
-                        }
-                           
-                        </select></div>
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">主办方联系人电话</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
-                        id="manager_mobile"
-                        disabled={true}
-                        value={this.state.sponsor_number==""?this.state.selected.manager_mobile:this.state.sponsor_number}
-                        >
-                        <option value={0}>-主办方联系人电话-</option>
-                        <option value={this.state.sponsor_number}>{this.state.sponsor_number}</option>
-                        <option value={this.state.selected.manager_mobile}>{this.state.selected.manager_mobile}</option>
-                        </select></div>
-                       
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"manager_mobile"}
-                            style={{width:"24%"}}
-                            id={"manager_mobile"}
-                            label={"主办方联系人电话"}
-                            disabled={true}
-                            value={this.state.sponsor_number==""?this.state.selected.manager_mobile:this.state.sponsor_number}
-                            >
-                             
-                        </TextField> */}
                         <TextField
-                            style={{width:"24%",margin:0,marginRight:"1px",fontSize:"14px"}}
                             className="nyx-clazz-message"
-                            key={"plan_train_num"}
-                            id={"plan_train_num"}
-                            label={"培训人数"}
-                            defaultValue={this.state.selected.plan_train_num==null?"65人(含15人补考)":this.state.selected.plan_train_num}
+                            key={"class_head"}
+                            id={"class_head"}
+                            label={"班主任"}
+                            value={this.state.selected["class_head"] === null ? "" : this.state.selected["class_head"]}
                             onChange={(event) => {
-                               
+                                this.state.selected["class_head"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
                             }}>
                         </TextField>
-                        <div className="nyx-class-lists-div" style={{width:"74%"}}>
-                        <p className="nyx-class-lists-p">详细地址</p>
-                        <select className="nyx-class-lists-select"
-                        id="address"
-                        defaultValue={this.state.selected.address==""?"":this.state.selected.address}
-                        //defaultValue={}
-                        onChange={(e)=>{
-                           
-                        }}
-
-                        >
-                        <option value={0}>-详细地址-</option>
-                        {this.state.detail_area_list.map(detail => {
-                          return <option>
-                          {detail.detailed}</option>
-                        })}
-                       
-                           
-                        </select></div>
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">理论讲师</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",}}
-                        id="teacher"
-                        defaultValue={this.state.selected.teacher}
-                        onChange={(e)=>{
-                            for(var i=0;i< this.state.see_manage_theory_list.length;i++){
-                                if(e.target.value== this.state.see_manage_theory_list[i].name){
-                                    this.setState({
-                                        theory_number:  this.state.see_manage_theory_list[i].number
-                                    })
-                                   // this.state.head_number=see_manage_theory_list[i].number;
-                                }
-                            }
-                            if(e.target.value==0){
-                                this.setState({
-                                    theory_number:  ""
-                                })
-                            }
-                        }}
-                        >
-                        <option value={0}>-理论讲师-</option>
-                        {
-                            this.state.see_manage_theory_list.map(see_manages => {
-                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
-                            })
-                        }
-                           
-                        </select></div>
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">理论讲师编号</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
-                        id="teacher_number"
-                         disabled={true}
-                        value={this.state.theory_number==""?this.state.selected.teacher_number:this.state.theory_number}
-                        >
-                        <option value={0}>-理论讲师编号-</option>
-                        <option value={this.state.theory_number}>{this.state.theory_number}</option>
-                        <option value={this.state.selected.teacher_number}>{this.state.selected.teacher_number}</option>
-                        </select></div>
-                       
-                        {/* <TextField
+                        <TextField
                             className="nyx-clazz-message"
-                            key={"teacher_number"}
-                            style={{width:"24%"}}
-                            id={"teacher_number"}
-                            label={"理论讲师编号"}
-                            disabled={true}
-                            value={this.state.theory_number==""?this.state.selected.teacher_number:this.state.theory_number}
-                            >
-                             
-                        </TextField> */}
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">实践讲师</p>
-                        <select className="nyx-class-lists-select"
-                         style={{fontSize:"14px",fontFamily:"微软雅黑"}}
-                        id="expert"
-                        defaultValue={this.state.selected.expert==""?"":this.state.selected.expert}
-                        onChange={(e)=>{
-                            for(var i=0;i< this.state.see_manage_expert_list.length;i++){
-                                if(e.target.value== this.state.see_manage_expert_list[i].name){
-                                    this.setState({
-                                        expert_number:  this.state.see_manage_expert_list[i].number
-                                    })
-                                }
-                            }
-                            if(e.target.value==0){
+                            key={"teacher"}
+                            id={"teacher"}
+                            label={"老师"}
+                            value={this.state.selected["teacher"] === null ? "" : this.state.selected["teacher"]}
+                            onChange={(event) => {
+                                this.state.selected["teacher"] = event.target.value
                                 this.setState({
-                                    expert_number:  ""
-                                })
-                            }
-                        }}
-                        >
-                        <option value={0}>-实践讲师-</option>
-                        {
-                            this.state.see_manage_expert_list.map(see_manages => {
-                                return  <option value={see_manages.name} key={see_manages.name}>{see_manages.name}</option>
-                            })
-                        }
-                           
-                        </select></div>
-                        <div className="nyx-class-lists-div">
-                        <p className="nyx-class-lists-p">实践讲师编号</p>
-                        <select className="nyx-class-lists-select"
-                        style={{fontSize:"14px",fontFamily:"微软雅黑",borderBottom:"dashed 1px"}}
-                        id="expert_number"
-                        disabled={true}
-                        value={this.state.expert_number==""?this.state.selected.expert_number:this.state.expert_number}
-                        >
-                        <option value={0}>-实践讲师编号-</option>
-                        <option value={this.state.expert_number}>{this.state.expert_number}</option>
-                        <option value={this.state.selected.expert_number}>{this.state.selected.expert_number}</option>
-                        </select></div>
-                       
-                        {/* <TextField
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
+                        <TextField
                             className="nyx-clazz-message"
-                            key={"expert_number"}
-                            style={{width:"24%"}}
-                            id={"expert_number"}
-                            label={"实践讲师编号"}
-                            disabled={true}
-                            value={this.state.expert_number}
-                            >
-                             
-                        </TextField> */}
+                            key={"address"}
+                            id={"address"}
+                            label={"开班地址"}
+                            value={this.state.selected["address"] === null ? "" : this.state.selected["address"]}
+                            onChange={(event) => {
+                                this.state.selected["address"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
+                        </TextField>
                        <div
-                       style={{width:"24%",top:"1rem"}}
                        className="nyx-input-date nyx-clazz-message"
                        >
                        <span 
@@ -767,7 +531,6 @@ class Clazz extends Component {
                         />
                        </div>
                        <div
-                       style={{width:"24%",top:"1rem"}}
                        className="nyx-input-date nyx-clazz-message"
                        >
                        <span 
@@ -786,29 +549,8 @@ class Clazz extends Component {
                           }}
                         />
                        </div>
-                       <div
-                       style={{width:"24%",top:"1rem"}}
-                       className="nyx-input-date nyx-clazz-message"
-                       >
-                       <span 
-                       >考试时间</span>
-                        <input
-                       // id="train_starttime"
-                         style={{}}
-                          type="date"
-                          defaultValue={this.state.selected_test_year+"-"+this.state.selected_test_month+"-"+this.state.selected_test_date}
-                          onChange={(event) => {
-                              var test_year=event.target.value.substr(0,4),
-                                 test_month=event.target.value.substr(5,2),
-                                 test_date=event.target.value.substr(8,2)
-                                  this.state.selected["test_time"]=test_year+test_month+test_date;
-                             
-                          }}
-                        />
-                       </div>
-                       <TextField
+                        <TextField
                             className="nyx-clazz-message"
-                            style={{width:"24%",top:"15px",fontSize:"14px"}}
                             key={"class_code"}
                             id={"class_code"}
                             label={"班级编号"}
@@ -822,57 +564,38 @@ class Clazz extends Component {
                         </TextField>
                         <TextField
                             className="nyx-clazz-message"
-                            key={"demo"}
-                            style={{width:"96.5%",marginTop:"2rem",fontSize:"14px"}}
-                            id={"demo"}
-                            label={"备注"}
-                            defaultValue={this.state.selected["demo"] === null ? "" : this.state.selected["demo"]}
-                            >
-                             
+                            key={"mobile"}
+                            id={"mobile"}
+                            label={"班主任电话"}
+                            value={this.state.selected["mobile"] === null ? "" : this.state.selected["mobile"]}
+                            onChange={(event) => {
+                                this.state.selected["mobile"] = event.target.value
+                                this.setState({
+                                    selected: this.state.selected
+                                });
+                            }}>
                         </TextField>
-                       
-                       
                     </div>
                 </DialogContent>
                 <DialogActions>
                     <div>
                         <Button
                             onClick={() => {
-                                var class_head = (document.getElementById("class_head").value==0?"":document.getElementById("class_head").value);
-                                var mobile =  (document.getElementById("mobile").value==0?"":document.getElementById("mobile").value);
-                                var manager = (document.getElementById("manager").value==0?"":document.getElementById("manager").value);
-                                var manager_mobile =  (document.getElementById("manager_mobile").value==0?"":document.getElementById("manager_mobile").value);
-                                var plan_train_num = (document.getElementById("plan_train_num").value);
-                                var class_code = document.getElementById("class_code").value;
-                                var address = (document.getElementById("address").value==0?"":document.getElementById("address").value);
+                                var class_head = (document.getElementById("class_head").value);
                                 var teacher = (document.getElementById("teacher").value);
-                                var teacher_number = (document.getElementById("teacher_number").value==0?"":document.getElementById("teacher_number").value);
-                                var expert = (document.getElementById("expert").value==0?"":document.getElementById("expert").value);
-                                var expert_number = (document.getElementById("expert_number").value==0?"":document.getElementById("expert_number").value);
-                               
+                                var address = (document.getElementById("address").value);
                                 var train_starttime =  this.state.selected["train_starttime"];
                                 var train_endtime = this.state.selected["train_endtime"];
-                                var test_time=this.state.selected["test_time"];
-                                var demo=(document.getElementById("demo").value);
-                                
-                               // var mobile = (document.getElementById("mobile").value);
+                                var class_code = document.getElementById("class_code").value;
+                                var mobile = (document.getElementById("mobile").value);
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head: class_head,
-                                    mobile:mobile,
-                                    manager:manager,
-                                    manager_mobile:manager_mobile,
-                                    plan_train_num:plan_train_num,
-                                    class_code: class_code,
-                                    address: address,
                                     teacher: teacher,
-                                    teacher_number:teacher_number,
-                                    expert:expert,
-                                    expert_number:expert_number,
+                                    address: address,
                                     train_starttime: train_starttime,
                                     train_endtime: train_endtime,
-                                    test_time:test_time,
-                                    
-                                    demo:demo
+                                    class_code: class_code,
+                                    mobile:mobile
                                 })
                                 this.handleRequestClose()
                                 this.state.btns=0;
@@ -1351,25 +1074,7 @@ class Clazz extends Component {
         getData(getRouter(UNCHOOSE_STUDENT), obj, cb, {});
     }
 
-//查看管理模块
-see_module = () =>{
-    var cb = (route, message, arg) => {
-        if (message.code === Code.LOGIC_SUCCESS) {
-           this.setState({
-            beingLoading: false
-           })
-            this.state.see_manage_head_list=message.data.classteacher ;
-            console.log(this.state.see_manage_head_list)
-            this.state.see_manage_sponser_list=message.data.sponsor;
-            this.state.see_manage_theory_list=message.data.teachermanage;
-            this.state.see_manage_expert_list=message.data.expert;
-          
-        }
-      
-        this.popUpNotice(NOTICE, 0, message.msg);
-    }
-    getData(getRouter(MANAGE_LISTS), { session: sessionStorage.session }, cb, {});
-}
+
     clazz_item = (clazz) => {
            
         return (
@@ -1444,11 +1149,8 @@ see_module = () =>{
                                                     <i
                                                         className="glyphicon glyphicon-pencil"
                                                         onClick={(e) => {
-                                                          //  this.see_module()
-                                                            this.detail_area_list(clazz.area_id)
                                                             this.state.btns=clazz.id;
                                                             this.state.selected = clazz;
-                                                            //this.state.expert_number==""
                                                             this.state.selected_start_year = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(0,4)
                                                             this.state.selected_start_month = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(4,2)
                                                             this.state.selected_start_date = this.state.selected["train_starttime"]==null?"":this.state.selected["train_starttime"].substr(6,2)
@@ -1456,18 +1158,9 @@ see_module = () =>{
                                                             this.state.selected_end_year = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(0,4)
                                                             this.state.selected_end_month = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(4,2)
                                                             this.state.selected_end_date = this.state.selected["train_endtime"]==null?"":this.state.selected["train_endtime"].substr(6,2)
-                                                            this.state.selected_test_year = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(0,4)
-                                                            this.state.selected_test_month = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(4,2)
-                                                            this.state.selected_test_date = this.state.selected["test_time"]==null?"":this.state.selected["test_time"].substr(6,2)
                                                            
                                                             // this.state.showInfo = true;
-                                                            this.setState({ openEditClazzDialog: true,
-                                                                expert_number:"",
-                                                                manager_mobile:"",
-                                                                theory_number:"",
-                                                                mobile:""
-                                                            //    ,expert_number:clazz.expert_number
-                                                            });
+                                                            this.setState({ openEditClazzDialog: true });
                                                         }}>
                                                     </i>
                                                     <i
@@ -1619,7 +1312,7 @@ see_module = () =>{
                         </Card>
                     })}
                     <List className="nyx-clazz-list" subheader={<ListSubheader
-                    style={{margin:0,float:"left",width:"35%",height:"45px"}}
+                    style={{margin:0,float:"left",width:"35%"}}
                     className="nyx-class-list-title" >{Lang[window.Lang].pages.org.clazz.clazz_list}</ListSubheader>}>
                          <Button className="nyx-org-btn-sm"
                             style={{marginTop:"19px",top:"-0.5rem"}}
@@ -1757,7 +1450,6 @@ see_module = () =>{
                                 href="#"
                                 download
                                 onClick={() => {
-
                                 }}
                                // className="nyx-org-btn-sm"            
                               // className="nyx-org-btn-sm"
@@ -2481,7 +2173,8 @@ see_module = () =>{
                                     id: this.state.allData.indexOf(this.state.tableData[i]) + 1,
                                     student_id: this.state.tableData[i].id,
                                     student_name: this.state.tableData[i].student_name,
-                                    company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
+                                    //company_name: this.state.tableData[i].company_name,
+                                   company_name: this.state.tableData[i].company_credit!=100?<span style={{color:"red"}}>{this.state.tableData[i].company_name}*</span>:this.state.tableData[i].company_name,
                                     company_admin: this.state.tableData[i].company_admin,
                                     detail: this.state.tableData[i].detail,
                                     area_name: getCity(this.state.tableData[i].area_id),
