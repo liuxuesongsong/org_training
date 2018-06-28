@@ -123,7 +123,6 @@ class Clazzrecord extends Component {
             this.setState({
                 recordtotalPage: 1,
                 recordcount: 0,
-               // is_inlist:1
                 
             })
         }
@@ -141,7 +140,6 @@ class Clazzrecord extends Component {
         }
         this.state.resitcurrentPage = page;
         if (this.state.allRecordData.length <= this.state.rowsrecordPerPage * (page - 1) && this.state.allRecordData.length < this.state.recordcount) {
-            // this.handleQueryRechargeCode(false, false);
             this.queryRecordClazz((Math.floor((this.state.recordcurrentPage - 1) / 2) + 1));
         } else {
             var data = this.state.allRecordData.slice(this.state.rowsrecordPerPage * (page - 1), this.state.rowsrecordPerPage * page);
@@ -167,7 +165,6 @@ class Clazzrecord extends Component {
                     count: message.data.count
                 })
                 this.state.count = message.data.count
-                // this.setState({ students: message.data, tableData: message.data })
             } else {
 
             }
@@ -183,8 +180,6 @@ class Clazzrecord extends Component {
                 
             })
         }
-      //  console.log(this.state.queryCondition)
-        //this.state.queryCondition.train_year=="null"?this.state.queryCondition.train_month=="":""
         getData(getRouter("select_all_class"), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
     }
 
@@ -202,7 +197,6 @@ class Clazzrecord extends Component {
         }
         this.state.currentPage = page;
         if (this.state.allData.length <= this.state.rowsPerPage * (page - 1) && this.state.allData.length < this.state.count) {
-            // this.handleQueryRechargeCode(false, false);
             this.queryStudents((Math.floor((this.state.currentPage - 1) / 4) + 1));
         } else {
             var data = this.state.allData.slice(this.state.rowsPerPage * (page - 1), this.state.rowsPerPage * page);
@@ -211,11 +205,8 @@ class Clazzrecord extends Component {
             this.setState({ tableData: data });
             if (data.length > 0) {
                 var allCheckBox = true;
-               // this.state.currentPageSelectedID = [];
                 for (var i = 0; i < data.length; i++) {
-                  //  console.log(data[i])
                     if (this.state.selectedClazzID.indexOf(data[i].id) === -1) {
-                        //console.log(data[i])
                         allCheckBox = false;
                     } else {
                         this.state.currentPageSelectedID.push((this.state.currentPage - 1) * this.state.rowsPerPage + i + 1)
@@ -329,6 +320,7 @@ class Clazzrecord extends Component {
             beingLoading: false,//loading结束
             openEditClazzDialog: false,//修改班级
             edit_state:0,
+            create_name:"",
             islength:""
          
         })
@@ -339,9 +331,7 @@ class Clazzrecord extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.state.selectedClazzID = [];
                 this.state.currentPageSelectedID = [];
-               // this.fresh();
                 this.queryStudents(1, true);
-                // this.setState({ clazzes: message.clazz })
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
@@ -386,16 +376,12 @@ class Clazzrecord extends Component {
             second_time = second_time.substring(0,10);
             components.push(
                 <option 
-                // selected={true?"i=new_date":""}
                 value={i} key={i}>{i+"年"}</option>
             )
         }
         return components
     }
     recordLogDrawer = (open) => () => {
-        if(open==false){
-           // this.state.btns=0;
-        }
          this.setState({
              recordlogright: open,
              recordlogshowInfo: open
@@ -407,7 +393,6 @@ class Clazzrecord extends Component {
     for(var i=1;i<=12;i++){
             components.push(
                 <option 
-                // selected={true?"i=new_date":""}
                 value={i<10?"0"+i:i} key={i}>{i<10?"0"+i+"月":i+"月"}</option>
             )
         }
@@ -454,17 +439,12 @@ class Clazzrecord extends Component {
             if (message.code === Code.LOGIC_SUCCESS) {
                 this.setState({
                     edit_state:0,
-                   // beingLoading: false
                 })
                 {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
                 {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
                 {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
                 {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
                 {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-                
-            //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
-                
-                //this.fresh();
                
             }
            
@@ -480,10 +460,6 @@ class Clazzrecord extends Component {
        {this.state.openpractice?getData(getRouter(EXPERT_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
       //实施地点
        {this.state.openimplement?getData(getRouter(ADDRESS_ADD), { session: sessionStorage.session, address_area_id:this.state.create_name,detailed:this.state.create_number }, cb, {}):""}
-
-       //  {this.state.openimplement?console.log(this.state.create_name+this.state.create_number+"implement"):""}
-     //   getData(getRouter(CREATE_TYPE), { session: sessionStorage.session, type_name:this.state.create_type_name }, cb, {});
-
     }
     //删除管理模块
     del_module = (id) => {
@@ -498,8 +474,7 @@ class Clazzrecord extends Component {
                 {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
                 {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
                 {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-                
-            //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
+                this.fresh()
                 
             }
            
@@ -526,15 +501,12 @@ class Clazzrecord extends Component {
                 this.setState({
                     edit_state:0
                 })
-               // this.fresh()
-              //  this.state.allData = [];
               {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
               {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
               {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
               {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
               {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-                
-          //    {this.state.openimplement? this.see_module(EXPERT_INFOS):""}
+                this.fresh()
               
             }
            
@@ -543,7 +515,6 @@ class Clazzrecord extends Component {
         
     var name= document.getElementById(name).value;
     var number = document.getElementById(number).value;
-    //console.log(name+number)
     {this.state.openhead?getData(getRouter(CLASSTEACHER_UPDATA), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
     //主办方联系人 
     {this.state.opensponsor?getData(getRouter(SPONSOR_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
@@ -555,7 +526,6 @@ class Clazzrecord extends Component {
 //实施地点
 {this.state.openimplement?getData(getRouter(ADDRESS_UPDATA), { session: sessionStorage.session, id:id,address_area_id:name,detailed:number  }, cb, {}):""}
 
-// getData(getRouter(EDIT_TYPE), { session: sessionStorage.session,id:id,type_name:type_name}, cb, {});
 
     }
      Dialogs = (title,type,islength) => {
@@ -566,7 +536,6 @@ class Clazzrecord extends Component {
           <BeingLoading /> : ''
         }
 
-                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     {title}
                     <Button
                         raised 
@@ -583,8 +552,6 @@ class Clazzrecord extends Component {
                             islength:""
                          })
                          {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
-                         //   document.getElementById("create_implement_area").value=null;
-                           
                             document.getElementById("create_number").value="";
                         }}
                         style={{float:"right",marginTop:"-5px"}}
@@ -598,9 +565,6 @@ class Clazzrecord extends Component {
                        style={{textAlign:"center",marginTop:"10px"}}
                         >
                         <p>{this.state.islength}</p>
-                        {/* <tr>
-                 <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
-             </tr> */}
                        {this.state.see_manage_list.length==0&&this.state.edit_state==0?"":<tr>
                  <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
              </tr>}
@@ -615,7 +579,6 @@ class Clazzrecord extends Component {
                         className="nyx-info-select-lg"
                         id="create_implement_area"
                         label={Lang[window.Lang].pages.org.clazz.info.area}
-                        // defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                         onChange={(e) => {
                             this.state.create_name =  e.target.value == "null"? null:e.target.value;
                         }}
@@ -625,7 +588,6 @@ class Clazzrecord extends Component {
                             return <option key={area.id} value={area.id}>{area.area_name}</option>
                         })}
                     </select>: <TextField
-                                  //  className="nyx-form-div"
                                     key={"create_name"}
                                     id="create_name"
                                     className="nyx-file-text"
@@ -633,7 +595,6 @@ class Clazzrecord extends Component {
                                         this.setState({
                                             create_name:e.target.value
                                         })
-                                      //  this.state.create_head_name=e.target.value
                                     }}
                                     label={Lang[window.Lang].pages.org.clazzrecord.info.name}
                                     fullWidth>
@@ -650,7 +611,6 @@ class Clazzrecord extends Component {
                                         this.setState({
                                             create_number:e.target.value
                                         })
-                                        //this.state.create_head_mobile=e.target.value
                                     }}
                                     label={type}
                                     fullWidth>
@@ -661,15 +621,10 @@ class Clazzrecord extends Component {
                                     color="primary"
                                     className="nyx-org-btn-sm"
                                     onClick={() => {
-                                        
                                     if(this.state.create_name==""){
                                         {this.state.openimplement?"":this.popUpNotice(NOTICE, 0, "请输入姓名");return}
-                                       // this.popUpNotice(NOTICE, 0, "请输入姓名");  
-                                      //  return
                                     }
                                         this.create_module();
-                                     //   this.state.allData = [];
-                                     //   this.fresh();
                                     }}
                                     style={{margin: 0,marginLeft:20,top:7}}
                                 >
@@ -686,8 +641,6 @@ class Clazzrecord extends Component {
                                         })
                                         if(this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击新增！":"")
                                         {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
-                                     //   document.getElementById("create_implement_area").value=null;
-                                       
                                         document.getElementById("create_number").value="";
                                     }}
                                     style={{margin: 0,marginLeft:6,top:7}}
@@ -721,9 +674,6 @@ class Clazzrecord extends Component {
                                             </td><td
                                             style={{width:"215px"}}
                                             >
-                            {/* <input
-                            
-                            value={type_infos.type_name}/> */}
                                <TextField
                                key={see_manages.detailed}
                                   id={"edit_number"+see_manages.id}
@@ -735,7 +685,6 @@ class Clazzrecord extends Component {
                                </td>
                               <td>
                               <Button
-                                 // raised 
                                   color="primary"
                                   className="nyx-org-btn-sm"
                                   style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"none":"block"}}
@@ -744,23 +693,17 @@ class Clazzrecord extends Component {
                                     this.setState({
                                       edit_state:see_manages.id
                                     })
-                                  //  console.log(see_manages.type_name)
                                   }}
                                       >
                                   {"编辑"}
                                   </Button>
                                   <Button
-                                 // raised 
                                  style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"block":"none"}}
                                   color="primary"
                                   className="nyx-org-btn-sm"
                                   onClick={() => {
                                       
                                       this.edit_module(see_manages.id,"implement_area"+see_manages.id,"edit_number"+see_manages.id);
-                                     
-                                    //   this.setState({
-                                    //       edit_state:0
-                                    //   })
                                   }}
                                       >
                                   {"保存"}
@@ -768,12 +711,10 @@ class Clazzrecord extends Component {
                               
                               </td><td>
                               <Button
-                                 // raised 
                                   color="primary"
                                   className="nyx-org-btn-sm"
                                   onClick={() => {
                                       this.del_module(see_manages.id);
-                                     // this.fresh();
                                   }}
                                   style={{margin:0,marginLeft:10}}
                                   >
@@ -785,7 +726,6 @@ class Clazzrecord extends Component {
                               
                             return <tr>
                             <td>
-
                             <TextField
                                           key={see_manages.name}
                                           style={{width:"110px"}}
@@ -798,9 +738,6 @@ class Clazzrecord extends Component {
                                           </td><td
                                           style={{width:"215px"}}
                                           >
-                          {/* <input
-                          
-                          value={type_infos.type_name}/> */}
                              <TextField
                              key={see_manages.number}
                                 id={"edit_number"+see_manages.id}
@@ -812,7 +749,6 @@ class Clazzrecord extends Component {
                              </td>
                             <td>
                             <Button
-                               // raised 
                                 color="primary"
                                 className="nyx-org-btn-sm"
                                 style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"none":"block"}}
@@ -821,22 +757,16 @@ class Clazzrecord extends Component {
                                   this.setState({
                                     edit_state:see_manages.id
                                   })
-                                //  console.log(see_manages.type_name)
                                 }}
                                     >
                                 {"编辑"}
                                 </Button>
                                 <Button
-                               // raised 
                                style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"block":"none"}}
                                 color="primary"
                                 className="nyx-org-btn-sm"
                                 onClick={() => {
                                     this.edit_module(see_manages.id,"edit_name"+see_manages.id,"edit_number"+see_manages.id);
-                                   
-                                  //   this.setState({
-                                  //       edit_state:0
-                                  //   })
                                 }}
                                     >
                                 {"保存"}
@@ -844,12 +774,10 @@ class Clazzrecord extends Component {
                             
                             </td><td>
                             <Button
-                               // raised 
                                 color="primary"
                                 className="nyx-org-btn-sm"
                                 onClick={() => {
                                     this.del_module(see_manages.id);
-                                   // this.fresh();
                                 }}
                                 style={{margin:0,marginLeft:10}}
                                 >
@@ -862,17 +790,6 @@ class Clazzrecord extends Component {
                 </DialogContent>
                 <DialogActions>
                     <div>
-                        {/* <Button
-                            onClick={() => {
-                               this.setState({
-                                edit_state:0
-                                })
-                                this.handleRequestClose()
-                                
-                            }}
-                        >
-                            {Lang[window.Lang].pages.main.certain_button}
-                        </Button> */}
                         <Button
                             onClick={() => {
                                 this.setState({
@@ -895,7 +812,6 @@ class Clazzrecord extends Component {
         return (
             <Dialog name="editClazzDialog" open={this.state.openEditClazzDialog} onRequestClose={this.handleRequestClose} >
                 <DialogTitle>
-                {/* {getInst(clazz.ti_id)} - {getCity(clazz.area_id)} - {getCourse(clazz.course_id)} */}
                     修改班级-{this.state.selected["id"]}-{this.state.selected["ti_id"]?getInst(this.state.selected["ti_id"]):""}
                     -{this.state.selected["area_id"]?getCity(this.state.selected["area_id"]):""}
                     -{this.state.selected["course_id"]?getClasstype(this.state.selected["course_id"]):""}
@@ -947,18 +863,6 @@ class Clazzrecord extends Component {
                         <option value={this.state.head_number}>{this.state.head_number==""?"-班主任电话-":this.state.head_number}</option>
                         <option value={this.state.selected.mobile}>{this.state.selected.mobile}</option>
                         </select></div>
-
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"teacher"}
-                            style={{width:"24%"}}
-                            id={"mobile"}
-                            label={"班主任电话"}
-                            disabled={true}
-                            value={this.state.head_number==""?this.state.selected.mobile:this.state.head_number}
-                            >
-                             
-                        </TextField> */}
                         <div className="nyx-class-lists-div">
                         <p className="nyx-class-lists-p">主办方联系人</p>
                         <select className="nyx-class-lists-select"
@@ -972,8 +876,6 @@ class Clazzrecord extends Component {
                                     this.setState({
                                         sponsor_number:  this.state.see_manage_sponser_list[i].number
                                     })
-                                    
-                                   // this.state.head_number=see_manage_sponser_list[i].number;
                                 }
                                     if(e.target.value==0){
                                         this.setState({
@@ -1003,18 +905,6 @@ class Clazzrecord extends Component {
                         <option value={this.state.sponsor_number}>{this.state.sponsor_number}</option>
                         <option value={this.state.selected.manager_mobile}>{this.state.selected.manager_mobile}</option>
                         </select></div>
-                       
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"manager_mobile"}
-                            style={{width:"24%"}}
-                            id={"manager_mobile"}
-                            label={"主办方联系人电话"}
-                            disabled={true}
-                            value={this.state.sponsor_number==""?this.state.selected.manager_mobile:this.state.sponsor_number}
-                            >
-                             
-                        </TextField> */}
                         <TextField
                             style={{width:"24%",margin:0,marginRight:"1px",fontSize:"14px"}}
                             className="nyx-clazz-message"
@@ -1031,19 +921,12 @@ class Clazzrecord extends Component {
                         <select className="nyx-class-lists-select"
                         id="address"
                         defaultValue={this.state.selected.address==""?"":this.state.selected.address}
-                        //defaultValue={}
-                        onChange={(e)=>{
-                           
-                        }}
-
                         >
                         <option value={0}>-详细地址-</option>
                         {this.state.detail_area_list.map(detail => {
                           return <option>
                           {detail.detailed}</option>
                         })}
-                       
-                           
                         </select></div>
                         <div className="nyx-class-lists-div">
                         <p className="nyx-class-lists-p">理论讲师</p>
@@ -1057,7 +940,6 @@ class Clazzrecord extends Component {
                                     this.setState({
                                         theory_number:  this.state.see_manage_theory_list[i].number
                                     })
-                                   // this.state.head_number=see_manage_theory_list[i].number;
                                 }
                             }
                             if(e.target.value==0){
@@ -1087,18 +969,6 @@ class Clazzrecord extends Component {
                         <option value={this.state.theory_number}>{this.state.theory_number}</option>
                         <option value={this.state.selected.teacher_number}>{this.state.selected.teacher_number}</option>
                         </select></div>
-                       
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"teacher_number"}
-                            style={{width:"24%"}}
-                            id={"teacher_number"}
-                            label={"理论讲师编号"}
-                            disabled={true}
-                            value={this.state.theory_number==""?this.state.selected.teacher_number:this.state.theory_number}
-                            >
-                             
-                        </TextField> */}
                         <div className="nyx-class-lists-div">
                         <p className="nyx-class-lists-p">实践讲师</p>
                         <select className="nyx-class-lists-select"
@@ -1140,18 +1010,6 @@ class Clazzrecord extends Component {
                         <option value={this.state.expert_number}>{this.state.expert_number}</option>
                         <option value={this.state.selected.expert_number}>{this.state.selected.expert_number}</option>
                         </select></div>
-                       
-                        {/* <TextField
-                            className="nyx-clazz-message"
-                            key={"expert_number"}
-                            style={{width:"24%"}}
-                            id={"expert_number"}
-                            label={"实践讲师编号"}
-                            disabled={true}
-                            value={this.state.expert_number}
-                            >
-                             
-                        </TextField> */}
                        <div
                        style={{width:"24%",top:"1rem"}}
                        className="nyx-input-date nyx-clazz-message"
@@ -1159,8 +1017,6 @@ class Clazzrecord extends Component {
                        <span 
                        >开始时间</span>
                         <input
-                       // id="train_starttime"
-                         style={{}}
                           type="date"
                           defaultValue={this.state.selected_start_year+"-"+this.state.selected_start_month+"-"+this.state.selected_start_date}
                           onChange={(event) => {
@@ -1179,8 +1035,6 @@ class Clazzrecord extends Component {
                        <span 
                        >结束时间</span>
                         <input
-                       // id="train_starttime"
-                         style={{}}
                           type="date"
                           defaultValue={this.state.selected_end_year+"-"+this.state.selected_end_month+"-"+this.state.selected_end_date}
                           onChange={(event) => {
@@ -1260,8 +1114,6 @@ class Clazzrecord extends Component {
                                 var train_endtime = this.state.selected["train_endtime"];
                                 var test_time=this.state.selected["test_time"];
                                 var demo=(document.getElementById("demo").value);
-                                
-                               // var mobile = (document.getElementById("mobile").value);
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head: class_head,
                                     mobile:mobile,
@@ -1311,7 +1163,6 @@ class Clazzrecord extends Component {
                         label={Lang[window.Lang].pages.org.clazz.info.area}
                         defaultValue={this.state.search_area_id === null ? "" : this.state.search_area_id}
                         onChange={(e) => {
-                            console.log( e.target.value)
                             this.state.search_area_id =  e.target.value == "null"? null:e.target.value;
                             this.state.queryCondition.area_id =  e.target.value == "null"? null:e.target.value;
                         }}
@@ -1348,7 +1199,6 @@ class Clazzrecord extends Component {
                         }}
                     >
                         <option value={"null"}>{"-培训机构-"}</option>
-                        {/* <option value={0}>{"无培训机构"}</option> */}
                         <option value={1}>{"中软培训"}</option>
                         <option value={2}>{"赛迪"}</option>
                         <option value={3}>{"赛宝"}</option>
@@ -1359,14 +1209,9 @@ class Clazzrecord extends Component {
                      className="nyx-info-select-lg"
                      id={"search_record_year"}
                      onChange={(e) => {
-                        // console.log(e.target.value)
                         this.setState({search_year:e.target.value == "null"? null:e.target.value})
                         this.state.queryCondition.train_time=e.target.value == "null"? null:this.state.search_month==null?e.target.value:e.target.value+this.state.search_month;
-
                          this.state.search_year == "null"? this.state.queryCondition.train_month=="null":"";
-                         console.log(e.target.value+this.state.queryCondition.train_month)
-                       // this.state.search_year =  e.target.value == "null"? null:e.target.value;
-                        //this.state.queryCondition.institution =  e.target.value == "null"? null:e.target.value;
                     }}
                      >
                     <option value={"null"}>{"-培训年份-"}</option>
@@ -1382,8 +1227,6 @@ class Clazzrecord extends Component {
                          this.setState({
                             search_month:e.target.value == "null"? null:e.target.value
                          })
-                        // console.log(this.state.queryCondition.train_year)
-                        //this.state.search_month =  e.target.value == "null"? null:e.target.value;
                         this.state.queryCondition.train_time =  e.target.value == "null"? this.state.search_year:this.state.search_year+e.target.value;
                          
                     }}
@@ -1401,7 +1244,6 @@ class Clazzrecord extends Component {
                         }}
                     >
                         <option value={"null"}>{"-备案情况-"}</option>
-                        {/* <option value={0}>{"无培训机构"}</option> */}
                         <option value={1}>{"未备案"}</option>
                         <option value={2}>{"已备案"}</option>
                         
@@ -1485,10 +1327,6 @@ class Clazzrecord extends Component {
                 >
                     {"实施地点管理"}
                 </Button>   
-                    
-                   
-                   
-                   
                 </div>
                 <Drawer
                        
@@ -1524,7 +1362,6 @@ class Clazzrecord extends Component {
                      {
                          this.state.allRecordData.map((record_log)=>{   
                             return <tr
-                                   
                                     key = {record_log.id}> 
                                     <td width={60} height={25}>{this.state.allRecordData.indexOf(record_log)+1}</td>
                                     <td title={record_log.train_starttime==null?
@@ -1550,162 +1387,12 @@ class Clazzrecord extends Component {
                                     <td width={80} title={record_log.bid}>{record_log.bid}</td>
                                     <td width={140} title={record_log.new_time}>{record_log.new_time}</td>
                                     <td width={150} title={record_log.demo==null?"":record_log.demo}>{record_log.demo==null?"":record_log.demo}</td>
-                                    {/* <td title={file_list.file_name} width={140} style={{textAlign:"left",paddingLeft:"1rem"}}>{file_list.file_name}</td>
-                                    <td title={file_list.type_name} width={120}>{file_list.type_name}</td>
-                                    <td title={file_list.edition} width={80}>{file_list.edition}</td>
-                                    <td title={file_list.time} width={80}>{file_list.time}</td>
-                                    <td title={file_list.uploader} width={80}>{file_list.uploader}</td> */}
                                   </tr>
                          
                           })
                      }
-                    {/* {this.filePage(this.state.filepno,this.state.filepsize)} */}
                 </table>
                     </div>
-                    {/* {this.state.recordlogshowInfo==true?<ReactDataGrid
-                       rowKey="id"
-                       columns={
-                        [
-                           
-                            {
-                                key: "number",
-                                name: "序号",
-                                width: 50,
-                                resizable: true
-                            },
-                            {
-                                key: "train_time",
-                                name: "培训时间",
-                                width: 180,
-                                resizable: true
-                            },
-                            {
-                                key: "test_time",
-                                name: "考试时间",
-                                width: 100,
-                                resizable: true
-                            },
-                            {
-                                key: "plan_train_num",
-                                name: "培训人数",
-                                width: 100,
-                                resizable: true
-                            },
-                           
-                            {
-                                key: "address",
-                                name: "培训地点",
-                                width: 80,
-                                resizable: true
-                            },
-                            {
-                                key: "class_head",
-                                name: "班主任-电话",
-                                width: 125,
-                                resizable: true
-                            },
-                            {
-                                key: "manager",
-                                name: "主办方负责人-电话",
-                                width: 125,
-                                resizable: true
-                            },
-                            {
-                                key: "teacher",
-                                name: "理论讲师-讲师编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "expert",
-                                name: "实践讲师-讲师编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "class_code",
-                                name: "班级编号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "record_time",
-                                name: "备案时间",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "record_ti",
-                                name: "备案账号",
-                                width: 120,
-                                resizable: true
-                            },
-                            {
-                                key: "register",
-                                name: "备注",
-                                width: 120,
-                                resizable: true
-                            }
-                        ]
-                   }
-                   
-                   rowGetter={(i) => {
-                       if (i === -1) { return {} }
-                       return {
-                           number: this.state.allRecordData.indexOf(this.state.tablerecordData[i]) + 1,
-                        //student_id: this.state.tableData[i].id,
-                        train_time: this.state.tablerecordData[i].train_starttime==null?
-                        this.state.tablerecordData[i].train_endtime==null?"":"~"+this.state.tablerecordData[i].train_endtime:this.state.tablerecordData[i].train_endtime==null?this.state.tablerecordData[i].train_starttime+"~":this.state.tablerecordData[i].train_starttime+"~"+this.state.tablerecordData[i].train_endtime,
-                        test_time: this.state.tablerecordData[i].test_time==null?"":this.state.tablerecordData[i].test_time,
-                        plan_train_num:this.state.tablerecordData[i].plan_train_num==null?"":this.state.tablerecordData[i].plan_train_num,
-                        address:this.state.tablerecordData[i].address==null?"":this.state.tablerecordData[i].address,
-                        class_head:this.state.tablerecordData[i].class_head==null?
-                        this.state.tablerecordData[i].mobile==null?"":"-"+this.state.tablerecordData[i].mobile:this.state.tablerecordData[i].mobile==null?this.state.tablerecordData[i].class_head:this.state.tablerecordData[i].class_head+"-"+this.state.tablerecordData[i].mobile,
-                        manager:this.state.tablerecordData[i].manager==null?
-                        this.state.tablerecordData[i].manager_mobile==null?"":"-"+this.state.tablerecordData[i].manager_mobile:this.state.tablerecordData[i].manager_mobile==null?this.state.tablerecordData[i].manager:this.state.tablerecordData[i].manager+"-"+this.state.tablerecordData[i].manager_mobile,
-                        teacher:this.state.tablerecordData[i].teacher==null?
-                        this.state.tablerecordData[i].teacher_number==null?"":"-"+this.state.tablerecordData[i].teacher_number:this.state.tablerecordData[i].teacher_number==null?this.state.tablerecordData[i].teacher:this.state.tablerecordData[i].teacher+"-"+this.state.tablerecordData[i].teacher_number,
-                        expert:this.state.tablerecordData[i].expert==null?
-                        this.state.tablerecordData[i].expert_number==null?"":"-"+this.state.tablerecordData[i].expert_number:this.state.tablerecordData[i].expert_number==null?this.state.tablerecordData[i].expert:this.state.tablerecordData[i].expert+"-"+this.state.tablerecordData[i].expert_number,
-                        class_code:this.state.tablerecordData[i].class_code,
-                        record_time:this.state.tablerecordData[i].new_time,
-                        record_ti:this.state.tablerecordData[i].bid,
-                        register: this.state.tablerecordData[i].demo,
-                          
-                       }
-                   }}
-                   rowsCount={this.state.tablerecordData.length}
-                   onRowClick={(rowIdx, row) => {
-                       if (rowIdx !== -1) {
-                           this.handleSelection(rowIdx, row);
-                       }
-                   }}
-                   renderColor={(idx) => { return "black" }}
-                   maxHeight={1000}
-                   minHeight={535}
-                   rowHeight={20}
-               />:""} */}
-                    
-               {/* <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitPre();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"上页"}
-               </Button>
-               {"第"+this.state.resitcurrentPage+"页"+ "/" + "共"+this.state.resittotalPage+"页"}
-               <Button
-                   color="primary"
-                   onClick={() => {
-                       this.showResitNext();
-                   }}
-                   style={{ margin: 10 }}
-               >
-                   {"下页"}
-               </Button> */}
-                    
                     </div>
                      </Drawer>
                 
@@ -1818,7 +1505,6 @@ class Clazzrecord extends Component {
                         if (i === -1) { return {} }
                         return {
                             id: this.state.tableData[i].id,
-                            //student_id: this.state.tableData[i].id,
                             course_id: getClasstype(this.state.tableData[i].course_id),
                             institution: getInst(this.state.tableData[i].ti_id),
                             state: this.state.tableData[i].state==1?"未备案":this.state.tableData[i].state==2?"已备案":"",
@@ -1899,7 +1585,6 @@ class Clazzrecord extends Component {
                         color="primary"
                         className="nyx-org-btn-lg"
                         onClick={() => {
-                            console.log(this.state.selectedClazzID)
                            if(this.state.selectedClazzID.length!=1){
                             this.popUpNotice(NOTICE, 0, "请选择一个班级修改班级信息");
                             return false;
@@ -1928,12 +1613,8 @@ class Clazzrecord extends Component {
                                     manager_mobile:"",
                                     theory_number:"",
                                     mobile:""})
-                                   //console.log(this.state.allData[i])
                                }
                            }
-                        ///   console.log(this.state.tableData)
-                        //   console.log("修改班级信息")
-                            
                         }}
                         style={{marginLeft:10,position:"relative",top:"-2px",minWidth:"110px"}}
                     >
@@ -1953,9 +1634,6 @@ class Clazzrecord extends Component {
                             return false;
                            }
                            this.class_record();
-                            // this.state.selectedClazzID = [];
-                            // this.state.currentPageSelectedID = [];
-                            // this.queryStudents(1, true);
                         }}
                         style={{marginLeft:10,position:"relative",top:"-2px"}}
                     >
@@ -1966,8 +1644,6 @@ class Clazzrecord extends Component {
                         color="primary"
                         className="nyx-org-btn-md"
                         onClick={() => {
-                         //  console.log( this.state.selectedClazzID)
-                           
                            if(this.state.selectedClazzID.length!=1){
                             this.popUpNotice(NOTICE, 0, "请选择一个班级查询备案记录");
                             return false;
@@ -1995,13 +1671,6 @@ class Clazzrecord extends Component {
                     >
                         {"备案记录"}
                     </Button>
-                    
-                {/* {"已选择"+this.state.selectedClazzID.length + "人/"}
-
-                共{this.state.count}人
-                 */}
-                 {/* {this.headDialog()} */}
-                  
                   {this.state.openhead?this.Dialogs("班主任管理","电话","暂无班主任信息，请点击新增！"):""}
                   {this.state.opensponsor?this.Dialogs("主办方联系人管理","电话","暂无主办方联系人信息，请点击新增！"):""}
                   {this.state.opentheory?this.Dialogs("理论讲师管理","讲师编号","暂无理论讲师信息，请点击新增！"):""}

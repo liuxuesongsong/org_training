@@ -443,7 +443,6 @@ class Student extends Component {
             }
             this.popUpNotice(NOTICE, 0, message.msg);
         }
-        console.log(this.state.idcard);
         getData(getRouter(UNLOCK_STUDENT), { session: sessionStorage.session,idcard:this.state.idcard}, cb, {});
     }
     unlockDialog = () => {
@@ -940,11 +939,9 @@ class Student extends Component {
 
                     var my_select_class_state=document.getElementById('search_resit_state');
                     var class_state_index=my_select_class_state.selectedIndex;
-                    console.log(class_state_index)
                     {my_select_is_inlist.options[is_inlist_index].text=="-报名状态-"?all_is_inlist="已报名":all_is_inlist=my_select_is_inlist.options[is_inlist_index].text}
                     {my_select_class_state.options[class_state_index].text=="-排班情况-"?all_class_state="所有排班情况":all_class_state=my_select_class_state.options[class_state_index].text}
 
-                    console.log(all_class_state)
                    this.popUpNotice(ALERT, 0, "导出的学生信息:【"+all_area+"】【 "+all_course+"】【"+all_is_inlist+"】【"+all_class_state+"】的人员", [
                        () => {
                            var href =  getRouter("export_resit").url+"&session=" + sessionStorage.session;
@@ -957,12 +954,10 @@ class Student extends Component {
                            if(this.state.queryResitCondition.course_id!=undefined && this.state.queryResitCondition.course_id!=null){
                             href = href+"&course_id=" + this.state.queryResitCondition.course_id;
                            } 
-                           console.log(this.state.queryResitCondition.class_state)
                            if(this.state.queryResitCondition.class_state!=undefined && this.state.queryResitCondition.class_state!=null){
                             href = href+"&class_state=" + this.state.queryResitCondition.class_state;
                            } 
                            var a = document.createElement('a');
-                           console.log(a)
                            a.href = href;
                            a.click();  
                            this.closeNotice();
@@ -1015,14 +1010,7 @@ class Student extends Component {
                         raised 
                         onClick={() => {
                             this.state.comany_name_log  = detail_message.comany_name;
-                            console.log(detail_message.comany_name)
                           this.company_credit_log(detail_message.company_id)
-                          
-                        //   this.setState({
-                        //     credit_log_state:true,
-
-                        //   })
-                          console.log(this.state.company_credit_log_list)
                         }}
                         className="nyx-org-btn-md"                                            
                         style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
@@ -1268,7 +1256,6 @@ class Student extends Component {
                             } 
                             var a = document.createElement('a');
                             a.href = href;
-                            console.log(a)
                             a.click();  
                             this.closeNotice();
                         }, () => {
@@ -1293,7 +1280,6 @@ class Student extends Component {
                         color="primary"
                         className="nyx-org-btn-lg"
                         onClick={() => {
-                            //console.log(this.state.selectedStudentID.length)
                             if(this.state.selectedStudentID.length==0){
                                 this.popUpNotice(NOTICE, 0, "请选择失信企业相关信息");
                                 return;
