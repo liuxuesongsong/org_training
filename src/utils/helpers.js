@@ -91,6 +91,7 @@ export function getData(router, json, callback = null, args = {}) {
       return;
     } else {
       var request_low = router.request[key].split(":");
+      console.log(request_low)
       switch (request_low[0]) {
         case "string":
           json[key] = json[key].toString();

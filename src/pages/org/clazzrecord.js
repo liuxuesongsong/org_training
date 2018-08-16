@@ -31,7 +31,7 @@ class Clazzrecord extends Component {
         queryCondition: {},
         selectedClazzID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
-        queryResitCondition: {class_state:2,state:1},
+        queryCondition: {},
         currentPage: 1,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
@@ -42,19 +42,12 @@ class Clazzrecord extends Component {
         pno:1,
         psize:10,
         count: 0,
-        islength:"",
         search_year:null,
         search_month:null,
         search_area_id: null,
         search_course_id: null,
         search_institution: null,
         showStudents:false,
-        openDialog:false,
-        opentheory:false,
-        openhead:false,
-        opensponsor:false,
-        openpractice:false,
-        openimplement:false,//实施地点管理模块
         openEditClazzDialog: false,
         beingLoading: false,
         recordlogshowInfo:false,
@@ -312,11 +305,7 @@ class Clazzrecord extends Component {
         this.setState({
             openheadDialog: false,
             openDialog:false,
-            opentheory:false,
-            openhead:false,
-            opensponsor:false,//主办方
-            openpractice:false,//实践
-            openimplement:false,//实施
+            
             beingLoading: false,//loading结束
             openEditClazzDialog: false,//修改班级
             edit_state:0,
@@ -349,6 +338,15 @@ class Clazzrecord extends Component {
         }
         getData(getRouter(DETAIL_AREA_LIST), { session: sessionStorage.session, address_area_id: id }, cb, { id: id });
     }
+    // select_all_class_csv= () => {
+    //     var cb = (route, message, arg) => {
+    //         if (message.code === Code.LOGIC_SUCCESS) {
+                
+              
+    //         }
+    //     }
+    //     getData(getRouter("select_all_class_csv"), { session: sessionStorage.session }, cb, {});
+    // }
     class_record =()=>{
         var cb = (route, message, arg) => {
             if (message.code === Code.LOGIC_SUCCESS) {
@@ -432,381 +430,7 @@ class Clazzrecord extends Component {
         }
         getData(getRouter(see_module), { session: sessionStorage.session }, cb, {});
     }
-    //创建管理模块
-    create_module = () => {
-        
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({
-                    edit_state:0,
-                })
-                {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
-                {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
-                {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
-                {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
-                {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-               
-            }
-           
-            this.popUpNotice(NOTICE, 0, message.msg);
-        }
-       //班主任 
-       {this.state.openhead?getData(getRouter(CLASSTEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
-       //主办方联系人 
-       {this.state.opensponsor?getData(getRouter(SPONSOR_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
-       //理论讲师
-       {this.state.opentheory?getData(getRouter(TEACHER_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
-       //实践讲师
-       {this.state.openpractice?getData(getRouter(EXPERT_ADD), { session: sessionStorage.session, name:this.state.create_name,number:this.state.create_number }, cb, {}):""}
-      //实施地点
-       {this.state.openimplement?getData(getRouter(ADDRESS_ADD), { session: sessionStorage.session, address_area_id:this.state.create_name,detailed:this.state.create_number }, cb, {}):""}
-    }
-    //删除管理模块
-    del_module = (id) => {
-        
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({
-                    edit_state:0
-                })
-                {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
-                {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
-                {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
-                {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
-                {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-                this.fresh()
-                
-            }
-           
-            this.popUpNotice(NOTICE, 0, message.msg);
-        }
-        {this.state.openhead?getData(getRouter(CLASSTEACHER_DEL), { session: sessionStorage.session,id:id }, cb, {}):""}
-        //主办方联系人 
-        {this.state.opensponsor?getData(getRouter(SPONSOR_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
-        //理论讲师
-        {this.state.opentheory?getData(getRouter(TEACHER_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
-        //实践讲师
-        {this.state.openpractice?getData(getRouter(EXPERT_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
-  //实施地点
-  {this.state.openimplement?getData(getRouter(ADDRESS_DEL), { session: sessionStorage.session, id:id }, cb, {}):""}
- 
 
-    }
-
-    //修改管理模块
-    edit_module = (id,name,number) => {
-        
-        var cb = (route, message, arg) => {
-            if (message.code === Code.LOGIC_SUCCESS) {
-                this.setState({
-                    edit_state:0
-                })
-              {this.state.openhead? this.see_module(CLASSTEACHER_INFOS):""}
-              {this.state.opensponsor? this.see_module(SPONSOR_INFOS):""}
-              {this.state.opentheory? this.see_module(TEACHER_INFOS):""}
-              {this.state.openpractice? this.see_module(EXPERT_INFOS):""}
-              {this.state.openimplement? this.see_module(ADDRESS_INFOS):""}
-                this.fresh()
-              
-            }
-           
-            this.popUpNotice(NOTICE, 0, message.msg);
-        }
-        
-    var name= document.getElementById(name).value;
-    var number = document.getElementById(number).value;
-    {this.state.openhead?getData(getRouter(CLASSTEACHER_UPDATA), { session: sessionStorage.session,id:id,name:name,number:number }, cb, {}):""}
-    //主办方联系人 
-    {this.state.opensponsor?getData(getRouter(SPONSOR_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
-    //理论讲师
-    {this.state.opentheory?getData(getRouter(TEACHER_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number }, cb, {}):""}
-    //实践讲师
-    {this.state.openpractice?getData(getRouter(EXPERT_UPDATA), { session: sessionStorage.session, id:id,name:name,number:number  }, cb, {}):""}
-
-//实施地点
-{this.state.openimplement?getData(getRouter(ADDRESS_UPDATA), { session: sessionStorage.session, id:id,address_area_id:name,detailed:number  }, cb, {}):""}
-
-
-    }
-     Dialogs = (title,type,islength) => {
-        return (
-            <Dialog open={this.state.openDialog} onRequestClose={this.handleRequestClose} >
-                <DialogTitle style={{width:"515px"}}>
-                {this.state.beingLoading ?
-          <BeingLoading /> : ''
-        }
-
-                    {title}
-                    <Button
-                        raised 
-                        color="primary"
-                       
-                        className="nyx-org-btn-md"
-                        onClick={() => {
-                            if(this.state.edit_state!=0){
-                                this.popUpNotice(NOTICE, 0, "请保存正在编辑的文档");
-                                return false
-                            }
-                         this.setState({
-                            edit_state:-1,
-                            islength:""
-                         })
-                         {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
-                            document.getElementById("create_number").value="";
-                        }}
-                        style={{float:"right",marginTop:"-5px"}}
-                    >
-                        {"新增"}
-                    </Button>
-            </DialogTitle>
-                <DialogContent>
-                    
-                    <table 
-                       style={{textAlign:"center",marginTop:"10px"}}
-                        >
-                        <p>{this.state.islength}</p>
-                       {this.state.see_manage_list.length==0&&this.state.edit_state==0?"":<tr>
-                 <td style={{width:"110px"}}>{this.state.openimplement?"地区":"姓名"}</td><td style={{width:"215px"}}>{type}</td><td></td><td></td>
-             </tr>}
-                        
-                        <tr style={{display:this.state.edit_state==-1?"":"none"}}>
-                           
-                            <td style={{width:"110px"}}>
-                            {this.state.openimplement?<select
-                    style={{
-                        border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.54)",marginLeft:"1rem",height:"36px",outline:"none"
-                    }}
-                        className="nyx-info-select-lg"
-                        id="create_implement_area"
-                        label={Lang[window.Lang].pages.org.clazz.info.area}
-                        onChange={(e) => {
-                            this.state.create_name =  e.target.value == "null"? null:e.target.value;
-                        }}
-                    >   
-                        <option value={"null"}>{"-省市-"}</option>
-                        {getAreas().map(area => {
-                            return <option key={area.id} value={area.id}>{area.area_name}</option>
-                        })}
-                    </select>: <TextField
-                                    key={"create_name"}
-                                    id="create_name"
-                                    className="nyx-file-text"
-                                    onChange={(e)=>{
-                                        this.setState({
-                                            create_name:e.target.value
-                                        })
-                                    }}
-                                    label={Lang[window.Lang].pages.org.clazzrecord.info.name}
-                                    fullWidth>
-                                </TextField>  }
-                           
-                            </td>
-                            <td style={{width:"215px"}}>
-                            <TextField
-                                    className="nyx-form-div"
-                                    key={"create_number"}
-                                    id="create_number"
-                                    className="nyx-file-text"
-                                    onChange={(e)=>{
-                                        this.setState({
-                                            create_number:e.target.value
-                                        })
-                                    }}
-                                    label={type}
-                                    fullWidth>
-                                </TextField>  
-                            </td>
-                            <td>
-                            <Button
-                                    color="primary"
-                                    className="nyx-org-btn-sm"
-                                    onClick={() => {
-                                    if(this.state.create_name==""){
-                                        {this.state.openimplement?"":this.popUpNotice(NOTICE, 0, "请输入姓名");return}
-                                    }
-                                        this.create_module();
-                                    }}
-                                    style={{margin: 0,marginLeft:20,top:7}}
-                                >
-                                    {"保存"}
-                                </Button>
-                                </td>
-                                <td>
-                                <Button
-                                    color="primary"
-                                    className="nyx-org-btn-sm"
-                                    onClick={() => {
-                                        this.setState({
-                                            edit_state:0,
-                                        })
-                                        if(this.state.see_manage_list.length==0?this.state.islength="暂无相关信息，请点击新增！":"")
-                                        {this.state.openimplement?document.getElementById("create_implement_area").value=null: document.getElementById("create_name").value=""}
-                                        document.getElementById("create_number").value="";
-                                    }}
-                                    style={{margin: 0,marginLeft:6,top:7}}
-                                >
-                                    {"取消"}
-                                </Button>      
-                                </td>
-                        </tr>
-                        {this.state.openimplement?this.state.see_manage_list.map(see_manages => {
-                              
-                              return <tr>
-                              <td>
-
-                              <select
-                                style={
-                                    this.state.edit_state==see_manages.id?{border:"none",borderBottom:"1px solid rgba(0, 0, 0, 0.38)",marginLeft:"1rem",height:"26px",outline:"none",marginBottom:"6px",paddingBottom:"5px",fontSize:"12px",color:"rgba(0, 0, 0, 0.87)"}
-                                    :{border:"none",borderBottom:"1px dashed rgba(0, 0, 0, 0.38)",marginLeft:"1rem",height:"26px",outline:"none",marginBottom:"6px",paddingBottom:"5px",fontSize:"12px",color:"rgba(0, 0, 0, 0.38)"}
-                                    
-                                }
-                                    className="nyx-info-select-lg"
-                                    id={"implement_area"+see_manages.id}
-                                    disabled={this.state.edit_state==see_manages.id?false:true}
-                                    defaultValue={see_manages.address_area_id}
-                                    label={Lang[window.Lang].pages.org.clazz.info.area}
-                                >   
-                                    <option style={{marginBottom:"0.5rem"}} value={"null"}>{"-省市-"}</option>
-                                    {getAreas().map(area => {
-                                        return <option key={area.id} value={area.id}>{area.area_name}</option>
-                                    })}
-                                </select>
-                                            </td><td
-                                            style={{width:"215px"}}
-                                            >
-                               <TextField
-                               key={see_manages.detailed}
-                                  id={"edit_number"+see_manages.id}
-                                  className="nyx-file-text"
-                                  defaultValue={see_manages.detailed}
-                                 disabled={this.state.edit_state==see_manages.id?false:true}
-                                
-                              />
-                               </td>
-                              <td>
-                              <Button
-                                  color="primary"
-                                  className="nyx-org-btn-sm"
-                                  style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"none":"block"}}
-                                  onClick={() => {
-                                   
-                                    this.setState({
-                                      edit_state:see_manages.id
-                                    })
-                                  }}
-                                      >
-                                  {"编辑"}
-                                  </Button>
-                                  <Button
-                                 style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"block":"none"}}
-                                  color="primary"
-                                  className="nyx-org-btn-sm"
-                                  onClick={() => {
-                                      
-                                      this.edit_module(see_manages.id,"implement_area"+see_manages.id,"edit_number"+see_manages.id);
-                                  }}
-                                      >
-                                  {"保存"}
-                                  </Button>
-                              
-                              </td><td>
-                              <Button
-                                  color="primary"
-                                  className="nyx-org-btn-sm"
-                                  onClick={() => {
-                                      this.del_module(see_manages.id);
-                                  }}
-                                  style={{margin:0,marginLeft:10}}
-                                  >
-                                  {"删除"}
-                                  </Button>
-                              </td>
-                          </tr>
-                          }):this.state.see_manage_list.map(see_manages => {
-                              
-                            return <tr>
-                            <td>
-                            <TextField
-                                          key={see_manages.name}
-                                          style={{width:"110px"}}
-                                              id={"edit_name"+see_manages.id}
-                                              className="nyx-file-text"
-                                              defaultValue= {see_manages.name}
-                                              disabled={this.state.edit_state==see_manages.id?false:true}
-                                              
-                                          />
-                                          </td><td
-                                          style={{width:"215px"}}
-                                          >
-                             <TextField
-                             key={see_manages.number}
-                                id={"edit_number"+see_manages.id}
-                                className="nyx-file-text"
-                                defaultValue={see_manages.number}
-                               disabled={this.state.edit_state==see_manages.id?false:true}
-                              
-                            />
-                             </td>
-                            <td>
-                            <Button
-                                color="primary"
-                                className="nyx-org-btn-sm"
-                                style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"none":"block"}}
-                                onClick={() => {
-                                 
-                                  this.setState({
-                                    edit_state:see_manages.id
-                                  })
-                                }}
-                                    >
-                                {"编辑"}
-                                </Button>
-                                <Button
-                               style={{margin: 0,marginLeft:20,display:this.state.edit_state==see_manages.id?"block":"none"}}
-                                color="primary"
-                                className="nyx-org-btn-sm"
-                                onClick={() => {
-                                    this.edit_module(see_manages.id,"edit_name"+see_manages.id,"edit_number"+see_manages.id);
-                                }}
-                                    >
-                                {"保存"}
-                                </Button>
-                            
-                            </td><td>
-                            <Button
-                                color="primary"
-                                className="nyx-org-btn-sm"
-                                onClick={() => {
-                                    this.del_module(see_manages.id);
-                                }}
-                                style={{margin:0,marginLeft:10}}
-                                >
-                                {"删除"}
-                                </Button>
-                            </td>
-                        </tr>
-                        })}
-                    </table>
-                </DialogContent>
-                <DialogActions>
-                    <div>
-                        <Button
-                            onClick={() => {
-                                this.setState({
-                                    edit_state:0
-                                })
-                                this.handleRequestClose()
-                            
-                            }}
-                        >
-                            {Lang[window.Lang].pages.main.cancel_button}
-                        </Button>
-                    </div>
-                </DialogActions>
-            </Dialog >
-        )
-
-    }
     //修改班级信息弹出框
     editClazzDialog = () => {
         return (
@@ -917,12 +541,16 @@ class Clazzrecord extends Component {
                             }}>
                         </TextField>
                         <div className="nyx-class-lists-div" style={{width:"74%"}}>
-                        <p className="nyx-class-lists-p">详细地址</p>
+                        <p className="nyx-class-lists-p">培训地址</p>
                         <select className="nyx-class-lists-select"
                         id="address"
+                        onChange={(e)=>{
+                            console.log(document.getElementById("demo").value);
+                            document.getElementById("demo").value=e.target.value;
+                        }}
                         defaultValue={this.state.selected.address==""?"":this.state.selected.address}
                         >
-                        <option value={0}>-详细地址-</option>
+                        <option value={0}>-培训地址-</option>
                         {this.state.detail_area_list.map(detail => {
                           return <option>
                           {detail.detailed}</option>
@@ -1068,7 +696,7 @@ class Clazzrecord extends Component {
                        </div>
                        <TextField
                             className="nyx-clazz-message"
-                            style={{width:"24%",top:"15px",fontSize:"14px"}}
+                            style={{width:"24%",top:"14px",fontSize:"14px"}}
                             key={"class_code"}
                             id={"class_code"}
                             label={"班级编号"}
@@ -1080,7 +708,19 @@ class Clazzrecord extends Component {
                                 });
                             }}>
                         </TextField>
-                        <TextField
+                        <div className="nyx-class-lists-div" style={{width:"99.5%",}}>
+                        <p className="nyx-class-lists-p">考试地址</p>
+                        <select className="nyx-class-lists-select"
+                        id="demo"
+                        defaultValue={this.state.selected["demo"] === null ? "" : this.state.selected["demo"]}
+                        >
+                        <option value={0}>-考试地址-</option>
+                        {this.state.detail_area_list.map(detail => {
+                          return <option>
+                          {detail.detailed}</option>
+                        })}
+                        </select></div>
+                        {/* <TextField
                             className="nyx-clazz-message"
                             key={"demo"}
                             style={{width:"96.5%",marginTop:"2rem",fontSize:"14px"}}
@@ -1089,7 +729,7 @@ class Clazzrecord extends Component {
                             defaultValue={this.state.selected["demo"] === null ? "" : this.state.selected["demo"]}
                             >
                              
-                        </TextField>
+                        </TextField> */}
                        
                        
                     </div>
@@ -1262,71 +902,65 @@ class Clazzrecord extends Component {
                     >
                         {"搜索"}
                     </Button>
-                <Button
-                    raised 
-                    color="primary"
-                    className="nyx-org-btn-lg"
-                    onClick={() => {
-                        this.state.see_manage_list=[];
-                        this.setState({openDialog: true , openhead: true ,beingLoading: true});
-                        this.see_module(CLASSTEACHER_INFOS);
-                    }}
-                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"85px"}}
-                >
-                    {"班主任管理"}
-                </Button>
-                <Button
-                    raised 
-                    color="primary"
-                    className="nyx-org-btn-lg"
-                    onClick={() => {
-                        this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,opensponsor:true,beingLoading: true });
-                        this.see_module(SPONSOR_INFOS);
-                    }}
-                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"125px"}}
-                >
-                    {"主办方联系人管理"}
-                </Button>
-                <Button
-                    raised 
-                    color="primary"
-                    className="nyx-org-btn-lg"
-                    onClick={() => {
-                        this.state.see_manage_list=[];
-                        this.setState({ openDialog: true ,opentheory:true,beingLoading: true});
-                        this.see_module(TEACHER_INFOS);
-                    }}
-                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
-                >
-                    {"理论讲师管理"}
-                </Button>   
-                <Button
-                    raised 
-                    color="primary"
-                    className="nyx-org-btn-lg"
-                    onClick={() => {
-                        this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,openpractice:true,beingLoading: true });
-                        this.see_module(EXPERT_INFOS);
-                    }}
-                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px"}}
-                >
-                    {"实践讲师管理"}
-                </Button>   
-                <Button
-                    raised 
-                    color="primary"
-                    className="nyx-org-btn-lg"
-                    onClick={() => {
-                        this.state.see_manage_list=[];
-                        this.setState({ openDialog: true,openimplement: true,beingLoading: true });
-                        this.see_module(ADDRESS_INFOS);
-                    }}
-                    style={{marginLeft:5,position:"relative",top:"-2px",minWidth:"95px",marginBottom:"2rem"}}
-                >
-                    {"实施地点管理"}
-                </Button>   
+                    <Button raised 
+                        color="primary"
+                        className="nyx-org-btn-lg"
+                        style={{marginLeft:10,position:"relative",top:"-2px"}}
+                        onClick={() => {
+                         var all_area;   
+                         var all_course;
+                         var all_time;
+                         var all_state;
+                         var all_institution;
+                         {this.state.search_institution===null?all_institution="所有培训机构":""}
+                        {this.state.search_area_id===null?all_area="所有地区":all_area=getCity(this.state.search_area_id)}
+                        {this.state.search_course_id===null?all_course="所有级别":all_course=getClasstype(this.state.search_course_id)}
+                        {this.state.search_year===null?all_time="所有年份":this.state.search_month===null?all_time=this.state.search_year+"年":all_time=this.state.search_year+"年"+this.state.search_month+"月"}
+                        {this.state.search_state==null?all_state="所有备案情况":this.state.search_state==="1"?all_state="未备案":all_state="已备案"}
+                       
+                        this.popUpNotice(ALERT, 0, "导出开班情况:【"+all_area+"】【 "+all_course+"】【"+all_time+"】【"+all_state+"】", [
+                            () => {
+                                var href =  getRouter("select_all_class_csv").url+"&session=" + sessionStorage.session;
+                                if(this.state.queryCondition.area_id!=undefined && this.state.queryCondition.area_id!=null){
+                                     href = href+"&area_id=" + this.state.queryCondition.area_id;
+                                }
+                                if(this.state.search_state!=undefined && this.state.search_state!=null){
+                                 href = href+"&state=" + this.state.search_state;
+                                }
+                                if(this.state.queryCondition.course_id!=undefined && this.state.queryCondition.course_id!=null){
+                                 href = href+"&course_id=" + this.state.queryCondition.course_id;
+                                } 
+                                if(this.state.queryCondition.train_time!=undefined && this.state.queryCondition.train_time!=null){
+                                 href = href+"&train_time=" + this.state.queryCondition.train_time;
+                                } 
+                                if(this.state.queryCondition.institution!=undefined && this.state.queryCondition.institution!=null){
+                                    href = href+"&institution=" + this.state.queryCondition.institution;
+                               }
+                                console.log(href)
+                                var a = document.createElement('a');
+                                a.href = href;
+                                a.click();  
+                                this.closeNotice();
+                            }, () => {
+                                this.closeNotice();
+                            }]);
+                       // this.select_all_class_csv()
+
+                        }}>
+                       下载搜索结果
+                    </Button>
+                    <Button raised 
+                        color="primary"
+                        className="nyx-org-btn-lg"
+                        style={{marginLeft:10,position:"relative",top:"-2px",marginBottom:"1rem"}}
+                        onClick={() => {
+                                var href =  getRouter("count_csst").url+"&session=" + sessionStorage.session;
+                                var a = document.createElement('a');
+                                a.href = href;
+                                a.click();  
+                        }}>
+                       导出班级统计
+                    </Button>
                 </div>
                 <Drawer
                        
@@ -1671,6 +1305,7 @@ class Clazzrecord extends Component {
                     >
                         {"备案记录"}
                     </Button>
+                    
                   {this.state.openhead?this.Dialogs("班主任管理","电话","暂无班主任信息，请点击新增！"):""}
                   {this.state.opensponsor?this.Dialogs("主办方联系人管理","电话","暂无主办方联系人信息，请点击新增！"):""}
                   {this.state.opentheory?this.Dialogs("理论讲师管理","讲师编号","暂无理论讲师信息，请点击新增！"):""}
