@@ -740,6 +740,7 @@ class Area extends Component {
                                key={see_manages.detailed}
                                   id={"edit_number"+see_manages.id}
                                   className="nyx-file-text"
+                                  title={see_manages.detailed}
                                   defaultValue={see_manages.detailed}
                                  disabled={this.state.edit_state==see_manages.id?false:true}
                                 

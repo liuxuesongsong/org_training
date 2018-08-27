@@ -57,6 +57,7 @@ class Clazzrecord extends Component {
         see_manage_theory_list:[],//查看理论讲师管理列表
         see_manage_expert_list:[],//查看实践讲师管理列表
         detail_area_list:[],
+        teacher_id:"",
         head_number:"",
         sponsor_number:"",
         theory_number:"",
@@ -452,14 +453,14 @@ class Clazzrecord extends Component {
                             for(var i=0;i< this.state.see_manage_head_list.length;i++){
                                 if(e.target.value== this.state.see_manage_head_list[i].name){
                                     this.setState({
-                                        head_number:  this.state.see_manage_head_list[i].number
+                                        head_number:  this.state.see_manage_head_list[i].number,
                                     })
-                                    
+                                    this.state.selected["teacher_id"]=this.state.see_manage_head_list[i].id;
                                 }
                             }
                             if(e.target.value==0){
                                 this.setState({
-                                    head_number:  ""
+                                    head_number:  "",
                                 })
                             }
                            
@@ -754,8 +755,10 @@ class Clazzrecord extends Component {
                                 var train_endtime = this.state.selected["train_endtime"];
                                 var test_time=this.state.selected["test_time"];
                                 var demo=(document.getElementById("demo").value);
+                                var teacher_id =this.state.selected["teacher_id"];
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head: class_head,
+                                    teacher_id:teacher_id,
                                     mobile:mobile,
                                     manager:manager,
                                     manager_mobile:manager_mobile,

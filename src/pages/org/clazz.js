@@ -29,7 +29,7 @@ import ReactDataGrid from 'angon_react_data_grid';
 
 import Code from '../../code';
 import Lang from '../../language';
-import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT,BATCH_DEL_RESIT,CLASSTEACHER_INFOS ,MANAGE_LISTS,DETAIL_AREA_LIST} from '../../enum';
+import { DEL_TRAIN, UNCHOOSE_STUDENT, INST_QUERY, STATUS_ARRANGED_DID, AGREE_ARRANGE, ALERT, NOTICE, SELECT_STUDNETS, INSERT_STUDENT, SELECT_CLAZZ_STUDENTS, CREATE_TRAIN, CREATE_CLAZZ, REMOVE_STUDENT, BASE_INFO, CLASS_INFOS, EDIT_CLAZZ, DELETE_CLAZZ, SELF_INFO, ADDEXP, DELEXP, DATA_TYPE_STUDENT, QUERY, CARD_TYPE_INFO,SELECT_STUDNETS_BY,BATCH_AGREE_STUDENT,BATCH_DELETE_STUDENT,CANCEL_LIST,BATCH_AGREE_CANCEL,AGREE_CANCEL,SELECT_RESITS,CREATE_RESIT,DEL_RESIT,AGREE_RESIT,BATCH_DEL_RESIT,CLASSTEACHER_INFOS ,MANAGE_LISTS,DETAIL_AREA_LIST,STUDENT_TRAIN_DETAIL,COMPANY_CREDIT_LOG,CHANGE_CREDIT} from '../../enum';
 
 import CommonAlert from '../../components/CommonAlert';
 import BeingLoading from '../../components/BeingLoading';
@@ -50,6 +50,9 @@ class Clazz extends Component {
         selectedStudentID: [],      //所有选择的学生ID
         currentPageSelectedID: [],  //当前页面选择的序列ID
         clazzStudents: [],          //班级内的学生
+        student_train_detail_list:[],//详细信息列表
+        company_credit_log_list:[],//失信记录列表
+        credit_id_arr:[],
         clazzResitStudents:[],
         cancelClazzStudent:[],
         allStudentinfos:null,
@@ -68,6 +71,12 @@ class Clazz extends Component {
         searchClazzDialog: false,
         openEditClazzDialog: false,
         openResitTrain:false,
+        openCreditDialog:false,
+        creditshowInfo:false,
+        creditlogshowInfo:false,
+        credit_log_state:false,
+        edit_state:0,
+        this_credit_message:"",
         currentPage: 1,
         totalPage: 1,
         rowsPerPage: 25,             //每页显示数据
@@ -103,6 +112,7 @@ class Clazz extends Component {
         sponsor_number:"",
         theory_number:"",
         expert_number:"",
+        teacher_id:"",
         search_area_id: null,
         search_clazz_course_id: null,
         search_clazz_area_id: null,
@@ -142,7 +152,28 @@ class Clazz extends Component {
        // this.state.class_number=0;
         initCache(this.cacheToState);
     }
+    timestamp2Time = (timestamp, separator) =>{
+        var result = "";  
+              
+        if(timestamp) {  
+            var reg = new RegExp(/\D/, "g"); //提取数字字符串  
+            var timestamp_str = timestamp.replace(reg, "");  
 
+            var d = new Date();  
+            d.setTime(timestamp_str);  
+            var year = d.getFullYear();  
+            var month = d.getMonth() + 1;  
+            var day = d.getDate();  
+            if(month < 10) {  
+                month = "0" + month;  
+            }  
+            if(day < 10) {  
+                day = "0" + day;  
+            }  
+            result = year + separator + month + separator + day;  
+        }  
+        return result;  
+    }
     cacheToState() {
         window.currentPage.queryStudents();
         window.currentPage.see_module();
@@ -194,6 +225,73 @@ class Clazz extends Component {
         }
        
         getData(getRouter(SELECT_STUDNETS), { session: sessionStorage.session, query_condition: Object.assign({ page: query_page, page_size: 100 }, this.state.queryCondition) }, cb, {});
+    }
+    //获取失信详细信息
+    student_train_detail = () => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               // this.state.selectedStudentID = [];
+               // this.state.currentPageSelectedID = [];
+               // this.queryStudents(1, true)
+                this.state.student_train_detail_list=message.data;
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var checklist = document.getElementsByName("selected");
+            this.state.credit_id_arr=[];
+            for(var i=0;i<checklist.length;i++){
+            if(checklist[i].checked==true)
+                this.state.credit_id_arr.push(checklist[i].id)
+            }   
+        var obj = {
+            session: sessionStorage.session,
+            user_ids: this.state.credit_id_arr
+        }
+        getData(getRouter(STUDENT_TRAIN_DETAIL), obj, cb, {});
+    }
+    //获取是失信记录
+    company_credit_log = (company_id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+               // this.state.selectedStudentID = [];
+               // this.state.currentPageSelectedID = [];
+               // this.queryStudents(1, true)
+               this.state.company_credit_log_list=[];
+               this.state.credit_log_state=false;
+               if(message.data.length>0){
+                this.setState({
+                    credit_log_state:true,
+                    company_credit_log_list:message.data
+                  })
+               }else(
+                this.popUpNotice(NOTICE, 0, "该企业暂无失信记录") 
+               )
+               // this.state.company_credit_log_list=message.data;
+            }
+          //  this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var obj = {
+            session: sessionStorage.session,
+            company_id: company_id
+        }
+        getData(getRouter(COMPANY_CREDIT_LOG), obj, cb, {});
+    }
+    change_credit = (name,company_id,class_id) => {
+        var cb = (route, message, arg) => {
+            if (message.code === Code.LOGIC_SUCCESS) {
+                this.state.selectedStudentID = [];
+                this.state.currentPageSelectedID = [];
+                this.setState({
+                    edit_state:0
+                })
+                this.queryStudents(1, true)
+            }
+            this.popUpNotice(NOTICE, 0, message.msg);
+        }
+        var msg = document.getElementById("change_credit_reason").value;
+        
+      
+        getData(getRouter(CHANGE_CREDIT), {session: sessionStorage.session,company_id:company_id,class_id:class_id,msg:name+"-"+msg,type:1}, cb, {});
     }
     resitStudents = (query_page = 1, reload = false) => {
         var cb = (route, message, arg) => {
@@ -503,17 +601,21 @@ class Clazz extends Component {
                         id="class_head"
                         defaultValue={this.state.selected["class_head"] === null ? "" : this.state.selected["class_head"]}
                         onChange={(e)=>{
+                           
                             for(var i=0;i< this.state.see_manage_head_list.length;i++){
                                 if(e.target.value== this.state.see_manage_head_list[i].name){
                                     this.setState({
-                                        head_number:  this.state.see_manage_head_list[i].number
+                                        head_number:  this.state.see_manage_head_list[i].number,
+                                       
                                     })
+                                    this.state.selected["teacher_id"]=this.state.see_manage_head_list[i].id;
                                     
                                 }
                             }
                             if(e.target.value==0){
                                 this.setState({
-                                    head_number:  ""
+                                    head_number:  "",
+                                  
                                 })
                             }
                            
@@ -628,6 +730,7 @@ class Clazz extends Component {
                             console.log(document.getElementById("demo").value);
                             document.getElementById("demo").value=e.target.value;
                         }}
+                       // title={this.state.selected.address==""?"":this.state.selected.address}
                         defaultValue={this.state.selected.address==""?"":this.state.selected.address}
                         >
                         <option value={0}>-培训地址-</option>
@@ -837,6 +940,7 @@ class Clazz extends Component {
                     <div>
                         <Button
                             onClick={() => {
+                                console.log(this.state.selected["teacher_id"])
                                 var class_head = (document.getElementById("class_head").value==0?"":document.getElementById("class_head").value);
                                 var mobile =  (document.getElementById("mobile").value==0?"":document.getElementById("mobile").value);
                                 var manager = (document.getElementById("manager").value==0?"":document.getElementById("manager").value);
@@ -852,11 +956,13 @@ class Clazz extends Component {
                                 var train_starttime =  this.state.selected["train_starttime"];
                                 var train_endtime = this.state.selected["train_endtime"];
                                 var test_time=this.state.selected["test_time"];
+                                var teacher_id = this.state.selected["teacher_id"];
                                 var demo=(document.getElementById("demo").value);
                                 
                                // var mobile = (document.getElementById("mobile").value);
                                 this.modifyClazz(this.state.selected.id, {
                                     class_head: class_head,
+                                    teacher_id:teacher_id,
                                     mobile:mobile,
                                     manager:manager,
                                     manager_mobile:manager_mobile,
@@ -896,7 +1002,182 @@ class Clazz extends Component {
 
     }
 
-
+    creditDialog = () => {
+        return (
+            <Dialog open={this.state.openCreditDialog} onRequestClose={this.handleRequestClose} >
+                <div style={{width:"580px",height:"600px",paddingTop:"1rem",overflow:"auto"}}> 
+                    <p style={{color:"#2196f3",fontSize:"18px",marginLeft:"2rem"}}>企业失信标注</p>
+                    <div style={{height:"30px",width:"100%",margin:"0.5rem 0"}} className="nyx-clazz-student-name">
+                    
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                     姓名</div>
+                    <div style={{width:"150px",textAlign:"center"}} className="nyx-clazz-student-message">
+                    公司全称</div>
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    报名状态</div>
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    班级编号</div>
+                    <div style={{width:"5rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    培训机构</div>
+                    </div>
+                    {this.state.student_train_detail_list.map(detail_message => {
+                    return    <div style={{height:"30px",width:"100%",margin:"0.5rem 0"}} className="nyx-clazz-student-name">
+                    
+                    <div style={{width:"4rem",textAlign:"center"}} title=   {detail_message.user_name} className="nyx-clazz-student-message">
+                        {detail_message.user_name}</div>
+                     <div style={{width:"150px",textAlign:"center"}} title={detail_message.comany_name} className="nyx-clazz-student-message">{detail_message.comany_name}</div>
+                     <div style={{width:"4rem",textAlign:"center"}} title={detail_message.is_inlist==-1?"待报名-导入":
+                    detail_message.is_inlist==0?"待报名":detail_message.is_inlist==1?"待安排":detail_message.is_inlist==2?"已安排":detail_message.is_inlist==3?"已确认":""
+                    } className="nyx-clazz-student-message">
+                     {detail_message.is_inlist==-1?"待报名-导入":
+                    detail_message.is_inlist==0?"待报名":detail_message.is_inlist==1?"待安排":detail_message.is_inlist==2?"已安排":detail_message.is_inlist==3?"已确认":""}</div>
+                     <div style={{width:"4rem",textAlign:"center"}} title={detail_message.class_id==0?"未排班":detail_message.class_id} className="nyx-clazz-student-message">
+                     {detail_message.class_id==0?"未排班":detail_message.class_id}</div>
+                     <div style={{width:"5rem",textAlign:"center"}} title={getInst(detail_message.ti_id)} className="nyx-clazz-student-message">
+                     {getInst(detail_message.ti_id)}</div>
+                     <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
+                            this.setState({
+                                edit_state:0,
+                                comany_name_log:detail_message.comany_name
+                            })
+                          this.company_credit_log(detail_message.company_id)
+                        }}
+                        className="nyx-org-btn-md"                                            
+                        style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
+                    >
+                        {"失信记录"}
+                    </Button>
+                     <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
+                            this.setState({
+                                edit_state:-1,
+                                credit_log_state:false,
+                                this_credit_message:detail_message.comany_name+"-"+detail_message.user_name,
+                                creditname:detail_message.user_name,
+                                creditcompany_id:detail_message.company_id,
+                                creditclass_id:detail_message.class_id
+                            })
+                           
+                       
+                        }}
+                        className="nyx-org-btn-sm"                                            
+                        style={{ position:"relative",top:"-9px",float:"right",right:"0.5rem",minHeight:"26px"}}
+                    >
+                        {"标注"}
+                    </Button>  
+                                                           
+                     </div>                
+                })}
+                 <div style={{display:this.state.edit_state==-1?"":"none",padding:"2rem 0"}}>
+                 <span style={{marginLeft:"1rem"}}>{this.state.this_credit_message}</span>
+                 <TextField
+                           style={{width:"25.3rem",marginLeft:"1rem"}}
+                           className="nyx-form-div"
+                           key={"change_credit_reason"}
+                           id="change_credit_reason"
+                           placeholder="失信原因"
+                          // label={"失信原因"}
+                           fullWidth>
+                     </TextField>  
+                     <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
+                            if(document.getElementById("change_credit_reason").value==""){
+                                this.popUpNotice(NOTICE, 0, "请填写失信原因");
+                                return;
+                            }
+                            this.change_credit(this.state.creditname,this.state.creditcompany_id,this.state.creditclass_id);
+                        }}
+                        className="nyx-org-btn-sm"                                            
+                        style={{ left:"1rem",minHeight:"26px"}}
+                    >
+                        {"确定"}
+                    </Button>  
+                    <Button
+                        color="primary"
+                        raised 
+                        onClick={() => {
+                            this.setState({
+                                edit_state:0,
+                             })
+                        }}
+                        className="nyx-org-btn-md"                                            
+                        style={{ left:"1rem",minHeight:"26px"}}
+                    >
+                        {"取消"}
+                    </Button>  
+                 </div>
+                <div style={this.state.credit_log_state?{display:"block"}:{display:"none"}}>
+                <p style={{color:"#2196f3",fontSize:"18px",marginLeft:"2rem"}}>{this.state.comany_name_log}失信记录</p>
+                <div style={{height:"30px",margin:"0.5rem 0"}} className="nyx-clazz-student-name">
+                   <div style={{width:"3rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    序号</div>
+                    <div style={{width:"250px",textAlign:"center"}} className="nyx-clazz-student-message">
+                    失信原因</div>
+                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    班级编号</div>
+                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    标注机构</div>
+                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                    标注时间</div>
+                    </div>
+                    {this.state.company_credit_log_list.map(company_credit_log => {
+                        
+                        return <div style={{height:"30px",margin:"0.5rem 0"}} className="nyx-clazz-student-name">
+                        <div style={{width:"3rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                        {this.state.company_credit_log_list.indexOf(company_credit_log)+1}</div>
+   
+                                    <div style={{width:"250px",textAlign:"center"}} title={company_credit_log.msg} className="nyx-clazz-student-message">{company_credit_log.msg}</div>
+                                    <div style={{width:"4rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                                     {company_credit_log.class_id==0?"未排班":company_credit_log.class_id}</div>
+                                   
+                                    <div style={{width:"6rem",textAlign:"center"}} title={getInst(company_credit_log.ti_id)} className="nyx-clazz-student-message">
+                                    {getInst(company_credit_log.ti_id)}</div>
+                                    <div style={{width:"6rem",textAlign:"center"}} className="nyx-clazz-student-message">
+                                    {this.timestamp2Time(company_credit_log.time+"000", "-")}
+                                    </div>
+                         </div>
+                    })}
+                    
+                </div>
+                
+                   </div>
+                <DialogActions>
+                    <div>
+                        {/* <Button
+                            onClick={() => {
+                              this.setState({
+                                edit_state:0,
+                                credit_log_state:false,
+                              })
+                               // this.fresh();
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.certain_button}
+                        </Button> */}
+                        <Button
+                            onClick={() => {
+                                this.setState({
+                                    edit_state:0,
+                                    credit_log_state:false,
+                                  })
+                                this.handleRequestClose()
+                            }}
+                        >
+                            {Lang[window.Lang].pages.main.cancel_button}
+                        </Button>
+                    </div>
+                </DialogActions>
+            </Dialog >
+        )
+    }
     newClazzDialog = () => {
         return (
             <Dialog open={this.state.openNewClazzDialog} onRequestClose={this.handleRequestClose} >
@@ -1060,7 +1341,9 @@ class Clazz extends Component {
         this.setState({
             openNewClazzDialog: false,
             searchClazzDialog: false,
-            openEditClazzDialog: false
+            openEditClazzDialog: false,
+            openCreditDialog:false,
+            edit_state:0,
         })
     }
 
@@ -1307,7 +1590,7 @@ class Clazz extends Component {
                         }}
                     />
                 )
-            } else if (k === "course_id" && this.state.queryCondition.course_id != null) {
+            } else if (k === "course_id" && this.state.queryCondition.course_id != "1,2" && this.state.queryCondition.course_id != "3,4") {
                 chips.push(
                     <Chip className="nyx-chip"
                         label={"课程" + ":" + getCourse(this.state.queryCondition[k])}
@@ -1514,9 +1797,16 @@ see_module = () =>{
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
                                                             if(clazz.course_id==4){
-                                                                this.state.queryCondition.course_id = null;
+                                                                this.state.queryCondition.course_id = "1,2";
                                                                 document.getElementById("search_course_id").value=null;
-                                                            }else{
+                                                            }else if(clazz.course_id==5){
+                                                                this.state.queryCondition.course_id = "4";
+                                                                document.getElementById("search_course_id").value="4";
+                                                            }else if(clazz.course_id==6){
+                                                                this.state.queryCondition.course_id = "3,4";
+                                                                document.getElementById("search_course_id").value=null;
+                                                            }
+                                                            else{
                                                                 this.state.queryCondition.course_id = clazz.course_id;
                                                                 document.getElementById("search_course_id").value=clazz.course_id;
                                                             }
@@ -1546,7 +1836,13 @@ see_module = () =>{
                                                             document.getElementById("search_area_id").value=clazz.area_id;
                                                             this.state.queryCondition.area_id = clazz.area_id;
                                                             if(clazz.course_id==4){
-                                                                this.state.queryCondition.course_id = null;
+                                                                this.state.queryCondition.course_id = "1,2";
+                                                                document.getElementById("search_course_id").value=null;
+                                                            }else if(clazz.course_id==5){
+                                                                this.state.queryCondition.course_id = "4";
+                                                                document.getElementById("search_course_id").value="4";
+                                                            }else if(clazz.course_id==6){
+                                                                this.state.queryCondition.course_id = "3,4";
                                                                 document.getElementById("search_course_id").value=null;
                                                             }else{
                                                                 this.state.queryCondition.course_id = clazz.course_id;
@@ -1820,6 +2116,53 @@ see_module = () =>{
                             >
                                 {"导出补考学员"}
                             </Button>
+                            <Button
+                            raised
+                                color="primary"
+                                className="nyx-org-btn-lg"
+                                style={{margin: 0,marginLeft:15,padding:"0",minWidth:"100px" }}
+                                onClick={
+                                    () => {
+                                        var checklist = document.getElementsByName("selected");
+                                        var m=0;
+                                        for(var i = 0; i < checklist.length; i++) {
+
+                                            if(checklist[i].checked==true){
+                                                m++
+                                            }
+                                        }
+                                       if(m==0){
+                                        this.popUpNotice(NOTICE, 0, "请选择失信标注学员");
+                                        return false
+                                       }
+                                       this.student_train_detail();      
+                                            this.setState({
+                                                openCreditDialog: true
+                                                
+                                            });
+                                            this.state.company_credit_log_list=[];
+                                       
+                                        // this.state.clazzStudents.length!=0?
+                                        // this.popUpNotice(ALERT, 0, "导出本班级培训学员信息", [
+                                        //     () => {
+                                        //         var href = getRouter("export_csv_classid").url + "&session=" + sessionStorage.session + "&clazz_id=" + this.state.selected.id;
+                                        //         var a = document.createElement('a');
+                                        //         a.href = href;
+                                        //         a.click();
+                                        //         this.closeNotice();
+                                        //     }, () => {
+                                        //         this.closeNotice();
+                                        //     }]): this.popUpNotice(ALERT, 0, "暂无培训学员", [
+                                        //         () => {
+                                        //             this.closeNotice();
+                                        //         }, () => {
+                                        //             this.closeNotice();
+                                        //         }]);
+                                    }
+                                }
+                            >
+                                {"失信标注"}
+                            </Button>
                            
 
 
@@ -1995,10 +2338,10 @@ see_module = () =>{
                                     return <div className="nyx-clazz-student-name"
 
                                     >
-                                     <input name={student.is_cancel == 1? "noselected" : "selected"} 
+                                     <input id={student.student_id} name={student.is_cancel == 1? "noselected" : "selected"} 
                                      disabled={student.is_cancel == 1? true : false}
                                      value={student.id} type="checkbox"/> 
-                                    <div name="student_id_select" style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div><div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>
+                                    <div name="student_id_select" style={{width:"3rem"}} title={student.student_id} className="nyx-clazz-student-message">{student.student_id}</div><div style={{width:"3rem"}} title={student.student_name} className="nyx-clazz-student-message">{student.student_name}</div>{student.company_credit!=100?<div  title={student.company_name} className="nyx-clazz-student-message" style={{color:"red",width:"200px"}}>{student.company_name}*</div>:<div style={{width:"200px"}} title={student.company_name} className="nyx-clazz-student-message">{student.company_name}</div>}
                                         {student.is_cancel=="0"?<i
                                            className="glyphicon glyphicon-ok"
                                             style={student.reg_status == 2 ?{ float:"right",right:"1rem",color:"#9E9E9E",top:"-0.5rem"}:{ float:"right",right:"1rem",top:"-0.5rem"}}
@@ -2626,6 +2969,7 @@ see_module = () =>{
                     {this.newClazzDialog()}
                     {this.searchClazzDialog()}
                     {this.editClazzDialog()}
+                    {this.creditDialog()}
 
 
                     <CommonAlert
